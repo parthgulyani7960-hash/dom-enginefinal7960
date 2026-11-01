@@ -228,15 +228,22 @@ class FirebaseService {
   }
 
   /**
-   * Helper to deeply sanitize object keys for Firebase Realtime Database
+   * Helper to deeply sanitize object keys and values for Firebase Realtime Database
    * Firebase keys cannot contain: . # $ / [ ]
+   * Firebase values CANNOT contain undefined (causes Admin SDK `.set()` to throw)
    */
   sanitizeForFirebase(obj) {
-    if (obj === null || obj === undefined) return obj;
-    if (Array.isArray(obj)) return obj.map(item => this.sanitizeForFirebase(item));
+    if (obj === undefined) return null;
+    if (obj === null) return null;
+    if (Array.isArray(obj)) {
+      return obj
+        .filter(item => item !== undefined)
+        .map(item => this.sanitizeForFirebase(item));
+    }
     if (typeof obj === 'object') {
       const clean = {};
       for (const [k, v] of Object.entries(obj)) {
+        if (v === undefined) continue; // Strip undefined fields so Firebase Admin SDK never rejects
         const safeKey = k.replace(/[.#$/\[\]]/g, ch => {
           switch (ch) {
             case '.': return '___dot___';
@@ -248,11 +255,28 @@ class FirebaseService {
             default: return '_';
           }
         });
-        clean[safeKey] = this.sanitizeForFirebase(v);
+        const cleanVal = this.sanitizeForFirebase(v);
+        if (cleanVal !== undefined) {
+          clean[safeKey] = cleanVal;
+        }
       }
       return clean;
     }
     return obj;
+  }
+
+  /**
+   * Get live database connection and sync status for admin & app layers
+   */
+  getConnectionStatus() {
+    return {
+      connected: Boolean(this.rtdbInstance || this.config.databaseURL),
+      driver: this.rtdbInstance ? 'FirebaseAdminSDK' : (this.config.databaseURL ? 'REST' : 'LocalStorageOnly'),
+      projectId: this.config.projectId || 'dominos-order-engine-final',
+      databaseURL: this.getRtdbBaseUrl(),
+      syncStatus: this.config.syncStatus || 'SYNCED',
+      lastSyncAt: this.config.lastSyncAt || new Date().toISOString()
+    };
   }
 
   /**

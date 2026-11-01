@@ -164,9 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateUserNavIdentity();
 
-  if (isUserLoggedIn()) {
-    loadUserProfile();
-  }
+  // Always load latest profile from database & local cache
+  loadUserProfile();
   loadStorefrontNotifications();
 
   // Backdrop click listener to close modals
@@ -581,19 +580,26 @@ function updateCatalogCountBadge(items) {
 // =========================================================================
 
 async function loadUserProfile() {
-  if (!isUserLoggedIn()) {
-    updateUserNavIdentity();
-    return;
-  }
   try {
-    const url = currentUser.email
-      ? `/api/user/profile?email=${encodeURIComponent(currentUser.email)}`
-      : `/api/user/profile?uid=${encodeURIComponent(currentUser.userId12 || '')}`;
+    let url = '/api/user/profile';
+    if (currentUser && currentUser.email) {
+      url += `?email=${encodeURIComponent(currentUser.email)}`;
+    } else if (currentUser && currentUser.userId12) {
+      url += `?uid=${encodeURIComponent(currentUser.userId12)}`;
+    }
     const res = await fetch(url);
+    if (!res.ok) {
+      updateUserNavIdentity();
+      return;
+    }
     const data = await res.json();
-    if (data.profile) {
-      currentUser = { ...GUEST_USER, ...currentUser, ...data.profile, isGuest: false };
-      localStorage.setItem('dominos_user', JSON.stringify(currentUser));
+    if (data && data.profile) {
+      const p = data.profile;
+      const isRealUser = Boolean(p.email || p.userId12);
+      currentUser = { ...GUEST_USER, ...currentUser, ...p, isGuest: !isRealUser };
+      if (isRealUser) {
+        localStorage.setItem('dominos_user', JSON.stringify(currentUser));
+      }
       updateUserNavIdentity();
       
       // Update Name & Fixed Phone
@@ -601,7 +607,7 @@ async function loadUserProfile() {
       const nameLabel = document.getElementById('userNameLabel');
       const fixedPhone = document.getElementById('profFixedPhone');
       if (nameInput) nameInput.value = currentUser.name || '';
-      if (nameLabel) nameLabel.innerText = currentUser.name || 'User';
+      if (nameLabel) nameLabel.innerText = currentUser.name || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
       if (fixedPhone) {
         const isLocked = currentUser.phoneLocked !== false;
         const digits = currentUser.phone ? currentUser.phone.replace(/[^0-9]/g, '').slice(-10) : '';
@@ -617,7 +623,7 @@ async function loadUserProfile() {
         uid12Badge.innerText = `UID: ${currentUser.userId12 || 'N/A'}`;
       }
       const profEmail = document.getElementById('profUserEmailDisplay');
-      if (profEmail) profEmail.innerText = currentUser.email || 'N/A';
+      if (profEmail) profEmail.innerText = currentUser.email || 'Not logged in';
       const profUid = document.getElementById('profUserUidDisplay');
       if (profUid) profUid.innerText = currentUser.userId12 || 'N/A';
 
@@ -648,6 +654,10 @@ async function loadUserProfile() {
       }
     }
   } catch (err) {
+    console.warn('Error loading user profile:', err);
+    updateUserNavIdentity();
+  }
+}
     console.warn('Profile load note:', err);
   }
 }
@@ -1262,20 +1272,21 @@ async function loadUserProfileWallet() {
 window.loadUserProfileWallet = loadUserProfileWallet;
 
 function openUserProfileModal() {
-  if (!isUserLoggedIn()) {
-    openGoogleAuthModal();
-    showToastNotice('Please sign in with Google to view your profile, wallet & saved addresses.', '👤');
-    return;
-  }
+  loadUserProfile();
 
   const uid12Badge = document.getElementById('profUserUid12Badge');
   if (uid12Badge) {
     uid12Badge.innerText = `UID: ${currentUser.userId12 || 'N/A'}`;
   }
   const profEmail = document.getElementById('profUserEmailDisplay');
-  if (profEmail) profEmail.innerText = currentUser.email || 'N/A';
+  if (profEmail) profEmail.innerText = currentUser.email || 'Not Signed In (Guest)';
   const profUid = document.getElementById('profUserUidDisplay');
   if (profUid) profUid.innerText = currentUser.userId12 || 'N/A';
+
+  const guestBanner = document.getElementById('profGuestNoticeBanner');
+  if (guestBanner) {
+    guestBanner.style.display = (!currentUser.email || currentUser.isGuest) ? 'block' : 'none';
+  }
 
   const nameInput = document.getElementById('profUserNameInput');
   if (nameInput) nameInput.value = currentUser.name || '';
@@ -2452,11 +2463,11 @@ function renderCartDrawer(triggerRemoteVerify = true) {
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-          <button style="border: 1px solid var(--gray-300); background: white; width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-weight: 700;" onclick="changeQty('${item.id}', -1)">-</button>
-          <span style="font-weight: 700; font-size: 14px; min-width: 16px; text-align: center;">${item.quantity}</span>
-          <button style="border: 1px solid var(--gray-300); background: white; width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-weight: 700;" onclick="changeQty('${item.id}', 1)">+</button>
-          <span style="font-weight: 800; font-size: 14px; margin-left: 6px; min-width: 48px; text-align: right;">₹${itemTotal}</span>
-          <button onclick="removeFromCart('${item.id}')" title="Remove item" style="border: none; background: #fee2e2; color: #b91c1c; width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 6px; display: inline-flex; align-items: center; justify-content: center;">🗑️</button>
+          <button style="border: 1px solid var(--gray-300); background: #f8fafc; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; touch-action: manipulation; transition: all 0.15s;" onclick="changeQty('${item.id}', -1)" aria-label="Decrease quantity">-</button>
+          <span style="font-weight: 800; font-size: 14px; min-width: 20px; text-align: center;">${item.quantity}</span>
+          <button style="border: 1px solid var(--gray-300); background: #f8fafc; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; touch-action: manipulation; transition: all 0.15s;" onclick="changeQty('${item.id}', 1)" aria-label="Increase quantity">+</button>
+          <span style="font-weight: 900; font-size: 14px; margin-left: 6px; min-width: 48px; text-align: right; color: var(--dark);">₹${itemTotal}</span>
+          <button onclick="removeFromCart('${item.id}')" title="Remove item" style="border: none; background: #fee2e2; color: #b91c1c; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-left: 4px; display: inline-flex; align-items: center; justify-content: center; touch-action: manipulation;" aria-label="Remove item">🗑️</button>
         </div>
       </div>
     `;
@@ -4473,11 +4484,6 @@ function viewProofScreenshot(url = null) {
 let myOrdersPollInterval = null;
 
 function openMyOrdersModal() {
-  if (!isUserLoggedIn()) {
-    openGoogleAuthModal();
-    showToastNotice('Please sign in with Google to view your order history & live tracker.', '📦');
-    return;
-  }
   openModal('myOrdersModal');
   loadMyOrders();
   if (myOrdersPollInterval) clearInterval(myOrdersPollInterval);
@@ -5935,6 +5941,18 @@ async function handleContinueWithGoogle() {
   const guessedName = nameParts.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') || 'Google User';
   await signInWithDeviceGoogleAccount(email.trim(), guessedName, 'https://lh3.googleusercontent.com/a/default-user=s96-c');
 }
+async function submitModalGoogleEmail() {
+  const input = document.getElementById('modalGoogleEmailInput');
+  const email = (input?.value || '').trim();
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid Google Account email address (e.g. yourname@gmail.com).');
+    return;
+  }
+  const nameParts = email.split('@')[0].split(/[._-]/);
+  const guessedName = nameParts.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') || 'Google User';
+  await signInWithDeviceGoogleAccount(email, guessedName, 'https://lh3.googleusercontent.com/a/default-user=s96-c');
+}
+window.submitModalGoogleEmail = submitModalGoogleEmail;
 window.handleContinueWithGoogle = handleContinueWithGoogle;
 window.triggerDeviceGoogleLogin = handleContinueWithGoogle;
 window.promptAddGoogleAccount = handleContinueWithGoogle;
@@ -6028,12 +6046,17 @@ function openGoogleAuthModal() {
 window.openGoogleAuthModal = openGoogleAuthModal;
 
 function signOutUser() {
+  if (!confirm('Are you sure you want to log out of your Domino\'s Order Engine account?')) {
+    return;
+  }
   fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
   localStorage.removeItem('dominos_user');
+  sessionStorage.removeItem('dom_admin_token');
   currentUser = { ...GUEST_USER };
   updateUserNavIdentity();
   closeModal('userProfileModal');
   showToastNotice('Signed out from Domino\'s Order Engine', '🚪');
+  loadUserProfile();
 }
 window.signOutUser = signOutUser;
 

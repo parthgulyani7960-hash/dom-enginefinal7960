@@ -372,11 +372,15 @@ class Database {
     if (!cloudData || typeof cloudData !== 'object') return;
     console.log('[DB] ☁️ Merging cloud records from Firebase Realtime Database...');
 
-    // 1. Merge accounts
+    // 1. Merge accounts (Respect deleted tombstone IDs)
     if (Array.isArray(cloudData.accounts) && cloudData.accounts.length > 0) {
       if (!Array.isArray(this.data.accounts)) this.data.accounts = [];
+      const deletedIds = new Set(this.data.deletedAccountIds || []);
       for (const cloudAcc of cloudData.accounts) {
         if (!cloudAcc || !cloudAcc.id) continue;
+        if (deletedIds.has(cloudAcc.id) || (cloudAcc.cleanPhone && deletedIds.has(cloudAcc.cleanPhone))) {
+          continue; // Account was deleted by admin - do not resurrect from cloud
+        }
         const localIdx = this.data.accounts.findIndex(a => a.id === cloudAcc.id || (cloudAcc.cleanPhone && a.cleanPhone === cloudAcc.cleanPhone));
         if (localIdx < 0) {
           this.data.accounts.push(cloudAcc);
@@ -390,11 +394,15 @@ class Database {
       }
     }
 
-    // 2. Merge users & customer delivery addresses
+    // 2. Merge users & customer delivery addresses (Respect deleted user IDs)
     if (Array.isArray(cloudData.users) && cloudData.users.length > 0) {
       if (!Array.isArray(this.data.users)) this.data.users = [];
+      const deletedUids = new Set(this.data.deletedUserIds || []);
       for (const cloudUser of cloudData.users) {
         if (!cloudUser || !cloudUser.id) continue;
+        if (deletedUids.has(cloudUser.id) || (cloudUser.userId12 && deletedUids.has(cloudUser.userId12)) || (cloudUser.email && deletedUids.has(cloudUser.email.toLowerCase()))) {
+          continue; // User was deleted by admin - do not resurrect from cloud
+        }
         const localIdx = this.data.users.findIndex(u => u.id === cloudUser.id || (cloudUser.email && u.email === cloudUser.email));
         if (localIdx < 0) {
           this.data.users.push(cloudUser);
@@ -539,8 +547,39 @@ class Database {
   }
 
   deleteAccount(id) {
+    if (!Array.isArray(this.data.accounts)) this.data.accounts = [];
+    const accountToDelete = this.data.accounts.find(a => a.id === id);
     this.data.accounts = this.data.accounts.filter(a => a.id !== id);
+    
+    // Tombstone the deleted account ID so it is never re-pulled from cloud merge
+    if (!Array.isArray(this.data.deletedAccountIds)) {
+      this.data.deletedAccountIds = [];
+    }
+    if (!this.data.deletedAccountIds.includes(id)) {
+      this.data.deletedAccountIds.push(id);
+    }
+    if (accountToDelete?.cleanPhone && !this.data.deletedAccountIds.includes(accountToDelete.cleanPhone)) {
+      this.data.deletedAccountIds.push(accountToDelete.cleanPhone);
+    }
     this.save();
+
+    // Explicitly delete/update accounts in Firebase Cloud
+    if (this.firebaseService) {
+      if (this.firebaseService.rtdbInstance) {
+        try {
+          const cleanAccounts = this.firebaseService.sanitizeForFirebase(this.data.accounts);
+          this.firebaseService.rtdbInstance.ref('dominos_order_engine/accounts').set(cleanAccounts).catch(() => {});
+        } catch (_) {}
+      } else {
+        const baseUrl = this.firebaseService.getRtdbBaseUrl();
+        if (baseUrl) {
+          const endpoint = `${baseUrl}/dominos_order_engine/accounts.json`;
+          const cleanAccounts = this.firebaseService.sanitizeForFirebase(this.data.accounts);
+          this.firebaseService.httpsRequest(endpoint, 'PUT', cleanAccounts).catch(() => {});
+        }
+      }
+    }
+    return true;
   }
 
   getDominosRegistrationStatus(phone) {
@@ -1424,6 +1463,12 @@ class Database {
     const idx = this.data.users.findIndex(u => u.id === userId || u.userId12 === userId);
     if (idx < 0) throw new Error('User not found.');
     const deleted = this.data.users.splice(idx, 1)[0];
+    if (!Array.isArray(this.data.deletedUserIds)) {
+      this.data.deletedUserIds = [];
+    }
+    if (deleted.id && !this.data.deletedUserIds.includes(deleted.id)) this.data.deletedUserIds.push(deleted.id);
+    if (deleted.userId12 && !this.data.deletedUserIds.includes(deleted.userId12)) this.data.deletedUserIds.push(deleted.userId12);
+    if (deleted.email && !this.data.deletedUserIds.includes(deleted.email.toLowerCase())) this.data.deletedUserIds.push(deleted.email.toLowerCase());
     this.save();
     return deleted;
   }

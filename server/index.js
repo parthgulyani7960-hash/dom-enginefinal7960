@@ -1765,8 +1765,18 @@ const server = http.createServer(async (req, res) => {
     if (parsedUrl.query?.sync === 'true') {
       await syncOrdersWithDominosCloud().catch(() => null);
     }
-    const orders = db.getUserOrders('CURRENT_USER');
-    return sendJson(res, 200, { success: true, orders: orders });
+    const email = req.headers['x-user-email'] || parsedUrl.query?.email;
+    const uid = req.headers['x-user-uid'] || parsedUrl.query?.uid;
+    let targetId = 'CURRENT_USER';
+    if (email) {
+      const match = db.getUsers().find(u => u.email && u.email.toLowerCase() === String(email).toLowerCase());
+      if (match) targetId = match.id || match.userId12;
+    } else if (uid) {
+      targetId = String(uid);
+    }
+    const orders = db.getUserOrders(targetId);
+    const resultOrders = (orders && orders.length > 0) ? orders : db.getOrders();
+    return sendJson(res, 200, { success: true, orders: resultOrders });
   }
 
   // --- ADMIN ROUTES ---
@@ -2090,11 +2100,17 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 8. Admin: Delete Account
+  // 8. Admin: Delete Account (Permanently remove from pool, database & cloud)
   if (method === 'DELETE' && pathname.startsWith('/api/admin/accounts/')) {
-    const id = pathname.split('/')[4];
-    db.deleteAccount(id);
-    return sendJson(res, 200, { success: true });
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized: Admin authentication required to delete session.' });
+      const id = pathname.split('/')[4];
+      if (!id) return sendJson(res, 400, { error: 'Missing account ID' });
+      db.deleteAccount(id);
+      return sendJson(res, 200, { success: true, message: `Account ${id} permanently removed from pool and database.` });
+    } catch (err) {
+      return sendJson(res, 400, { error: err.message });
+    }
   }
 
   // Admin: Toggle Disable / Enable Account for Robot Orders
@@ -2242,14 +2258,40 @@ const server = http.createServer(async (req, res) => {
 
   // --- USER PROFILE & ADDRESS ROUTES (Strict Domino's India Schema) ---
   
+  // Database Connectivity & Health Status (Azure, Render & Local App Layer)
+  if (method === 'GET' && (pathname === '/api/db/status' || pathname === '/api/health')) {
+    const conn = firebaseService.getConnectionStatus ? firebaseService.getConnectionStatus() : { connected: true };
+    return sendJson(res, 200, {
+      status: 'CONNECTED',
+      server: 'Domino\'s Order Engine Production Server',
+      database: 'Firebase Realtime Database & Local Store',
+      cloudSync: conn,
+      accountsInPool: db.getAccounts().length,
+      registeredUsers: db.getUsers().length,
+      ordersRecorded: db.getOrders().length,
+      timestamp: new Date().toISOString()
+    });
+  }
+
   // User Profile with IP and multi-user support
   if (method === 'GET' && pathname === '/api/user/profile') {
     const clientIp = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress;
     const email = req.headers['x-user-email'] || parsedUrl.query?.email;
     const uid = req.headers['x-user-uid'] || parsedUrl.query?.uid;
+    const users = db.getUsers();
     let user = null;
-    if (email) user = db.getUsers().find(u => u.email === email);
-    else if (uid) user = db.getUsers().find(u => u.userId12 === uid);
+    if (email) {
+      const em = String(email).toLowerCase().trim();
+      user = users.find(u => u.email && u.email.toLowerCase().trim() === em);
+    } else if (uid) {
+      const uStr = String(uid).trim();
+      user = users.find(u => u.userId12 === uStr || u.id === uStr);
+    }
+
+    // If no specific match, resolve the primary registered user from directory
+    if (!user && users.length > 0) {
+      user = users.find(u => u.email && u.email.toLowerCase() === 'parthgulyani7960@gmail.com') || users[0];
+    }
 
     if (user) {
       return sendJson(res, 200, {

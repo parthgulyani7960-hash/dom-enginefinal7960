@@ -164,6 +164,7 @@ function onAdminUnlocked(email = 'parthgulyani7960@gmail.com') {
   if (logoutBtn) logoutBtn.style.display = 'inline-flex';
 
   // Load all initial panels
+  checkDatabaseConnectionStatus();
   const initialView = window.location.hash ? window.location.hash.slice(1) : (localStorage.getItem('domAdminTab') || 'sessions');
   switchAdminView(initialView);
   loadExtractionGuide();
@@ -248,6 +249,9 @@ async function adminUnlockWithGoogle() {
 window.adminUnlockWithGoogle = adminUnlockWithGoogle;
 
 async function adminLogout() {
+  if (!confirm('Are you sure you want to log out of the Admin Console?')) {
+    return;
+  }
   try {
     await fetch('/api/admin/auth/logout', { method: 'POST' });
   } catch (e) {}
@@ -258,8 +262,35 @@ async function adminLogout() {
 }
 window.adminLogout = adminLogout;
 
+async function checkDatabaseConnectionStatus() {
+  const badge = document.getElementById('adminDbStatusBadge');
+  const txt = document.getElementById('adminDbStatusText');
+  try {
+    const res = await fetch('/api/db/status');
+    const data = await res.json();
+    if (res.ok && data.status === 'CONNECTED') {
+      if (txt) txt.innerText = data.cloudSync?.driver === 'FirebaseAdminSDK' ? 'Cloud DB Active (Admin SDK)' : 'Database Connected';
+      if (badge) {
+        badge.style.background = '#f0fdf4';
+        badge.style.color = '#166534';
+        badge.style.borderColor = '#86efac';
+      }
+    } else {
+      if (txt) txt.innerText = 'DB Offline';
+      if (badge) {
+        badge.style.background = '#fef2f2';
+        badge.style.color = '#b91c1c';
+        badge.style.borderColor = '#fca5a5';
+      }
+    }
+  } catch (_) {
+    if (txt) txt.innerText = 'DB Local';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   checkAdminAuthStatus();
+  checkDatabaseConnectionStatus();
 });
 
 // Toast notification helper
