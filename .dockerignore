@@ -2,7 +2,7 @@ node_modules
 npm-debug.log
 .git
 .gitignore
-scratch/test_*.js
+scratch
 *.tmp
-public/screenshots/*.png
-C:\Users\parth\AppData
+*.log
+public/screenshots
