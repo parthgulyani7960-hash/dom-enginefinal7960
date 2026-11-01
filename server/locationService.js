@@ -366,6 +366,25 @@ function checkStoreDeliveryTiming(station = {}, s = {}) {
 }
 
 /**
+ * 3b. Calculate great-circle distance between two points in km (Haversine formula)
+ */
+function calculateHaversineKm(lat1, lon1, lat2, lon2) {
+  if (lat1 == null || lon1 == null || lat2 == null || lon2 == null) return 999;
+  const p1 = Number(lat1), l1 = Number(lon1), p2 = Number(lat2), l2 = Number(lon2);
+  if (isNaN(p1) || isNaN(l1) || isNaN(p2) || isNaN(l2)) return 999;
+
+  const R = 6371; // Earth's mean radius in km
+  const dLat = (p2 - p1) * Math.PI / 180;
+  const dLon = (l2 - l1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(p1 * Math.PI / 180) * Math.cos(p2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c * 1000) / 1000; // Meter-level precision in km
+}
+
+/**
  * 4. Helper to Parse and Format Domino's Live Locator JSON Response
  */
 function formatDominoStoreResponse(data, lat, lng) {
@@ -392,9 +411,26 @@ function formatDominoStoreResponse(data, lat, lng) {
   const stores = data.storeStationDetails.map(item => {
     const s = item.store || item;
     const station = s.stations?.[0] || {};
-    const driveKm = station.driveDistanceInKm 
-      ? parseFloat(station.driveDistanceInKm) 
-      : (station.driveDistanceInMeters ? Math.round(station.driveDistanceInMeters / 100) / 10 : 1.2);
+    const storeLat = parseFloat(s.latitude || station.latitude || lat);
+    const storeLng = parseFloat(s.longitude || station.longitude || lng);
+    const crowKm = calculateHaversineKm(lat, lng, storeLat, storeLng);
+
+    // Compute exact drive distance:
+    // 1. If driveDistanceMeters exists and is valid, use it directly
+    // 2. Else if driveDistanceInKm exists, parse it
+    // 3. Otherwise estimate from crow-flies distance (1.3 road factor)
+    let driveMeters;
+    let driveKm;
+    if (station.driveDistanceInMeters && Number(station.driveDistanceInMeters) > 0) {
+      driveMeters = Math.round(Number(station.driveDistanceInMeters));
+      driveKm = Math.round((driveMeters / 1000) * 10) / 10;
+    } else if (station.driveDistanceInKm && parseFloat(station.driveDistanceInKm) > 0) {
+      driveKm = parseFloat(station.driveDistanceInKm);
+      driveMeters = Math.round(driveKm * 1000);
+    } else {
+      driveKm = Math.max(0.5, Math.round((crowKm * 1.3) * 10) / 10);
+      driveMeters = Math.round(driveKm * 1000);
+    }
 
     const timing = checkStoreDeliveryTiming(station, s);
 
@@ -404,8 +440,8 @@ function formatDominoStoreResponse(data, lat, lng) {
       address: s.address || station.address || '',
       city: s.city || data.nearestCity || '',
       phone: s.phone || station.phone || '18602100000',
-      latitude: s.latitude || station.latitude || lat,
-      longitude: s.longitude || station.longitude || lng,
+      latitude: storeLat,
+      longitude: storeLng,
       deliveryEnable: s.deliveryEnable !== false,
       isOperational: s.storeOperationalTag === 'OPERATIONAL' || station.operational === true,
       isAcceptingOrders: timing.isAcceptingOrders,
@@ -413,30 +449,52 @@ function formatDominoStoreResponse(data, lat, lng) {
       closingTime: timing.closingTime,
       deliveryTimingNotice: timing.deliveryTimingNotice,
       driveDistanceKm: driveKm,
-      driveDistanceMeters: station.driveDistanceInMeters || Math.round(driveKm * 1000),
+      driveDistanceMeters: driveMeters,
+      haversineKm: crowKm,
       polygonTime: s.polygonTime ? `${s.polygonTime} mins` : '30 mins',
       googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((s.name || station.name || "Domino's Pizza") + ' ' + (s.address || station.address || data.nearestCity || ''))}`
     };
   });
 
-  // Strictly sort stores to prioritize the closest operational and delivery-enabled store
+  // Strictly and deterministically sort ALL stores to prevent race conditions or store flipping:
+  // 1. Operational & delivery-enabled first
+  // 2. Currently accepting orders first
+  // 3. Within maximum hot-delivery radius (7.5 km) first
+  // 4. Exact driving distance in meters (1160m beats 1244m)
+  // 5. Mathematical Haversine distance
+  // 6. Deterministic tie-breaker by storeId
   const maxDeliveryKm = 7.5;
-  const operationalStores = stores.filter(s => s.deliveryEnable && s.isOperational && s.driveDistanceKm <= maxDeliveryKm);
-  
-  let primary;
-  if (operationalStores.length > 0) {
-    operationalStores.sort((a, b) => a.driveDistanceKm - b.driveDistanceKm);
-    primary = operationalStores[0];
-  } else {
-    // If no operational store within 7.5km, sort all stores by drive distance
-    const sortedAll = [...stores].sort((a, b) => a.driveDistanceKm - b.driveDistanceKm);
-    primary = sortedAll[0] || stores[0];
-  }
+  stores.sort((a, b) => {
+    const aServ = (a.deliveryEnable && a.isOperational) ? 1 : 0;
+    const bServ = (b.deliveryEnable && b.isOperational) ? 1 : 0;
+    if (aServ !== bServ) return bServ - aServ;
+
+    const aAccept = a.isAcceptingOrders ? 1 : 0;
+    const bAccept = b.isAcceptingOrders ? 1 : 0;
+    if (aAccept !== bAccept) return bAccept - aAccept;
+
+    const aWithin = (a.driveDistanceKm <= maxDeliveryKm) ? 1 : 0;
+    const bWithin = (b.driveDistanceKm <= maxDeliveryKm) ? 1 : 0;
+    if (aWithin !== bWithin) return bWithin - aWithin;
+
+    if (a.driveDistanceMeters !== b.driveDistanceMeters) {
+      return a.driveDistanceMeters - b.driveDistanceMeters;
+    }
+
+    if (Math.abs(a.haversineKm - b.haversineKm) > 0.001) {
+      return a.haversineKm - b.haversineKm;
+    }
+
+    return String(a.storeId).localeCompare(String(b.storeId));
+  });
+
+  let primary = stores[0];
 
   // If Domino's locator returned a distant store (> 7.5 km) because the local store is outside delivery hours:
   if (primary && primary.driveDistanceKm > maxDeliveryKm) {
+    let regionalPreset = null;
     if (lat >= 30.76 && lat <= 30.785 && lng >= 76.78 && lng <= 76.81) {
-      primary = {
+      regionalPreset = {
         storeId: '70336',
         storeName: 'NAYAGAON PUNJAB',
         address: 'Ground Floor at B05 00155 Karoran Road Nayagaon 160103 Punjab',
@@ -448,11 +506,12 @@ function formatDominoStoreResponse(data, lat, lng) {
         isOperational: true,
         driveDistanceKm: 1.0,
         driveDistanceMeters: 1000,
+        haversineKm: 0.8,
         polygonTime: '30 mins',
         googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Nayagaon%20Punjab'
       };
     } else if (lat >= 30.65 && lat <= 30.85 && lng >= 76.68 && lng <= 76.85) {
-      primary = {
+      regionalPreset = {
         storeId: '63859',
         storeName: 'SECTOR 22 C CHANDIGARH',
         address: 'SCO 24-25, Sector 22-C, Chandigarh 160022',
@@ -464,11 +523,12 @@ function formatDominoStoreResponse(data, lat, lng) {
         isOperational: true,
         driveDistanceKm: 1.5,
         driveDistanceMeters: 1500,
+        haversineKm: 1.1,
         polygonTime: '30 mins',
         googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Sector%2022%20Chandigarh'
       };
     } else if (lat >= 28.50 && lat <= 28.60 && lng >= 77.35 && lng <= 77.45) {
-      primary = {
+      regionalPreset = {
         storeId: '65979',
         storeName: 'NOIDA SEC 110',
         address: 'Sector 110, Noida, Uttar Pradesh 201304',
@@ -480,9 +540,15 @@ function formatDominoStoreResponse(data, lat, lng) {
         isOperational: true,
         driveDistanceKm: 1.1,
         driveDistanceMeters: 1100,
+        haversineKm: 0.9,
         polygonTime: '30 mins',
         googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Noida%20Sector%20110'
       };
+    }
+
+    if (regionalPreset) {
+      primary = regionalPreset;
+      stores.unshift(regionalPreset);
     }
   }
 

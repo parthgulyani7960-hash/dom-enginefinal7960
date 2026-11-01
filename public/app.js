@@ -92,9 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const parsed = JSON.parse(storedCoords);
       if (parsed && parsed.lat && parsed.lng) {
-        hasUserLocation = true;
-        currentCoordinates = { latitude: parsed.lat, longitude: parsed.lng };
-        applyResolvedLocation(parsed.lat, parsed.lng);
+        const storedPrio = parsed.priority || LOCATION_PRIORITY.SESSION_CACHE;
+        applyResolvedLocation(parsed.lat, parsed.lng, storedPrio, 'Session Cache');
       }
     } catch (e) {}
   }
@@ -533,8 +532,8 @@ async function loadUserProfile() {
         const cartFlat = document.getElementById('cartQuickFlatInput');
         if (cartFlat && defAddr.flat) cartFlat.value = defAddr.flat;
         displayCartAddress(defAddr);
-        if (defAddr.latitude && defAddr.longitude && !hasUserLocation) {
-          applyResolvedLocation(defAddr.latitude, defAddr.longitude);
+        if (defAddr.latitude && defAddr.longitude && activeLocationPriority < LOCATION_PRIORITY.PROFILE_SAVED) {
+          applyResolvedLocation(defAddr.latitude, defAddr.longitude, LOCATION_PRIORITY.PROFILE_SAVED, 'Customer Default Address');
         }
       }
     }
@@ -1350,7 +1349,18 @@ function updateCartServiceabilityCard(gmapsLink, avail = {}) {
   }
 }
 
-// Helper to acquire device geolocation coordinates
+// Sequence token & Priority system to eliminate location race conditions
+let activeLocationSeq = 0;
+const LOCATION_PRIORITY = {
+  IP_AUTODETECT: 1,
+  SESSION_CACHE: 2,
+  PROFILE_SAVED: 3,
+  HARDWARE_GPS: 4,
+  USER_MANUAL: 5
+};
+let activeLocationPriority = 0;
+
+// Helper to acquire fresh device geolocation coordinates
 function acquireDeviceCoordinates() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
@@ -1359,7 +1369,7 @@ function acquireDeviceCoordinates() {
     navigator.geolocation.getCurrentPosition(
       pos => resolve(pos.coords),
       err => reject(err),
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
     );
   });
 }
@@ -1386,12 +1396,16 @@ async function detectUserLocation() {
 
   try {
     const coords = await acquireDeviceCoordinates();
-    await applyResolvedLocation(coords.latitude, coords.longitude);
+    await applyResolvedLocation(coords.latitude, coords.longitude, LOCATION_PRIORITY.HARDWARE_GPS, 'Device GPS Satellite');
     showToastNotice('✓ GPS Satellite Location Locked!', '📍');
   } catch (geoErr) {
     console.warn('[GPS-FALLBACK] Geolocation notice:', geoErr.message);
-    showToastNotice('Satellite GPS unavailable. Resolving location via network IP...', '🌐');
-    await initLocationOnLoad();
+    if (activeLocationPriority < LOCATION_PRIORITY.PROFILE_SAVED) {
+      showToastNotice('Satellite GPS unavailable. Resolving location via network IP...', '🌐');
+      await initLocationOnLoad(LOCATION_PRIORITY.IP_AUTODETECT);
+    } else {
+      showToastNotice('GPS signal weak; maintaining verified delivery location.', '📍');
+    }
   } finally {
     isGpsRequestActive = false;
     startGpsCooldown(3);
@@ -1443,7 +1457,11 @@ function setGpsButtonLoading(isLoading) {
   }
 }
 
-async function initLocationOnLoad() {
+async function initLocationOnLoad(priority = LOCATION_PRIORITY.IP_AUTODETECT) {
+  if (priority < activeLocationPriority) {
+    console.log(`[LOCATION] Skipping IP auto-detect; active priority is higher (${activeLocationPriority})`);
+    return;
+  }
   try {
     const res = await fetch('/api/location/auto-detect');
     if (res.status === 429) {
@@ -1454,25 +1472,40 @@ async function initLocationOnLoad() {
     const data = await res.json();
     const coords = data.coordinates || data.clientCoordinates || (data.availability?.store ? { latitude: data.availability.store.latitude, longitude: data.availability.store.longitude } : null);
     if (data.success && coords) {
-      await applyResolvedLocation(coords.latitude, coords.longitude);
+      await applyResolvedLocation(coords.latitude, coords.longitude, priority, 'Network IP Auto-Detect');
     }
   } catch (err) {
     console.warn('Auto-detect fallback error:', err);
   }
 }
 
-async function applyResolvedLocation(lat, lng) {
+async function applyResolvedLocation(lat, lng, priority = LOCATION_PRIORITY.IP_AUTODETECT, sourceLabel = '') {
+  // Reject lower-priority location updates if a higher-priority lock is already active
+  if (priority < activeLocationPriority) {
+    console.log(`[LOCATION] Discarding lower-priority location update (${priority} < active ${activeLocationPriority}) from: ${sourceLabel}`);
+    return;
+  }
+
+  // Increment monotonic request sequence token
+  const reqSeq = ++activeLocationSeq;
+  activeLocationPriority = priority;
   hasUserLocation = true;
   currentCoordinates = { latitude: lat, longitude: lng };
-  sessionStorage.setItem('dominos_user_coords', JSON.stringify({ lat, lng }));
+  sessionStorage.setItem('dominos_user_coords', JSON.stringify({ lat, lng, priority }));
 
   try {
     const res = await fetch(`/api/location/store-availability?lat=${lat}&lng=${lng}`);
+    if (reqSeq !== activeLocationSeq) {
+      console.log(`[LOCATION] Discarded stale out-of-order store response #${reqSeq} (active: #${activeLocationSeq})`);
+      return;
+    }
+
     if (res.status === 429) {
       const errData = await res.json().catch(() => ({}));
       showToastNotice(errData.message || 'Store availability rate limited. Please wait.', '⏳');
     } else {
       const data = await res.json();
+      if (reqSeq !== activeLocationSeq) return;
       if (data.success && data.availability) {
         updateStoreUI(data.availability);
       }
@@ -1481,11 +1514,12 @@ async function applyResolvedLocation(lat, lng) {
     // Sync coordinates to address form
     const fLat = document.getElementById('formLat');
     const fLng = document.getElementById('formLng');
-    if (fLat) fLat.value = lat.toFixed(6);
-    if (fLng) fLng.value = lng.toFixed(6);
+    if (fLat) fLat.value = Number(lat).toFixed(6);
+    if (fLng) fLng.value = Number(lng).toFixed(6);
 
     // Refresh catalog with store-specific availability for this location!
     await fetchCatalog(lat, lng);
+    if (reqSeq !== activeLocationSeq) return;
 
     // If cart has items, immediately re-verify rates against this new delivering kitchen
     if (cart.length > 0) {
@@ -1505,7 +1539,7 @@ async function modalDetectUserLocation() {
 
   try {
     const coords = await acquireDeviceCoordinates();
-    await applyResolvedLocation(coords.latitude, coords.longitude);
+    await applyResolvedLocation(coords.latitude, coords.longitude, LOCATION_PRIORITY.HARDWARE_GPS, 'Modal Device GPS');
     closeModal('locationRequiredModal');
     processPendingAddToCart();
   } catch (err) {
@@ -1515,7 +1549,7 @@ async function modalDetectUserLocation() {
       const data = await res.json();
       const coords = data.coordinates || data.clientCoordinates || (data.availability?.store ? { latitude: data.availability.store.latitude, longitude: data.availability.store.longitude } : null);
       if (data.success && coords) {
-        await applyResolvedLocation(coords.latitude, coords.longitude);
+        await applyResolvedLocation(coords.latitude, coords.longitude, LOCATION_PRIORITY.IP_AUTODETECT, 'Modal Network IP');
         closeModal('locationRequiredModal');
         processPendingAddToCart();
         return;
@@ -1541,7 +1575,7 @@ async function modalSearchArea() {
     const data = await res.json();
     if (data.success && data.availability && data.availability.store) {
       const coords = data.availability.coordinates || { latitude: data.availability.store.latitude, longitude: data.availability.store.longitude };
-      await applyResolvedLocation(coords.latitude, coords.longitude);
+      await applyResolvedLocation(coords.latitude, coords.longitude, LOCATION_PRIORITY.USER_MANUAL, 'Modal Area Search');
       closeModal('locationRequiredModal');
       processPendingAddToCart();
     } else {
@@ -2527,8 +2561,7 @@ async function submitCartInlineAddress() {
       if (select) select.value = addedAddr.id;
       await onCartAddressDropdownChange(addedAddr.id);
     } else {
-      await applyResolvedLocation(fallbackLat, fallbackLng);
-      await verifyCartWithKitchen();
+      await applyResolvedLocation(fallbackLat, fallbackLng, LOCATION_PRIORITY.USER_MANUAL, 'Inline Address Save');
     }
   } catch (err) {
     alert('Failed to save address: ' + err.message);
@@ -2610,12 +2643,7 @@ async function onTopBarAddressSelectChange(val) {
     if (cartSelect) cartSelect.value = 'CURRENT_LOCATION';
     if (quickFlatWrap) quickFlatWrap.style.display = 'block';
     await detectUserLocation();
-    if (currentCoordinates) {
-      await applyResolvedLocation(currentCoordinates.latitude, currentCoordinates.longitude);
-      await fetchCatalog(currentCoordinates.latitude, currentCoordinates.longitude);
-      await verifyCartWithKitchen();
-      displayCartAddress(getActiveSelectedAddress());
-    }
+    displayCartAddress(getActiveSelectedAddress());
   } else {
     if (cartSelect) cartSelect.value = val;
     if (quickFlatWrap) quickFlatWrap.style.display = 'none';
@@ -2625,9 +2653,7 @@ async function onTopBarAddressSelectChange(val) {
       if (cartQuickInput) cartQuickInput.value = addr.flat || '';
       displayCartAddress(addr, true);
       if (addr.latitude && addr.longitude) {
-        await applyResolvedLocation(addr.latitude, addr.longitude);
-        await fetchCatalog(addr.latitude, addr.longitude);
-        await verifyCartWithKitchen();
+        await applyResolvedLocation(addr.latitude, addr.longitude, LOCATION_PRIORITY.USER_MANUAL, 'Top Bar Selected Address');
       }
     }
   }
@@ -2715,9 +2741,10 @@ async function onCartAddressDropdownChange(selectedId) {
     if (quickFlatWrap) quickFlatWrap.style.display = 'block';
     if (currentCoordinates) {
       displayCartAddress(getActiveSelectedAddress());
-      await applyResolvedLocation(currentCoordinates.latitude, currentCoordinates.longitude);
-      await fetchCatalog(currentCoordinates.latitude, currentCoordinates.longitude);
-      await verifyCartWithKitchen();
+      await applyResolvedLocation(currentCoordinates.latitude, currentCoordinates.longitude, LOCATION_PRIORITY.HARDWARE_GPS, 'Cart Dropdown GPS');
+    } else {
+      await detectUserLocation();
+      displayCartAddress(getActiveSelectedAddress());
     }
     return;
   }
@@ -2735,9 +2762,7 @@ async function onCartAddressDropdownChange(selectedId) {
 
   // Re-verify store serviceability with this address's coordinates
   if (addr.latitude && addr.longitude) {
-    await applyResolvedLocation(addr.latitude, addr.longitude);
-    await fetchCatalog(addr.latitude, addr.longitude);
-    await verifyCartWithKitchen();
+    await applyResolvedLocation(addr.latitude, addr.longitude, LOCATION_PRIORITY.USER_MANUAL, 'Cart Address Dropdown');
   }
 }
 
@@ -2872,13 +2897,14 @@ async function cartDetectCurrentLocation() {
   try {
     const coords = await acquireDeviceCoordinates();
     currentCoordinates = coords;
-    await applyResolvedLocation(coords.latitude, coords.longitude);
-    syncCartAddressOptions();
+    currentActiveDeliveryId = 'CURRENT_GPS';
     const select = document.getElementById('cartAddressSelect');
-    if (select) {
-      select.value = 'CURRENT_LOCATION';
-      await onCartAddressDropdownChange('CURRENT_LOCATION');
-    }
+    if (select) select.value = 'CURRENT_LOCATION';
+    const topSelect = document.getElementById('topBarAddressSelect');
+    if (topSelect) topSelect.value = 'CURRENT_GPS';
+    syncCartAddressOptions();
+    displayCartAddress(getActiveSelectedAddress());
+    await applyResolvedLocation(coords.latitude, coords.longitude, LOCATION_PRIORITY.HARDWARE_GPS, 'Cart Quick GPS Button');
     showToastNotice('GPS Location Locked! Delivering kitchen updated.', '📍');
   } catch (err) {
     alert('Unable to detect device GPS: ' + err.message);
