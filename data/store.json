@@ -34,13 +34,13 @@
       "customerName": "Domino's Customer (6938)",
       "userId": "353304038",
       "cartId": "5912088909743535705",
-      "accountType": "SECOND_ORDER_ACCOUNT",
-      "category": "CATEGORY_SECOND_ORDER",
-      "categoryName": "Cheesy 2nd Order Tier",
-      "couponCode": "CHEESY",
+      "accountType": "EXISTING_ACCOUNT",
+      "category": "CATEGORY_FLAT_100",
+      "categoryName": "Party Repeat Order Tier",
+      "couponCode": "PARTY",
       "status": "IDLE",
       "disabled": false,
-      "totalOrdersPlaced": 2,
+      "totalOrdersPlaced": 3,
       "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
       "credentials": {
         "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
@@ -48,10 +48,11 @@
       },
       "storedAt": "2026-11-01T13:35:39.834Z",
       "expiresAt": "2026-12-01T15:52:00.765Z",
-      "lastActive": "2026-11-01T17:07:53.958Z",
-      "pastOrdersCount": 1,
+      "lastActive": "2026-11-01T20:16:52.857Z",
+      "pastOrdersCount": 2,
       "lastValidated": "2026-11-01T15:52:00.765Z",
-      "activeOrderId": null
+      "activeOrderId": null,
+      "lastAssignedAt": "2026-11-01T20:16:52.833Z"
     },
     {
       "id": "ACC-DOM-3155",
@@ -59,17 +60,17 @@
       "cleanPhone": "7888422429",
       "customerName": "Parth Gulyani",
       "userId": "346377415",
-      "cartId": "3865786925599380677",
-      "accountType": "NEW_ACCOUNT",
-      "category": "CATEGORY_50_OFF",
-      "categoryName": "🟢 50% OFF New User Tier",
-      "couponCode": "DOMNEW50",
+      "cartId": "8506177491330876239",
+      "accountType": "EXISTING_ACCOUNT",
+      "category": "CATEGORY_FLAT_100",
+      "categoryName": "Party Repeat Order Tier",
+      "couponCode": "PARTY",
       "cookies": [
         {
           "domain": ".dominos.co.in",
           "name": "token",
           "path": "/",
-          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0"
+          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw"
         },
         {
           "domain": ".dominos.co.in",
@@ -228,9 +229,9 @@
         "analytics_device_id": "dev_559sk1jc59u1793550579194",
         "analytics_sdk_config:https://api.dominos.co.in/ambit-web/ingest:proj_a280da1c8a61bb96:__anonymous__": "{\"trackingFlags\":{\"emergencyDisableEventIngest\":false,\"emergencyDisableReplayIngest\":false,\"enableEventTracking\":true,\"trackPageViews\":true,\"trackClicks\":true,\"trackForms\":true,\"networkCaptureEnabled\":true,\"networkCaptureFetch\":true,\"networkCaptureXhr\":true,\"networkCaptureImages\":false,\"networkCaptureStylesheets\":false,\"networkCaptureScripts\":false,\"networkSampleRate\":1,\"networkQueueLimit\":1000,\"enableReplay\":true,\"enableMouseTracking\":true,\"enableScrollTracking\":true,\"replaySampleRate\":0.02,\"mousemoveSamplingMs\":100,\"scrollSamplingMs\":200,\"checkoutEveryNth\":50,\"maxReplayDurationMinutes\":0,\"replayWorkerEnabled\":true,\"replayMaxQueueBytes\":10485760,\"replayMaxQueueEvents\":2000,\"replayUploadConcurrency\":2,\"webFlushIntervalMs\":1000,\"webBatchSize\":500,\"webMaxQueueEvents\":2000,\"webMaxQueueBytes\":5242880,\"webGzipThresholdBytes\":60000,\"webReplayChunkSizeChars\":256000,\"webUploadConcurrency\":2,\"collectFonts\":true,\"recordCanvas\":true,\"configCacheTtlSeconds\":900,\"sessionTimeoutMs\":1800000,\"maskAllInputs\":true,\"maskTextSelectors\":\"\",\"blockSelectors\":\"\",\"ignoreSelectors\":\"\",\"mobileReplayMaskLevel\":\"medium\",\"mobileReplayQuality\":\"high\",\"androidBatchIntervalMs\":1000,\"androidMaxQueueEvents\":10000,\"androidMaxQueueBytes\":10485760,\"androidReplayMaxQueueEvents\":2000,\"androidReplayMaxQueueBytes\":10485760,\"androidReplayBatchSize\":200,\"androidReplayChunkSizeBytes\":50000,\"androidUploadConcurrency\":1,\"androidCaptureImages\":true,\"androidInteractionEvents\":true,\"nodeBatchSize\":100,\"nodeFlushIntervalMs\":1000,\"nodeMaxQueueEvents\":10000,\"nodeGzipThresholdBytes\":60000,\"nodeMaxRetries\":3,\"nodeRetryBaseDelayMs\":250,\"nodeRequestTimeoutMs\":10000,\"nodeAutoFlush\":true,\"timezone\":\"Asia/Kolkata\"},\"userPolicy\":{\"user_id\":null,\"enableReplay\":false,\"forceReplaySample\":false},\"expiresAt\":1793551482525}",
         "analytics_session_state": "{\"id\":\"sess_7wh8uy4dwwb1793550579194\",\"lastActivity\":1793550582459}",
-        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0",
-        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0",
-        "cartId": "3865786925599380677",
+        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw",
+        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw",
+        "cartId": "8506177491330876239",
         "confrimView": "false",
         "currentSelToppObj": "{}",
         "debug": "undefined",
@@ -255,37 +256,39 @@
         "paymentMode": "{}",
         "reorderHistoryId": "",
         "storeId": "6585R",
-        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0",
+        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw",
         "totalWalletBalance": "",
         "userAddresses": "[]",
-        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..3Gb7w0zeOlHflZs5jnBrUw.zoVQS5w5yoc7Pqw7Hv7C76FP1wD_7EDnIB7tsTDIuIaGUm0bKaOiUWeGwMWkCCu6JaJNbqFczbhl0Vod6E5n5Bb9eOmLxEifrl3moJxmlfO3AnThhk3Y-SYB5Zzbn9ivVo4wOSr2atuiwAPf5zuNpjZ5xeD9yEXWsDj1ikwzFpjSkKySI2e9rapOoQBYYQTa.UiP1PyVVkkGh5PqYm85QDksawQK3OscsXbaya_Xa_1Y\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0\"},\"userId\":\"346377415\",\"cartId\":\"3865786925599380677\"},\"userData\":\"U2FsdGVkX19jWMfE/TCDp7wxGO9pOBgkBWQmy6LffXSVMCfgB4A6VvEIPILGCGwK5BX6e2CbxjNpBJfJb8SiFQbaAXePk4wNATLjaky3yYYD4MCu48UBelQGTm6PSiOuSBhWyZfTU7ekkFUaLRLMVzPA2HYP3MoRAALf8oXzEssRnQQ+Et0WZHjA3Dk/P04gp9CmWN8aXAuWI1VhPY9V1Trmoy+g5zX5hNE7zoCN66TuivRb5Yia71cjzEb0z3BGUcA4k44bwSKh4Ouy2TQlf6NTiwvBYcc0FvE3V+xMvmydHgHF+6jMUxX4G2D0ahRi\"}",
+        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..3Gb7w0zeOlHflZs5jnBrUw.zoVQS5w5yoc7Pqw7Hv7C76FP1wD_7EDnIB7tsTDIuIaGUm0bKaOiUWeGwMWkCCu6JaJNbqFczbhl0Vod6E5n5Bb9eOmLxEifrl3moJxmlfO3AnThhk3Y-SYB5Zzbn9ivVo4wOSr2atuiwAPf5zuNpjZ5xeD9yEXWsDj1ikwzFpjSkKySI2e9rapOoQBYYQTa.UiP1PyVVkkGh5PqYm85QDksawQK3OscsXbaya_Xa_1Y\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw\"},\"userId\":\"346377415\",\"cartId\":\"8506177491330876239\"},\"userData\":\"U2FsdGVkX19jWMfE/TCDp7wxGO9pOBgkBWQmy6LffXSVMCfgB4A6VvEIPILGCGwK5BX6e2CbxjNpBJfJb8SiFQbaAXePk4wNATLjaky3yYYD4MCu48UBelQGTm6PSiOuSBhWyZfTU7ekkFUaLRLMVzPA2HYP3MoRAALf8oXzEssRnQQ+Et0WZHjA3Dk/P04gp9CmWN8aXAuWI1VhPY9V1Trmoy+g5zX5hNE7zoCN66TuivRb5Yia71cjzEb0z3BGUcA4k44bwSKh4Ouy2TQlf6NTiwvBYcc0FvE3V+xMvmydHgHF+6jMUxX4G2D0ahRi\"}",
         "utm_attributes": "{\"utm_source\":\"direct\",\"utm_medium\":\"direct\",\"utm_campaign\":\"direct\",\"utm_source_medium\":\"direct-direct\"}"
       },
-      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0",
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw",
       "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..3Gb7w0zeOlHflZs5jnBrUw.zoVQS5w5yoc7Pqw7Hv7C76FP1wD_7EDnIB7tsTDIuIaGUm0bKaOiUWeGwMWkCCu6JaJNbqFczbhl0Vod6E5n5Bb9eOmLxEifrl3moJxmlfO3AnThhk3Y-SYB5Zzbn9ivVo4wOSr2atuiwAPf5zuNpjZ5xeD9yEXWsDj1ikwzFpjSkKySI2e9rapOoQBYYQTa.UiP1PyVVkkGh5PqYm85QDksawQK3OscsXbaya_Xa_1Y",
       "credentials": {
-        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0",
-        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0",
-        "cartId": "3865786925599380677",
+        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw",
+        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw",
+        "cartId": "8506177491330876239",
         "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..3Gb7w0zeOlHflZs5jnBrUw.zoVQS5w5yoc7Pqw7Hv7C76FP1wD_7EDnIB7tsTDIuIaGUm0bKaOiUWeGwMWkCCu6JaJNbqFczbhl0Vod6E5n5Bb9eOmLxEifrl3moJxmlfO3AnThhk3Y-SYB5Zzbn9ivVo4wOSr2atuiwAPf5zuNpjZ5xeD9yEXWsDj1ikwzFpjSkKySI2e9rapOoQBYYQTa.UiP1PyVVkkGh5PqYm85QDksawQK3OscsXbaya_Xa_1Y",
-        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..PjyqLogz2_EyGyXI6sKxzA.e_7qAHsVlFORjIZj0VUacGgw0xLN4iZBJarw5LeTzT_t3w527A9cCJYxvw90LLb1R8FsQTrcxbzQnCJYWt20MzAFDC6ccBtdhmj-f1-F3oBdPKbVNso1HeOmPCzLTYKWNGgI22zy2eCRElG1TMWCzoPAUblunPujyrgnDQl1hqMDG3VMNRy25Ib563jR23Zr.NPid6nkY0SdQXggDli2JtXjqZTlO8aab5oTu1zHfAj0",
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..6Tca1O8z-vIYMq6Ke6gGBw.ds9b7qsbGH_51iPGsSOSezF44QZQwVtZdg87ldHZIiveUN3KY5Ng9f0RJWZb3mfPUhR78oWKGQBxHwZtuN3Hk_Y13vAP-UeDLFkv5THekuR0xKcVhxavHkfq2uCgaAUT30qIymiMnySVvjGMOtjkZYmVMLhsyKT6wUOqz_58hty38oaBg0CET8o8au6CKX2E.0U3Plnt4g_EBqtV6qM_4u1T1PYnItMtl5aPiFUGe6Nw",
         "userId": "346377415"
       },
-      "pastOrdersCount": 0,
+      "pastOrdersCount": 2,
       "reorderItems": [],
       "status": "IDLE",
-      "totalOrdersPlaced": 2,
+      "totalOrdersPlaced": 4,
       "storedAt": "2026-11-01T13:35:39.834Z",
-      "lastRefreshedAt": "2026-11-01T19:55:06.623Z",
-      "accessTokenExpiresAt": "2026-11-01T20:55:06.623Z",
-      "refreshTokenExpiresAt": "2026-12-01T19:55:06.623Z",
-      "expiresAt": "2026-12-01T19:55:06.623Z",
+      "lastRefreshedAt": "2026-11-01T20:16:53.179Z",
+      "accessTokenExpiresAt": "2026-11-01T21:16:53.179Z",
+      "refreshTokenExpiresAt": "2026-12-01T20:16:53.179Z",
+      "expiresAt": "2026-12-01T20:16:53.179Z",
       "source": "LIVE_SMS_OTP",
-      "lastActive": "2026-11-01T16:30:19.792Z",
-      "lastValidated": "2026-11-01T19:55:07.273Z",
+      "lastActive": "2026-11-01T20:16:52.965Z",
+      "lastValidated": "2026-11-01T20:16:53.179Z",
       "isCheesyRewards": true,
       "loyaltyProgram": "POTP2",
-      "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)"
+      "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)",
+      "activeOrderId": null,
+      "lastAssignedAt": "2026-11-01T20:16:52.924Z"
     },
     {
       "id": "test_acc_1",
@@ -309,7 +312,7 @@
     "merchantCode": "DOM-5819",
     "note": "Domino's Order Payment",
     "receiverUpiId": "dominos.pay@okhdfcbank",
-    "updatedAt": "2026-11-01T20:10:38.411Z"
+    "updatedAt": "2026-11-01T20:17:42.637Z"
   },
   "vouchers": [
     {
@@ -6310,6 +6313,365 @@
   ],
   "orders": [
     {
+      "id": "DOM-ENG-212900",
+      "engineOrderRef": "DOM-ENG-212900",
+      "dominosOrderRef": null,
+      "cartId": "8506177491330876239",
+      "assignedAccountId": "ACC-DOM-3155",
+      "userId12": "591501648476",
+      "user": {
+        "name": "Anonymous Guest",
+        "email": "parthgulyani7960@gmail.com",
+        "phone": "+91 7893618933",
+        "userId12": "591501648476"
+      },
+      "items": [
+        {
+          "id": "3",
+          "name": "Peppy Paneer",
+          "price": 259,
+          "quantity": 1,
+          "size": "Regular",
+          "crust": "Classic Hand Tossed"
+        }
+      ],
+      "location": {
+        "store": {
+          "storeId": "65977",
+          "storeName": "CHANDIGARH SEC 8B"
+        }
+      },
+      "address": {
+        "addressLine": "Tower 4, Sector 18",
+        "receiverName": "Anonymous Guest",
+        "receiverMobile": "9123456780",
+        "lat": 28.57,
+        "lng": 77.32,
+        "storeId": "65977",
+        "storeName": "CHANDIGARH SEC 8B"
+      },
+      "payment": {
+        "method": "COD",
+        "subtotal": 259,
+        "gst": 12.95,
+        "deliveryFee": 35,
+        "packagingFee": 0,
+        "discountAmount": 100,
+        "couponCode": "NEWBIE100",
+        "amount": 207,
+        "originalEstimatedAmount": 294,
+        "priceDifference": -87,
+        "priceNotice": "Domino's live store price verified at kitchen: Total reduced by ₹87.",
+        "receiverUpiId": "Pranjalottery@fam",
+        "receiverPayeeName": "Dominos order engine",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Dominos%20order%20engine&am=207&tr=DOM-ENG-212900&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-212900",
+        "status": "CONFIRMED_COD",
+        "transactionId": "COD-64212900",
+        "verifiedAt": "2026-11-01T20:16:52.900Z"
+      },
+      "robot": {
+        "status": "ERROR",
+        "assignedAccountId": "ACC-DOM-3155",
+        "accountPhone": "+91 7888422429",
+        "sessionPhone": "+91 7888422429",
+        "accountCategory": "CATEGORY_50_OFF",
+        "categoryName": "🟢 50% OFF New User Tier",
+        "couponCode": null,
+        "cartId": "8506177491330876239",
+        "dominosOrderRef": null,
+        "dominosAddressId": null,
+        "dominosFormattedAddress": null,
+        "storeId": "65979",
+        "storeName": "NOIDA SEC 110",
+        "billAmount": 259,
+        "discountAmount": 100,
+        "dueAmount": null,
+        "proofScreenshotUrl": null,
+        "cartBillScreenshotUrl": null,
+        "rider": {
+          "name": null,
+          "phone": null,
+          "status": "AWAITING_KITCHEN_DISPATCH"
+        },
+        "logs": [
+          "[1:46:52 am] Order created (Cash on Delivery). Engine Ref: DOM-ENG-212900 | Domino's Live Ref: Awaiting Placement | Cart ID: #3865786925599380677. Store: Kitchen. Verified Total: ₹207. Session Phone: +91 7888422429. Promo: NEWBIE100.",
+          "[01:46:52] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[01:46:52] Resuming pre-assigned Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🟢 50% OFF New User Tier",
+          "[01:46:52] Claimed Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🟢 50% OFF New User Tier",
+          "[01:46:52] Rejuvenating session token with Domino's India live auth API...",
+          "[01:46:53] ✓ Token refreshed! 30-day session extended. Cart ID: 8506177491330876239",
+          "[01:46:53] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[01:46:53] Resolving Domino's delivery kitchen for coordinates: [28.5355, 77.3910]",
+          "[01:46:53] Kitchen Resolved: NOIDA SEC 110 (Store ID: 65979) - Delivery ETA: 45 mins",
+          "[01:46:53] 🤖 Launching unified Middleman Robot on m.dominos.co.in (Address -> Cart -> Cash on Delivery)...",
+          "[01:46:53] [MIDDLEMAN-ENGINE] 🚀 Launching unified robot session for Customer Order DOM-ENG-212900...",
+          "[01:46:55] [MIDDLEMAN-ENGINE] 🔑 Injecting 15 saved Domino's session cookies...",
+          "[01:46:56] [MIDDLEMAN-ENGINE] 🏪 Delivering Store Resolved from Domino's Locator: CHANDIGARH SEC 8B (ID: 65977)",
+          "[01:46:56] [MIDDLEMAN-ENGINE] 🏠 Registering customer delivery address on Domino's India for 7888422429...",
+          "[01:46:59] [MIDDLEMAN-ENGINE] ✓ Customer delivery address saved in Domino's \"My Addresses\"! (ID: #1429201890)",
+          "[01:46:59] [MIDDLEMAN-ENGINE] 🧹 Checking cart and clearing leftover items for Store 65977...",
+          "[01:47:01] [MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.",
+          "[01:47:01] [MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store 65977...",
+          "[01:47:05] [MIDDLEMAN-ENGINE] 🛒 Adding 1 constituent item(s) to Domino's cart...",
+          "[01:47:05] [MIDDLEMAN-ENGINE] 🍕 Adding \"Peppy Paneer\" (Qty: 1) to Domino's cart...",
+          "[01:47:10] [MIDDLEMAN-ENGINE] ✓ Successfully added \"Peppy Paneer\" to cart!",
+          "[01:47:10] [MIDDLEMAN-ENGINE] 📝 Closing search modal to uncover View Cart bar...",
+          "[01:47:13] [MIDDLEMAN-ENGINE] 🛒 Navigating to Domino's Cart View...",
+          "[01:47:21] [MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/65977, navigatedViaClick = false",
+          "[01:47:36] [MIDDLEMAN-ENGINE] 🔍 DOM Snapshot: wraps = 0, cards = 0, snippet = \"Domino's Pizza Veg Only Non Veg Only Sort by Cheese Lava Big Big Pizza Veg Pizza Non-Veg Pizza Deals Chicken Feast Cheese Burst Pizza Cheese Volcano Pizza Mania Garlic Breads & Dips Beverages Desserts Tacos & Parcels Maxxx Pizzas 2in1 Cheese Burst Cheese Lava Cheese Lava Spiced Double Chicken 8 ch\"",
+          "[01:47:36] [MIDDLEMAN-ENGINE] 🔍 Auditing cart items against customer order...",
+          "[01:47:36] [MIDDLEMAN-ENGINE] 🛡️ Verifying cart contents against customer order...",
+          "[01:47:37] [MIDDLEMAN-ENGINE] Cart Contents: 0 item(s). Missing: 1, Rogue: 0",
+          "[01:47:37] [MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: Cart verification failed: Ordered item(s) missing from Domino's cart: [Peppy Paneer]. Order blocked to prevent placing incomplete order.",
+          "[01:47:45] ❌ Domino's Placement Notice: Cart verification failed: Ordered item(s) missing from Domino's cart: [Peppy Paneer]. Order blocked to prevent placing incomplete order.",
+          "[01:47:45] Domino's session +91 7888422429 released back to pool."
+        ],
+        "estimatedDelivery": "45 mins",
+        "error": "Cart verification failed: Ordered item(s) missing from Domino's cart: [Peppy Paneer]. Order blocked to prevent placing incomplete order."
+      },
+      "createdAt": "2026-11-01T20:16:52.900Z",
+      "updatedAt": "2026-11-01T20:17:45.229Z"
+    },
+    {
+      "id": "DOM-ENG-212819",
+      "engineOrderRef": "DOM-ENG-212819",
+      "dominosOrderRef": null,
+      "cartId": "5912088909743535705",
+      "assignedAccountId": "ACC-DOM-2158",
+      "userId12": "591501648476",
+      "user": {
+        "name": "Test Customer Second",
+        "email": "testsecond@example.com",
+        "phone": "9811223344",
+        "userId12": "591501648476"
+      },
+      "items": [
+        {
+          "id": "2",
+          "name": "Farmhouse",
+          "price": 259,
+          "quantity": 1,
+          "size": "Medium",
+          "crust": "Cheese Burst"
+        }
+      ],
+      "location": {
+        "store": {
+          "storeId": "65977",
+          "storeName": "CHANDIGARH SEC 8B"
+        }
+      },
+      "address": {
+        "addressLine": "Plot 45, DLF Phase 3",
+        "receiverName": "Test Customer Second",
+        "receiverMobile": "9811223344",
+        "lat": 28.49,
+        "lng": 77.089,
+        "storeId": "65977",
+        "storeName": "CHANDIGARH SEC 8B"
+      },
+      "payment": {
+        "method": "COD",
+        "subtotal": 259,
+        "gst": 12.95,
+        "deliveryFee": 35,
+        "packagingFee": 0,
+        "discountAmount": 50,
+        "couponCode": "CHEESY",
+        "amount": 257,
+        "originalEstimatedAmount": 294,
+        "priceDifference": -37,
+        "priceNotice": "Domino's live store price verified at kitchen: Total reduced by ₹37.",
+        "receiverUpiId": "Pranjalottery@fam",
+        "receiverPayeeName": "Dominos order engine",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Dominos%20order%20engine&am=257&tr=DOM-ENG-212819&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-212819",
+        "status": "CONFIRMED_COD",
+        "transactionId": "COD-64212819",
+        "verifiedAt": "2026-11-01T20:16:52.819Z"
+      },
+      "robot": {
+        "status": "ERROR",
+        "assignedAccountId": "ACC-DOM-2158",
+        "accountPhone": "+91 9650146938",
+        "sessionPhone": "+91 9650146938",
+        "accountCategory": "CATEGORY_SECOND_ORDER",
+        "categoryName": "Cheesy 2nd Order Tier",
+        "couponCode": null,
+        "cartId": "5912088909743535705",
+        "dominosOrderRef": null,
+        "dominosAddressId": null,
+        "dominosFormattedAddress": null,
+        "storeId": "65979",
+        "storeName": "NOIDA SEC 110",
+        "billAmount": 259,
+        "discountAmount": 50,
+        "dueAmount": null,
+        "proofScreenshotUrl": null,
+        "cartBillScreenshotUrl": null,
+        "rider": {
+          "name": null,
+          "phone": null,
+          "status": "AWAITING_KITCHEN_DISPATCH"
+        },
+        "logs": [
+          "[1:46:52 am] Order created (Cash on Delivery). Engine Ref: DOM-ENG-212819 | Domino's Live Ref: Awaiting Placement | Cart ID: #5912088909743535705. Store: Kitchen. Verified Total: ₹257. Session Phone: +91 9650146938. Promo: CHEESY.",
+          "[01:46:52] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[01:46:52] Resuming pre-assigned Domino's Session: +91 9650146938 (ACC-DOM-2158) - Category: Cheesy 2nd Order Tier",
+          "[01:46:52] Claimed Domino's Session: +91 9650146938 (ACC-DOM-2158) - Category: Cheesy 2nd Order Tier",
+          "[01:46:52] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[01:46:52] Resolving Domino's delivery kitchen for coordinates: [28.5355, 77.3910]",
+          "[01:46:53] Kitchen Resolved: NOIDA SEC 110 (Store ID: 65979) - Delivery ETA: 45 mins",
+          "[01:46:53] 🤖 Launching unified Middleman Robot on m.dominos.co.in (Address -> Cart -> Cash on Delivery)...",
+          "[01:46:53] [MIDDLEMAN-ENGINE] 🚀 Launching unified robot session for Customer Order DOM-ENG-212819...",
+          "[01:46:56] [MIDDLEMAN-ENGINE] 🏪 Delivering Store Resolved from Domino's Locator: CHANDIGARH SEC 8B (ID: 65977)",
+          "[01:46:56] [MIDDLEMAN-ENGINE] 🏠 Registering customer delivery address on Domino's India for 9650146938...",
+          "[01:46:58] [MIDDLEMAN-ENGINE] ℹ️ Address established and linked to session.",
+          "[01:46:58] [MIDDLEMAN-ENGINE] 🧹 Checking cart and clearing leftover items for Store 65977...",
+          "[01:47:01] [MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.",
+          "[01:47:01] [MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store 65977...",
+          "[01:47:04] [MIDDLEMAN-ENGINE] 🛒 Adding 1 constituent item(s) to Domino's cart...",
+          "[01:47:04] [MIDDLEMAN-ENGINE] 🍕 Adding \"Farmhouse\" (Qty: 1) to Domino's cart...",
+          "[01:47:10] [MIDDLEMAN-ENGINE] ✓ Successfully added \"Farmhouse\" to cart!",
+          "[01:47:10] [MIDDLEMAN-ENGINE] 📝 Closing search modal to uncover View Cart bar...",
+          "[01:47:14] [MIDDLEMAN-ENGINE] 🛒 Navigating to Domino's Cart View...",
+          "[01:47:19] [MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/65977, navigatedViaClick = false",
+          "[01:47:34] [MIDDLEMAN-ENGINE] 🔍 DOM Snapshot: wraps = 0, cards = 0, snippet = \"Domino's Pizza Veg Only Non Veg Only Sort by Cheese Lava Big Big Pizza Veg Pizza Non-Veg Pizza Deals Chicken Feast Cheese Burst Pizza Cheese Volcano Pizza Mania Garlic Breads & Dips Beverages Desserts Tacos & Parcels Maxxx Pizzas 2in1 Cheese Burst Cheese Lava Cheese Lava Spiced Double Chicken 8 ch\"",
+          "[01:47:34] [MIDDLEMAN-ENGINE] 🔍 Auditing cart items against customer order...",
+          "[01:47:34] [MIDDLEMAN-ENGINE] 🛡️ Verifying cart contents against customer order...",
+          "[01:47:34] [MIDDLEMAN-ENGINE] Cart Contents: 0 item(s). Missing: 1, Rogue: 0",
+          "[01:47:34] [MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: Cart verification failed: Ordered item(s) missing from Domino's cart: [Farmhouse]. Order blocked to prevent placing incomplete order.",
+          "[01:47:44] ❌ Domino's Placement Notice: Cart verification failed: Ordered item(s) missing from Domino's cart: [Farmhouse]. Order blocked to prevent placing incomplete order.",
+          "[01:47:44] Domino's session +91 9650146938 released back to pool."
+        ],
+        "estimatedDelivery": "45 mins",
+        "error": "Cart verification failed: Ordered item(s) missing from Domino's cart: [Farmhouse]. Order blocked to prevent placing incomplete order."
+      },
+      "createdAt": "2026-11-01T20:16:52.819Z",
+      "updatedAt": "2026-11-01T20:17:44.689Z"
+    },
+    {
+      "id": "DOM-ENG-212715",
+      "engineOrderRef": "DOM-ENG-212715",
+      "dominosOrderRef": null,
+      "cartId": "1923714987849279435",
+      "assignedAccountId": "ACC-DOM-3155",
+      "userId12": "591501648476",
+      "user": {
+        "name": "Test Customer New",
+        "email": "testnew@example.com",
+        "phone": "9988776655",
+        "userId12": "591501648476"
+      },
+      "items": [
+        {
+          "id": "1",
+          "name": "Margherita",
+          "price": 109,
+          "quantity": 2,
+          "size": "Regular",
+          "crust": "Classic Hand Tossed"
+        }
+      ],
+      "location": {
+        "store": {
+          "storeId": "65977",
+          "storeName": "CHANDIGARH SEC 8B"
+        }
+      },
+      "address": {
+        "addressLine": "Flat 101, Galaxy Heights, Sector 62",
+        "receiverName": "Test Customer New",
+        "receiverMobile": "9988776655",
+        "deliveryInstructions": "Leave with guard",
+        "lat": 28.628,
+        "lng": 77.364,
+        "storeId": "65977",
+        "storeName": "CHANDIGARH SEC 8B"
+      },
+      "payment": {
+        "method": "COD",
+        "subtotal": 218,
+        "gst": 10.9,
+        "deliveryFee": 35,
+        "packagingFee": 0,
+        "discountAmount": 100,
+        "couponCode": "NEWBIE100",
+        "amount": 164,
+        "originalEstimatedAmount": 253,
+        "priceDifference": -89,
+        "priceNotice": "Domino's live store price verified at kitchen: Total reduced by ₹89.",
+        "receiverUpiId": "Pranjalottery@fam",
+        "receiverPayeeName": "Dominos order engine",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Dominos%20order%20engine&am=164&tr=DOM-ENG-212715&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-212715",
+        "status": "CONFIRMED_COD",
+        "transactionId": "COD-64212716",
+        "verifiedAt": "2026-11-01T20:16:52.716Z"
+      },
+      "robot": {
+        "status": "ERROR",
+        "assignedAccountId": "ACC-DOM-3155",
+        "accountPhone": "+91 7888422429",
+        "sessionPhone": "+91 7888422429",
+        "accountCategory": "CATEGORY_50_OFF",
+        "categoryName": "🟢 50% OFF New User Tier",
+        "couponCode": null,
+        "cartId": "1923714987849279435",
+        "dominosOrderRef": null,
+        "dominosAddressId": null,
+        "dominosFormattedAddress": null,
+        "storeId": "65979",
+        "storeName": "NOIDA SEC 110",
+        "billAmount": 218,
+        "discountAmount": 100,
+        "dueAmount": null,
+        "proofScreenshotUrl": null,
+        "cartBillScreenshotUrl": null,
+        "rider": {
+          "name": null,
+          "phone": null,
+          "status": "AWAITING_KITCHEN_DISPATCH"
+        },
+        "logs": [
+          "[1:46:52 am] Order created (Cash on Delivery). Engine Ref: DOM-ENG-212715 | Domino's Live Ref: Awaiting Placement | Cart ID: #3865786925599380677. Store: Kitchen. Verified Total: ₹164. Session Phone: +91 7888422429. Promo: NEWBIE100.",
+          "[01:46:52] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[01:46:52] Resuming pre-assigned Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🟢 50% OFF New User Tier",
+          "[01:46:52] Claimed Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🟢 50% OFF New User Tier",
+          "[01:46:52] Rejuvenating session token with Domino's India live auth API...",
+          "[01:46:53] ✓ Token refreshed! 30-day session extended. Cart ID: 1923714987849279435",
+          "[01:46:53] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[01:46:53] Resolving Domino's delivery kitchen for coordinates: [28.5355, 77.3910]",
+          "[01:46:53] Kitchen Resolved: NOIDA SEC 110 (Store ID: 65979) - Delivery ETA: 45 mins",
+          "[01:46:53] 🤖 Launching unified Middleman Robot on m.dominos.co.in (Address -> Cart -> Cash on Delivery)...",
+          "[01:46:53] [MIDDLEMAN-ENGINE] 🚀 Launching unified robot session for Customer Order DOM-ENG-212715...",
+          "[01:46:55] [MIDDLEMAN-ENGINE] 🔑 Injecting 15 saved Domino's session cookies...",
+          "[01:46:56] [MIDDLEMAN-ENGINE] 🏪 Delivering Store Resolved from Domino's Locator: CHANDIGARH SEC 8B (ID: 65977)",
+          "[01:46:56] [MIDDLEMAN-ENGINE] 🏠 Registering customer delivery address on Domino's India for 7888422429...",
+          "[01:47:00] [MIDDLEMAN-ENGINE] ✓ Customer delivery address saved in Domino's \"My Addresses\"! (ID: #1478167498)",
+          "[01:47:00] [MIDDLEMAN-ENGINE] 🧹 Checking cart and clearing leftover items for Store 65977...",
+          "[01:47:02] [MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.",
+          "[01:47:02] [MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store 65977...",
+          "[01:47:07] [MIDDLEMAN-ENGINE] 🛒 Adding 1 constituent item(s) to Domino's cart...",
+          "[01:47:07] [MIDDLEMAN-ENGINE] 🍕 Adding \"Margherita\" (Qty: 2) to Domino's cart...",
+          "[01:47:14] [MIDDLEMAN-ENGINE] ✓ Successfully added \"Margherita\" to cart!",
+          "[01:47:18] [MIDDLEMAN-ENGINE] ✓ Successfully added \"Margherita\" to cart!",
+          "[01:47:18] [MIDDLEMAN-ENGINE] 📝 Closing search modal to uncover View Cart bar...",
+          "[01:47:22] [MIDDLEMAN-ENGINE] 🛒 Navigating to Domino's Cart View...",
+          "[01:47:29] [MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/65977, navigatedViaClick = false",
+          "[01:47:44] [MIDDLEMAN-ENGINE] 🔍 DOM Snapshot: wraps = 0, cards = 0, snippet = \"Domino's Pizza Veg Only Non Veg Only Sort by Cheese Lava Big Big Pizza Veg Pizza Non-Veg Pizza Deals Chicken Feast Cheese Burst Pizza Cheese Volcano Pizza Mania Garlic Breads & Dips Beverages Desserts Tacos & Parcels Maxxx Pizzas 2in1 Cheese Burst Cheese Lava Cheese Lava Spiced Double Chicken 8 ch\"",
+          "[01:47:44] [MIDDLEMAN-ENGINE] 🔍 Auditing cart items against customer order...",
+          "[01:47:44] [MIDDLEMAN-ENGINE] 🛡️ Verifying cart contents against customer order...",
+          "[01:47:44] [MIDDLEMAN-ENGINE] Cart Contents: 0 item(s). Missing: 1, Rogue: 0",
+          "[01:47:44] [MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: Cart verification failed: Ordered item(s) missing from Domino's cart: [Margherita]. Order blocked to prevent placing incomplete order.",
+          "[01:47:45] ❌ Domino's Placement Notice: Cart verification failed: Ordered item(s) missing from Domino's cart: [Margherita]. Order blocked to prevent placing incomplete order.",
+          "[01:47:45] Domino's session +91 7888422429 released back to pool."
+        ],
+        "estimatedDelivery": "45 mins",
+        "error": "Cart verification failed: Ordered item(s) missing from Domino's cart: [Margherita]. Order blocked to prevent placing incomplete order."
+      },
+      "createdAt": "2026-11-01T20:16:52.742Z",
+      "updatedAt": "2026-11-01T20:17:45.024Z"
+    },
+    {
       "id": "DOM-ENG-250275",
       "engineOrderRef": "DOM-ENG-250275",
       "dominosOrderRef": null,
@@ -6449,6 +6811,24 @@
       "upiUri": "upi://pay?pa=Pranjlottery%40fam&pn=Dominos%20order%20engine&am=50&tr=DEP-593926&tn=Domino's%20Order%20Engine%20Wallet%20Deposit%20DEP-593926&cu=INR",
       "userId": "591501648476",
       "utr": ""
+    },
+    {
+      "adminNote": "Admin Verified & Approved",
+      "amount": 50,
+      "approvedAt": "2026-11-01T20:11:23.136Z",
+      "createdAt": "2026-11-01T20:10:45.747Z",
+      "expiresAt": "2026-11-01T20:15:45.747Z",
+      "id": "DEP-526279",
+      "method": "UPI_DEEP_LINK",
+      "phone": "7893618933",
+      "reference": "DEP-526279",
+      "referenceId": "DEP-526279",
+      "status": "APPROVED",
+      "submittedAt": "2026-11-01T20:11:02.795Z",
+      "updatedAt": "2026-11-01T20:11:02.795Z",
+      "upiUri": "upi://pay?pa=Pranjalgulyani%40fam&pn=Dominos%20order%20engine&am=50&tr=DEP-526279&tn=Domino's%20Order%20Engine%20Wallet%20Deposit%20DEP-526279&cu=INR",
+      "userId": "591501648476",
+      "utr": ""
     }
   ],
   "walletWithdrawals": [],
@@ -6501,10 +6881,10 @@
     },
     {
       "email": "parthgulyani7960@gmail.com",
-      "googleId": "g-1793563838298",
+      "googleId": "g-1793564262480",
       "id": "USR-0426",
       "isAdmin": true,
-      "lastActive": "2026-11-01T20:10:38.298Z",
+      "lastActive": "2026-11-01T20:17:42.480Z",
       "name": "Parth Gulyani",
       "phone": "",
       "phoneLocked": false,
@@ -6512,20 +6892,20 @@
       "registeredAt": "2026-11-01T19:46:40.426Z",
       "role": "ADMIN",
       "status": "ACTIVE",
-      "transactions": [],
       "userId12": "591501648476",
       "wallet": {
         "balance": 0,
         "currency": "INR"
       },
       "walletBalance": 0,
+      "transactions": [],
       "savedAddresses": []
     },
     {
       "email": "regularcustomer99@gmail.com",
-      "googleId": "g-1793563838331",
+      "googleId": "g-1793564262517",
       "id": "USR-0459",
-      "lastActive": "2026-11-01T20:10:38.331Z",
+      "lastActive": "2026-11-01T20:17:42.517Z",
       "name": "Regular Customer",
       "phone": "",
       "phoneLocked": false,
@@ -6533,13 +6913,13 @@
       "registeredAt": "2026-11-01T19:46:40.459Z",
       "status": "ACTIVE",
       "userId12": "819292137534",
-      "walletBalance": 0,
-      "savedAddresses": [],
-      "transactions": [],
       "wallet": {
         "balance": 0,
         "currency": "INR"
-      }
+      },
+      "walletBalance": 0,
+      "savedAddresses": [],
+      "transactions": []
     }
   ],
   "notifications": [
@@ -6574,7 +6954,7 @@
   "maintenanceMode": {
     "active": false,
     "message": "Scheduled Maintenance: System upgrade in progress. Ordering paused.",
-    "until": "2026-11-01T20:40:51.525Z",
-    "updatedAt": "2026-11-01T20:10:51.581Z"
+    "until": "2026-11-01T20:47:55.240Z",
+    "updatedAt": "2026-11-01T20:17:55.263Z"
   }
 }

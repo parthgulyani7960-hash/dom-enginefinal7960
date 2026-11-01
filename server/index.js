@@ -1015,6 +1015,9 @@ const server = http.createServer(async (req, res) => {
       }
 
       const customerPhone = (payload.user?.phone || userProf.phone || '').replace(/[^0-9]/g, '').slice(-10);
+      const custRegStatus = (customerPhone && typeof db.getDominosRegistrationStatus === 'function') ? db.getDominosRegistrationStatus(customerPhone) : null;
+      const isExistingDominoUser = Boolean(custRegStatus?.isDominoRegistered && Number(custRegStatus?.pastOrdersCount || 0) > 0);
+      const isExistingDominosUser = isExistingDominoUser;
 
       let activeSession = null;
       // 1. Direct pool match for customer's own phone if active and non-disabled
