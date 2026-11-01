@@ -1749,7 +1749,7 @@
   "maintenanceMode": {
     "active": false,
     "message": "Scheduled Maintenance: System upgrade in progress. Ordering paused.",
-    "until": "2026-11-01T19:30:56.293Z",
-    "updatedAt": "2026-11-01T19:00:56.322Z"
+    "until": "2026-11-01T19:36:18.516Z",
+    "updatedAt": "2026-11-01T19:06:18.536Z"
   }
 }
