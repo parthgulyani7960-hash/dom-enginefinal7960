@@ -2539,11 +2539,19 @@ function renderCartDrawer(triggerRemoteVerify = true) {
     if (outOfStockBanner) outOfStockBanner.style.display = 'none';
     if (proceedBtn && isStoreServiceable) {
       proceedBtn.disabled = false;
-      proceedBtn.style.background = 'var(--primary)';
       proceedBtn.style.cursor = 'pointer';
-      proceedBtn.innerText = currentPaymentMethod === 'COD'
-        ? 'Place Cash on Delivery Order →'
-        : 'Proceed to Online QR Payment →';
+      if (currentPaymentMethod === 'COD') {
+        proceedBtn.innerHTML = `<span>💵</span> <span>Place Cash on Delivery Order (₹${grandTotal}) &rarr;</span>`;
+        proceedBtn.style.background = '#16a34a';
+      } else {
+        proceedBtn.innerHTML = `<span>📱</span> <span>Proceed to UPI QR Payment (₹${grandTotal}) &rarr;</span>`;
+        proceedBtn.style.background = '#0066a3';
+      }
+    } else if (proceedBtn && !isStoreServiceable) {
+      proceedBtn.disabled = true;
+      proceedBtn.style.background = '#94a3b8';
+      proceedBtn.style.cursor = 'not-allowed';
+      proceedBtn.innerText = 'Store Currently Unserviceable';
     }
   }
 
@@ -2563,6 +2571,7 @@ function onPaymentMethodChange(method) {
   const note = document.getElementById('paymentMethodNote');
   const proceedBtn = document.getElementById('cartProceedBtn');
 
+  const curTotal = document.getElementById('billTotal')?.innerText || '';
   if (method === 'COD') {
     if (lblCOD) {
       lblCOD.style.border = '2px solid #0055a5';
@@ -2575,10 +2584,11 @@ function onPaymentMethodChange(method) {
       lblUPI.style.color = '#475569';
     }
     if (note) {
-      note.innerHTML = '✓ Robot automatically adds items to Domino\'s site and places order as <strong>Cash on Delivery</strong>! Pay cash to the Domino\'s rider upon delivery.';
+      note.innerHTML = '✓ Order will be placed directly with your local Domino\'s kitchen as <strong>Cash on Delivery</strong>! Pay cash to the Domino\'s rider upon doorstep arrival.';
     }
     if (proceedBtn && !proceedBtn.disabled) {
-      proceedBtn.innerText = 'Place Cash on Delivery Order →';
+      proceedBtn.innerHTML = `<span>💵</span> <span>Place Cash on Delivery Order ${curTotal ? `(${curTotal})` : ''} &rarr;</span>`;
+      proceedBtn.style.background = '#16a34a';
     }
   } else {
     if (lblCOD) {
@@ -2595,7 +2605,8 @@ function onPaymentMethodChange(method) {
       note.innerHTML = '✓ Complete payment instantly via UPI QR code. Once confirmed, Domino\'s order engine is automatically dispatched.';
     }
     if (proceedBtn && !proceedBtn.disabled) {
-      proceedBtn.innerText = 'Proceed to Online QR Payment →';
+      proceedBtn.innerHTML = `<span>📱</span> <span>Proceed to UPI QR Payment ${curTotal ? `(${curTotal})` : ''} &rarr;</span>`;
+      proceedBtn.style.background = '#0066a3';
     }
   }
 }
@@ -3078,6 +3089,7 @@ async function proceedToPaymentQR() {
   }
 
   if (!isUserLoggedIn()) {
+    closeModal('cartModal');
     openGoogleAuthModal();
     showToastNotice('Please sign in with Google to place your Domino\'s order.', '🔑');
     return;
@@ -3116,8 +3128,8 @@ async function proceedToPaymentQR() {
     }
     selectedAddr = {
       id: 'CURRENT_LOCATION',
-      name: currentUser.name || 'Parth',
-      phone: currentUser.phone || '+91 7893618933',
+      name: currentUser.name || 'Customer',
+      phone: currentUser.phone || '',
       flat: quickFlat,
       building: currentResolvedStore ? currentResolvedStore.storeName : 'Nearby Delivery Location',
       street: currentResolvedStore ? (currentResolvedStore.address || currentResolvedStore.locality || 'Verified GPS Area') : 'Verified GPS Area',
@@ -3141,13 +3153,13 @@ async function proceedToPaymentQR() {
   const lng = selectedAddr.longitude || (currentCoordinates && currentCoordinates.longitude) || 77.3910;
 
   // Receiver details (customizable per order)
-  const receiverName = document.getElementById('cartReceiverNameInput')?.value?.trim() || selectedAddr.name || currentUser.name || 'Parth';
-  const receiverRawPhone = document.getElementById('cartReceiverPhoneInput')?.value?.trim() || selectedAddr.phone || currentUser.phone || '+91 7893618933';
+  const receiverName = document.getElementById('cartReceiverNameInput')?.value?.trim() || selectedAddr.name || currentUser.name || 'Customer';
+  const receiverRawPhone = document.getElementById('cartReceiverPhoneInput')?.value?.trim() || selectedAddr.phone || currentUser.phone || '';
   const receiverPhone = receiverRawPhone.replace(/[^0-9]/g, '').slice(-10);
 
   // Strict Domino's Indian Mobile Validation (10 digits starting with 6, 7, 8, or 9)
   if (!receiverPhone || receiverPhone.length !== 10 || !/^[6-9]\d{9}$/.test(receiverPhone)) {
-    alert('Please enter a valid 10-digit Indian mobile number for the receiver (starting with 6, 7, 8, or 9). Domino\'s rider requires this to coordinate delivery.');
+    alert('Please enter a valid 10-digit Indian mobile number for rider delivery contact (starting with 6, 7, 8, or 9). Domino\'s rider requires this to coordinate delivery.');
     const phoneInput = document.getElementById('cartReceiverPhoneInput');
     if (phoneInput) {
       phoneInput.focus();
@@ -3292,6 +3304,18 @@ async function proceedToPaymentQR() {
     confTotalEl.innerText = document.getElementById('cartGrandTotal')?.innerText || `₹${subtotal + taxes + delivery}`;
   }
 
+  const confExecBtn = document.getElementById('btnExecuteConfirmedOrder');
+  if (confExecBtn) {
+    const totalDisplay = confTotalEl?.innerText || '';
+    if (currentPaymentMethod === 'UPI') {
+      confExecBtn.innerHTML = `<span>⚡</span> <span>Proceed to Instant QR Payment ${totalDisplay ? `(${totalDisplay})` : ''} &rarr;</span>`;
+      confExecBtn.style.background = '#0066a3';
+    } else {
+      confExecBtn.innerHTML = `<span>✓</span> <span>Confirm &amp; Place COD Order ${totalDisplay ? `(${totalDisplay})` : ''} &rarr;</span>`;
+      confExecBtn.style.background = '#16a34a';
+    }
+  }
+
   // Open the Confirmation Modal
   openModal('orderConfirmationModal');
 }
@@ -3370,6 +3394,13 @@ async function executeFinalConfirmedOrder() {
     }
 
     currentOrder = data.order;
+    try {
+      const myOrderIds = JSON.parse(localStorage.getItem('dominos_my_order_ids') || '[]');
+      if (currentOrder && currentOrder.id && !myOrderIds.includes(currentOrder.id)) {
+        myOrderIds.unshift(currentOrder.id);
+        localStorage.setItem('dominos_my_order_ids', JSON.stringify(myOrderIds.slice(0, 50)));
+      }
+    } catch (e) {}
     if (data.priceDifference && data.priceDifference !== 0) {
       showToastNotice(data.priceNotice || `Price updated by Domino's store billing: ₹${data.dominosVerifiedTotal}`, 'ℹ️');
     }
@@ -4458,6 +4489,13 @@ async function promptUpdateRiderPhone() {
     if (!res.ok) throw new Error(data.error || 'Failed to update rider');
 
     currentOrder = data.order;
+    try {
+      const myOrderIds = JSON.parse(localStorage.getItem('dominos_my_order_ids') || '[]');
+      if (currentOrder && currentOrder.id && !myOrderIds.includes(currentOrder.id)) {
+        myOrderIds.unshift(currentOrder.id);
+        localStorage.setItem('dominos_my_order_ids', JSON.stringify(myOrderIds.slice(0, 50)));
+      }
+    } catch (e) {}
     updateTrackingUI(currentOrder);
     showToastNotice(data.message || `🛵 Rider contact updated to ${data.rider.phone}! This is the rider and you can contact the rider for your order.`, '✅');
   } catch (err) {
@@ -4499,9 +4537,27 @@ function openMyOrdersModal() {
   }, 6000);
 }
 
+function getMyOrdersFetchUrl(sync = false) {
+  const params = new URLSearchParams();
+  if (sync) params.append('sync', 'true');
+  if (currentUser) {
+    if (currentUser.email) params.append('email', currentUser.email);
+    if (currentUser.userId12) params.append('uid', currentUser.userId12);
+    if (currentUser.phone) {
+      const clean = currentUser.phone.replace(/[^0-9]/g, '').slice(-10);
+      if (clean) params.append('phone', clean);
+    }
+  }
+  try {
+    const localIds = JSON.parse(localStorage.getItem('dominos_my_order_ids') || '[]');
+    if (localIds.length > 0) params.append('orderIds', localIds.join(','));
+  } catch (e) {}
+  return `/api/user/orders?${params.toString()}`;
+}
+
 async function loadMyOrdersSilent() {
   try {
-    const res = await fetch('/api/user/orders');
+    const res = await fetch(getMyOrdersFetchUrl());
     const data = await res.json();
     if (data && data.orders) {
       renderMyOrders(data.orders);
@@ -4523,7 +4579,7 @@ async function loadMyOrders() {
   `;
 
   try {
-    const res = await fetch('/api/user/orders');
+    const res = await fetch(getMyOrdersFetchUrl());
     const data = await res.json();
     const orders = data.orders || [];
     renderMyOrders(orders);

@@ -2074,18 +2074,22 @@ class Database {
     return acc;
   }
 
-  getUserOrders(userId) {
-    const prof = this.getUserProfile();
-    const user = (userId && userId !== 'CURRENT_USER') ? this.getUser(userId) : (this.getUsers()[0] || prof);
+  getUserOrders(identifier) {
+    if (!identifier) return [];
     const allOrders = this.getOrders();
-    const targetUid = user?.userId12 || prof.userId12;
-    const targetPhone = user?.cleanPhone || (prof.phone ? prof.phone.replace(/[^0-9]/g, '').slice(-10) : '7893618933');
+    const cleanId = String(identifier).trim().toLowerCase();
+    const cleanDigits = identifier.replace(/[^0-9]/g, '').slice(-10);
 
-    return allOrders.filter(o => 
-      (targetUid && (o.userId12 === targetUid || o.user?.userId12 === targetUid)) ||
-      (targetPhone && o.user?.phone && o.user.phone.includes(targetPhone)) ||
-      (targetPhone && o.address?.phone && o.address.phone.includes(targetPhone))
-    );
+    return allOrders.filter(o => {
+      if (cleanId && (o.userId12 === cleanId || o.user?.userId12 === cleanId)) return true;
+      if (cleanId && (o.user?.email?.toLowerCase() === cleanId || o.address?.email?.toLowerCase() === cleanId)) return true;
+      if (cleanDigits && cleanDigits.length === 10) {
+        const uPhone = (o.user?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+        const aPhone = (o.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+        if (uPhone === cleanDigits || aPhone === cleanDigits) return true;
+      }
+      return false;
+    });
   }
 
   // Admin User Address Management (Max 3 Addresses Enforced)

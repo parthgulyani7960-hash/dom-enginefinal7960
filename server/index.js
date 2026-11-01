@@ -1152,9 +1152,9 @@ const server = http.createServer(async (req, res) => {
         assignedAccountId: activeSession ? activeSession.id : null,
         userId12: userId12,
         user: {
-          name: payload.user?.name || userProf.name || 'Parth Sharma',
-          email: payload.user?.email || userProf.email || 'parth.google@gmail.com',
-          phone: payload.user?.phone || userProf.phone || '+91 7893618933',
+          name: payload.user?.name || payload.address?.name || 'Customer',
+          email: payload.user?.email || payload.address?.email || '',
+          phone: payload.user?.phone || payload.address?.phone || '',
           userId12: userId12
         },
         items: payload.items || [],
@@ -1778,18 +1778,31 @@ const server = http.createServer(async (req, res) => {
     if (parsedUrl.query?.sync === 'true') {
       await syncOrdersWithDominosCloud().catch(() => null);
     }
-    const email = req.headers['x-user-email'] || parsedUrl.query?.email;
-    const uid = req.headers['x-user-uid'] || parsedUrl.query?.uid;
-    let targetId = 'CURRENT_USER';
-    if (email) {
-      const match = db.getUsers().find(u => u.email && u.email.toLowerCase() === String(email).toLowerCase());
-      if (match) targetId = match.id || match.userId12;
-    } else if (uid) {
-      targetId = String(uid);
-    }
-    const orders = db.getUserOrders(targetId);
-    const resultOrders = (orders && orders.length > 0) ? orders : db.getOrders();
-    return sendJson(res, 200, { success: true, orders: resultOrders });
+    const email = (req.headers['x-user-email'] || parsedUrl.query?.email || '').trim().toLowerCase();
+    const uid = (req.headers['x-user-uid'] || parsedUrl.query?.uid || '').trim();
+    const rawPhone = (parsedUrl.query?.phone || '').trim();
+    const cleanPhone = rawPhone.replace(/[^0-9]/g, '').slice(-10);
+    const orderIdsParam = (parsedUrl.query?.orderIds || '').trim();
+    const localOrderIds = orderIdsParam ? orderIdsParam.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    const allOrders = db.getOrders();
+    const matchedOrders = allOrders.filter(o => {
+      // 1. Order placed on this browser device
+      if (localOrderIds.includes(o.id)) return true;
+      // 2. Order matches user email
+      if (email && (o.user?.email?.toLowerCase() === email || o.address?.email?.toLowerCase() === email)) return true;
+      // 3. Order matches user numerical UID
+      if (uid && (o.userId12 === uid || o.user?.userId12 === uid)) return true;
+      // 4. Order matches receiver / user 10-digit mobile
+      if (cleanPhone && cleanPhone.length === 10) {
+        const uPhone = (o.user?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+        const aPhone = (o.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+        if (uPhone === cleanPhone || aPhone === cleanPhone) return true;
+      }
+      return false;
+    });
+
+    return sendJson(res, 200, { success: true, orders: matchedOrders });
   }
 
   // --- ADMIN ROUTES ---
@@ -2337,8 +2350,8 @@ const server = http.createServer(async (req, res) => {
     try {
       const address = await parseBody(req);
       const userProf = db.getUserProfile();
-      address.name = address.name || (address.firstName ? `${address.firstName} ${address.lastName || ''}`.trim() : userProf.name || 'Parth Sharma');
-      address.phone = address.phone || userProf.phone || '+91 7893618933';
+      address.name = address.name || (address.firstName ? `${address.firstName} ${address.lastName || ''}`.trim() : (address.receiverName || 'Customer'));
+      address.phone = address.phone || address.receiverPhone || '';
       address.orderForSomeoneElse = Boolean(address.orderForSomeoneElse);
       address.receiverName = address.receiverName || address.name;
       address.receiverPhone = address.receiverPhone || address.phone;

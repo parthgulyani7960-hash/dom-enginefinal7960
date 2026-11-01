@@ -818,10 +818,12 @@
             ✓ Order will be placed directly with your local Domino's kitchen as <strong>Cash on Delivery</strong>! Pay cash to the Domino's rider upon doorstep arrival.
           </div>
         </div>
+      </div>
 
-        <!-- Proceed / Submit Order Button -->
-        <button class="btn-primary" id="cartProceedBtn" onclick="handleCartOrderSubmit()">
-          Place Cash on Delivery Order &rarr;
+      <!-- Pinned & Protected Sticky Cart Footer -->
+      <div class="modal-footer" id="cartModalFooter">
+        <button class="btn-primary" id="cartProceedBtn" onclick="handleCartOrderSubmit()" style="min-height: 50px; font-size: 15px; font-weight: 800; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(0, 102, 163, 0.35);">
+          <span>💵</span> <span>Place Cash on Delivery Order &rarr;</span>
         </button>
       </div>
     </div>
@@ -918,17 +920,16 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- SECTION 4: Confirmation Actions -->
-        <div>
-          <button class="btn-primary" id="btnExecuteConfirmedOrder" onclick="executeFinalConfirmedOrder()" style="background: #16a34a; font-size: 15px; font-weight: 800; padding: 14px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);">
-            <span>✓ Confirm &amp; Place Domino's Order</span>
-          </button>
-          <button type="button" class="btn-secondary" onclick="closeModal('orderConfirmationModal')" style="width: 100%; margin-top: 8px; padding: 9px; font-size: 12px; font-weight: 700; background: white; border: 1px solid #cbd5e1; color: var(--gray-600);">
-            &larr; Modify Order / Edit Items
-          </button>
-        </div>
-
+      <!-- Pinned & Protected Sticky Confirmation Footer -->
+      <div class="modal-footer" id="orderConfirmFooter">
+        <button class="btn-primary" id="btnExecuteConfirmedOrder" onclick="executeFinalConfirmedOrder()" style="background: #16a34a; font-size: 15px; font-weight: 800; min-height: 50px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35); border-radius: 12px;">
+          <span>✓ Confirm &amp; Place Domino's Order</span>
+        </button>
+        <button type="button" class="btn-secondary" onclick="closeModal('orderConfirmationModal')" style="width: 100%; min-height: 42px; font-size: 13px; font-weight: 700; background: white; border: 1.5px solid #cbd5e1; color: var(--gray-600); border-radius: 10px;">
+          &larr; Modify Order / Edit Items
+        </button>
       </div>
     </div>
   </div>
@@ -996,12 +997,19 @@
           <span>⚡ Pay via UPI App (Instant App Open) &rarr;</span>
         </a>
 
-        <div style="text-align: center; margin-bottom: 14px;">
+        <div style="text-align: center; margin-bottom: 8px;">
           <p style="font-size: 12px; color: var(--gray-600); margin-bottom: 2px;">Scan with any UPI App (GPay, PhonePe, Paytm, CRED, BHIM)</p>
         </div>
+      </div>
 
-        <button class="btn-primary" onclick="confirmPaymentAndRelease()" style="padding: 12px; font-size: 14px; font-weight: 800; border-radius: 8px; margin-bottom: 8px;">✅ I Have Paid / Confirm Order &rarr;</button>
-        <button class="btn-secondary" onclick="closeModal('paymentModal')" style="border-radius: 8px;">✕ Cancel Order</button>
+      <!-- Pinned & Protected Sticky Payment Footer -->
+      <div class="modal-footer" id="paymentModalFooter">
+        <button class="btn-primary" onclick="confirmPaymentAndRelease()" style="min-height: 50px; font-size: 15px; font-weight: 800; border-radius: 12px; background: #16a34a; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);">
+          ✅ I Have Paid / Confirm Order &rarr;
+        </button>
+        <button class="btn-secondary" onclick="closeModal('paymentModal')" style="min-height: 42px; font-size: 13px; font-weight: 700; border-radius: 10px; background: white; border: 1.5px solid #cbd5e1; color: var(--gray-600);">
+          ✕ Cancel Order
+        </button>
       </div>
     </div>
   </div>
