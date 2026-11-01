@@ -1,0 +1,1755 @@
+{
+  "accounts": [
+    {
+      "id": "ACC-DOM-0325",
+      "phone": "+91 7893618933",
+      "cleanPhone": "7893618933",
+      "customerName": "Parth Sharma",
+      "userId": "353304039",
+      "cartId": "7011004257346197868",
+      "accountType": "NEW_ACCOUNT",
+      "category": "CATEGORY_FLAT_100",
+      "categoryName": "🔵 Party Repeat Order Tier",
+      "couponCode": "PARTY",
+      "status": "IDLE",
+      "disabled": true,
+      "totalOrdersPlaced": 3,
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
+      "credentials": {
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
+        "expiration": 1796132139833
+      },
+      "storedAt": "2026-11-01T13:35:39.833Z",
+      "expiresAt": "2026-12-01T18:42:45.942Z",
+      "lastActive": "2026-11-01T13:37:31.196Z",
+      "activeOrderId": null,
+      "lastAssignedAt": "2026-11-01T13:37:31.192Z",
+      "pastOrdersCount": 0,
+      "lastValidated": "2026-11-01T18:42:45.942Z"
+    },
+    {
+      "id": "ACC-DOM-2158",
+      "phone": "+91 9650146938",
+      "cleanPhone": "9650146938",
+      "customerName": "Domino's Customer (6938)",
+      "userId": "353304038",
+      "cartId": "5912088909743535705",
+      "accountType": "SECOND_ORDER_ACCOUNT",
+      "category": "CATEGORY_SECOND_ORDER",
+      "categoryName": "Cheesy 2nd Order Tier",
+      "couponCode": "CHEESY",
+      "status": "IDLE",
+      "disabled": false,
+      "totalOrdersPlaced": 2,
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
+      "credentials": {
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
+        "expiration": 1796132139834
+      },
+      "storedAt": "2026-11-01T13:35:39.834Z",
+      "expiresAt": "2026-12-01T15:52:00.765Z",
+      "lastActive": "2026-11-01T17:07:53.958Z",
+      "pastOrdersCount": 1,
+      "lastValidated": "2026-11-01T15:52:00.765Z",
+      "activeOrderId": null
+    },
+    {
+      "id": "ACC-DOM-3155",
+      "phone": "+91 7888422429",
+      "cleanPhone": "7888422429",
+      "customerName": "Parth Gulyani",
+      "userId": "346377415",
+      "cartId": "4036087112628937436",
+      "accountType": "NEW_ACCOUNT",
+      "category": "CATEGORY_50_OFF",
+      "categoryName": "🟢 50% OFF New User Tier",
+      "couponCode": "DOMNEW50",
+      "cookies": [
+        {
+          "name": "token",
+          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+          "domain": ".dominos.co.in",
+          "path": "/"
+        },
+        {
+          "name": "_gcl_au",
+          "value": "1.1.531085401.1793550565",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1801326564,
+          "httpOnly": false,
+          "secure": false,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "th_capi_ph",
+          "value": "00aea567bbe445ceb57f26b489f8482b3feeaa145b56afd6dc281ba02d268e26",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1828110581.931415,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "None"
+        },
+        {
+          "name": "IDE",
+          "value": "AHWqTUnAJ0TZYXd44DpQq0fYMinWuxnhISQTKjRZbCuforC0YnOJ-JDLPqDPj6-9",
+          "domain": ".doubleclick.net",
+          "path": "/",
+          "expires": 1828110565.326065,
+          "httpOnly": true,
+          "secure": true,
+          "sameSite": "None"
+        },
+        {
+          "name": "neo_sc",
+          "value": "NeotagEncrypt%3AU2FsdGVkX1%2BQ7Sa%2FNUKww%2F4DqFtD%2F3vie48L8z439bU%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086565,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "nt_page_init_referrer",
+          "value": "NeotagEncrypt%3AU2FsdGVkX19RzAKbP3f7DVvQJTLI6kxB4GF5p2fqnAQ%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086565,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "nt_page_init_referring_domain",
+          "value": "NeotagEncrypt%3AU2FsdGVkX1%2BpSySgogwyU3M4y2RUqg30fmQousYTeAU%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086565,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "amp_22b51b",
+          "value": "UAsrx4aehS3qTryXzdlQTz.MzQ2Mzc3NDE1..1k6bv3eua.1k6bv3s8s.9.4.d",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086577,
+          "httpOnly": false,
+          "secure": false,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "amp_ff201f",
+          "value": "hihtTLjz2vxBSvIjjR057m...1k6bv3ss2.1k6bv3vse.e.f.t",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086581,
+          "httpOnly": false,
+          "secure": false,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "nt_user_id",
+          "value": "NeotagEncrypt%3AU2FsdGVkX1%2BV%2B4%2FEuP8frsbzIJ9rnaUnveXOp%2FQWmQo%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086582,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "nt_trait",
+          "value": "NeotagEncrypt%3AU2FsdGVkX1%2BRzFt%2BtW2aG8%2BZfLMf7jeW92SWeBuiJhI%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086582,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "nt_group_id",
+          "value": "NeotagEncrypt%3AU2FsdGVkX1%2BltkIGNtJxCamV89tP3rEF2XKyFPxpYMo%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086582,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "nt_group_trait",
+          "value": "NeotagEncrypt%3AU2FsdGVkX19sPHtUWWlpkD8FcePRSTeuaYwu39qT1s0%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086582,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "nt_anonymous_id",
+          "value": "NeotagEncrypt%3AU2FsdGVkX19omuhMn9Z3MXpAFIjnXvAC7zQv49WUQ5J0eqRqc3uynaq6MjKSb06cfW2s01SWdffiXw6bwpBs%2FQ%3D%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086582,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        },
+        {
+          "name": "neo_session",
+          "value": "NeotagEncrypt%3AU2FsdGVkX1%2FPjlmzcBsGablSyl5LZYROBZllNR2mxcyYpkLFBFX%2Foe3QKEW9cikPYTfyhVVEa0YW82DP0RaANSJYNLGZQOXqLMzeGVnZD6223c%2BboW2IGoFssHK%2BjxcBy%2FYsg9Tru%2BajPh%2FY4ZBrdw%3D%3D",
+          "domain": ".dominos.co.in",
+          "path": "/",
+          "expires": 1825086582,
+          "httpOnly": false,
+          "secure": true,
+          "sameSite": "Lax"
+        }
+      ],
+      "localStorage": {
+        "reorderHistoryId": "",
+        "finalRedirectUrl": "",
+        "nxgLoyalty": "PWA,ADRD,IOS,Desktop",
+        "_gcl_ls": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1793550564726},\"expires\":1801326564726},\"gsid_dc\":{\"value\":{\"joinId\":\"gUaUIrwC0bGikzM2z0xuoi_ESNWDovx9bA\",\"lastJoinedTimeMs\":1793550564732},\"expires\":1793550864732}}",
+        "isWalletSelected": "",
+        "PWA_CONFIG": "{\"isIrctcWorking\":false,\"loginNudgeSwitch\":true,\"menuRuleEngine\":\"{\\\"veg pizza\\\":\\r \\r {\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"}\\r ,\\\"non-veg pizza\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"pasta pizza party\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"meals & combos\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"pizza mania\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"speciality chicken\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"sides\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"beverages\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"dessert\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"daily essentials\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"masala pizza\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"},\\\"bestsellers\\\":{\\\"order\\\":\\\"asc\\\",\\\"bucketSize\\\":\\\"99\\\"}}\",\"paymentModePercentage\":99,\"menuReverseAB\":0,\"UPIIntentFlow_AB_Value\":70,\"maximumcartprice\":5000,\"showOneClickReorderTimer\":true,\"showZeroContactDelivery\":true,\"aibMapRestricted\":false,\"autoLoginPercentage\":1,\"timeout\":70,\"tnclink\":\"http://tnc.dominos.co.in/\",\"feedback\":{\"tags\":[\"Payment\",\"Offers\",\"Location\",\"Tracking Order\",\"Menu\",\"Other\"],\"items\":[{\"title\":\"NOT SO GOOD\",\"subtitle\":\"Sorry to hear that. What went wrong?\"},{\"title\":\"NOT SO GOOD\",\"subtitle\":\"Sorry to hear that. What went wrong?\"},{\"title\":\"CAN BE BETTER\",\"subtitle\":\"Sorry to hear that. What went wrong?\"},{\"title\":\"GOOD\",\"subtitle\":\"Thank You. Let us know how we can improve further?\"},{\"title\":\"LIKED IT\",\"subtitle\":\"Thank You. Let us know what you liked about us?\"},{\"title\":\"LOVED IT\",\"subtitle\":\"Thank You. Let us know what you liked about us?\"}]},\"offerBanner\":0,\"extracheesecount\":3,\"features\":\"{\\\"countryName\\\": \\\"india\\\",\\\"features\\\": [\\\"fareye\\\",\\\"tsg_refund\\\",\\\"address_on_cart\\\",\\\"menu_reverse\\\",\\\"menuRuleEngine\\\",\\\"showAppBanner\\\"]}\",\"offerBannerUrl\":\"/images/edvbanner_20190702.jpg\",\"isLocationIndependent\":true,\"appResetTimeStamp\":21600,\"playstoreurl\":\"https://play.google.com/store/apps/details?id=com.Dominos\",\"showOneClickOrderCancel\":false,\"newFlow\":20,\"appstoreurl\":\"https://itunes.apple.com/in/app/dominos-pizza/id523106486?mt=8\",\"abTestNew\":\"{\\\"cart_takeawayAddress\\\":\\\"A\\\",\\\"map_page_ab\\\":\\\"test\\\",\\\"location_page_ab\\\":\\\"test\\\",\\\"otp_autoread\\\":\\\"test\\\",\\\"cart_cta\\\":{\\\"default\\\":\\n{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}\\n,\\\"test\\\":{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}},\\\"address_page_ab\\\":{\\\"default\\\":\\n{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}\\n,\\\"test\\\":{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}},\\\"splash_screen_ab\\\":{\\\"default\\\":\\n{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}\\n,\\\"B\\\":{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"},\\\"C\\\":{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}},\\\"veg_only_ab\\\":{\\\"default\\\":\\n{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}\\n,\\\"test\\\":{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}},\\\"web_speech_ab\\\":{\\\"default\\\":\\n{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}\\n,\\\"A\\\":{\\\"low\\\":\\\"-20\\\",\\\"high\\\":\\\"-10\\\"}}}\",\"isManualLocatorEnable\":true,\"maximumcartitems\":25,\"cdnbaseurl\":\"https://images.dominos.co.in/\",\"hidePaymentMethodsForWallet\":\"[\\\"EVOUCHER\\\"]\",\"newLocationFlowOff\":true,\"leftnavDisabledLinks\":\"deliverOnTrain\",\"ucrEnabled\":true,\"feedbackOrdersDuration\":1296000,\"aibMapRedirectToAppStore\":\"https://dominos.sng.link/Avyfa/29d7/7xb8\",\"aibShowAppInstallBanner\":false,\"loyaltyCardCode\":\"POTP2\",\"showAppBanner\":false,\"storeId\":\"6585R\",\"loginNudgeABConfig\":100,\"otpNudgeABConfig\":99,\"showExtraCheeseOption\":true,\"isBatchAPIEnable\":true,\"aibNoMapRedirectToAppStore\":\"https://dominos.sng.link/Avyfa/s604/hdhy\",\"restrictedCities\":\"[]\",\"customercareemail\":\"guestcaredominos@jublfood.com\",\"support\":\"18602100000\",\"isCartHandlingRequired\":false}",
+        "itemPriceToppingArray": "{}",
+        "storeId": "6585R",
+        "paymentMode": "{}",
+        "neotag.1f46967f-fcfb-416a-ab5d-e84dc084eaa9.inProgress": "{}",
+        "amplitude_unsent_identify_22b51b98c3b678e3bb43761e835025fb_dominos_pwa": "[{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550564305,\"event_id\":1,\"session_id\":1793550564298,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$unset\":{\"referrer\":\"-\",\"referring_domain\":\"-\",\"utm_source\":\"-\",\"utm_medium\":\"-\",\"utm_campaign\":\"-\",\"utm_term\":\"-\",\"utm_content\":\"-\"}},\"uuid\":\"ab4747c4-ebda-4063-be89-5657d128ce4d\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":1,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550564426,\"event_id\":2,\"session_id\":1793550564298,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"user_type\":\"guest\",\"is_PWA_saved_mobile\":false,\"login_route\":\"Side menu\",\"UPI_intent_or_collect\":\"collect\",\"is_GPS_enabled\":\"OFF\",\"next_gen_home_ab_experiment_v18\":\"N/A\",\"utm_source_medium_pwa\":\"direct-direct\",\"utm_source_pwa\":\"direct\",\"utm_medium_pwa\":\"direct\",\"utm_campaign_pwa\":\"direct\",\"landingPage\":\"postorder-ui/login\",\"deviceType\":\"desktop\",\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"networkType\":\"4g\",\"screenSize\":\"412x915\",\"screenResolution\":\"412x915\"}},\"uuid\":\"a3dec785-7e62-442f-8ef6-ac2100d80cc7\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":2,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550577934,\"event_id\":3,\"session_id\":1793550564298,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"Screen_user_loggedin\":\"Auto Login - COD\"}},\"uuid\":\"a56705e2-eb79-4d2c-856c-33757a9408d2\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":11,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":\"346377415\",\"timestamp\":1793550577948,\"event_id\":4,\"session_id\":1793550564298,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"user_type\":\"loggedIn\",\"cartId\":\"4158292237569749362\",\"next_gen_home_ab_experiment_v18\":\"nextgen_variant_s\",\"user_id\":\"346377415\"}},\"uuid\":\"67d49e77-f472-459b-b572-845b896aea19\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":13,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null}]",
+        "amplitude_unsent_22b51b98c3b678e3bb43761e835025fb_dominos_pwa": "[{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550564449,\"event_id\":1,\"session_id\":1793550564298,\"event_type\":\"pageView\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"\",\"eventAction\":\"\",\"eventLabel\":\"\",\"Page_Name\":\"/login\",\"previousPage\":\"\",\"Events_time_stamp\":1793550564447},\"user_properties\":{},\"uuid\":\"4b4a021b-dc00-4f5c-bf62-74608fb4314e\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":3,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550564685,\"event_id\":2,\"session_id\":1793550564298,\"event_type\":\"Login_Screen_Property\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"Login Screen\",\"eventAction\":\"Send OTP\",\"eventLabel\":\"Clicked - Successful\",\"previousPage\":\"\",\"Page_Name\":\"/postorder-ui/login\",\"Events_time_stamp\":1793550564684},\"user_properties\":{},\"uuid\":\"a94de2d5-1e4b-46a4-9c26-4459cd755a97\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":4,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550564795,\"event_id\":3,\"session_id\":1793550564298,\"event_type\":\"OTP_Event\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"OTP Screen\",\"eventAction\":\"Autoread impression\",\"eventLabel\":\"impression\",\"previousPage\":\"\",\"Page_Name\":\"/postorder-ui/login-otp\",\"Events_time_stamp\":1793550564794},\"user_properties\":{},\"uuid\":\"c04e3762-0aa5-42c2-abc4-2ec231d1661d\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":5,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550564798,\"event_id\":4,\"session_id\":1793550564298,\"event_type\":\"OTP_Event\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"OTP Screen\",\"eventAction\":\"Resend OTP in 45s\",\"eventLabel\":\"impression\",\"previousPage\":\"\",\"Page_Name\":\"/postorder-ui/login-otp\",\"Events_time_stamp\":1793550564798},\"user_properties\":{},\"uuid\":\"9e238441-7f42-4936-95ba-edc81f83e173\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":6,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550567336,\"event_id\":5,\"session_id\":1793550564298,\"event_type\":\"time_spent\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"time spent\",\"fired_after\":3,\"Page_Name\":\"/postorder-ui/login-otp\",\"Events_time_stamp\":1793550567336},\"user_properties\":{},\"uuid\":\"876c876b-ec9f-41d9-b689-0717679f1d45\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":7,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550577805,\"event_id\":6,\"session_id\":1793550564298,\"event_type\":\"OTP_Event\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"OTP Screen\",\"eventAction\":\"OTP Filled - Manually\",\"eventLabel\":\"\",\"previousPage\":\"\",\"Page_Name\":\"/postorder-ui/login-otp\",\"Events_time_stamp\":1793550577803},\"user_properties\":{},\"uuid\":\"c0cb1484-589c-4ca3-80bc-00434940befe\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":8,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550577810,\"event_id\":7,\"session_id\":1793550564298,\"event_type\":\"OTP_Event\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"OTP Screen\",\"eventAction\":\"Login - Manually\",\"eventLabel\":\"Clicked\",\"previousPage\":\"\",\"Page_Name\":\"/postorder-ui/login-otp\",\"Events_time_stamp\":1793550577809},\"user_properties\":{},\"uuid\":\"3de23056-afbb-452a-83a8-048a006f1b35\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":9,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550577915,\"event_id\":8,\"session_id\":1793550564298,\"event_type\":\"OTP_Event\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"OTP Screen\",\"eventAction\":\"Login - Manually\",\"eventLabel\":\"Clicked - Successful\",\"previousPage\":\"\",\"Page_Name\":\"/postorder-ui/login-otp\",\"Events_time_stamp\":1793550577914},\"user_properties\":{},\"uuid\":\"6049c481-f9d0-4a36-a0b7-c453c9023364\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":10,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"UAsrx4aehS3qTryXzdlQTz\",\"user_id\":null,\"timestamp\":1793550577935,\"event_id\":9,\"session_id\":1793550564298,\"event_type\":\"autoLogin\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"Auto Login\",\"eventAction\":\"COD Checkout Login\",\"eventLabel\":\"Login Success\",\"Page_Name\":\"/postorder-ui/login-otp\",\"Events_time_stamp\":1793550577934},\"user_properties\":{},\"uuid\":\"360016ca-5917-4234-b637-caef40aad69a\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":12,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null}]",
+        "neotag.1f46967f-fcfb-416a-ab5d-e84dc084eaa9.reclaimStart": "null",
+        "DEVICE_ID": "1105202745",
+        "amplitude_unsent_identify_ff201f6f6c8100d736dff4ce304fa819": "[{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578564,\"event_id\":1,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$unset\":{\"referrer\":\"-\",\"referring_domain\":\"-\",\"utm_source\":\"-\",\"utm_medium\":\"-\",\"utm_campaign\":\"-\",\"utm_term\":\"-\",\"utm_content\":\"-\"}},\"uuid\":\"d1d20fb5-bb91-4743-a3fb-5b24b1b2c2ba\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":1,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578569,\"event_id\":2,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$setOnce\":{\"initial_referrer\":\"https://m.dominos.co.in/\",\"initial_referring_domain\":\"m.dominos.co.in\"},\"$set\":{\"referrer\":\"https://m.dominos.co.in/\",\"referring_domain\":\"m.dominos.co.in\"}},\"uuid\":\"8b239fef-70a1-426e-935c-ef840d1d05f5\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":2,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578666,\"event_id\":3,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"nghEMVisible\":\"yes\",\"nghEMType\":\"carousal\",\"nghGridType\":\"main\"}},\"uuid\":\"8c8cb187-3aa1-46ea-a7e3-c7cfbe1d1396\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":3,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578677,\"event_id\":4,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"nghDeliveryTime\":\"Select Location\"}},\"uuid\":\"fea55484-d063-4af6-bc81-fbe3e9f130ed\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":4,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578678,\"event_id\":5,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"nghDG\":\"-1\"}},\"uuid\":\"f08c20c1-c193-40e3-8c52-38561a5cc076\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":5,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578679,\"event_id\":6,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"nghSG\":\"-1\"}},\"uuid\":\"5c8cb6dc-3307-4e47-813e-93fdc82ed011\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":6,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578798,\"event_id\":7,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"utmSourceMedium\":\"\",\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"deviceType\":\"desktop\",\"landingPage\":\"postorder-ui/login\",\"networkType\":\"4g\",\"screenSize\":\"412x915\",\"screenResolution\":\"412x915\",\"Order_type\":\"D\",\"AB_EXPR_PAYMENT_V1\":{},\"storeId\":\"6585R\",\"next_gen_home_ab_experiment_v18\":\"nextgen_variant_s\"}},\"uuid\":\"279b3110-2b63-4360-9cdf-8ef9297f2b4f\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":7,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578891,\"event_id\":8,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"nghDeliveryTime\":\"NOW\"}},\"uuid\":\"138d24bf-19d6-40b2-9398-82ce6dc3375b\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":16,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578895,\"event_id\":9,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"nghDG\":\"-1\"}},\"uuid\":\"54e18a7d-ad57-4091-beb7-115cc54e4ec9\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":17,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578896,\"event_id\":10,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"nghSG\":\"-1\"}},\"uuid\":\"4d9a7b12-3efb-4299-84d1-856fb6af6263\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":18,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578996,\"event_id\":11,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"loyalty_status\":\"ENROLLED\"}},\"uuid\":\"81f105bd-6300-4126-a733-c7c635bdd1d5\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":21,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550579002,\"event_id\":12,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"loyalty_user\":true}},\"uuid\":\"6a176820-3fb5-46c8-8927-c32e22001289\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":22,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550579010,\"event_id\":13,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"loyalty_status\":\"ENROLLED\"}},\"uuid\":\"c9f407e5-32f6-4597-82e1-bcdfe29b255c\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":23,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550579012,\"event_id\":14,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"loyalty_user\":true}},\"uuid\":\"604a6a7a-49ca-4894-9005-c48a77b2af9a\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":24,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550579013,\"event_id\":15,\"session_id\":1793550578562,\"event_type\":\"$identify\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{},\"user_properties\":{\"$set\":{\"reward_points\":100}},\"uuid\":\"667eb108-9650-4d9b-b4a1-63448e47d7e8\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":25,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null}]",
+        "mobileNo": "7888422429",
+        "AB_TEST_VWO_ID": "4191088776",
+        "isPaymentModeAvailable": "",
+        "userAddresses": "[]",
+        "amplitude_unsent_ff201f6f6c8100d736dff4ce304fa819": "[{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578805,\"event_id\":1,\"session_id\":1793550578562,\"event_type\":\"Impression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"impression\",\"sectionName\":\"track order\",\"sectionPosition\":\"3\",\"positionWithinSection\":1,\"category\":\"Your Order is confirmed!\",\"orderType\":\"delivery\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550578644},\"user_properties\":{},\"uuid\":\"7b809519-8e4d-4476-ba94-8a65d3baac6b\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":8,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578806,\"event_id\":2,\"session_id\":1793550578562,\"event_type\":\"Locationbar_Impression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"Locationbar_Impression\",\"sectionName\":\"locationBar\",\"sectionPosition\":2,\"category\":\"Give us your exact location for seamless delivery\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550578663},\"user_properties\":{},\"uuid\":\"9efd43b2-76da-43a7-8234-31e3454c70d6\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":9,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578809,\"event_id\":3,\"session_id\":1793550578562,\"event_type\":\"Impression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"impression\",\"sectionName\":\"order type section\",\"sectionPosition\":\"2\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550578663},\"user_properties\":{},\"uuid\":\"787bf350-6846-423b-ac20-18c8263cc6f6\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":10,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578810,\"event_id\":4,\"session_id\":1793550578562,\"event_type\":\"nghEMImpression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"nghEMImpression\",\"sectionName\":\"explore menu section\",\"sectionPosition\":\"5\",\"category\":[\"2in1 cheese burst\",\"big big pizza\",\"veg pizza\",\"pizza mania\",\"garlic breads & dips\",\"deals\",\"cheese volcano\",\"combos\",\"chicken feast\",\"desserts\",\"beverages\",\"cheese burst pizza\"],\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"storeID\":\"6585R\",\"categoryCount\":12,\"gridType\":\"main\",\"Events_time_stamp\":1793550578668},\"user_properties\":{},\"uuid\":\"9bd703f0-7248-4566-89dd-f0d99803c6d8\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":11,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578812,\"event_id\":5,\"session_id\":1793550578562,\"event_type\":\"Impression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"impression\",\"sectionName\":\"track order\",\"sectionPosition\":\"3\",\"positionWithinSection\":1,\"category\":\"Your Order is confirmed!\",\"orderType\":\"delivery\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550578795},\"user_properties\":{},\"uuid\":\"0b2d6571-c67e-4ff6-bd33-8c37e9cab3af\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":12,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578871,\"event_id\":6,\"session_id\":1793550578562,\"event_type\":\"pageView\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"next_gen_home_ab_experiment_v18\":\"nextgen_variant_s\",\"Page_Name\":\"nextgen home page\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550578812},\"user_properties\":{},\"uuid\":\"93081553-4e4e-48d0-ad5a-e299fdaa8e30\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":13,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578872,\"event_id\":7,\"session_id\":1793550578562,\"event_type\":\"nextgenPwaAb\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"next_gen_home_ab_experiment_v18\":\"nextgen_variant_s\",\"Events_time_stamp\":1793550578812},\"user_properties\":{},\"uuid\":\"4d6ccd65-6aa6-4663-a959-3faf9a8cc213\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":14,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578873,\"event_id\":8,\"session_id\":1793550578562,\"event_type\":\"nghUserURL\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"Page_Name\":\"nextgen home page\",\"Previous_page\":\"https://m.dominos.co.in/\",\"url\":\"https://m.dominos.co.in/jfl-discovery-ui/en/dt/home\",\"landingPage\":\"postorder-ui/login\",\"Events_time_stamp\":1793550578812},\"user_properties\":{},\"uuid\":\"cf1cb7be-d898-4512-965f-0838cd30540b\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":15,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578947,\"event_id\":9,\"session_id\":1793550578562,\"event_type\":\"nghLocation\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"nghLocation\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"locationType\":\"default\",\"storeID\":\"6585R\",\"Events_time_stamp\":1793550578875},\"user_properties\":{},\"uuid\":\"e259c85a-3fd6-4fe7-a1c1-86cc883e76f8\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":19,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550578974,\"event_id\":10,\"session_id\":1793550578562,\"event_type\":\"location_permission_on_home\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"appeared\",\"eventCategory\":\"location permission on home screen\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550578899},\"user_properties\":{},\"uuid\":\"66b86582-d530-4ace-8596-bdb7d66869a0\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":20,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550579047,\"event_id\":11,\"session_id\":1793550578562,\"event_type\":\"nghOfferImpression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"impression\",\"sectionName\":\"offer section\",\"sectionPosition\":\"6\",\"positionWithinSection\":1,\"category\":\"get ₹200 off\",\"subCategory\":\"banner\",\"offerType\":\"percentage discount\",\"offerStage\":\"not applied\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550579045},\"user_properties\":{},\"uuid\":\"6d6acec7-22e0-4712-b43c-9003f51d58ab\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":26,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550579196,\"event_id\":12,\"session_id\":1793550578562,\"event_type\":\"Impression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"Impression\",\"sectionName\":\"previously ordered items card\",\"sectionPosition\":\"4\",\"category\":\"chicken keema & onion with desi makhani sauce\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550579183},\"user_properties\":{},\"uuid\":\"d88ec79d-b74d-483b-aa6e-20cadb0762ec\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":27,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550579224,\"event_id\":13,\"session_id\":1793550578562,\"event_type\":\"Impression\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"userAction\":\"Impression\",\"sectionName\":\"previously ordered items card\",\"sectionPosition\":\"4\",\"category\":\"tomato ketchup\",\"screenName\":\"nextgen home page\",\"Page_Name\":\"nextgen home page\",\"previousScreenname\":\"https://m.dominos.co.in/\",\"Previous_page\":\"https://m.dominos.co.in/\",\"Events_time_stamp\":1793550579184},\"user_properties\":{},\"uuid\":\"aa0a7e2a-fa54-408e-8d7d-d11fed003b8c\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":28,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null},{\"device_id\":\"hihtTLjz2vxBSvIjjR057m\",\"user_id\":null,\"timestamp\":1793550581646,\"event_id\":14,\"session_id\":1793550578562,\"event_type\":\"time_spent\",\"version_name\":null,\"platform\":\"Web\",\"os_name\":\"Chrome\",\"os_version\":\"120\",\"device_model\":\"Windows\",\"device_manufacturer\":null,\"language\":\"en-GB\",\"api_properties\":{},\"event_properties\":{\"eventCategory\":\"time spent\",\"fired_after\":\"3\",\"Events_time_stamp\":1793550581645,\"Page_Name\":\"nextgen home page\"},\"user_properties\":{},\"uuid\":\"2c1a47ad-c1d4-428e-b9d2-49c3ff2704cd\",\"library\":{\"name\":\"amplitude-js\",\"version\":\"8.21.10\"},\"sequence_number\":29,\"groups\":{},\"group_properties\":{},\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\",\"partner_id\":null}]",
+        "lastLocationNew": "[{\"recent\":{\"loyaltyMetadata\":[{\"loyaltyProgramCode\":\"POTP2\",\"earnPointsPerOrder\":100,\"earnMOV\":350,\"burnMOV\":0,\"itemRedeemPoints\":600,\"slicesPerPie\":6,\"priceBand\":259,\"programVersion\":\"v1\",\"redeemCap\":\"UNIVERSAL\",\"maxPoints\":0,\"maxItems\":0,\"redeemPointsSlab\":[600],\"menuType\":\"LOYALTY_V1\"}]}}]",
+        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..3Gb7w0zeOlHflZs5jnBrUw.zoVQS5w5yoc7Pqw7Hv7C76FP1wD_7EDnIB7tsTDIuIaGUm0bKaOiUWeGwMWkCCu6JaJNbqFczbhl0Vod6E5n5Bb9eOmLxEifrl3moJxmlfO3AnThhk3Y-SYB5Zzbn9ivVo4wOSr2atuiwAPf5zuNpjZ5xeD9yEXWsDj1ikwzFpjSkKySI2e9rapOoQBYYQTa.UiP1PyVVkkGh5PqYm85QDksawQK3OscsXbaya_Xa_1Y\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc\"},\"userId\":\"346377415\",\"cartId\":\"4036087112628937436\"},\"userData\":\"U2FsdGVkX19jWMfE/TCDp7wxGO9pOBgkBWQmy6LffXSVMCfgB4A6VvEIPILGCGwK5BX6e2CbxjNpBJfJb8SiFQbaAXePk4wNATLjaky3yYYD4MCu48UBelQGTm6PSiOuSBhWyZfTU7ekkFUaLRLMVzPA2HYP3MoRAALf8oXzEssRnQQ+Et0WZHjA3Dk/P04gp9CmWN8aXAuWI1VhPY9V1Trmoy+g5zX5hNE7zoCN66TuivRb5Yia71cjzEb0z3BGUcA4k44bwSKh4Ouy2TQlf6NTiwvBYcc0FvE3V+xMvmydHgHF+6jMUxX4G2D0ahRi\"}",
+        "analytics_session_state": "{\"id\":\"sess_7wh8uy4dwwb1793550579194\",\"lastActivity\":1793550582459}",
+        "analytics_device_id": "dev_559sk1jc59u1793550579194",
+        "isAmbitEnabled": "true",
+        "addressDetail": "U2FsdGVkX1/w149veUJhc8v6eqXqx8pJNNCxZL578hlDlHZKabxNT7pn2I7OhnGePsuxijL7HW9dPh9tFiSv74OpAfzQ0uPSds8Z59cc4MAlj39QCZry60WYOrjGko0wHRGbOn5NL8927aeJ90nEAA==",
+        "orderTypeSubtitle": "{\"Delivery_Duration\":\"NOW\"}",
+        "neotag.1f46967f-fcfb-416a-ab5d-e84dc084eaa9.queue": "[]",
+        "otpLimit": "false",
+        "affid": "undefined",
+        "ab_test_vwo_id": "4171876835",
+        "totalWalletBalance": "",
+        "loyaltyInfo": "{\"status\":\"SUCCESS\",\"mobile\":\"7888422429\",\"loyaltyCardCode\":\"POTP2\",\"enrollmentDate\":\"2026-01-08 15:47:06\",\"enrollmentStatus\":\"ENROLLED\",\"loyaltyProgramTitle\":\"Cheesy Rewards\",\"boostWeek\":{},\"programConfig\":{\"loyaltyProgramCode\":\"POTP2\",\"burnMOV\":0,\"itemRedeemPoints\":600,\"slicesPerPie\":6,\"priceBand\":259,\"earnPointsPerOrder\":100,\"earnMOV\":350,\"programVersion\":\"v1\",\"redeemCap\":\"UNIVERSAL\",\"maxItems\":0,\"maxPoints\":0,\"menuType\":\"LOYALTY_V1\",\"redeemPointsSlab\":[600]},\"issuanceMsg\":\"Points will be credited within 15 minutes of delivery & in store dining billing\"}",
+        "analytics_sdk_config:https://api.dominos.co.in/ambit-web/ingest:proj_a280da1c8a61bb96:__anonymous__": "{\"trackingFlags\":{\"emergencyDisableEventIngest\":false,\"emergencyDisableReplayIngest\":false,\"enableEventTracking\":true,\"trackPageViews\":true,\"trackClicks\":true,\"trackForms\":true,\"networkCaptureEnabled\":true,\"networkCaptureFetch\":true,\"networkCaptureXhr\":true,\"networkCaptureImages\":false,\"networkCaptureStylesheets\":false,\"networkCaptureScripts\":false,\"networkSampleRate\":1,\"networkQueueLimit\":1000,\"enableReplay\":true,\"enableMouseTracking\":true,\"enableScrollTracking\":true,\"replaySampleRate\":0.02,\"mousemoveSamplingMs\":100,\"scrollSamplingMs\":200,\"checkoutEveryNth\":50,\"maxReplayDurationMinutes\":0,\"replayWorkerEnabled\":true,\"replayMaxQueueBytes\":10485760,\"replayMaxQueueEvents\":2000,\"replayUploadConcurrency\":2,\"webFlushIntervalMs\":1000,\"webBatchSize\":500,\"webMaxQueueEvents\":2000,\"webMaxQueueBytes\":5242880,\"webGzipThresholdBytes\":60000,\"webReplayChunkSizeChars\":256000,\"webUploadConcurrency\":2,\"collectFonts\":true,\"recordCanvas\":true,\"configCacheTtlSeconds\":900,\"sessionTimeoutMs\":1800000,\"maskAllInputs\":true,\"maskTextSelectors\":\"\",\"blockSelectors\":\"\",\"ignoreSelectors\":\"\",\"mobileReplayMaskLevel\":\"medium\",\"mobileReplayQuality\":\"high\",\"androidBatchIntervalMs\":1000,\"androidMaxQueueEvents\":10000,\"androidMaxQueueBytes\":10485760,\"androidReplayMaxQueueEvents\":2000,\"androidReplayMaxQueueBytes\":10485760,\"androidReplayBatchSize\":200,\"androidReplayChunkSizeBytes\":50000,\"androidUploadConcurrency\":1,\"androidCaptureImages\":true,\"androidInteractionEvents\":true,\"nodeBatchSize\":100,\"nodeFlushIntervalMs\":1000,\"nodeMaxQueueEvents\":10000,\"nodeGzipThresholdBytes\":60000,\"nodeMaxRetries\":3,\"nodeRetryBaseDelayMs\":250,\"nodeRequestTimeoutMs\":10000,\"nodeAutoFlush\":true,\"timezone\":\"Asia/Kolkata\"},\"userPolicy\":{\"user_id\":null,\"enableReplay\":false,\"forceReplaySample\":false},\"expiresAt\":1793551482525}",
+        "neotag.1f46967f-fcfb-416a-ab5d-e84dc084eaa9.reclaimEnd": "null",
+        "currentSelToppObj": "{}",
+        "confrimView": "false",
+        "isFromReOrder": "false",
+        "analytics_attribution": "{\"initial_utm_source\":null,\"initial_utm_medium\":null,\"initial_utm_campaign\":null,\"initial_utm_term\":null,\"initial_utm_content\":null,\"initial_referrer\":\"https://m.dominos.co.in/\",\"initial_landing_page\":\"https://m.dominos.co.in/jfl-discovery-ui/en/dt/home\",\"utm_source\":null,\"utm_medium\":null,\"utm_campaign\":null,\"utm_term\":null,\"utm_content\":null}",
+        "utm_attributes": "{\"utm_source\":\"direct\",\"utm_medium\":\"direct\",\"utm_campaign\":\"direct\",\"utm_source_medium\":\"direct-direct\"}",
+        "debug": "undefined",
+        "neotag.1f46967f-fcfb-416a-ab5d-e84dc084eaa9.ack": "1793550619322",
+        "isDefaultWalletApplied": "false",
+        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+        "cartId": "4036087112628937436"
+      },
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+      "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..3Gb7w0zeOlHflZs5jnBrUw.zoVQS5w5yoc7Pqw7Hv7C76FP1wD_7EDnIB7tsTDIuIaGUm0bKaOiUWeGwMWkCCu6JaJNbqFczbhl0Vod6E5n5Bb9eOmLxEifrl3moJxmlfO3AnThhk3Y-SYB5Zzbn9ivVo4wOSr2atuiwAPf5zuNpjZ5xeD9yEXWsDj1ikwzFpjSkKySI2e9rapOoQBYYQTa.UiP1PyVVkkGh5PqYm85QDksawQK3OscsXbaya_Xa_1Y",
+      "credentials": {
+        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+        "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..3Gb7w0zeOlHflZs5jnBrUw.zoVQS5w5yoc7Pqw7Hv7C76FP1wD_7EDnIB7tsTDIuIaGUm0bKaOiUWeGwMWkCCu6JaJNbqFczbhl0Vod6E5n5Bb9eOmLxEifrl3moJxmlfO3AnThhk3Y-SYB5Zzbn9ivVo4wOSr2atuiwAPf5zuNpjZ5xeD9yEXWsDj1ikwzFpjSkKySI2e9rapOoQBYYQTa.UiP1PyVVkkGh5PqYm85QDksawQK3OscsXbaya_Xa_1Y",
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..H4bpdJfxh1MDxK-7zymN_A.wUNCp_J36jOATkeUOtNhUk9d4ITAhaMpJwVjrkQcBDD-djNnDJu_cnTTtepuvNd7IuPsGQ9ivm4qqLK9fKaXGLGOeh7gp0ZU5e4fPLXLYiG8IY19z8H9KV6Cebx3WFLXVM7geBadL6qo3f6Y3gYcG-d5uXFVqsGjRTKCR6qZd2l92Ym7DHvM9dMtNffAbSKY.HfWZrZ4zQK1LG5lLSrhl4C33pgsDEBmi-T6pCsv3Nvc",
+        "cartId": "4036087112628937436",
+        "userId": "346377415"
+      },
+      "pastOrdersCount": 0,
+      "reorderItems": [],
+      "status": "IDLE",
+      "totalOrdersPlaced": 2,
+      "storedAt": "2026-11-01T13:35:39.834Z",
+      "lastRefreshedAt": "2026-11-01T18:42:45.702Z",
+      "accessTokenExpiresAt": "2026-11-01T19:42:45.702Z",
+      "refreshTokenExpiresAt": "2026-12-01T18:42:45.702Z",
+      "expiresAt": "2026-12-01T18:42:45.702Z",
+      "source": "LIVE_SMS_OTP",
+      "lastActive": "2026-11-01T16:30:19.792Z",
+      "lastValidated": "2026-11-01T18:42:45.795Z",
+      "isCheesyRewards": true,
+      "loyaltyProgram": "POTP2",
+      "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)"
+    },
+    {
+      "id": "test_acc_1",
+      "phone": "9876543210",
+      "status": "ACTIVE"
+    }
+  ],
+  "couponRules": {
+    "firstOrderCoupon": "NEWBIE100",
+    "firstOrderDiscount": 100,
+    "secondOrderCoupon": "CHEESY",
+    "secondOrderDiscount": 50,
+    "regularOrderCoupon": "PARTY",
+    "regularOrderDiscount": 100,
+    "fallbackCoupon": "DOMNEW30",
+    "fallbackDiscount": 80
+  },
+  "paymentSettings": {
+    "upiId": "dominos.pay@okhdfcbank",
+    "payeeName": "Domino's Official Kitchen Outlet",
+    "merchantCode": "DOM-5819",
+    "note": "Domino's Order Payment"
+  },
+  "vouchers": [
+    {
+      "id": "VOUCH-502",
+      "code": "6014992100481239",
+      "pin": "517290",
+      "balance": 1500,
+      "initialBalance": 1500,
+      "status": "UNUSED",
+      "usedInOrderId": null
+    },
+    {
+      "id": "VOUCH-503",
+      "code": "6014381029471182",
+      "pin": "394812",
+      "balance": 800,
+      "initialBalance": 800,
+      "status": "UNUSED",
+      "usedInOrderId": null
+    }
+  ],
+  "combos": [
+    {
+      "id": "COMBO-1",
+      "name": "Double Treat Veg Extravaganza",
+      "tag": "🔥 Bestseller Combo",
+      "badge": "Save ₹160",
+      "price": 549,
+      "originalPrice": 709,
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "1 Medium Farmhouse Pizza + 1 Regular Peppy Paneer + 1 Stuffed Garlic Bread + 2x 250ml Coke",
+      "includedItems": [
+        {
+          "name": "Farmhouse Pizza (Medium)",
+          "dominosCode": "PIZ0119",
+          "qty": 1
+        },
+        {
+          "name": "Peppy Paneer (Regular)",
+          "dominosCode": "PIZ0120",
+          "qty": 1
+        },
+        {
+          "name": "Stuffed Garlic Bread",
+          "dominosCode": "SID0046",
+          "qty": 1
+        },
+        {
+          "name": "Coca-Cola 250ml",
+          "dominosCode": "BEV-COKE-250",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "COMBO-2",
+      "name": "Carnivore Non-Veg Feast",
+      "tag": "🍗 Non-Veg Special",
+      "badge": "Save ₹220",
+      "price": 699,
+      "originalPrice": 919,
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp",
+      "description": "1 Medium Chicken Golden Delight + 1 Regular Barbeque Chicken + 1 Cheesy Dip + 2x 250ml Coke",
+      "includedItems": [
+        {
+          "name": "Chicken Golden Delight (Medium)",
+          "dominosCode": "PIZ0125",
+          "qty": 1
+        },
+        {
+          "name": "Barbeque Chicken Pizza (Regular)",
+          "dominosCode": "PIZ0124",
+          "qty": 1
+        },
+        {
+          "name": "Cheesy Jalapeno Dip",
+          "dominosCode": "SID0010",
+          "qty": 1
+        },
+        {
+          "name": "Coca-Cola 250ml",
+          "dominosCode": "BEV-COKE-250",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "COMBO-3",
+      "name": "Late Night Midnight Cravings",
+      "tag": "🌙 Solo Combo",
+      "badge": "Save ₹90",
+      "price": 389,
+      "originalPrice": 479,
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+      "description": "1 Regular Margherita with Cheese Burst Crust + 1 Choco Lava Cake + 1 Thums Up",
+      "includedItems": [
+        {
+          "name": "Margherita (Regular, Cheese Burst)",
+          "dominosCode": "PIZ0117",
+          "qty": 1
+        },
+        {
+          "name": "Choco Lava Cake",
+          "dominosCode": "DES0001",
+          "qty": 1
+        },
+        {
+          "name": "Thums Up 250ml",
+          "dominosCode": "BEV-THUM-250",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "COMBO-4",
+      "name": "Party Squad 4-Pizza Mania Box",
+      "tag": "🎉 Mega Party",
+      "badge": "Save ₹250",
+      "price": 599,
+      "originalPrice": 849,
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
+      "description": "4x Regular Pizzas (Capsicum, Golden Corn, Onion, Veg Loaded) + 1 Garlic Breadsticks + 1.25L Cold Drink",
+      "includedItems": [
+        {
+          "name": "Capsicum Mania Pizza",
+          "dominosCode": "PIZ0232",
+          "qty": 1
+        },
+        {
+          "name": "Golden Corn Mania Pizza",
+          "dominosCode": "PIZ0130",
+          "qty": 1
+        },
+        {
+          "name": "Onion Mania Pizza",
+          "dominosCode": "PIZ0129",
+          "qty": 1
+        },
+        {
+          "name": "Veg Loaded Pizza",
+          "dominosCode": "PIZ0140",
+          "qty": 1
+        },
+        {
+          "name": "Garlic Breadsticks",
+          "dominosCode": "SID0001",
+          "qty": 1
+        },
+        {
+          "name": "Coca-Cola 1.25L Bottle",
+          "dominosCode": "BEV-COKE-125",
+          "qty": 1
+        }
+      ]
+    }
+  ],
+  "menu": [
+    {
+      "id": "DOM-PIZ0117",
+      "name": "Margherita",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 109,
+      "originalPrice": 139,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0117",
+      "skuId": "1#1#1",
+      "description": "Classic delight with 100% real mozzarella cheese on fresh signature crust.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "sizes": {
+        "Regular (Serves 1)": 109,
+        "Medium (Serves 2)": 239,
+        "Large (Serves 4)": 449
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 109,
+          "Cheese Burst": 184,
+          "Fresh Pan Pizza": 139
+        },
+        "Medium": {
+          "New Hand Tossed": 239,
+          "Cheese Burst": 339,
+          "Fresh Pan Pizza": 289
+        },
+        "Large": {
+          "New Hand Tossed": 449,
+          "Cheese Burst": 574,
+          "Fresh Pan Pizza": 519
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ0118",
+      "name": "Double Cheese Margherita",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 199,
+      "originalPrice": 249,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0118",
+      "skuId": "1#2#1",
+      "description": "An evergreen hit with loaded double mozzarella cheese for ultimate cheese pull.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "sizes": {
+        "Regular (Serves 1)": 199,
+        "Medium (Serves 2)": 379,
+        "Large (Serves 4)": 599
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 199,
+          "Cheese Burst": 274,
+          "Fresh Pan Pizza": 229
+        },
+        "Medium": {
+          "New Hand Tossed": 379,
+          "Cheese Burst": 479,
+          "Fresh Pan Pizza": 429
+        },
+        "Large": {
+          "New Hand Tossed": 599,
+          "Cheese Burst": 724,
+          "Fresh Pan Pizza": 669
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ0119",
+      "name": "Farmhouse",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 259,
+      "originalPrice": 299,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0119",
+      "skuId": "1#3#1",
+      "description": "Delightful combination of onion, crisp capsicum, grilled mushroom & fresh tomato.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "sizes": {
+        "Regular (Serves 1)": 259,
+        "Medium (Serves 2)": 459,
+        "Large (Serves 4)": 699
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 259,
+          "Cheese Burst": 334,
+          "Fresh Pan Pizza": 289
+        },
+        "Medium": {
+          "New Hand Tossed": 459,
+          "Cheese Burst": 559,
+          "Fresh Pan Pizza": 509
+        },
+        "Large": {
+          "New Hand Tossed": 699,
+          "Cheese Burst": 824,
+          "Fresh Pan Pizza": 769
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ0120",
+      "name": "Peppy Paneer",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 259,
+      "originalPrice": 299,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0120",
+      "skuId": "1#4#1",
+      "description": "Flavorful trio of juicy paneer chunks, crisp capsicum with spicy red paprika.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/0b41b2cb-958c-4c17-b0b2-397308538684_volcanoHomePeppyPaneer.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/0b41b2cb-958c-4c17-b0b2-397308538684_volcanoHomePeppyPaneer.webp",
+      "sizes": {
+        "Regular (Serves 1)": 259,
+        "Medium (Serves 2)": 459,
+        "Large (Serves 4)": 699
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 259,
+          "Cheese Burst": 334,
+          "Fresh Pan Pizza": 289
+        },
+        "Medium": {
+          "New Hand Tossed": 459,
+          "Cheese Burst": 559,
+          "Fresh Pan Pizza": 509
+        },
+        "Large": {
+          "New Hand Tossed": 699,
+          "Cheese Burst": 824,
+          "Fresh Pan Pizza": 769
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ0128",
+      "name": "Cheese n Corn",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 179,
+      "originalPrice": 219,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0128",
+      "skuId": "1#5#1",
+      "description": "Sweet and juicy golden corn with rich mozzarella cheese topping.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a91605f1-39e2-411a-8bb7-f288ec7b0849_cheese-n-corn.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a91605f1-39e2-411a-8bb7-f288ec7b0849_cheese-n-corn.webp",
+      "sizes": {
+        "Regular (Serves 1)": 179,
+        "Medium (Serves 2)": 339,
+        "Large (Serves 4)": 559
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 179,
+          "Cheese Burst": 254,
+          "Fresh Pan Pizza": 209
+        },
+        "Medium": {
+          "New Hand Tossed": 339,
+          "Cheese Burst": 439,
+          "Fresh Pan Pizza": 389
+        },
+        "Large": {
+          "New Hand Tossed": 559,
+          "Cheese Burst": 684,
+          "Fresh Pan Pizza": 629
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ0125",
+      "name": "Veggie Paradise",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 259,
+      "originalPrice": 299,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0125",
+      "skuId": "1#6#1",
+      "description": "Goldern corn, black olives, crisp capsicum & red paprika.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5c464efc-29b9-45e3-9831-a07742cf6be0_veggie_paradise.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5c464efc-29b9-45e3-9831-a07742cf6be0_veggie_paradise.webp",
+      "sizes": {
+        "Regular (Serves 1)": 259,
+        "Medium (Serves 2)": 459,
+        "Large (Serves 4)": 699
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 259,
+          "Cheese Burst": 334,
+          "Fresh Pan Pizza": 289
+        },
+        "Medium": {
+          "New Hand Tossed": 459,
+          "Cheese Burst": 559,
+          "Fresh Pan Pizza": 509
+        },
+        "Large": {
+          "New Hand Tossed": 699,
+          "Cheese Burst": 824,
+          "Fresh Pan Pizza": 769
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ0121",
+      "name": "Indi Tandoori Paneer",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 299,
+      "originalPrice": 349,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0121",
+      "skuId": "1#7#1",
+      "description": "Tandoori paneer, red paprika, mint mayo and fresh onion for spicy tandoori lovers.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c0c00ef6-92e1-4560-8f92-91f86f85d263_IndianTandooriPaneer.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c0c00ef6-92e1-4560-8f92-91f86f85d263_IndianTandooriPaneer.webp",
+      "sizes": {
+        "Regular (Serves 1)": 299,
+        "Medium (Serves 2)": 549,
+        "Large (Serves 4)": 799
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 299,
+          "Cheese Burst": 374,
+          "Fresh Pan Pizza": 329
+        },
+        "Medium": {
+          "New Hand Tossed": 549,
+          "Cheese Burst": 649,
+          "Fresh Pan Pizza": 599
+        },
+        "Large": {
+          "New Hand Tossed": 799,
+          "Cheese Burst": 924,
+          "Fresh Pan Pizza": 869
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ0122",
+      "name": "Veg Extravaganza",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 299,
+      "originalPrice": 349,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0122",
+      "skuId": "1#8#1",
+      "description": "Black olives, onion, capsicum, mushroom, golden corn, tomato, jalapeno & extra cheese.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a949646b-e3c3-4c9c-851d-bf1c60f1b212_veg_extravaganza.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a949646b-e3c3-4c9c-851d-bf1c60f1b212_veg_extravaganza.webp",
+      "sizes": {
+        "Regular (Serves 1)": 299,
+        "Medium (Serves 2)": 549,
+        "Large (Serves 4)": 799
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 299,
+          "Cheese Burst": 374,
+          "Fresh Pan Pizza": 329
+        },
+        "Medium": {
+          "New Hand Tossed": 549,
+          "Cheese Burst": 649,
+          "Fresh Pan Pizza": 599
+        },
+        "Large": {
+          "New Hand Tossed": 799,
+          "Cheese Burst": 924,
+          "Fresh Pan Pizza": 869
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ5119",
+      "name": "Pepper Barbecue Chicken",
+      "category": "Non-Veg Pizza",
+      "type": "NON-VEG",
+      "price": 249,
+      "originalPrice": 289,
+      "isVeg": false,
+      "isAvailable": true,
+      "dominosCode": "PIZ5119",
+      "skuId": "2#1#1",
+      "description": "Pepper barbecue chicken for that flavorful, meaty kick in every bite.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/092e071a-65fb-4977-9be7-5c5f492da6f2_pepper_barbeque_chicken.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/092e071a-65fb-4977-9be7-5c5f492da6f2_pepper_barbeque_chicken.webp",
+      "sizes": {
+        "Regular (Serves 1)": 249,
+        "Medium (Serves 2)": 449,
+        "Large (Serves 4)": 669
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 249,
+          "Cheese Burst": 324,
+          "Fresh Pan Pizza": 279
+        },
+        "Medium": {
+          "New Hand Tossed": 449,
+          "Cheese Burst": 549,
+          "Fresh Pan Pizza": 499
+        },
+        "Large": {
+          "New Hand Tossed": 669,
+          "Cheese Burst": 794,
+          "Fresh Pan Pizza": 739
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ5123",
+      "name": "Chicken Golden Delight",
+      "category": "Non-Veg Pizza",
+      "type": "NON-VEG",
+      "price": 279,
+      "originalPrice": 329,
+      "isVeg": false,
+      "isAvailable": true,
+      "dominosCode": "PIZ5123",
+      "skuId": "2#2#1",
+      "description": "Barbeque chicken with a golden topping of sweet corn loaded with extra mozzarella.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp",
+      "sizes": {
+        "Regular (Serves 1)": 279,
+        "Medium (Serves 2)": 499,
+        "Large (Serves 4)": 749
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 279,
+          "Cheese Burst": 354,
+          "Fresh Pan Pizza": 309
+        },
+        "Medium": {
+          "New Hand Tossed": 499,
+          "Cheese Burst": 599,
+          "Fresh Pan Pizza": 549
+        },
+        "Large": {
+          "New Hand Tossed": 749,
+          "Cheese Burst": 874,
+          "Fresh Pan Pizza": 819
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ5124",
+      "name": "Chicken Dominator",
+      "category": "Non-Veg Pizza",
+      "type": "NON-VEG",
+      "price": 359,
+      "originalPrice": 419,
+      "isVeg": false,
+      "isAvailable": true,
+      "dominosCode": "PIZ5124",
+      "skuId": "2#3#1",
+      "description": "Loaded with double pepper barbecue chicken, peri-peri chicken, chicken tikka & grilled chicken rasher.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/e74a8174-8b63-4416-86db-2234057ea0dd_dominator.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/e74a8174-8b63-4416-86db-2234057ea0dd_dominator.webp",
+      "sizes": {
+        "Regular (Serves 1)": 359,
+        "Medium (Serves 2)": 599,
+        "Large (Serves 4)": 899
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 359,
+          "Cheese Burst": 434,
+          "Fresh Pan Pizza": 389
+        },
+        "Medium": {
+          "New Hand Tossed": 599,
+          "Cheese Burst": 699,
+          "Fresh Pan Pizza": 649
+        },
+        "Large": {
+          "New Hand Tossed": 899,
+          "Cheese Burst": 1024,
+          "Fresh Pan Pizza": 969
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ5120",
+      "name": "Non-Veg Supreme",
+      "category": "Non-Veg Pizza",
+      "type": "NON-VEG",
+      "price": 359,
+      "originalPrice": 419,
+      "isVeg": false,
+      "isAvailable": true,
+      "dominosCode": "PIZ5120",
+      "skuId": "2#4#1",
+      "description": "Supreme feast with black olives, grilled mushrooms, pepper barbecue chicken, peri-peri chicken & grilled rashers.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/216f4dbd-c852-411a-be34-31fcf549ea5b_nonveg_supreme.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/216f4dbd-c852-411a-be34-31fcf549ea5b_nonveg_supreme.webp",
+      "sizes": {
+        "Regular (Serves 1)": 359,
+        "Medium (Serves 2)": 599,
+        "Large (Serves 4)": 899
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 359,
+          "Cheese Burst": 434,
+          "Fresh Pan Pizza": 389
+        },
+        "Medium": {
+          "New Hand Tossed": 599,
+          "Cheese Burst": 699,
+          "Fresh Pan Pizza": 649
+        },
+        "Large": {
+          "New Hand Tossed": 899,
+          "Cheese Burst": 1024,
+          "Fresh Pan Pizza": 969
+        }
+      }
+    },
+    {
+      "id": "DOM-PIZ5121",
+      "name": "Indi Chicken Tikka",
+      "category": "Non-Veg Pizza",
+      "type": "NON-VEG",
+      "price": 359,
+      "originalPrice": 419,
+      "isVeg": false,
+      "isAvailable": true,
+      "dominosCode": "PIZ5121",
+      "skuId": "2#5#1",
+      "description": "Tandoori chicken tikka chunks with red paprika, mint mayo and fresh onion.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/187c3a03-7a91-443b-8581-ea9119cf9fb0_IndiChickenTikka.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/187c3a03-7a91-443b-8581-ea9119cf9fb0_IndiChickenTikka.webp",
+      "sizes": {
+        "Regular (Serves 1)": 359,
+        "Medium (Serves 2)": 599,
+        "Large (Serves 4)": 899
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 359,
+          "Cheese Burst": 434,
+          "Fresh Pan Pizza": 389
+        },
+        "Medium": {
+          "New Hand Tossed": 599,
+          "Cheese Burst": 699,
+          "Fresh Pan Pizza": 649
+        },
+        "Large": {
+          "New Hand Tossed": 899,
+          "Cheese Burst": 1024,
+          "Fresh Pan Pizza": 969
+        }
+      }
+    },
+    {
+      "id": "DOM-PM0001",
+      "name": "Veg Loaded Pizza",
+      "category": "Pizza Mania",
+      "type": "VEG",
+      "price": 169,
+      "originalPrice": 199,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PM0001",
+      "skuId": "3#1#1",
+      "description": "Tomato, jalapeno, golden corn, grilled mushroom & mozzarella cheese.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "sizes": {
+        "Regular (Single)": 169
+      },
+      "allowedSizes": [
+        "Regular"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed"
+      ]
+    },
+    {
+      "id": "DOM-PM0002",
+      "name": "Cheesy Pizza",
+      "category": "Pizza Mania",
+      "type": "VEG",
+      "price": 99,
+      "originalPrice": 129,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PM0002",
+      "skuId": "3#2#1",
+      "description": "Delicious orange cheddar cheese dressing topped on classic crust.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "sizes": {
+        "Regular (Single)": 99
+      },
+      "allowedSizes": [
+        "Regular"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed"
+      ]
+    },
+    {
+      "id": "DOM-PM0003",
+      "name": "Paneer & Onion",
+      "category": "Pizza Mania",
+      "type": "VEG",
+      "price": 119,
+      "originalPrice": 149,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PM0003",
+      "skuId": "3#3#1",
+      "description": "Creamy paneer cubes and crunchy onion with rich mozzarella.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "sizes": {
+        "Regular (Single)": 119
+      },
+      "allowedSizes": [
+        "Regular"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed"
+      ]
+    },
+    {
+      "id": "DOM-PM0004",
+      "name": "Golden Corn Pizza",
+      "category": "Pizza Mania",
+      "type": "VEG",
+      "price": 89,
+      "originalPrice": 109,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PM0004",
+      "skuId": "3#4#1",
+      "description": "Sweet corn and 100% mozzarella cheese on hand-stretched dough.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "sizes": {
+        "Regular (Single)": 89
+      },
+      "allowedSizes": [
+        "Regular"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed"
+      ]
+    },
+    {
+      "id": "DOM-PM0005",
+      "name": "Classic Onion Pizza",
+      "category": "Pizza Mania",
+      "type": "VEG",
+      "price": 69,
+      "originalPrice": 89,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PM0005",
+      "skuId": "3#5#1",
+      "description": "Crunchy onion with mozzarella cheese - the all-time pocket-friendly favorite.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "sizes": {
+        "Regular (Single)": 69
+      },
+      "allowedSizes": [
+        "Regular"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed"
+      ]
+    },
+    {
+      "id": "DOM-PM5001",
+      "name": "Non-Veg Loaded Pizza",
+      "category": "Pizza Mania",
+      "type": "NON-VEG",
+      "price": 199,
+      "originalPrice": 229,
+      "isVeg": false,
+      "isAvailable": true,
+      "dominosCode": "PM5001",
+      "skuId": "3#6#1",
+      "description": "Peri-peri chicken, pepper barbecue chicken with spicy red paprika.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
+      "sizes": {
+        "Regular (Single)": 199
+      },
+      "allowedSizes": [
+        "Regular"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed"
+      ]
+    },
+    {
+      "id": "DOM-BRD0096",
+      "name": "Garlic Breadsticks",
+      "category": "Garlic Breads & Sides",
+      "type": "VEG",
+      "price": 109,
+      "originalPrice": 129,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "BRD0096",
+      "skuId": "4#1#1",
+      "description": "Baked to perfection. Your favorite garlic breadsticks seasoned with exotic herbs.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp"
+    },
+    {
+      "id": "DOM-BRD0024",
+      "name": "Classic Stuffed Garlic Bread",
+      "category": "Garlic Breads & Sides",
+      "type": "VEG",
+      "price": 159,
+      "originalPrice": 189,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "BRD0024",
+      "skuId": "4#2#1",
+      "description": "Freshly baked garlic bread stuffed with mozzarella cheese, sweet corn and spicy jalapenos.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp"
+    },
+    {
+      "id": "DOM-SID0049",
+      "name": "Zingy Parcel Veg",
+      "category": "Garlic Breads & Sides",
+      "type": "VEG",
+      "price": 49,
+      "originalPrice": 59,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "SID0049",
+      "skuId": "4#3#1",
+      "description": "Snack on warm, flaky crust parcel stuffed with spicy paneer and harissa sauce.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp"
+    },
+    {
+      "id": "DOM-SID0050",
+      "name": "Zingy Parcel Non-Veg",
+      "category": "Garlic Breads & Sides",
+      "type": "NON-VEG",
+      "price": 59,
+      "originalPrice": 69,
+      "isVeg": false,
+      "isAvailable": true,
+      "dominosCode": "SID0050",
+      "skuId": "4#4#1",
+      "description": "Snack parcel stuffed with juicy chicken chunks and creamy spicy sauce.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp"
+    },
+    {
+      "id": "DOM-DIP0001",
+      "name": "Cheesy Dip",
+      "category": "Garlic Breads & Sides",
+      "type": "VEG",
+      "price": 30,
+      "originalPrice": 35,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "DIP0001",
+      "skuId": "4#5#1",
+      "description": "Super creamy, delicious cheddar cheese dip for crusts and garlic bread.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp"
+    },
+    {
+      "id": "DOM-CAKE02",
+      "name": "Choco Lava Cake",
+      "category": "Desserts",
+      "type": "VEG",
+      "price": 109,
+      "originalPrice": 129,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "CAKE02",
+      "skuId": "5#1#1",
+      "description": "Chocolate lovers delight! Indulgent, gooey molten hot chocolate lava inside chocolate cake.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp"
+    },
+    {
+      "id": "DOM-CAKE03",
+      "name": "Butterscotch Mousse Cake",
+      "category": "Desserts",
+      "type": "VEG",
+      "price": 109,
+      "originalPrice": 129,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "CAKE03",
+      "skuId": "5#2#1",
+      "description": "Sweet fluffy butterscotch cream mousse layered with crunchy chocolate crispies.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp"
+    },
+    {
+      "id": "DOM-CAKE04",
+      "name": "Red Velvet Lava Cake",
+      "category": "Desserts",
+      "type": "VEG",
+      "price": 139,
+      "originalPrice": 159,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "CAKE04",
+      "skuId": "5#3#1",
+      "description": "Delightful red velvet cake oozing with sweet warm white chocolate lava.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp"
+    },
+    {
+      "id": "DOM-BEV0001",
+      "name": "Pepsi 475ml",
+      "category": "Beverages",
+      "type": "VEG",
+      "price": 60,
+      "originalPrice": 60,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "BEV0001",
+      "skuId": "6#1#1",
+      "description": "Sparkling chilled cola to pair with your hot Domino's pizza.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp"
+    },
+    {
+      "id": "DOM-BEV0002",
+      "name": "Mirinda 475ml",
+      "category": "Beverages",
+      "type": "VEG",
+      "price": 60,
+      "originalPrice": 60,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "BEV0002",
+      "skuId": "6#2#1",
+      "description": "Fizzy tangy orange soda with vibrant refreshing flavor.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp"
+    },
+    {
+      "id": "DOM-BEV0003",
+      "name": "7Up 475ml",
+      "category": "Beverages",
+      "type": "VEG",
+      "price": 60,
+      "originalPrice": 60,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "BEV0003",
+      "skuId": "6#3#1",
+      "description": "Crisp lemon-lime refreshment to cleanse the palate.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp"
+    }
+  ],
+  "dominosRegisteredPhones": [
+    {
+      "phone": "+91 7888402429",
+      "cleanPhone": "7888402429",
+      "isDominoRegistered": true,
+      "autoCoupon": "PARTY",
+      "couponCode": "PARTY",
+      "accountType": "EXISTING_ACCOUNT",
+      "categoryName": "🔵 Party Repeat Order Tier",
+      "customerName": "Parth (Verified Domino's Customer)",
+      "lastCheckedAt": "2026-11-01T15:04:40.991Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE",
+      "proof": {
+        "method": "DOMINOS_NXG_LIVE_PROBE",
+        "welcomeRewardPointsBonus": 0,
+        "dominosSavingsStrip": "You saved <b>₹245</b> (FREE Delivery) 🎉",
+        "evaluatedAt": "2026-11-01T15:04:40.991Z"
+      }
+    },
+    {
+      "phone": "+91 7888422429",
+      "cleanPhone": "7888422429",
+      "isDominoRegistered": true,
+      "autoCoupon": "PARTY",
+      "couponCode": "PARTY",
+      "accountType": "EXISTING_ACCOUNT",
+      "categoryName": "🔵 Party Repeat Order Tier",
+      "customerName": "Parth (Verified Domino's Customer)",
+      "lastCheckedAt": "2026-11-01T12:00:00.000Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE"
+    },
+    {
+      "phone": "+91 9872502531",
+      "cleanPhone": "9872502531",
+      "isDominoRegistered": false,
+      "autoCoupon": "DOMNEW50",
+      "couponCode": "DOMNEW50",
+      "accountType": "NEW_ACCOUNT",
+      "categoryName": "🟢 50% OFF New User Tier",
+      "customerName": "Domino's Customer (2531)",
+      "lastCheckedAt": "2026-11-01T13:32:40.822Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE"
+    },
+    {
+      "phone": "+91 9123456780",
+      "cleanPhone": "9123456780",
+      "isDominoRegistered": true,
+      "autoCoupon": "PARTY",
+      "couponCode": "PARTY",
+      "accountType": "EXISTING_ACCOUNT",
+      "categoryName": "🔵 Party Repeat Order Tier",
+      "customerName": "Domino's Customer (6780)",
+      "lastCheckedAt": "2026-11-01T15:04:33.380Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE",
+      "proof": {
+        "method": "DOMINOS_NXG_LIVE_PROBE",
+        "welcomeRewardPointsBonus": 0,
+        "dominosSavingsStrip": "You saved <b>₹245</b> (FREE Delivery) 🎉",
+        "evaluatedAt": "2026-11-01T15:04:33.380Z"
+      }
+    },
+    {
+      "phone": "+91 9319388282",
+      "cleanPhone": "9319388282",
+      "isDominoRegistered": true,
+      "autoCoupon": "PARTY",
+      "couponCode": "PARTY",
+      "accountType": "EXISTING_ACCOUNT",
+      "categoryName": "🔵 Party Repeat Order Tier",
+      "customerName": "Domino's Customer (8282)",
+      "lastCheckedAt": "2026-11-01T15:04:33.539Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE",
+      "proof": {
+        "method": "DOMINOS_NXG_LIVE_PROBE",
+        "welcomeRewardPointsBonus": 0,
+        "dominosSavingsStrip": "You saved <b>₹245</b> (FREE Delivery) 🎉",
+        "evaluatedAt": "2026-11-01T15:04:33.539Z"
+      }
+    },
+    {
+      "phone": "+91 9975645903",
+      "cleanPhone": "9975645903",
+      "isDominoRegistered": true,
+      "autoCoupon": "PARTY",
+      "couponCode": "PARTY",
+      "accountType": "EXISTING_ACCOUNT",
+      "categoryName": "🔵 Party Repeat Order Tier",
+      "customerName": "Domino's Customer (5903)",
+      "lastCheckedAt": "2026-11-01T15:04:33.371Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE",
+      "proof": {
+        "method": "DOMINOS_NXG_LIVE_PROBE",
+        "welcomeRewardPointsBonus": 0,
+        "dominosSavingsStrip": "You saved <b>₹245</b> (FREE Delivery) 🎉",
+        "evaluatedAt": "2026-11-01T15:04:33.371Z"
+      }
+    },
+    {
+      "phone": "+91 7888422462",
+      "cleanPhone": "7888422462",
+      "isDominoRegistered": true,
+      "pastOrdersCount": 0,
+      "autoCoupon": "PARTY",
+      "couponCode": "PARTY",
+      "accountType": "EXISTING_ACCOUNT",
+      "categoryName": "🔵 Party Repeat Order Tier",
+      "customerName": "Domino's Customer (2462)",
+      "lastCheckedAt": "2026-11-01T15:04:30.427Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE",
+      "proof": {
+        "method": "DOMINOS_NXG_LIVE_PROBE",
+        "welcomeRewardPointsBonus": 0,
+        "dominosSavingsStrip": "You saved <b>₹245</b> (FREE Delivery) 🎉",
+        "evaluatedAt": "2026-11-01T15:04:30.427Z"
+      }
+    },
+    {
+      "phone": "+91 9814138868",
+      "cleanPhone": "9814138868",
+      "isDominoRegistered": false,
+      "pastOrdersCount": 0,
+      "autoCoupon": "NEWBIE100",
+      "couponCode": "NEWBIE100",
+      "accountType": "NEW_ACCOUNT",
+      "categoryName": "🟢 50% OFF New User Tier",
+      "customerName": "Domino's Customer (8868)",
+      "lastCheckedAt": "2026-11-01T15:04:32.705Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE",
+      "proof": {
+        "method": "DOMINOS_NXG_LIVE_PROBE",
+        "welcomeRewardPointsBonus": 100,
+        "dominosSavingsStrip": "You saved <b>₹245</b> (FREE Delivery) + earned <b>100</b> Reward Points 🎉",
+        "evaluatedAt": "2026-11-01T15:04:32.705Z"
+      }
+    },
+    {
+      "phone": "+91 9464956705",
+      "cleanPhone": "9464956705",
+      "isDominoRegistered": false,
+      "pastOrdersCount": 0,
+      "autoCoupon": "NEWBIE100",
+      "couponCode": "NEWBIE100",
+      "accountType": "NEW_ACCOUNT",
+      "categoryName": "🟢 50% OFF New User Tier",
+      "customerName": "Domino's Customer (6705)",
+      "lastCheckedAt": "2026-11-01T15:06:18.405Z",
+      "source": "DOMINOS_LIVE_NXG_PROBE",
+      "proof": {
+        "method": "DOMINOS_NXG_LIVE_PROBE",
+        "welcomeRewardPointsBonus": 100,
+        "dominosSavingsStrip": "You saved <b>₹245</b> (FREE Delivery) + earned <b>100</b> Reward Points 🎉",
+        "evaluatedAt": "2026-11-01T15:06:18.405Z"
+      }
+    }
+  ],
+  "orders": [
+    {
+      "id": "DOM-ENG-250275",
+      "engineOrderRef": "DOM-ENG-250275",
+      "dominosOrderRef": null,
+      "cartId": "7011004257346197868",
+      "assignedAccountId": "ACC-DOM-0325",
+      "userId12": "948271035824",
+      "user": {
+        "name": "Parth Sharma",
+        "email": "parth.google@gmail.com",
+        "phone": "+91 7888402429",
+        "userId12": "948271035824"
+      },
+      "items": [
+        {
+          "id": "ITEM-1",
+          "name": "Margherita Pizza",
+          "price": 109,
+          "quantity": 2,
+          "dominosCode": "PIZ0118"
+        },
+        {
+          "id": "ITEM-6",
+          "name": "Stuffed Garlic Bread",
+          "price": 149,
+          "quantity": 1,
+          "dominosCode": "SID0046"
+        }
+      ],
+      "location": {
+        "latitude": 30.7339,
+        "longitude": 76.7889,
+        "store": {
+          "storeId": "65977",
+          "storeName": "CHANDIGARH SEC 8B",
+          "address": "SCF-3,SECTOR 8/B,,CHANDIGARH - 160008 PH.NO. 0172-2720091/ 92/ 93/ 94/ 95/ 96/ 97/ 98"
+        }
+      },
+      "address": {
+        "completeAddress": "House No. 124, Shivalik Greens, Sector 15, Chandigarh",
+        "storeId": "65977",
+        "storeName": "CHANDIGARH SEC 8B"
+      },
+      "payment": {
+        "method": "COD",
+        "subtotal": 729,
+        "gst": 36.45,
+        "deliveryFee": 35,
+        "packagingFee": 0,
+        "discountAmount": 100,
+        "couponCode": "PARTY",
+        "amount": 700,
+        "originalEstimatedAmount": 402,
+        "priceDifference": 298,
+        "priceNotice": "Domino's live store price verified at CHANDIGARH SEC 8B: Total adjusted by +₹298 (includes 5% GST & standard delivery).",
+        "receiverUpiId": "dominos.pay@okhdfcbank",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "upiString": "upi://pay?pa=dominos.pay%40okhdfcbank&pn=Domino's%20Official%20Kitchen%20Outlet&am=700&tr=DOM-ENG-250275&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-250275",
+        "status": "CONFIRMED_COD",
+        "transactionId": "COD-40251190",
+        "verifiedAt": "2026-11-01T13:37:31.190Z"
+      },
+      "robot": {
+        "status": "ERROR",
+        "assignedAccountId": "ACC-DOM-0325",
+        "accountPhone": "+91 7893618933",
+        "sessionPhone": "+91 7893618933",
+        "accountCategory": "CATEGORY_FLAT_100",
+        "categoryName": "🔵 Party Repeat Order Tier",
+        "couponCode": null,
+        "cartId": "7011004257346197868",
+        "dominosOrderRef": null,
+        "dominosAddressId": null,
+        "dominosFormattedAddress": null,
+        "storeId": "65977",
+        "storeName": "CHANDIGARH SEC 8B",
+        "billAmount": 729,
+        "discountAmount": 100,
+        "dueAmount": null,
+        "proofScreenshotUrl": null,
+        "cartBillScreenshotUrl": null,
+        "rider": {
+          "name": null,
+          "phone": null,
+          "status": "AWAITING_KITCHEN_DISPATCH"
+        },
+        "logs": [
+          "[7:07:31 pm] Order created (Cash on Delivery). Engine Ref: DOM-ENG-250275 | Domino's Live Ref: Awaiting Placement | Cart ID: #7011004257346197868. Store: CHANDIGARH SEC 8B. Verified Total: ₹700. Session Phone: +91 7893618933. Promo: PARTY.",
+          "[19:07:31] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[19:07:31] Resuming pre-assigned Domino's Session: +91 7893618933 (ACC-DOM-0325) - Category: 🔵 Party Repeat Order Tier",
+          "[19:07:31] Claimed Domino's Session: +91 7893618933 (ACC-DOM-0325) - Category: 🔵 Party Repeat Order Tier",
+          "[19:07:31] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[19:07:31] Resolving Domino's delivery kitchen for coordinates: [30.7339, 76.7889]",
+          "[19:07:31] Kitchen Resolved: CHANDIGARH SEC 8B (Store ID: 65977) - Delivery ETA: 30 mins",
+          "[19:07:31] 🤖 Launching unified Middleman Robot on m.dominos.co.in (Address -> Cart -> Cash on Delivery)...",
+          "[19:07:31] [MIDDLEMAN-ENGINE] 🚀 Launching unified robot session for Customer Order DOM-ENG-250275...",
+          "[19:07:32] [MIDDLEMAN-ENGINE] 🏪 Delivering Store Resolved from Domino's Locator: CHANDIGARH SEC 8B (ID: 65977)",
+          "[19:07:32] [MIDDLEMAN-ENGINE] 🏠 Registering customer delivery address on Domino's India for 7893618933...",
+          "[19:07:34] [MIDDLEMAN-ENGINE] ℹ️ Address established and linked to session.",
+          "[19:07:34] [MIDDLEMAN-ENGINE] 🧹 Checking cart and clearing leftover items for Store 65977...",
+          "[19:07:37] [MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.",
+          "[19:07:37] [MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store 65977...",
+          "[19:07:41] [MIDDLEMAN-ENGINE] 🛒 Adding 2 constituent item(s) to Domino's cart...",
+          "[19:07:41] [MIDDLEMAN-ENGINE] 🍕 Adding \"Margherita Pizza\" (Qty: 2) to Domino's cart...",
+          "[19:07:46] [MIDDLEMAN-ENGINE] ⚠️ Note: \"Margherita Pizza\" not clicked on menu page; checking cart...",
+          "[19:07:51] [MIDDLEMAN-ENGINE] ⚠️ Note: \"Margherita Pizza\" not clicked on menu page; checking cart...",
+          "[19:07:51] [MIDDLEMAN-ENGINE] 🍕 Adding \"Stuffed Garlic Bread\" (Qty: 1) to Domino's cart...",
+          "[19:07:55] [MIDDLEMAN-ENGINE] ✓ Successfully added \"Stuffed Garlic Bread\" to cart!",
+          "[19:07:55] [MIDDLEMAN-ENGINE] 📝 Closing search modal to uncover View Cart bar...",
+          "[19:07:58] [MIDDLEMAN-ENGINE] 🛒 Navigating to Domino's Cart View...",
+          "[19:08:02] [MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/65977, navigatedViaClick = false",
+          "[19:08:16] [MIDDLEMAN-ENGINE] 🔍 DOM Snapshot: wraps = 0, cards = 0, snippet = \"Domino's Pizza Veg Only Non Veg Only Sort by Cheese Lava Big Big Pizza Veg Pizza Non-Veg Pizza Deals Chicken Feast Cheese Burst Pizza Cheese Volcano Pizza Mania Garlic Breads & Dips Beverages Desserts Tacos & Parcels Maxxx Pizzas 2in1 Cheese Burst Cheese Lava Cheese Lava Spiced Double Chicken 8 ch\"",
+          "[19:08:16] [MIDDLEMAN-ENGINE] 🔍 Auditing cart items against customer order...",
+          "[19:08:16] [MIDDLEMAN-ENGINE] 🛡️ Verifying cart contents against customer order...",
+          "[19:08:16] [MIDDLEMAN-ENGINE] Cart Contents: 0 item(s). Missing: 2, Rogue: 0",
+          "[19:08:16] [MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: Cart verification failed: Ordered item(s) missing from Domino's cart: [Margherita Pizza, Stuffed Garlic Bread]. Order blocked to prevent placing incomplete order.",
+          "[19:08:17] ❌ Domino's Placement Notice: Cart verification failed: Ordered item(s) missing from Domino's cart: [Margherita Pizza, Stuffed Garlic Bread]. Order blocked to prevent placing incomplete order."
+        ],
+        "estimatedDelivery": "30 mins",
+        "error": "Cart verification failed: Ordered item(s) missing from Domino's cart: [Margherita Pizza, Stuffed Garlic Bread]. Order blocked to prevent placing incomplete order."
+      },
+      "createdAt": "2026-11-01T13:37:31.191Z",
+      "updatedAt": "2026-11-01T13:38:17.192Z"
+    }
+  ],
+  "walletDeposits": [],
+  "walletWithdrawals": [],
+  "announcements": [],
+  "tickets": [],
+  "userProfile": {
+    "email": "parth.google@gmail.com",
+    "name": "Parth Sharma",
+    "phone": "+91 7893618933",
+    "phoneLocked": true,
+    "picture": "https://lh3.googleusercontent.com/a/default-user=s96-c",
+    "userId12": "948271035824",
+    "wallet": {
+      "balance": 0,
+      "currency": "INR"
+    },
+    "savedAddresses": []
+  },
+  "users": [
+    {
+      "email": "test.user.1793554351040@gmail.com",
+      "googleId": "g-1793554351041",
+      "id": "USR-1042",
+      "lastActive": "2026-11-01T17:32:31.042Z",
+      "name": "Verification Bot",
+      "phone": "",
+      "phoneLocked": false,
+      "picture": "https://lh3.googleusercontent.com/a/test-pic=s96-c",
+      "registeredAt": "2026-11-01T17:32:31.042Z",
+      "status": "ACTIVE",
+      "userId12": "191878130976",
+      "wallet": {
+        "balance": 0,
+        "currency": "INR"
+      },
+      "walletBalance": 0,
+      "savedAddresses": [],
+      "transactions": []
+    },
+    {
+      "email": "test@example.com",
+      "id": "test_usr_1",
+      "userId12": "303036732898",
+      "wallet": {
+        "balance": 0,
+        "currency": "INR"
+      },
+      "transactions": [],
+      "savedAddresses": []
+    }
+  ],
+  "notifications": [
+    {
+      "id": "NOTIF-873907",
+      "title": "🔥 50% OFF Today on Domino's Pizzas!",
+      "message": "Limited-time offer! Enjoy flat 50% OFF up to ₹100 on Medium & Large Pizzas.",
+      "type": "OFFER",
+      "badge": "50% FLASH",
+      "active": true,
+      "createdAt": "2026-11-01T17:07:53.907Z"
+    },
+    {
+      "id": "NOTIF-860980",
+      "title": "🔥 50% OFF Today on Domino's Pizzas!",
+      "message": "Limited-time offer! Enjoy flat 50% OFF up to ₹100 on Medium & Large Pizzas.",
+      "type": "OFFER",
+      "badge": "50% FLASH",
+      "active": true,
+      "createdAt": "2026-11-01T17:07:40.980Z"
+    },
+    {
+      "id": "NOTIF-01",
+      "title": "🎉 Welcome to DominoSync Platform!",
+      "message": "Order authentic Domino's pizzas at 50% discount with instant live tracking & autonomous robot ordering.",
+      "type": "OFFER",
+      "badge": "50% OFF",
+      "active": true,
+      "createdAt": "2026-11-01T13:31:52.023Z"
+    }
+  ],
+  "maintenanceMode": {
+    "active": false,
+    "message": "Scheduled Maintenance: System upgrade in progress. Ordering paused.",
+    "until": "2026-11-01T19:30:56.293Z",
+    "updatedAt": "2026-11-01T19:00:56.322Z"
+  }
+}

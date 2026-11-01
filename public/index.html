@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domino's Order Engine | Official Domino's Store Ordering &amp; Kitchen Dispatch</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="/qr.js"></script>
+  <style>
+    .kitchen-gmaps-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      padding: 5px 12px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .kitchen-gmaps-link:hover {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    .gps-lock-badge {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* System Info Tooltip Dot */
+    .info-dot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      border: 1px solid #bae6fd;
+      transition: all 0.2s;
+      user-select: none;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+    .info-dot:hover {
+      background: #0284c7;
+      color: white;
+      border-color: #0284c7;
+      transform: scale(1.1);
+    }
+
+    /* Wallet Card */
+    .wallet-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%);
+      color: white;
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+    }
+    .wallet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+    .wallet-balance {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    .wallet-subtext {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    /* Address Cards in Profile */
+    .address-card {
+      background: white;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .address-card.active-default {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    .addr-badge-default {
+      background: #10b981;
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .addr-badge-tag {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* Toast Notice */
+    #storeToastNotice {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 9999;
+    }
+
+    @keyframes scooterBob {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="logo-container">
+      <div class="logo-icon">🍕</div>
+      <div>
+        <div class="brand-title" style="display: flex; align-items: center;">Domino's Order Engine <span class="info-dot" onclick="showSystemInfo('overview')" title="Click for Domino's Order Engine platform guide">i</span></div>
+        <div class="brand-tag">Autonomous Domino's Ordering Platform</div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- User Dynamic Auth & Identity Container -->
+      <div id="navAuthContainer" style="display: flex; align-items: center; gap: 8px;">
+        <button class="nav-btn-google-auth" id="btnNavGoogleSignIn" onclick="openGoogleAuthModal()" title="Sign In or Register with Google" style="background: white; border: 1.5px solid #4285f4; color: #1e3a8a; padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2); transition: all 0.2s;">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span>Sign In with Google</span>
+        </button>
+      </div>
+
+      <!-- Customer Order History Button -->
+      <button class="nav-btn-secondary" id="btnMyOrders" onclick="openMyOrdersModal()" title="View Past Orders, Live Tracker & Domino's Bills" style="background: white; border: 1.5px solid var(--gray-300); color: var(--dark); padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <span>📦</span>
+        <span>My Orders</span>
+      </button>
+
+      <!-- In-App Support Chat & Help Desk Button -->
+      <button class="nav-btn-secondary" id="btnHelpSupport" onclick="openHelpSupportModal()" title="Domino's Order Help, Live Chat & Ticket Support" style="background: white; border: 1.5px solid #93c5fd; color: #1d4ed8; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <span>🎧</span>
+        <span>Help &amp; Support</span>
+      </button>
+
+      <!-- Cart Toggle Button -->
+      <button class="cart-toggle-btn" onclick="openCartModal()">
+        <span>🛒 Cart</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- High-Visibility Scheduled System Maintenance Banner -->
+  <div id="maintenanceAlertBanner" style="display: none; background: linear-gradient(90deg, #7f1d1d 0%, #b91c1c 50%, #991b1b 100%); color: #ffffff; padding: 14px 24px; border-bottom: 3px solid #ef4444; font-size: 14px; font-weight: 700; box-shadow: 0 4px 16px rgba(185, 28, 28, 0.4); z-index: 999; position: relative;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span style="background: #ffffff; color: #b91c1c; font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase;">⚠️ System Maintenance</span>
+        <span id="maintenanceBannerTitle" style="font-size: 15px; font-weight: 800;">Domino's Order Engine Maintenance</span>
+        <span id="maintenanceBannerMessage" style="color: #fecaca; font-weight: 500; font-size: 13px;">We will be back soon! Autonomous ordering and wallet actions are temporarily paused.</span>
+      </div>
+      <div id="maintenanceEtaWrap" style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); padding: 5px 14px; border-radius: 20px; font-size: 12px; color: #fef08a;">
+        <span>⏳ Status:</span>
+        <strong id="maintenanceEtaText">Maintenance In Progress</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Broadcast In-App Notification Banner -->
+  <div id="storeNotificationBanner" style="display: none; background: #f0fdf4; border-bottom: 1.5px solid #86efac; color: #166534; padding: 10px 24px; font-size: 13px; font-weight: 600; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <span id="bannerBadge" style="background: #0066a3; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">DOMINO'S LIVE</span>
+      <strong id="bannerTitle">🍕 Live Store Kitchen Ordering</strong>
+      <span id="bannerMessage" style="color: #166534;">Direct delivery from your verified nearest Domino's store with live rider telemetry.</span>
+    </div>
+    <button onclick="dismissNotificationBanner()" style="background: none; border: none; font-size: 18px; color: #166534; cursor: pointer; padding: 0 6px; font-weight: 800;" title="Dismiss announcement">&times;</button>
+  </div>
+
+  <!-- Live Domino's Store Availability Bar (Current Location Locked) -->
+  <div id="storeAvailabilityBar" style="background: #0f172a; color: white; padding: 12px 24px; border-bottom: 2px solid #0066a3; display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      
+      <!-- Store Status Display & Top Location Address Controller -->
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;" id="storeStatusContainer">
+        <span id="storeStatusBadge" style="background: #f59e0b; color: #0f172a; padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; letter-spacing: 0.5px;">
+          📍 LOCATION REQUIRED
+        </span>
+        <span id="storeStatusText" style="font-weight: 600;">
+          Detect your current location to check pizza availability at your nearest Domino's kitchen
+        </span>
+        <a id="topKitchenGmapsLink" href="#" target="_blank" class="kitchen-gmaps-link" style="display: none;">
+          🗺️ View Kitchen on Google Maps &rarr;
+        </a>
+      </div>
+
+      <!-- Top Bar GPS & Store Detection Status -->
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;" id="topBarControlsWrap">
+        <!-- Nearest Store Status Pill -->
+        <div style="display: flex; align-items: center; gap: 6px; background: #1e293b; border: 1.5px solid #0284c7; padding: 6px 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+          <span style="font-size: 13px; color: #38bdf8;">🛰️</span>
+          <span id="topBarStoreLabel" style="font-size: 11px; font-weight: 800; color: #f8fafc;">Detecting Nearest Store...</span>
+        </div>
+
+        <!-- GPS Button -->
+        <button id="topDetectGpsBtn" onclick="detectUserLocation()" 
+                style="background: #0066a3; border: 1px solid #38bdf8; color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+          <span id="gpsBtnIcon">🛰️</span> <span id="gpsBtnLabel">Detect My Location (GPS)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Store Lock Notice -->
+    <div style="font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 6px;" id="storeNoticeLine">
+      <span>🔒 Providing your location allows Domino's to verify item stock and serviceability. No saved profile address needed to make a cart.</span>
+    </div>
+  </div>
+
+  <!-- Hero Banner -->
+  <div class="hero-banner">
+    <div class="hero-text">
+      <h1>Domino's India Store Ordering Engine</h1>
+      <p>Order authentic Domino's pizzas &amp; value combos at verified kitchen prices. Enjoy seamless Cash on Delivery or Instant UPI payment. Our order engine verifies localized store inventory, confirms your exact delivery address, and dispatches your order directly to the nearest Domino's kitchen with live rider tracking!</p>
+      <div class="hero-badges">
+        <span class="hero-badge">⚡ Instant Kitchen Dispatch</span>
+        <span class="hero-badge">🛡️ Cash on Delivery &amp; UPI Available</span>
+        <span class="hero-badge">🛵 Real-Time Domino's Rider Telemetry</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- Category Tabs -->
+    <div class="tabs-container" style="flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+      <button class="tab-btn active" onclick="filterCatalog('ALL', this)">All Items</button>
+      <button class="tab-btn" onclick="filterCatalog('COMBOS', this)">🔥 Special Combos</button>
+      <button class="tab-btn" onclick="filterCatalog('Veg Pizza', this)">🌱 Veg Pizzas</button>
+      <button class="tab-btn" onclick="filterCatalog('Non-Veg Pizza', this)">🍗 Non-Veg Pizzas</button>
+      <button class="tab-btn" onclick="filterCatalog('Pizza Mania', this)">🎯 Pizza Mania</button>
+      <button class="tab-btn" onclick="filterCatalog('Garlic Breads & Sides', this)">🥖 Sides &amp; Dips</button>
+      <button class="tab-btn" onclick="filterCatalog('Desserts', this)">🍫 Desserts</button>
+      <button class="tab-btn" onclick="filterCatalog('Beverages', this)">🥤 Beverages</button>
+    </div>
+
+    <!-- Diet Filter Options (Veg Only / Non-Veg Only / All) -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span style="font-size: 11px; font-weight: 800; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px;">Diet Filter:</span>
+        <button class="diet-tab active" id="dietAll" onclick="filterByDiet('ALL', this)" style="padding: 4px 12px; font-size: 11px; font-weight: 700; border-radius: 14px; border: 1.5px solid var(--gray-300); background: white; cursor: pointer; transition: all 0.2s;">All Food</button>
+        <button class="diet-tab" id="dietVeg" onclick="filterByDiet('VEG', this)" style="padding: 4px 12px; font-size: 11px; font-weight: 700; border-radius: 14px; border: 1.5px solid #22c55e; color: #15803d; background: white; cursor: pointer; transition: all 0.2s;">🟢 Pure Veg</button>
+        <button class="diet-tab" id="dietNonVeg" onclick="filterByDiet('NON-VEG', this)" style="padding: 4px 12px; font-size: 11px; font-weight: 700; border-radius: 14px; border: 1.5px solid #ef4444; color: #b91c1c; background: white; cursor: pointer; transition: all 0.2s;">🔴 Non-Veg</button>
+      </div>
+    </div>
+
+    <!-- Menu Filter Toolbar (Search + Auto Stock Optimization & Desktop Mode) -->
+    <div class="menu-toolbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; background: white; padding: 12px 18px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm);">
+      <div style="display: flex; align-items: center; gap: 10px; flex: 1; max-width: 450px;">
+        <span style="font-size: 16px;">🔍</span>
+        <input type="text" id="menuSearchInput" oninput="handleMenuSearch(this.value)" placeholder="Search pizzas, garlic breads, choco lava, drinks... (Press '/' to focus)" style="width: 100%; border: none; outline: none; font-size: 13px; font-weight: 500; background: transparent;">
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <!-- Area Stock Auto-Optimized Badge (Mandatory per Domino's policy) -->
+        <span style="font-size: 11px; font-weight: 700; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 4px 10px; border-radius: 12px; display: flex; align-items: center; gap: 4px;">
+          <span>⚡</span>
+          <span>Unavailable Items Auto-Hidden for Your Store</span>
+        </span>
+
+        <!-- Desktop Mode Keyboard Shortcuts Pill -->
+        <span style="font-size: 11px; font-weight: 700; color: #1e40af; background: #eff6ff; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 12px; cursor: help;" title="Keyboard Shortcuts: [C] Toggle Cart • [/] Focus Search • [Esc] Close Overlays • [Enter] Submit • [1-3] Diet Filters">
+          ⌨️ Desktop Mode: [C] Cart • [/] Search • [Esc] Close
+        </span>
+        
+        <span id="catalogCountBadge" style="background: #e2e8f0; color: #475569; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700;">
+          214 Items Total
+        </span>
+      </div>
+    </div>
+
+    <!-- Combos Section -->
+    <div id="combosSection">
+      <div class="section-title">
+        <span>Exclusive Value Combos</span>
+        <small style="font-size: 13px; color: var(--secondary); font-weight: 600;">Discounts automatically applied by Domino's Engine</small>
+      </div>
+      <div class="product-grid" id="combosGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Individual Items Section -->
+    <div id="menuSection">
+      <div class="section-title">
+        <span>Domino's Handcrafted Menu</span>
+      </div>
+      <div class="product-grid" id="menuGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- User Profile Modal (Wallet, Username, Fixed Phone, Multi-Address Management) -->
+  <div class="modal-overlay" id="userProfileModal">
+    <div class="modal-card" style="max-width: 580px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <span>👤 User Profile &amp; Addresses</span>
+            <span id="profUserUid12Badge" style="font-size: 11px; font-weight: 800; font-family: monospace; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 4px; border: 1px solid #bae6fd;">UID: 948271035824</span>
+          </div>
+          <div style="font-size: 12px; color: var(--gray-600);">Manage your 12-digit UID, real digital wallet &amp; saved addresses</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn-action-del" onclick="signOutUser()" style="padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer;" title="Log out from Domino's Order Engine">
+            🚪 Log Out
+          </button>
+          <button class="modal-close" onclick="closeModal('userProfileModal')">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        
+        <!-- Profile Navigation Tabs -->
+        <div style="display: flex; gap: 6px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px;">
+          <button type="button" id="tabBtnProfileWallet" class="btn-profile-tab active" onclick="switchProfileTab('wallet')" style="flex: 1; padding: 10px 6px; border: none; background: none; font-size: 13px; font-weight: 800; color: #0066a3; border-bottom: 3px solid #0066a3; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+            <span>👛</span> <span>Wallet &amp; Deposits</span>
+          </button>
+          <button type="button" id="tabBtnProfileAddresses" class="btn-profile-tab" onclick="switchProfileTab('addresses')" style="flex: 1; padding: 10px 6px; border: none; background: none; font-size: 13px; font-weight: 700; color: #64748b; border-bottom: 3px solid transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+            <span>📍</span> <span>Saved Addresses</span>
+          </button>
+          <button type="button" id="tabBtnProfileDetails" class="btn-profile-tab" onclick="switchProfileTab('details')" style="flex: 1; padding: 10px 6px; border: none; background: none; font-size: 13px; font-weight: 700; color: #64748b; border-bottom: 3px solid transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+            <span>👤</span> <span>Account Details</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: 👛 WALLET & PAYOUTS -->
+        <div id="profileTab-wallet">
+          <!-- Domino's Order Engine Digital Wallet Card -->
+          <div class="wallet-card" style="margin-bottom: 16px;">
+            <div class="wallet-header">
+              <span>👛 Domino's Order Engine Digital Wallet</span>
+              <span style="background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700;">🟢 ACTIVE</span>
+            </div>
+            <div class="wallet-balance" id="walletBalanceDisplay">₹0</div>
+            <div class="wallet-subtext" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <span>Real-time balance • Instant Domino's checkout <span class="info-dot" onclick="showSystemInfo('wallet')" title="Domino's Order Engine Wallet &amp; UPI Deposit Info">i</span></span>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" onclick="openWalletDepositModal()" style="background: white; color: #0066a3; font-weight: 800; font-size: 13px; border: none; border-radius: 6px; padding: 8px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.18);">
+                  💰 Add Money to Wallet
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Digital Wallet Full Transaction History -->
+          <div style="background: white; border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <h4 style="font-size: 13px; font-weight: 800; color: var(--dark); margin: 0; display: flex; align-items: center; gap: 6px;">
+                <span>📜 Full Transaction History</span>
+              </h4>
+              <button type="button" class="btn-action-copy" onclick="loadWalletTransactions()" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #0284c7; border-color: #bae6fd;">
+                🔄 Refresh
+              </button>
+            </div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">
+              View all wallet top-ups, order settlements, and balance adjustments. Click any item to view details.
+            </div>
+            <div id="walletTransactionsListContainer" style="max-height: 220px; overflow-y: auto; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 6px; padding: 8px;">
+              <div style="text-align: center; font-size: 11px; color: #64748b; padding: 12px;">No transactions recorded yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: 📍 SAVED ADDRESSES -->
+        <div id="profileTab-addresses" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h4 style="font-size: 14px; font-weight: 800; color: var(--dark); margin: 0;">📍 Saved Delivery Addresses</h4>
+              <small id="addressLimitBadge" style="font-size: 11px; color: #64748b; font-weight: 600;">Maximum 3 addresses permitted</small>
+            </div>
+            <button class="btn-primary" id="btnToggleAddAddress" style="width: auto; padding: 5px 12px; font-size: 11px;" onclick="toggleAddAddressForm()">
+              + Add New Address
+            </button>
+          </div>
+
+          <!-- Address Cards List -->
+          <div id="profileAddressListContainer" style="margin-bottom: 16px;">
+            <!-- Dynamically populated with address cards -->
+          </div>
+
+          <!-- Add / Edit Address Form (Collapsible - Domino's India Verified Schema) -->
+          <div id="addressFormSection" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px;">
+            <h4 id="addressFormTitle" style="font-size: 13px; font-weight: 800; margin-bottom: 12px; color: var(--dark);">+ Add New Delivery Address</h4>
+            <input type="hidden" id="formAddressId" value="">
+            <input type="hidden" id="formCity" value="Chandigarh">
+            <input type="hidden" id="formPincode" value="160015">
+
+            <!-- 1. Current Location GPS Quick-Sync Button inside Address Form -->
+            <button type="button" class="btn-location" id="formUseGpsBtn" onclick="useCurrentLocationForAddressForm()" style="width: 100%; margin-bottom: 12px;">
+              <span id="formGpsBtnIcon">📡</span>
+              <span id="formGpsBtnLabel">Acquire Fresh GPS Coordinates & Nearest Domino's Store</span>
+            </button>
+
+            <!-- 2. Mandatory GPS Coordinates Locked by Map/Device (Domino's Delivery Engine) -->
+            <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 6px; padding: 10px; margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-weight: 800; font-size: 11px; color: #166534;">📡 Mandatory GPS Coordinates (Auto-Acquired) <span class="info-dot" onclick="showSystemInfo('gps')" title="Why Domino's requires GPS lock">i</span></span>
+                <span class="gps-lock-badge" id="formGpsStatusBadge">✓ GPS Locked</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <div style="flex: 1;">
+                  <input type="text" id="formLat" class="form-input" value="30.7339" readonly style="background: white; font-size: 12px; font-weight: 700; color: #065f46;">
+                </div>
+                <div style="flex: 1;">
+                  <input type="text" id="formLng" class="form-input" value="76.7889" readonly style="background: white; font-size: 12px; font-weight: 700; color: #065f46;">
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. House / Flat / Floor / Unit Number -->
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label class="form-label">House / Flat / Floor / Unit No. *</label>
+              <input type="text" id="formFlat" class="form-input" placeholder="e.g. Flat 302, 3rd Floor / House 124">
+            </div>
+
+            <!-- 4. Complete Address (Building / Apartment / Street / Society) with Live Auto-Geocoding -->
+            <div class="form-group" style="margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label class="form-label" style="margin-bottom: 0;">Complete Address (Building / Society / Street / Sector) *</label>
+                <button type="button" onclick="autoResolveFormCoordinates()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; cursor: pointer;">
+                  🔍 Auto-Acquire GPS Pin
+                </button>
+              </div>
+              <input type="text" id="formCompleteAddress" class="form-input" placeholder="e.g. Shivalik Greens Society, Sector 15" oninput="debounceAutoResolveCoords(this.value)">
+            </div>
+
+            <!-- 5. Landmark (Optional) -->
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Landmark (Optional)</label>
+              <input type="text" id="formLandmark" class="form-input" placeholder="e.g. Near Community Center / Metro Station">
+            </div>
+
+            <!-- 6. Domino's Official "Order for someone else" Schema (Receiver Name & Contact Number) -->
+            <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 800; font-size: 12px; color: #1e293b; margin-bottom: 8px;">
+                <input type="checkbox" id="formOrderForSomeoneElse" checked onchange="toggleOrderForSomeoneElseUI(this.checked)" style="width: 17px; height: 17px; accent-color: #0066a3;">
+                <span>📦 Order for someone else (Receiver Name &amp; Contact Number)</span>
+              </label>
+              <div id="receiverDetailsSection">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                  <div style="flex: 1;">
+                    <label class="form-label" style="font-size: 11px;">Receiver First Name *</label>
+                    <input type="text" id="formFirstName" class="form-input" placeholder="e.g. Parth" value="Parth">
+                  </div>
+                  <div style="flex: 1;">
+                    <label class="form-label" style="font-size: 11px;">Receiver Last Name</label>
+                    <input type="text" id="formLastName" class="form-input" placeholder="e.g. Sharma" value="Sharma">
+                  </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 4px;">
+                  <label class="form-label" style="font-size: 11px;">Receiver / Delivery Executive Mobile Number *</label>
+                  <div style="display: flex; gap: 8px;">
+                    <div style="display: flex; align-items: center; background: white; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); padding: 0 10px; font-weight: 700; color: var(--gray-600); font-size: 12px;">
+                      🇮🇳 +91
+                    </div>
+                    <input type="tel" id="formPhone" class="form-input" placeholder="10-digit mobile" maxlength="10" style="font-weight: 700; font-size: 13px; font-family: monospace;">
+                  </div>
+                  <small style="font-size: 11px; color: #0284c7; font-weight: 600; display: block; margin-top: 3px;">
+                    🛵 Domino's delivery rider will call this exact receiver number upon arrival.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <!-- 7. Address Label & Type -->
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Address Type / Label *</label>
+              <select id="formAddrLabel" class="form-select">
+                <option value="Home">🏠 Home</option>
+                <option value="Work">🏢 Work / Office</option>
+                <option value="Other">📍 Other / Friend</option>
+              </select>
+            </div>
+
+            <!-- 8. Set as Default Address Highlighted Reminder Box -->
+            <div class="default-addr-reminder-box" style="margin-bottom: 14px;">
+              <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="formIsDefault" style="width: 18px; height: 18px; margin-top: 2px; accent-color: var(--primary);">
+                <div>
+                  <div style="font-weight: 800; font-size: 13px; color: #166534;">★ Set as my Default Delivery Address</div>
+                  <div style="font-size: 11px; color: #15803d; margin-top: 2px;">
+                    💡 Reminder: Check this box to deliver your Domino's orders to this address by default.
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-primary" onclick="submitAddressForm()">💾 Save Address &amp; Sync to Domino's Cloud</button>
+              <button class="btn-secondary" onclick="toggleAddAddressForm(false)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: 👤 ACCOUNT DETAILS -->
+        <div id="profileTab-details" style="display: none;">
+          <div style="background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px;">
+            <h4 style="font-size: 13px; font-weight: 800; color: var(--dark); margin-bottom: 12px;">Account Details &amp; Profile</h4>
+
+            <!-- Account Identity & Session -->
+            <div style="background: white; border: 1px solid var(--gray-300); border-radius: 6px; padding: 10px 12px; margin-bottom: 12px; font-size: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="color: var(--gray-600); font-size: 11px;">Signed-in Google Account:</span>
+                <strong id="profUserEmailDisplay" style="color: #0f172a; font-family: monospace;">parth.google@gmail.com</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="color: var(--gray-600); font-size: 11px;">12-Digit Customer UID:</span>
+                <strong id="profUserUidDisplay" style="color: #0284c7; font-family: monospace;">948271035824</strong>
+              </div>
+              <div style="padding-top: 8px; border-top: 1px dashed #e2e8f0; display: flex; justify-content: flex-end;">
+                <button type="button" class="btn-action-del" onclick="signOutUser()" style="padding: 6px 14px; font-size: 12px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                  <span>🚪</span> <span>Sign Out of Account</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label class="form-label">Full Name / Username (Editable)</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="profUserNameInput" class="form-input" value="Parth" placeholder="Enter Full Name">
+                <button class="btn-primary" style="width: auto; white-space: nowrap; padding: 0 16px; font-size: 12px;" onclick="saveUserNameOnly()">Save Name</button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Registered Mobile Number</span>
+                <span id="profPhoneLockBadge" style="color: #dc2626; font-size: 11px; font-weight: 700;">🔒 Locked (Contact Support to Change)</span>
+              </label>
+              <div style="display: flex; gap: 8px;">
+                <input type="tel" id="profFixedPhone" class="form-input" placeholder="10-digit mobile number" style="background: #f1f5f9; cursor: not-allowed; color: #475569; font-weight: 700;">
+                <button class="btn-primary" id="btnSavePhone" style="display: none; width: auto; white-space: nowrap; padding: 0 16px; font-size: 12px;" onclick="saveUserPhone()">Save Phone</button>
+                <button class="btn-action-copy" id="btnReqPhoneChange" style="width: auto; white-space: nowrap; padding: 0 12px; font-size: 11px; border-color: #0284c7; color: #0284c7;" onclick="requestPhoneChangeSupport()">💬 Request Change</button>
+              </div>
+            </div>
+
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--gray-300); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 11px; color: var(--gray-600);">Need help with an order, refund, or phone update?</span>
+              <button type="button" onclick="closeModal('userProfileModal'); openHelpSupportModal(null);" style="background: #0284c7; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                💬 Live Support Chat &amp; Help Desk
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer Modal (With Address Confirmation & Real Serviceability Verification) -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-right: 12px;">
+          <div class="modal-title">Your Order Cart</div>
+          <span id="cartNumericIdBadge" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-family: monospace; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px;">
+            🛒 Cart: #6708931605657220669
+          </span>
+        </div>
+        <button class="modal-close" onclick="closeModal('cartModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Out of Stock Warning Banner -->
+        <div id="cartOutOfStockWarning" style="display: none; background: #fef2f2; border: 1.5px solid #f87171; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: #991b1b; font-weight: 700;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <div>⚠️ Some items are currently out of stock at your local Domino's kitchen.</div>
+            <button type="button" onclick="removeOutOfStockCartItems()" style="background: #dc2626; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; cursor: pointer;">
+              🗑️ Remove Out-of-Stock Items
+            </button>
+          </div>
+        </div>
+
+        <!-- Cart Items List Header with Clear Cart -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.5px;">Selected Cart Items</span>
+          <button type="button" onclick="clearEntireCart()" style="background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            <span>🗑️</span> <span>Clear Cart</span>
+          </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cartItemsList" style="margin-bottom: 16px;">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Live Kitchen Price & Stock Synchronization Badge -->
+        <div id="cartRateSyncNotice" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span>⚡</span>
+            <span id="cartRateSyncLabel">Real-time store rates verified with local Domino's kitchen</span>
+          </div>
+          <span id="cartRateSyncStatusBadge" style="background: #22c55e; color: white; padding: 1px 6px; border-radius: 4px; font-size: 10px;">LIVE</span>
+        </div>
+
+        <!-- Bill Summary (Domino's Store Bill Breakdown) -->
+        <div style="background: var(--gray-50); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+            <span>Items Subtotal</span>
+            <span id="billSubtotal">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+            <span>Domino's GST (5% CGST + SGST)</span>
+            <span id="billGstPreview">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+            <span>Standard Delivery Fee</span>
+            <span id="billDeliveryFeePreview">₹35</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+            <span>Restaurant Packaging</span>
+            <span id="billPackagingPreview" style="color: #16a34a; font-weight: 700;">FREE</span>
+          </div>
+          <div id="billDiscountRow" style="display: none; justify-content: space-between; margin-bottom: 6px; color: #16a34a; font-weight: 700;">
+            <span id="billDiscountLabel">Special Discount</span>
+            <span id="billDiscountAmount">-₹0</span>
+          </div>
+          <div style="border-top: 1px dashed var(--gray-300); margin: 6px 0; padding-top: 6px;"></div>
+          <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 15px; color: var(--dark);">
+            <span>Payable Total</span>
+            <span id="billTotal" style="color: #16a34a;">₹0</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Confirmed Delivery Address & Receiver Details -->
+        <div style="background: var(--gray-50); border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px; font-size: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <strong style="color: var(--dark); font-size: 13px;">📍 Delivery Address:</strong>
+              <span id="cartAddressConfirmedBadge" style="background: #22c55e; color: white; font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 4px;">CONFIRMED</span>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="btnCartQuickGps" onclick="cartDetectCurrentLocation()" style="background: #e0f2fe; border: 1px solid #7dd3fc; color: #0369a1; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;" title="Deliver to device GPS location">
+                📍 My GPS
+              </button>
+              <button type="button" id="btnToggleCartInlineAddr" onclick="toggleCartInlineAddAddress()" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;">
+                + Add / Change
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Address Dropdown Selector if multiple addresses exist -->
+          <div style="margin-bottom: 8px;" id="cartAddressSelectWrapper">
+            <select id="cartAddressSelect" class="form-select" onchange="onCartAddressDropdownChange(this.value)" style="font-size: 12px; font-weight: 700; padding: 6px 10px;">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <!-- Quick House / Flat input for Current Location delivery -->
+          <div id="cartQuickFlatWrapper" style="margin-bottom: 8px; display: none;">
+            <input type="text" id="cartQuickFlatInput" class="form-input" placeholder="House / Flat / Floor / Room No. (e.g. Flat 402)" style="font-size: 12px; padding: 6px 10px;" oninput="onQuickFlatInputChange(this.value)">
+          </div>
+
+          <div id="cartAddressPreview" style="color: #475569; line-height: 1.4; padding: 4px 0;">
+            Parth • +91 7893618933<br>
+            House No. 124, 1st Floor, Shivalik Greens, Sector 15, Chandigarh - 160015
+          </div>
+          <div style="margin-top: 4px; font-size: 11px; color: #166534; font-weight: 700;" id="cartCoordinatesPreview">
+            📡 Locked GPS: [30.733900, 76.788900]
+          </div>
+
+          <!-- Dedicated Receiver Contact Details for Domino's Delivery Rider -->
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong style="color: #0f172a; font-size: 12px;">📞 Rider Delivery Contact:</strong>
+              <span style="font-size: 11px; color: #64748b;">(Domino's Rider will call this receiver)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;">
+              <div>
+                <label style="font-size: 10px; font-weight: 700; color: #475569; display: block; margin-bottom: 2px;">Receiver Name *</label>
+                <input type="text" id="cartReceiverNameInput" class="form-input" placeholder="Receiver Name" style="font-size: 12px; padding: 6px 10px;" oninput="onReceiverDetailsChange()">
+              </div>
+              <div>
+                <label style="font-size: 10px; font-weight: 700; color: #475569; display: block; margin-bottom: 2px;">Receiver Mobile *</label>
+                <input type="tel" id="cartReceiverPhoneInput" class="form-input" placeholder="10-digit Phone" style="font-size: 12px; padding: 6px 10px;" oninput="onReceiverDetailsChange()">
+              </div>
+            </div>
+            <div id="receiverHistoryPills" style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 11px; margin-top: 4px;">
+              <!-- Populated dynamically with recent receiver numbers -->
+            </div>
+          </div>
+
+          <!-- Inline Quick Add Address Accordion (Collapsible directly inside cart) -->
+          <div id="cartInlineAddAddrForm" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <strong style="font-size: 12px; color: #0f172a;">Quick-Add Delivery Address:</strong>
+              <button type="button" onclick="inlineDetectGpsAddress()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; cursor: pointer;">
+                📡 Auto-Detect GPS
+              </button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+              <input type="text" id="cartInlineReceiverName" class="form-input" placeholder="Receiver Name *" style="font-size: 12px; padding: 6px 10px;">
+              <input type="tel" id="cartInlineReceiverPhone" class="form-input" placeholder="10-digit Mobile *" maxlength="10" style="font-size: 12px; padding: 6px 10px; font-family: monospace;">
+            </div>
+            <div class="form-group" style="margin-bottom: 8px;">
+              <input type="text" id="cartInlineFlat" class="form-input" placeholder="House / Flat / Floor / Room No. *" style="font-size: 12px; padding: 6px 10px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 8px;">
+              <input type="text" id="cartInlineStreet" class="form-input" placeholder="Complete Street / Building / Society *" style="font-size: 12px; padding: 6px 10px;">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+              <input type="text" id="cartInlineCity" class="form-input" placeholder="City (e.g. Chandigarh)" style="font-size: 12px; padding: 6px 10px;">
+              <input type="text" id="cartInlinePincode" class="form-input" placeholder="Pincode (e.g. 160015)" style="font-size: 12px; padding: 6px 10px;">
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-primary" style="font-size: 11px; padding: 6px 12px; flex: 1;" onclick="submitCartInlineAddress()">💾 Save &amp; Select</button>
+              <button type="button" class="btn-secondary" style="font-size: 11px; padding: 6px 10px;" onclick="toggleCartInlineAddAddress(false)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Store Serviceability Verification Feedback Box -->
+        <div id="cartServiceabilityCard" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong id="cartServiceabilityHeader" style="color: #1e40af; font-size: 13px;">
+              🟢 Domino's Kitchen Verified &amp; Delivering:
+            </strong>
+            <a id="cartKitchenGmapsLink" href="https://www.google.com/maps/search/?api=1&query=CHANDIGARH%20SEC%208B%20SCF-3%2CSECTOR%208%2FB%2CCHANDIGARH" target="_blank" class="kitchen-gmaps-link" style="font-size: 11px;">
+              🗺️ Google Maps
+            </a>
+          </div>
+          <div id="cartStoreInfoText" style="color: #334155; font-weight: 600;">
+            Domino's Pizza - CHANDIGARH SEC 8B (SCF-3, Sector 8-B) • 1.0 km away (Est. 30 mins)
+          </div>
+          <div id="cartUnserviceableWarning" style="display: none; color: #b91c1c; font-weight: 700; margin-top: 6px; font-size: 11px;">
+            <!-- Rendered if unserviceable -->
+          </div>
+        </div>
+
+        <!-- Step 3: Payment Method Selection (Cash on Delivery vs Instant UPI) -->
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
+          <div style="font-size: 12px; font-weight: 800; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <span>💳 SELECT PAYMENT METHOD:</span>
+            <span style="font-size: 10px; color: #0284c7; font-weight: 700;">OFFICIAL DOMINO'S SETTLEMENT</span>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <label id="lblPayCOD" style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 8px; background: #eff6ff; border: 2px solid #0055a5; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 700; color: #0055a5;">
+              <input type="radio" name="cartPaymentMethod" value="COD" checked onchange="onPaymentMethodChange('COD')">
+              <span>💵 Cash on Delivery (COD)</span>
+            </label>
+            <label id="lblPayUPI" style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1.5px solid #cbd5e1; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 700; color: #475569;">
+              <input type="radio" name="cartPaymentMethod" value="UPI" onchange="onPaymentMethodChange('UPI')">
+              <span>📱 Instant UPI QR</span>
+            </label>
+          </div>
+          <div id="paymentMethodNote" style="font-size: 11px; color: #059669; font-weight: 600; margin-top: 8px; line-height: 1.4;">
+            ✓ Order will be placed directly with your local Domino's kitchen as <strong>Cash on Delivery</strong>! Pay cash to the Domino's rider upon doorstep arrival.
+          </div>
+        </div>
+
+        <!-- Proceed / Submit Order Button -->
+        <button class="btn-primary" id="cartProceedBtn" onclick="handleCartOrderSubmit()">
+          Place Cash on Delivery Order &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Explicit Pre-Order Confirmation Modal (Rider Contact & Delivery Verification) -->
+  <div class="modal-overlay" id="orderConfirmationModal">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-header" style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+        <div>
+          <div class="modal-title" style="display: flex; align-items: center; gap: 8px; font-size: 17px;">
+            <span>🛵</span> Confirm Delivery &amp; Rider Contact
+          </div>
+          <div style="font-size: 12px; color: var(--gray-600); margin-top: 2px;">
+            Please review recipient contact and destination before dispatching to Domino's.
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal('orderConfirmationModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px; max-height: 80vh; overflow-y: auto;">
+        
+        <!-- SECTION 1: Rider Delivery Contact (Critical Verification) -->
+        <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-size: 13px; font-weight: 800; color: #92400e; display: flex; align-items: center; gap: 6px;">
+              📞 Rider Delivery Contact
+            </span>
+            <span style="font-size: 11px; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid #fcd34d;">
+              Domino's rider will call this number
+            </span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--gray-600); display: block; margin-bottom: 4px;">Receiver Name</label>
+              <input type="text" id="confirmModalReceiverName" class="form-input" style="font-size: 13px; font-weight: 700; padding: 8px 10px; background: white;" placeholder="e.g. Parth">
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--gray-600); display: block; margin-bottom: 4px;">Rider Contact Mobile (10-digits)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <span style="font-size: 13px; font-weight: 700; color: var(--gray-500); background: #f1f5f9; padding: 8px 6px; border: 1px solid #cbd5e1; border-radius: 6px;">+91</span>
+                <input type="tel" id="confirmModalReceiverPhone" class="form-input" maxlength="10" style="font-size: 13px; font-weight: 800; font-family: monospace; letter-spacing: 0.5px; padding: 8px 10px; background: white;" placeholder="9876543210">
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #78350f; margin-top: 8px; line-height: 1.35;">
+            💡 The Domino's delivery executive will call this exact number upon arriving at your gate / door for contactless or cash handover.
+          </div>
+        </div>
+
+        <!-- SECTION 2: Doorstep Address & Assigned Store -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <div style="font-size: 13px; font-weight: 800; color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            📍 Doorstep Delivery Destination
+          </div>
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--gray-600); display: block; margin-bottom: 4px;">House / Flat / Floor Number</label>
+            <input type="text" id="confirmModalFlat" class="form-input" style="font-size: 13px; font-weight: 700; padding: 8px 10px; background: white;" placeholder="e.g. Flat 102, Tower B">
+          </div>
+          <div style="font-size: 12px; color: var(--gray-700); line-height: 1.4; background: white; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px;" id="confirmModalFullAddress">
+            Locating nearest Domino's delivery kitchen...
+          </div>
+
+          <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+            <div style="font-size: 12px; color: var(--gray-700);">
+              🏪 Kitchen: <strong id="confirmModalStoreName" style="color: #0066a3;">Resolving Kitchen...</strong> <span id="confirmModalStoreIdBadge" style="font-size: 10px; background: #e0f2fe; color: #0284c7; padding: 1px 6px; border-radius: 4px; font-weight: 700; font-family: monospace;">#—</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span id="confirmModalLiveStatusBadge" style="background: #dcfce7; color: #15803d; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; border: 1px solid #86efac;">🟢 Kitchen Online &amp; Stock Verified</span>
+              <div style="font-size: 11px; color: #059669; font-weight: 700;">
+                ⚡ Est. Arrival: <span id="confirmModalEta">30 mins</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: Itemized Order & Total -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <div style="font-size: 13px; font-weight: 800; color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <span>🍕 Ordered Items</span>
+            <span id="confirmModalItemCount" style="font-size: 11px; color: var(--gray-500); font-weight: 600;">2 items</span>
+          </div>
+          <div id="confirmModalItemsList" style="font-size: 12px; color: var(--gray-700); max-height: 140px; overflow-y: auto; margin-bottom: 10px;">
+            <!-- Populated dynamically -->
+          </div>
+          <div style="border-top: 1.5px solid #f1f5f9; padding-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <span id="confirmModalPaymentBadge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px;">
+                💵 Cash on Delivery (COD)
+              </span>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 12px; color: var(--gray-500); margin-right: 6px;">Grand Total:</span>
+              <strong id="confirmModalGrandTotal" style="font-size: 20px; font-weight: 900; color: #0066a3;">₹0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: Confirmation Actions -->
+        <div>
+          <button class="btn-primary" id="btnExecuteConfirmedOrder" onclick="executeFinalConfirmedOrder()" style="background: #16a34a; font-size: 15px; font-weight: 800; padding: 14px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);">
+            <span>✓ Confirm &amp; Place Domino's Order</span>
+          </button>
+          <button type="button" class="btn-secondary" onclick="closeModal('orderConfirmationModal')" style="width: 100%; margin-top: 8px; padding: 9px; font-size: 12px; font-weight: 700; background: white; border: 1px solid #cbd5e1; color: var(--gray-600);">
+            &larr; Modify Order / Edit Items
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic UPI QR Payment Modal -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Complete Payment (Online Only)</div>
+        <button class="modal-close" onclick="closeModal('paymentModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="no-cash-banner" style="background: #eff6ff; border-color: #93c5fd; color: #1e40af;">
+          📱 <span>Instant Online UPI: Scan the dynamic QR code below to confirm and dispatch your Domino's kitchen order.</span>
+        </div>
+
+        <div style="text-align: center;">
+          <div class="timer-tag" id="paymentTimer">⏱️ QR Expires in: 09:59</div>
+          <div style="font-size: 26px; font-weight: 900; color: var(--primary); margin-bottom: 4px;" id="qrPayAmount">₹0</div>
+          <div style="font-size: 12px; color: var(--gray-600); margin-bottom: 14px;">Order Ref: <span id="qrOrderRef" style="font-weight: 700; color: var(--dark);">ORD-000000</span></div>
+        </div>
+
+        <!-- Live Domino's Price Adjustment Alert (if price changed on Domino's site) -->
+        <div id="paymentPriceAdjustmentNotice" style="display: none; background: #fef3c7; border: 1.5px solid #f59e0b; color: #92400e; padding: 10px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; margin-bottom: 12px; text-align: left; line-height: 1.4;">
+        </div>
+
+        <!-- Verified Domino's Store Bill Breakdown -->
+        <div id="paymentBillBreakdown" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px; text-align: left;">
+          <div style="font-weight: 800; color: var(--dark); font-size: 11px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; display: flex; justify-content: space-between;">
+            <span>🏪 Domino's Verified Kitchen Bill</span>
+            <span id="billStoreName" style="color: #0066a3; font-weight: 700;">Domino's</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--gray-600);">
+            <span>Items Subtotal:</span>
+            <span id="billItemsSubtotal" style="font-weight: 600;">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--gray-600);">
+            <span>Domino's GST (5% CGST+SGST):</span>
+            <span id="billGst" style="font-weight: 600;">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--gray-600);">
+            <span>Delivery Fee:</span>
+            <span id="billDeliveryFee" style="font-weight: 600;">₹35</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-600);">
+            <span>Restaurant Packaging:</span>
+            <span id="billPackagingFee" style="font-weight: 700; color: #16a34a;">FREE</span>
+          </div>
+          <div style="border-top: 1px dashed var(--gray-300); padding-top: 6px; display: flex; justify-content: space-between; font-weight: 900; color: var(--dark); font-size: 13px;">
+            <span>Verified Total (Strictly Same as Domino's):</span>
+            <span id="billGrandTotal" style="color: #16a34a; font-size: 14px;">₹0</span>
+          </div>
+        </div>
+
+        <!-- Rendered Dynamic UPI QR Code -->
+        <div class="qr-container" id="qrCanvasContainer">
+          <!-- Dynamic SVG QR is injected here -->
+        </div>
+
+        <button type="button" class="btn-secondary" onclick="downloadOrderPaymentQr()" style="margin: 8px 0 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 800; font-size: 13px; padding: 10px; border: 1.5px solid #0066a3; color: #0066a3; background: #f0f9ff; border-radius: 8px; cursor: pointer;">
+          <span>📥</span> <span>Download QR Code (For PhonePe / GPay Scanner)</span>
+        </button>
+
+        <a id="orderUpiDeepLink" href="#" target="_blank" class="btn-primary" style="display: none; width: 100%; padding: 11px; font-size: 13px; font-weight: 800; background: #16a34a; text-decoration: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; border-radius: 8px;">
+          <span>⚡ Pay via UPI App (Instant App Open) &rarr;</span>
+        </a>
+
+        <div style="text-align: center; margin-bottom: 14px;">
+          <p style="font-size: 12px; color: var(--gray-600); margin-bottom: 2px;">Scan with any UPI App (GPay, PhonePe, Paytm, CRED, BHIM)</p>
+        </div>
+
+        <button class="btn-primary" onclick="confirmPaymentAndRelease()" style="padding: 12px; font-size: 14px; font-weight: 800; border-radius: 8px; margin-bottom: 8px;">✅ I Have Paid / Confirm Order &rarr;</button>
+        <button class="btn-secondary" onclick="closeModal('paymentModal')" style="border-radius: 8px;">✕ Cancel Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-Time Live Order & Kitchen Dispatch Tracker Modal -->
+  <div class="modal-overlay" id="trackingModal">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="trackerOrderTitle">Official Domino's Order &amp; Delivery Tracking</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Platform Ref: <span id="trackerOrderId">ORD-XXXXXX</span></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button id="btnRefreshTracking" onclick="refreshLiveOrderStatus()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Refresh live status from Domino's kitchen">
+            <span id="refreshTrackingIcon">🔄</span> <span>Refresh</span>
+          </button>
+          <button class="modal-close" onclick="closeModal('trackingModal')">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+        
+        <!-- Domino's Official Kitchen Store Token Card (Primary Authentic Reference) -->
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #166534; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+              <span>🍕</span> <span>DOMINO'S STORE KITCHEN TOKEN</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+              <span id="trackerKitchenTokenBadge" style="font-size: 22px; font-weight: 900; color: #15803d; font-family: monospace; letter-spacing: 1px;">#790007</span>
+              <button type="button" onclick="copyDominosToken()" style="background: #16a34a; color: white; border: none; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; cursor: pointer;">📋 Copy</button>
+            </div>
+            <div style="font-size: 11px; color: #14532d; margin-top: 2px;">
+              Printed on your physical pizza box. Quote this token if calling the store or delivery rider.
+            </div>
+          </div>
+          <div style="text-align: right; background: white; padding: 6px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+            <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Domino's Order Ref</div>
+            <div id="trackerDominosRefHeader" style="font-size: 13px; font-weight: 800; color: #0066a3; font-family: monospace;">#790007</div>
+            <div style="font-size: 10px; color: #0284c7; font-weight: 600; margin-top: 2px;">Status: <span id="trackerLiveStateLabel" style="font-weight: 800;">BAKING</span></div>
+          </div>
+        </div>
+
+        <!-- Domino's Official Big ETA Header Card -->
+        <div id="trackerBigEtaCard" style="background: linear-gradient(135deg, #0066a3, #0284c7); color: white; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(0, 102, 163, 0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div style="font-size: 10px; text-transform: uppercase; font-weight: 800; opacity: 0.9; letter-spacing: 0.5px;">ESTIMATED ARRIVAL TIME</div>
+            <div style="font-size: 22px; font-weight: 900; margin-top: 2px; display: flex; align-items: center; gap: 8px;">
+              <span>🛵</span> <span id="trackerBigEtaText">~20-25 Mins</span>
+            </div>
+            <div style="font-size: 11px; opacity: 0.95; margin-top: 2px;">
+              Guaranteed hot &amp; fresh directly from Domino's kitchen oven
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span id="trackerBigStagePill" style="background: rgba(255,255,255,0.22); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; backdrop-filter: blur(4px);">
+              🔥 BAKING IN OVEN
+            </span>
+          </div>
+        </div>
+
+        <!-- Domino's Authentic Animated Delivery Road Track (Moving Scooter Animation) -->
+        <div id="trackerAnimatedTrackCard" style="background: white; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 12px; margin-bottom: 12px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 12px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+              <span>🍕</span> <span>Live Domino's Delivery Tracker</span>
+            </div>
+            <div id="trackerAnimStageSubtitle" style="font-size: 11px; font-weight: 700; color: #0284c7;">
+              Rider preparing for dispatch
+            </div>
+          </div>
+
+          <!-- Road Track Graphic with Moving Player -->
+          <div style="position: relative; height: 46px; background: #f1f5f9; border-radius: 23px; border: 1.5px solid #cbd5e1; margin: 8px 4px 18px 4px; display: flex; align-items: center;">
+            <!-- Dashed Road Center Line -->
+            <div style="position: absolute; left: 12px; right: 12px; height: 2px; border-top: 2px dashed #94a3b8; z-index: 1;"></div>
+            
+            <!-- Progress Fill Bar -->
+            <div id="trackerAnimProgressFill" style="position: absolute; left: 0; top: 0; bottom: 0; width: 36%; background: linear-gradient(90deg, #10b981, #0284c7); border-radius: 23px; opacity: 0.3; transition: width 0.8s ease;"></div>
+
+            <!-- 4 Stage Milestone Dots -->
+            <div style="position: absolute; left: 6%; transform: translateX(-50%); z-index: 2; text-align: center;">
+              <div id="markerConfirmed" style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; margin: 0 auto; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">✓</div>
+            </div>
+            <div style="position: absolute; left: 36%; transform: translateX(-50%); z-index: 2; text-align: center;">
+              <div id="markerOven" style="width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; margin: 0 auto; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">🔥</div>
+            </div>
+            <div style="position: absolute; left: 70%; transform: translateX(-50%); z-index: 2; text-align: center;">
+              <div id="markerRoad" style="width: 22px; height: 22px; border-radius: 50%; background: #e2e8f0; color: #475569; display: flex; align-items: center; justify-content: center; font-size: 11px; margin: 0 auto;">🛵</div>
+            </div>
+            <div style="position: absolute; left: 94%; transform: translateX(-50%); z-index: 2; text-align: center;">
+              <div id="markerDoor" style="width: 22px; height: 22px; border-radius: 50%; background: #e2e8f0; color: #475569; display: flex; align-items: center; justify-content: center; font-size: 11px; margin: 0 auto;">🏠</div>
+            </div>
+
+            <!-- Moving Domino's Rider Player (Animated Scooter) -->
+            <div id="trackerAnimPlayerScooter" style="position: absolute; left: 36%; transform: translate(-50%, -6px); z-index: 3; transition: left 1s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;" title="Domino's Delivery Rider">
+              <div style="position: relative;">
+                <div style="font-size: 28px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25)); animation: scooterBob 0.6s infinite alternate ease-in-out;">
+                  🛵
+                </div>
+                <div style="position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 22px; height: 4px; background: rgba(0,0,0,0.2); border-radius: 50%; filter: blur(1px);"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Labels below track -->
+          <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; color: #64748b; padding: 0 4px;">
+            <span style="color: #166534;" id="lblStageConfirmed">1. Confirmed</span>
+            <span style="color: #b45309;" id="lblStageBaking">2. Oven Baking</span>
+            <span id="lblStageTransit">3. Out for Delivery</span>
+            <span id="lblStageDoor">4. Doorstep</span>
+          </div>
+        </div>
+
+        <!-- Real-Time GPS Map Toggle Pill (User clicks to open map, keeping default clean!) -->
+        <div style="text-align: center; margin: 8px 0 12px 0;">
+          <button type="button" id="btnToggleGpsMap" onclick="toggleLiveGpsMap()" style="background: #eff6ff; color: #0066a3; border: 1.5px solid #93c5fd; padding: 8px 16px; border-radius: 25px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 6px rgba(0, 102, 163, 0.12); transition: all 0.2s;">
+            <span id="toggleMapIcon">🗺️</span>
+            <span id="toggleMapText">Live Rider Delivery &amp; Real-Time GPS &darr;</span>
+          </button>
+        </div>
+
+        <!-- Order Quick Summary Card -->
+        <div id="trackerSummaryCard" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <div>
+              <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b;">Delivering Kitchen</span>
+              <div id="trackerStoreName" style="font-size: 13px; font-weight: 800; color: #0f172a;">Domino's Pizza Store Kitchen</div>
+            </div>
+            <div id="trackerStorePhoneWrapper">
+              <a id="trackerStorePhoneLink" href="tel:18002081234" style="background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                <span>📞</span> <span>Kitchen Dispatch: <strong id="trackerStorePhoneText">1800-208-1234</strong></span>
+              </a>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 6px;">
+            <div>
+              <span style="color: #64748b;">📍 Destination:</span> <strong id="trackerAddressText" style="color: #334155;">Delivery Address</strong>
+            </div>
+            <div>
+              <span style="color: #64748b;">📞 Receiver:</span> <strong id="trackerReceiverText" style="color: #334155;">Customer (+91 ...)</strong>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 11px;">
+            <div>
+              <span style="color: #64748b;">💰 Cash to Pay Rider:</span> <strong id="trackerBillTotal" style="color: #16a34a; font-size: 13px;">₹0</strong> <span id="trackerPayMethod" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 800;">COD</span>
+            </div>
+            <div id="trackerPaymentStatusBadge" style="font-weight: 700; font-size: 11px; color: #16a34a;">
+              ✓ Order Confirmed
+            </div>
+          </div>
+          <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+            <div>
+              <span style="color: #64748b;">⏱️ Live Delivery ETA:</span> <strong id="trackerLiveEtaCountdown" style="color: #0284c7; font-size: 12px;">~20 mins</strong>
+            </div>
+            <div id="trackerLiveStageBadge" style="background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 10px;">
+              🔥 IN OVEN BAKING
+            </div>
+          </div>
+        </div>
+
+        <!-- Dedicated Enlarge Rider Notification Banner (when rider is out for delivery) -->
+        <div id="trackerEnlargedRiderNotification" style="display: none; background: #065f46; color: white; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(6, 95, 70, 0.25);">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="font-size: 28px; background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                🛵
+              </div>
+              <div>
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 800; opacity: 0.95;">
+                  🛵 This is the rider and you can contact the rider for your order:
+                </div>
+                <strong id="enlargedRiderName" style="font-size: 15px; display: block; margin-top: 2px;">
+                  Domino's Delivery Executive
+                </strong>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <a id="enlargedCallRiderBtn" href="tel:" style="background: #ffffff; color: #065f46; text-decoration: none; font-size: 13px; font-weight: 800; padding: 9px 16px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+                <span>📞 Call Rider:</span> <strong id="enlargedRiderPhone">+91 ...</strong>
+              </a>
+              <button type="button" onclick="promptUpdateRiderPhone()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.5); border-radius: 6px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                ✏️ Update Number
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dedicated Cancellation Alert Banner (if store cancels) -->
+        <div id="trackerCancelledBanner" style="display: none; background: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 14px; margin-bottom: 14px; color: #991b1b;">
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <div style="font-size: 26px; line-height: 1;">❌</div>
+            <div style="flex: 1;">
+              <strong style="font-size: 13px; display: block; margin-bottom: 4px; color: #991b1b;">Order Cancelled by Domino's Kitchen</strong>
+              <p id="trackerCancelledReason" style="font-size: 11px; color: #7f1d1d; margin-bottom: 8px; line-height: 1.4;">
+                The store kitchen has cancelled this order. Please call the kitchen manager directly for immediate re-order or resolution.
+              </p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a id="btnCallStoreCancelled" href="tel:18002081234" style="background: #dc2626; color: white; border: none; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                  📞 Call Store Dispatch (<span id="trackerStorePhoneCancelled">1800-208-1234</span>)
+                </a>
+                <button type="button" onclick="reorderOrderItems(currentOrder ? currentOrder.id : null)" style="background: #16a34a; color: white; border: none; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                  ⚡ Retry Order with Instant UPI
+                </button>
+                <button type="button" onclick="openOrderHelpChat(currentOrder ? currentOrder.id : null)" style="background: white; color: #dc2626; border: 1.5px solid #dc2626; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                  💬 Chat Support
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cancelled Stamp Graphic Overlay -->
+        <div id="trackerCancelledStampGraphic" style="display: none; text-align: center; margin: 12px 0 16px 0;">
+          <div style="display: inline-block; border: 3px dashed #dc2626; border-radius: 8px; padding: 12px 24px; transform: rotate(-2deg); background: #fef2f2; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);">
+            <div style="font-size: 18px; font-weight: 900; color: #dc2626; letter-spacing: 2px; text-transform: uppercase;">
+              ❌ ORDER CANCELLED BY STORE
+            </div>
+            <div style="font-size: 11px; color: #991b1b; font-weight: 700; margin-top: 4px;" id="trackerCancelledCodAdvice">
+              Store phone verification was unreached for this Cash on Delivery order.
+            </div>
+            <div style="margin-top: 8px;">
+              <button type="button" onclick="reorderOrderItems(currentOrder ? currentOrder.id : null)" style="background: #16a34a; color: white; border: none; font-size: 12px; font-weight: 800; padding: 6px 14px; border-radius: 6px; cursor: pointer;">
+                ⚡ Retry with Instant UPI (Auto-Confirmed)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dedicated Delay Alert Banner (if store oven has slight delay ~8-9 mins) -->
+        <div id="trackerDelayBanner" style="display: none; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; color: #92400e;">
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <div style="font-size: 22px; line-height: 1;">⏳</div>
+            <div style="flex: 1;">
+              <strong style="font-size: 13px; display: block; margin-bottom: 3px; color: #b45309;">
+                Domino's Kitchen Rush: Preparation Running ~<span id="trackerDelayMinutes">8</span> Mins Delayed
+              </strong>
+              <div id="trackerDelayReason" style="font-size: 11px; color: #78350f; line-height: 1.4;">
+                High oven volume at Domino's store kitchen. Your pizza is prioritized and will be packed hot as soon as baking finishes!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dedicated Error Alert Banner if robot encountered an issue -->
+        <div id="trackerErrorBanner" style="display: none; background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; color: #991b1b;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <div>
+              <strong style="font-size: 12px; display: block; margin-bottom: 2px;">⚠️ Domino's Order Notice:</strong>
+              <span id="trackerErrorMsg" style="font-size: 11px; color: #7f1d1d;"></span>
+            </div>
+            <button id="btnTrackerErrorProof" onclick="viewProofScreenshot()" style="background: #ef4444; color: white; border: none; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; cursor: pointer; white-space: nowrap;">
+              View State Proof
+            </button>
+          </div>
+        </div>
+        
+        <!-- Animated 6-Stage Pipeline -->
+        <div class="tracking-pipeline" id="trackingPipeline">
+          <div class="tracking-step" id="step-pay">
+            <div class="step-icon done">✓</div>
+            <div class="step-content">
+              <div class="step-title">Order Confirmed &amp; Verified</div>
+              <div class="step-desc">Payment &amp; delivery method confirmed.</div>
+            </div>
+          </div>
+
+          <div class="tracking-step" id="step-session">
+            <div class="step-icon active">🏪</div>
+            <div class="step-content">
+              <div class="step-title">Domino's Delivering Kitchen Assigned</div>
+              <div class="step-desc" id="sessionDesc">Resolving nearest Domino's kitchen...</div>
+            </div>
+          </div>
+
+          <div class="tracking-step" id="step-cart">
+            <div class="step-icon">🛒</div>
+            <div class="step-content">
+              <div class="step-title">Store Kitchen Cart &amp; Address Verified</div>
+              <div class="step-desc" id="cartDesc">Verifying items, local kitchen inventory &amp; delivery route...</div>
+            </div>
+          </div>
+
+          <div class="tracking-step" id="step-voucher">
+            <div class="step-icon">🧾</div>
+            <div class="step-content">
+              <div class="step-title">Official Domino's Store Bill &amp; Tax Invoice Confirmed</div>
+              <div class="step-desc" id="voucherDesc">Kitchen invoice generated with authentic pricing.</div>
+            </div>
+          </div>
+
+          <div class="tracking-step" id="step-dominos">
+            <div class="step-icon">🍕</div>
+            <div class="step-content">
+              <div class="step-title">Baking in Domino's Oven</div>
+              <div class="step-desc" id="dominosDesc">Pizza is being handcrafted and hot packed in Domino's oven.</div>
+            </div>
+          </div>
+
+          <div class="tracking-step" id="step-dispatch">
+            <div class="step-icon">🛵</div>
+            <div class="step-content">
+              <div class="step-title">Dispatched &amp; Live Rider Telemetry</div>
+              <div class="step-desc" id="dispatchDesc">Rider assigned for doorstep delivery.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Domino's Store Invoice Photo Section -->
+        <div id="proofPhotoCard" style="display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: var(--radius-sm); padding: 14px; margin-top: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h4 style="font-size: 13px; font-weight: 800; color: #166534;">📸 Official Domino's Order Confirmation &amp; Tax Invoice</h4>
+              <p style="font-size: 11px; color: #15803d;">Domino's store tax invoice receipt generated with verified items, delivery address &amp; rider OTP.</p>
+            </div>
+            <button class="btn-primary" style="width: auto; padding: 6px 14px; font-size: 12px; background: #16a34a;" onclick="viewProofScreenshot()">View Domino's Bill &amp; Invoice</button>
+          </div>
+        </div>
+
+        <!-- Rider Telemetry Card (Live Rider Contact) -->
+        <div class="rider-card" id="riderCard" style="display: none; background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px 14px; margin-top: 14px; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm);">
+          <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+            <div style="font-size: 30px; background: #f0fdf4; border: 1px solid #86efac; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">🛵</div>
+            <div class="rider-info" style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                <span id="riderStatusBadge" style="background: #dcfce7; color: #15803d; font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 4px;">🛵 ON THE WAY</span>
+              </div>
+              <h4 id="riderName" style="font-size: 14px; font-weight: 800; color: var(--dark); margin: 0 0 2px 0;">Domino's Delivery Executive</h4>
+              <p id="riderPhone" style="font-size: 12px; color: #475569; margin: 0;">Contact details appear upon store packaging &amp; dispatch</p>
+              <p id="riderEta" style="font-weight: 700; color: #047857; margin-top: 2px; font-size: 11px;">Estimated Arrival: 15-20 mins</p>
+            </div>
+          </div>
+          <a href="#" id="callRiderBtn" class="btn-call" style="display: none; background: #16a34a; color: white; padding: 8px 14px; border-radius: 6px; font-weight: 800; font-size: 12px; text-decoration: none; white-space: nowrap;">📞 Call Rider</a>
+        </div>
+
+        <!-- Live GPS Rider & Kitchen Delivery Path Map Card (Zoomable & Interactive) -->
+        <div id="trackerLiveMapCard" style="display: none; background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; margin-top: 14px; overflow: hidden; box-shadow: var(--shadow-sm);">
+          <div style="padding: 10px 14px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 14px;">🗺️</span>
+              <span style="font-size: 12px; font-weight: 800; color: #1e293b;">Live Rider Delivery Path &amp; Real-Time GPS</span>
+              <span id="mapLiveStatusBadge" style="font-size: 10px; font-weight: 800; background: #dcfce7; color: #15803d; padding: 2px 6px; border-radius: 4px;">LIVE GPS</span>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button type="button" id="btnCenterRiderMap" onclick="centerLiveMapOnRider()" style="background: white; border: 1px solid #cbd5e1; color: #0284c7; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                🎯 Center Rider
+              </button>
+              <button type="button" id="btnToggleExpandMap" onclick="toggleExpandLiveMap()" style="background: white; border: 1px solid #cbd5e1; color: #334155; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                🔍 Zoom &amp; Expand
+              </button>
+            </div>
+          </div>
+          <!-- Leaflet Map Container -->
+          <div id="liveRiderMapContainer" style="width: 100%; height: 260px; background: #e2e8f0; position: relative;">
+          </div>
+          <div style="padding: 8px 12px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+            <div>
+              <span>📍 <strong id="mapStoreLabel">Store Kitchen</strong></span> &rarr;
+              <span>🛵 <strong id="mapRiderLabel" style="color: #065f46;">Rider Active</strong></span> &rarr;
+              <span>🏠 <strong id="mapDestLabel">Doorstep</strong></span>
+            </div>
+            <div style="font-weight: 700; color: #0284c7;" id="mapLiveStatusText">
+              Synced with Domino's Fleet
+            </div>
+          </div>
+        </div>
+
+        <!-- Help with this Order Button -->
+        <button type="button" onclick="openOrderHelpChat(currentOrder ? currentOrder.id : null)" style="width: 100%; margin-top: 14px; background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1d4ed8; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>🎧 Problem with this Domino's Order? Chat with Support &rarr;</span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- High-Impact Splash Notification: Out for Delivery (Rider Telemetry & Contact) -->
+  <div class="modal-overlay" id="orderDispatchedSplashModal" style="background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);">
+    <div class="modal-card" style="max-width: 440px; text-align: center; border-top: 6px solid #16a34a; box-shadow: 0 10px 25px rgba(0,0,0,0.25);">
+      <div style="font-size: 52px; margin: 8px 0;">🛵</div>
+      <h3 style="font-size: 20px; font-weight: 900; color: #065f46; margin-bottom: 6px;">Order is Out for Delivery!</h3>
+      <p style="font-size: 13px; color: #334155; margin-bottom: 16px;">
+        Your Domino's pizza order is hot &amp; fresh on the way to your delivery address!
+      </p>
+
+      <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 14px; margin-bottom: 16px; text-align: left;">
+        <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: #166534; margin-bottom: 4px;">
+          🛵 This is the rider and you can contact the rider for your order:
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+          <div>
+            <strong id="splashRiderName" style="font-size: 15px; color: #0f172a; display: block;">Domino's Delivery Executive</strong>
+            <span id="splashRiderPhoneText" style="font-size: 13px; font-weight: 700; color: #15803d; font-family: monospace;">+91 ...</span>
+          </div>
+          <a id="splashCallRiderBtn" href="tel:" style="background: #16a34a; color: white; text-decoration: none; font-size: 12px; font-weight: 800; padding: 8px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);">
+            <span>📞 Call Rider</span>
+          </a>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-primary" onclick="closeModal('orderDispatchedSplashModal'); openTrackingModal(currentOrder ? currentOrder.id : null);" style="flex: 1; padding: 10px; font-size: 13px;">
+          🗺️ Track Live
+        </button>
+        <button type="button" onclick="closeModal('orderDispatchedSplashModal')" style="background: #e2e8f0; color: #334155; border: none; font-weight: 700; font-size: 13px; padding: 10px 16px; border-radius: 6px; cursor: pointer;">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- High-Impact Splash Notification: Order Arrived & Handed Over -->
+  <div class="modal-overlay" id="orderArrivedSplashModal" style="background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);">
+    <div class="modal-card" style="max-width: 440px; text-align: center; border-top: 6px solid #0284c7; box-shadow: 0 10px 25px rgba(0,0,0,0.25);">
+      <div style="font-size: 52px; margin: 8px 0;">🍕🎉</div>
+      <h3 style="font-size: 20px; font-weight: 900; color: #0284c7; margin-bottom: 6px;">Your Order Has Arrived!</h3>
+      <p style="font-size: 13px; color: #334155; margin-bottom: 14px;">
+        The rider is at your doorstep. Go and collect your order. Enjoy your fresh hot meal!
+      </p>
+
+      <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 12px; margin-bottom: 16px;">
+        <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: #1d4ed8;">Domino's Store Kitchen Token</div>
+        <div id="splashTokenText" style="font-size: 22px; font-weight: 900; color: #0066a3; font-family: monospace; letter-spacing: 1px; margin-top: 2px;">#790022</div>
+        <div style="font-size: 11px; color: #3b82f6; margin-top: 2px;">Quote token if coordinating at gate or doorstep.</div>
+      </div>
+
+      <button type="button" class="btn-primary" onclick="closeModal('orderArrivedSplashModal'); openTrackingModal(currentOrder ? currentOrder.id : null);" style="width: 100%; padding: 12px; font-size: 14px; background: #16a34a;">
+        ✓ Collect Order &amp; Enjoy 🍕
+      </button>
+    </div>
+  </div>
+
+  <!-- Pizza Customization Modal (Sizes, Crusts, Extra Toppings) -->
+  <div class="modal-overlay" id="pizzaCustomizationModal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="customPizzaTitle">Customize Your Pizza</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="customPizzaSubtitle">Select size, crust &amp; toppings</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('pizzaCustomizationModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px; max-height: 75vh; overflow-y: auto;">
+        <!-- Header Info -->
+        <div style="display: flex; gap: 14px; margin-bottom: 16px; align-items: center;">
+          <img id="customPizzaImg" src="" style="width: 76px; height: 76px; border-radius: 8px; object-fit: cover; border: 1px solid var(--gray-200);" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
+          <div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span id="customPizzaVegTag" class="food-tag">🟢 VEG</span>
+              <strong id="customPizzaName" style="font-size: 15px; color: var(--dark);">Margherita</strong>
+            </div>
+            <p id="customPizzaDesc" style="font-size: 12px; color: var(--gray-600); margin-top: 4px; line-height: 1.4;"></p>
+          </div>
+        </div>
+
+        <!-- 1. Size Selection -->
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-700); display: block; margin-bottom: 8px;">
+            1. Select Size
+          </label>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;" id="sizeOptionsContainer">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- 2. Crust Selection -->
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-700); display: block; margin-bottom: 8px;">
+            2. Select Crust
+          </label>
+          <div style="display: flex; flex-direction: column; gap: 6px;" id="crustOptionsContainer">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- 3. Extra Toppings Selection -->
+        <div style="margin-bottom: 18px;">
+          <label style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-700); display: block; margin-bottom: 8px;">
+            3. Extra Toppings (Optional)
+          </label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="toppingsOptionsContainer">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- Footer Add Button with Live Price -->
+        <div style="border-top: 1px solid var(--gray-200); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 11px; color: var(--gray-500); text-transform: uppercase; font-weight: 700;">Total Price</div>
+            <div id="customTotalPrice" style="font-size: 22px; font-weight: 900; color: #16a34a;">₹0</div>
+          </div>
+          <button class="btn-primary" style="width: auto; padding: 10px 24px; font-size: 14px; font-weight: 800; cursor: pointer;" onclick="confirmAddCustomizedPizzaToCart()">
+            + Add to Cart &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mandatory Location Required Modal (Gate before Cart Creation) -->
+  <div class="modal-overlay" id="locationRequiredModal">
+    <div class="modal-card" style="max-width: 480px; text-align: center;">
+      <div class="modal-header">
+        <div class="modal-title">📍 Current Location Required</div>
+        <button class="modal-close" onclick="closeModal('locationRequiredModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 24px 20px;">
+        <div style="font-size: 44px; margin-bottom: 12px;">🛰️</div>
+        <h3 style="font-size: 17px; font-weight: 800; color: var(--dark); margin-bottom: 8px;">Verify Item Availability at Domino's</h3>
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px; line-height: 1.5;">
+          Domino's menu items vary by kitchen. You <strong>do not need to save an address</strong> to your profile, but providing your current location is mandatory to verify store coverage and check which pizzas are in stock before building your cart.
+        </p>
+
+        <!-- Detect GPS Button -->
+        <button class="btn-primary" id="modalDetectGpsBtn" onclick="modalDetectUserLocation()" style="width: 100%; padding: 13px; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; background: #0066a3;">
+          <span>🛰️</span>
+          <span id="modalDetectGpsLabel">Detect My Current Location (GPS)</span>
+        </button>
+        <p style="font-size: 11px; color: #64748b; text-align: center; margin: 0;">
+          📍 Automatically connects to the verified nearest Domino's kitchen outlet for accurate real-time inventory and pricing.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Order History Modal (My Orders) -->
+  <div class="modal-overlay" id="myOrdersModal">
+    <div class="modal-card" style="max-width: 640px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">📦 My Domino's Orders</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Track your live orders &amp; view official Domino's bill invoices</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button id="btnSyncDominosCloud" onclick="syncAllOrdersToDominosCloud()" style="background: #f0fdf4; color: #166534; border: 1px solid #86efac; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Sync active orders with Domino's India live cloud">
+            <span>☁️ Domino's Cloud Sync</span>
+          </button>
+          <button id="btnRefreshMyOrders" onclick="loadMyOrders()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Refresh order history from Domino's platform">
+            <span id="refreshMyOrdersIcon">🔄</span> <span>Refresh</span>
+          </button>
+          <button class="modal-close" onclick="closeModal('myOrdersModal')">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" style="padding: 18px; max-height: 75vh; overflow-y: auto;">
+        <div id="myOrdersListContainer">
+          <!-- Populated dynamically by JS -->
+          <div style="text-align: center; color: var(--gray-500); padding: 30px 0;">
+            <div style="font-size: 32px; margin-bottom: 8px;">⏳</div>
+            <div>Loading your order history...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot Proof Image Modal -->
+  <div class="modal-overlay" id="screenshotProofModal">
+    <div class="modal-card" style="max-width: 560px; text-align: center;">
+      <div class="modal-header">
+        <div class="modal-title">Domino's Official Bill &amp; Confirmation Receipt</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <a id="proofNewTabLink" href="#" target="_blank" style="background: #f1f5f9; color: #0284c7; border: 1px solid #cbd5e1; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-decoration: none;" title="Open image in new browser tab">🔍 Fullscreen</a>
+          <button class="modal-close" onclick="closeModal('screenshotProofModal')">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" style="padding: 16px;">
+        <p style="font-size: 12px; color: var(--gray-600); margin-bottom: 12px;">Official Domino's India store order &amp; tax invoice receipt showing verified kitchen branch, recipient details, and itemized bill.</p>
+        <div style="position: relative; min-height: 220px; background: #f8fafc; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gray-300); overflow: hidden;">
+          <img id="proofImgDisplay" src="" alt="Domino's Confirmation Screenshot" style="width: 100%; max-height: 580px; object-fit: contain;" onerror="this.style.display='none'; document.getElementById('proofFallbackNotice').style.display='block';" onload="this.style.display='block'; document.getElementById('proofFallbackNotice').style.display='none';">
+          <div id="proofFallbackNotice" style="display: none; padding: 24px; color: #64748b; font-size: 12px; font-weight: 600;">
+            ⏳ Domino's settlement proof photo is generating. Please refresh in a moment.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: Domino's Order Help & Support Chat System                          -->
+  <!-- ========================================================================= -->
+  <div class="modal-overlay" id="helpSupportModal">
+    <div class="modal-card" id="helpSupportModalCard" style="max-width: 620px; width: 95%; transition: all 0.25s ease;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🎧 Domino's Order Engine Order Help &amp; Live Chat</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Direct support ticket &amp; instant chat with admin team</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button type="button" onclick="minimizeHelpModal()" title="Minimize chat window" style="background: #f1f5f9; border: 1px solid var(--gray-300); border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; color: var(--gray-700); font-weight: 700;">🗕</button>
+          <button type="button" id="btnMaximizeHelp" onclick="toggleMaximizeHelpModal()" title="Maximize / Fullscreen" style="background: #f1f5f9; border: 1px solid var(--gray-300); border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; color: var(--gray-700); font-weight: 700;">🗖</button>
+          <button class="modal-close" onclick="closeModal('helpSupportModal')">&times;</button>
+        </div>
+      </div>
+
+      <!-- Tab Switcher: 1. Raise New Ticket, 2. My Active Tickets & Chat -->
+      <div style="display: flex; gap: 8px; padding: 12px 18px 0 18px;">
+        <button type="button" id="tabRaiseTicket" onclick="switchSupportTab('raise')" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 800; border-radius: 6px; border: none; background: #0066a3; color: white; cursor: pointer;">
+          ➕ Raise Order Ticket
+        </button>
+        <button type="button" id="tabActiveTickets" onclick="switchSupportTab('tickets')" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 800; border-radius: 6px; border: 1px solid var(--gray-300); background: white; color: var(--gray-600); cursor: pointer;">
+          💬 My Tickets &amp; Live Chat (<span id="userTicketCount">0</span>)
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 18px;">
+        <!-- VIEW 1: Raise Ticket with Interactive Chatbot Triage -->
+        <div id="supportRaiseView">
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+            <strong style="color: #1e40af; font-size: 13px; display: block; margin-bottom: 4px;">🤖 Domino's Order Engine Assistant:</strong>
+            <span style="font-size: 12px; color: #1e3a8a;">
+              Select your Domino's order and query below. Our automated triage connects you directly to our live support chat.
+            </span>
+          </div>
+
+          <!-- 1. Select Specific Domino's Order -->
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Select Domino's Order *</label>
+            <select id="ticketOrderSelect" class="form-select" style="font-size: 12px; font-weight: 600;">
+              <!-- Populated dynamically with customer's recent orders -->
+            </select>
+          </div>
+
+          <!-- 2. Interactive Issue Category Buttons -->
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Select Query Category *</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="ticketCategoryPills">
+              <button type="button" class="category-pill active" data-cat="MISSING_ITEM" onclick="selectTicketCategory('MISSING_ITEM', this)" style="padding: 8px 10px; border-radius: 8px; border: 1.5px solid #0066a3; background: #f0f9ff; color: #0066a3; font-size: 11px; font-weight: 700; text-align: left; cursor: pointer;">
+                🍕 Missing / Wrong Item
+              </button>
+              <button type="button" class="category-pill" data-cat="DELAYED_ORDER" onclick="selectTicketCategory('DELAYED_ORDER', this)" style="padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-600); font-size: 11px; font-weight: 700; text-align: left; cursor: pointer;">
+                ⏳ Significant Delivery Delay
+              </button>
+              <button type="button" class="category-pill" data-cat="RIDER_UNREACHABLE" onclick="selectTicketCategory('RIDER_UNREACHABLE', this)" style="padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-600); font-size: 11px; font-weight: 700; text-align: left; cursor: pointer;">
+                🛵 Rider Unreachable
+              </button>
+              <button type="button" class="category-pill" data-cat="COLD_FOOD_QUALITY" onclick="selectTicketCategory('COLD_FOOD_QUALITY', this)" style="padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-600); font-size: 11px; font-weight: 700; text-align: left; cursor: pointer;">
+                📦 Cold Food / Quality Issue
+              </button>
+              <button type="button" class="category-pill" data-cat="PAYMENT_REFUND" onclick="selectTicketCategory('PAYMENT_REFUND', this)" style="padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-600); font-size: 11px; font-weight: 700; text-align: left; cursor: pointer;">
+                💳 Payment / Refund Query
+              </button>
+              <button type="button" class="category-pill" data-cat="OTHER" onclick="selectTicketCategory('OTHER', this)" style="padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-600); font-size: 11px; font-weight: 700; text-align: left; cursor: pointer;">
+                💬 General Inquiry
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Problem Description -->
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Describe what happened *</label>
+            <textarea id="ticketDescription" class="form-input" rows="3" placeholder="Tell us details (e.g. Garlic bread missing, order taking too long, or pizza arrived cold...)" style="width: 100%; font-size: 12px; resize: vertical;"></textarea>
+          </div>
+
+          <!-- 4. Photo Proof Upload -->
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Attach Photo Proof (Optional - Food or Box photo):</label>
+            <input type="file" id="ticketPhotoInput" accept="image/*" onchange="previewTicketImage(this)" style="font-size: 11px;">
+            <div id="ticketImagePreviewContainer" style="display: none; margin-top: 8px;">
+              <img id="ticketImagePreview" src="" alt="Proof Preview" style="max-height: 110px; border-radius: 6px; border: 1px solid var(--gray-300);">
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary" id="btnSubmitTicket" onclick="submitSupportTicket()" style="width: 100%; background: #0066a3; font-size: 14px; font-weight: 800; padding: 12px; cursor: pointer;">
+            🚀 Submit Query &amp; Start Live Chat
+          </button>
+        </div>
+
+        <!-- VIEW 2: Active Chat Conversation with Admin & Bot -->
+        <div id="supportChatView" style="display: none;">
+          <!-- Ticket Selector if user has multiple tickets -->
+          <div style="margin-bottom: 10px;" id="ticketSelectorDropdownRow">
+            <select id="userActiveTicketsSelect" class="form-select" onchange="onUserSelectTicket(this.value)" style="font-size: 12px; font-weight: 700;">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--gray-200);">
+            <div>
+              <strong id="activeChatTicketTitle" style="font-size: 13px; color: #0f172a;">Ticket #TCK-XXXX</strong>
+              <div id="activeChatOrderBadge" style="font-size: 11px; color: #64748b;">Order: DOM-ENG-...</div>
+            </div>
+            <span id="activeChatStatusBadge" style="background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800;">OPEN</span>
+          </div>
+
+          <!-- Proof Image Display if customer attached one -->
+          <div id="userChatProofPreview" style="display: none; margin-bottom: 8px; background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px;">
+            <span style="font-size: 10px; font-weight: 700; color: #64748b; display: block; margin-bottom: 2px;">Attached Proof:</span>
+            <img id="userChatProofImg" src="" alt="Proof" style="max-height: 70px; border-radius: 4px;">
+          </div>
+
+          <!-- Chat Messages Container -->
+          <div id="supportChatMessages" style="height: 250px; overflow-y: auto; background: #f1f5f9; border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Chat Input Bar -->
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="chatMessageInput" class="form-input" placeholder="Type message to admin support..." style="flex: 1; font-size: 12px;" onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button type="button" class="btn-primary" onclick="sendChatMessage()" style="width: auto; background: #0066a3; padding: 8px 16px; font-size: 12px; font-weight: 800; cursor: pointer;">
+              📤 Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Customer Wallet Deposit / Top-up -->
+  <div class="modal-overlay" id="walletDepositModal">
+    <div class="modal-card" style="max-width: 460px; width: 95%;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" style="display: flex; align-items: center;">💰 Add Money to Domino's Wallet <span class="info-dot" onclick="showSystemInfo('wallet')" title="Domino's Order Engine Wallet &amp; UPI Deposit Info">i</span></div>
+          <div style="font-size: 12px; color: var(--gray-600);">Instant UPI QR &amp; Deep-link deposit with fast admin verification</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('walletDepositModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <!-- Step A: Amount Input Screen -->
+        <div id="depositStepAmount">
+          <!-- Current Balance -->
+          <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: #166534; text-transform: uppercase;">Current Wallet Balance</div>
+              <div style="font-size: 22px; font-weight: 900; color: #15803d;" id="walletModalCurrentBalance">₹0</div>
+            </div>
+            <div style="font-size: 28px;">👛</div>
+          </div>
+
+          <!-- Quick Amount Presets -->
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Select Quick Deposit Amount:</label>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+              <button type="button" onclick="selectDepositPreset(50)" class="btn-preset-amt" style="padding: 8px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: white; font-weight: 800; font-size: 13px; cursor: pointer; color: #0066a3;">₹50</button>
+              <button type="button" onclick="selectDepositPreset(100)" class="btn-preset-amt" style="padding: 8px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: white; font-weight: 800; font-size: 13px; cursor: pointer; color: #0066a3;">₹100</button>
+              <button type="button" onclick="selectDepositPreset(200)" class="btn-preset-amt" style="padding: 8px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: white; font-weight: 800; font-size: 13px; cursor: pointer; color: #0066a3;">₹200</button>
+              <button type="button" onclick="selectDepositPreset(500)" class="btn-preset-amt" style="padding: 8px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: white; font-weight: 800; font-size: 13px; cursor: pointer; color: #0066a3;">₹500</button>
+            </div>
+          </div>
+
+          <!-- Custom Amount -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">Or Enter Custom Deposit Amount (₹) *</label>
+            <div style="display: flex; gap: 8px;">
+              <div style="display: flex; align-items: center; background: #f8fafc; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); padding: 0 12px; font-weight: 800; color: #0066a3; font-size: 15px;">₹</div>
+              <input type="number" id="depositAmountInput" class="form-input" placeholder="Min ₹50" min="50" max="10000" style="font-weight: 800; font-size: 16px; color: var(--dark);" value="50">
+              </div>
+              <div style="font-size: 11px; color: #0284c7; margin-top: 4px; font-weight: 600;">💡 Minimum deposit amount is ₹50.
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary" id="btnGenerateDepositQr" onclick="requestWalletDepositQr()" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 800; background: #0066a3;">
+            ⚡ Generate UPI QR &amp; Pay &rarr;
+          </button>
+        </div>
+
+        <!-- Step B: Live Dynamic QR & UPI Deep Link Screen (5-Minute Window) -->
+        <div id="depositStepPayment" style="display: none;">
+          <!-- 5-Minute Countdown Timer Banner -->
+          <div id="depositCountdownContainer" style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span>⏱️</span>
+              <span style="font-size: 12px; font-weight: 700; color: #1e40af;">Dynamic QR Expires in:</span>
+              <strong id="depositCountdownTimer" style="font-size: 15px; font-weight: 900; color: #1d4ed8; font-family: monospace;">05:00</strong>
+            </div>
+            <span style="font-size: 11px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">DOMINO'S ORDER ENGINE</span>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 12px;">
+            <div style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">Amount to Add to Wallet</div>
+            <div style="font-size: 26px; font-weight: 900; color: #15803d; margin-top: 2px;">
+              <span id="depositPayAmountDisplay">₹50</span>
+            </div>
+          </div>
+
+          <!-- Dynamic QR Code Card with 5-Minute Expiry Overlay -->
+          <div style="background: white; border: 2px solid #0066a3; border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative;">
+            <div id="depositQrContainer" style="display: flex; justify-content: center; align-items: center; min-height: 180px; margin-bottom: 10px;">
+              <!-- QR generated dynamically -->
+            </div>
+            
+            <!-- 5-Minute Expired Overlay -->
+            <div id="depositQrExpiredOverlay" style="display: none; position: absolute; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); flex-direction: column; align-items: center; justify-content: center; padding: 16px; text-align: center; border-radius: 10px; z-index: 10;">
+              <div style="font-size: 32px; margin-bottom: 4px;">⏳</div>
+              <strong style="font-size: 14px; color: #b91c1c;">QR Expired (5-Minute Window Ended)</strong>
+              <p style="font-size: 11px; color: #475569; margin: 6px 0 12px; line-height: 1.4;">
+                If you already paid, click 'I Have Paid' below.<br>Otherwise, generate a fresh QR.
+              </p>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-primary" onclick="requestWalletDepositQr()" style="font-size: 11px; padding: 6px 14px; width: auto; background: #0066a3; font-weight: 800;">🔄 Generate New QR</button>
+                <button type="button" class="btn-secondary" onclick="closeModal('walletDepositModal'); openHelpSupportModal();" style="font-size: 11px; padding: 6px 12px; width: auto; font-weight: 700;">🎧 Contact Support</button>
+              </div>
+            </div>
+
+            <div style="font-size: 12px; color: #475569; font-weight: 700; margin-bottom: 10px;">
+              Scan with any UPI App: <strong>GPay, PhonePe, Paytm, CRED, BHIM</strong>
+            </div>
+
+            <!-- Download QR Code Button -->
+            <button type="button" id="btnDownloadDepositQr" onclick="downloadDepositQr()" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 800; border: 1.5px solid #0066a3; background: #f0f9ff; color: #0066a3; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+              <span>📥</span> <span>Download QR Code</span>
+            </button>
+          </div>
+
+          <!-- Click to Pay via UPI App (Direct deep link on mobile) -->
+          <a id="depositUpiDeepLink" href="#" target="_blank" class="btn-primary" style="width: 100%; padding: 12px; font-size: 13px; font-weight: 800; background: #16a34a; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; border-radius: 8px;">
+            <span>⚡ Pay via UPI App (GPay / PhonePe / Paytm) &rarr;</span>
+          </a>
+
+          <!-- I Have Paid Button -->
+          <button type="button" class="btn-primary" id="btnConfirmPaid" onclick="submitDepositPaidConfirmation()" style="width: 100%; padding: 13px; font-size: 14px; font-weight: 800; background: #0066a3; margin-bottom: 10px; border-radius: 8px;">
+            ✅ I Have Paid the Amount
+          </button>
+
+          <!-- Cancel Deposit Button -->
+          <button type="button" class="btn-action-del" onclick="cancelCurrentDeposit()" style="width: 100%; padding: 9px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; border-radius: 8px;">
+            ✕ Cancel This Deposit
+          </button>
+        </div>
+          </button>
+
+          <!-- Cancel Deposit Button -->
+          <button type="button" class="btn-action-del" onclick="cancelCurrentDeposit()" style="width: 100%; padding: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; border-radius: 6px; margin-bottom: 4px;">
+            ✕ Cancel This Deposit
+          </button>
+        </div>
+
+        <!-- Step C: Deposit Submitted Confirmation -->
+        <div id="depositStepSubmitted" style="display: none; text-align: center; padding: 14px 6px;">
+          <div style="font-size: 44px; margin-bottom: 8px;">⏳</div>
+          <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Deposit Submitted for Approval</h4>
+          <p style="font-size: 12px; color: #475569; margin-bottom: 14px; line-height: 1.5;">
+            Reference: <strong id="submittedRefDisplay">DEP-000000</strong> (<span id="submittedAmtDisplay">₹200</span>).<br>
+            Your payment is currently being verified by the admin desk. Your Domino's digital wallet balance will be credited within a few minutes.
+          </p>
+          <div style="display: flex; gap: 8px; justify-content: center;">
+            <button type="button" class="btn-primary" onclick="closeModal('walletDepositModal'); openUserProfileModal();" style="width: auto; padding: 8px 18px; font-size: 12px; background: #0066a3;">
+              📜 View Wallet History
+            </button>
+            <button type="button" class="btn-secondary" onclick="closeModal('walletDepositModal')" style="width: auto; padding: 8px 16px; font-size: 12px;">
+              Close
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Deposit Info Modal -->
+  <div class="modal-overlay" id="depositInfoModal">
+    <div class="modal-card" style="max-width: 480px; width: 95%;">
+      <div class="modal-header">
+        <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <span>ℹ️</span> <span>Domino's Order Engine Dynamic UPI Auto-Verification</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('depositInfoModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+          <strong style="color: #1e40af; font-size: 13px;">⚡ Automatic Reference Matching</strong>
+          <p style="margin: 4px 0 0; font-size: 12px; color: #1e3a8a;">
+            Domino's Order Engine uses automated cryptographic reference tags. You do not need to manually copy or type in bank UTR transaction numbers!
+          </p>
+        </div>
+        <ol style="padding-left: 20px; margin: 0 0 16px; display: flex; flex-direction: column; gap: 10px;">
+          <li><strong>Unique Transaction Reference (TR):</strong> When you request a deposit, the system creates a unique reference (e.g. <code>DEP-XXXXXX</code>) with an active 5-minute validity window.</li>
+          <li><strong>Prefilled in UPI Intent &amp; QR:</strong> The QR code and <em>⚡ Pay via UPI App</em> button embed this reference code into the payment memo (<code>tr=DEP-...</code> and <code>tn=Domino's Order Engine Deposit DEP-...</code>).</li>
+          <li><strong>Instant Desk Auto-Matching:</strong> Once payment is sent from your UPI app, our system and admin match your payment directly by reference code.</li>
+          <li><strong>5-Minute Security Expiry:</strong> Each QR remains valid for 5 minutes. If your payment was completed right as the QR expired, simply click <em>Contact Support</em> with your reference code for instant manual balance credit.</li>
+        </ol>
+        <button type="button" class="btn-primary" onclick="closeModal('depositInfoModal')" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 800; background: #0066a3;">
+          Got It, Understood!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Dock for Minimized Support Chat -->
+  <div id="chatFloatingDock" onclick="restoreHelpModal()" style="display: none; position: fixed; bottom: 24px; right: 24px; z-index: 10001; background: #0066a3; color: white; padding: 10px 18px; border-radius: 30px; box-shadow: 0 6px 20px rgba(0, 102, 163, 0.4); cursor: pointer; align-items: center; gap: 8px; border: 2px solid white; font-weight: 700; font-size: 13px;">
+    <span>💬 Support Chat</span>
+    <span id="dockUnreadBadge" style="background: #ef4444; color: white; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 800;">LIVE</span>
+  </div>
+
+  <!-- Floating Bottom Cart Bar (Allows seamless browsing without forcing modal open) -->
+  <div id="floatingCartBar" style="display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #0066a3; color: white; padding: 10px 20px; border-radius: 50px; box-shadow: 0 8px 24px rgba(0, 102, 163, 0.45); align-items: center; justify-content: space-between; gap: 18px; min-width: 300px; max-width: 92vw; border: 1.5px solid rgba(255,255,255,0.25);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 22px;">🛒</span>
+      <div>
+        <div style="font-size: 13px; font-weight: 800; line-height: 1.2;"><span id="floatingCartCount">0</span> Item(s) in Cart</div>
+        <div style="font-size: 11px; opacity: 0.9;">Cart Total: <strong id="floatingCartTotal">₹0</strong></div>
+      </div>
+    </div>
+    <button type="button" onclick="openCartModal()" style="background: white; color: #0066a3; border: none; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+      <span>View Cart</span>
+      <span style="font-size: 14px;">&rarr;</span>
+    </button>
+  </div>
+
+  <!-- Floating Toast Notification -->
+  <div id="storeToastNotice">
+    <span id="toastIcon">📍</span>
+    <span id="toastMsg">Location updated</span>
+  </div>
+
+  <script src="/app.js"></script>
+
+  <!-- Transaction Details View Modal -->
+  <div class="modal-overlay" id="transactionDetailsModal">
+    <div class="modal-card" style="max-width: 480px; width: 95%;">
+      <div class="modal-header">
+        <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <span>📜</span> <span>Transaction Details</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('transactionDetailsModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <div id="txDetailsContent">
+          <!-- Populated dynamically -->
+        </div>
+        <button type="button" class="btn-secondary" style="width: 100%; margin-top: 14px;" onclick="closeModal('transactionDetailsModal')">
+          Close Details
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Sign-In & Identity Modal -->
+  <div class="modal-overlay" id="googleAuthModal">
+    <div class="modal-card" style="max-width: 420px; width: 95%; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25);">
+      <div class="modal-header" style="background: linear-gradient(135deg, #0066a3 0%, #004c7a 100%); color: white; padding: 18px 20px;">
+        <div class="modal-title" style="display: flex; align-items: center; gap: 10px; color: white;">
+          <span style="font-size: 20px;">🍕</span> <span style="font-weight: 800; font-size: 16px;">Domino's Order Engine</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('googleAuthModal')" style="color: white; opacity: 0.85; font-size: 22px;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 28px 24px; text-align: center;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #eff6ff; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 12px rgba(0, 102, 163, 0.15);">
+          <svg width="34" height="34" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+        </div>
+        <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Sign In to Your Account</h3>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 24px; line-height: 1.5;">
+          Direct Google Single Sign-On for digital wallet management, saved delivery addresses, and autonomous Domino's ordering.
+        </p>
+
+        <!-- Primary Direct "Continue with Google" Action -->
+        <button type="button" id="btnContinueGoogle" onclick="handleContinueWithGoogle()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 14px; padding: 13px 20px; border: 1.5px solid #dadce0; border-radius: 28px; background: #ffffff; color: #3c4043; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(60,64,67,0.18); transition: all 0.2s; margin-bottom: 16px;" onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#4285f4';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#dadce0';">
+          <svg width="22" height="22" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <!-- Official GIS Button Hook -->
+        <div id="googleBtnContainer" style="display: flex; justify-content: center; margin-bottom: 12px; min-height: 44px;"></div>
+
+        <div style="font-size: 11px; color: #94a3b8; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px;">
+          <span>🔒</span> <span>Direct Google Authentication • Zero Passwords or OTPs Required</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domino's Order Engine Admin | Live Session Manager &amp; Voucher Vault</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    /* System Info Tooltip Dot */
+    .info-dot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      border: 1px solid #bae6fd;
+      transition: all 0.2s;
+      user-select: none;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+    .info-dot:hover {
+      background: #0284c7;
+      color: white;
+      border-color: #0284c7;
+      transform: scale(1.1);
+    }
+    .container {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    @media (max-width: 1024px) {
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .panel {
+      background: white;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-200);
+      padding: 14px 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--gray-100);
+      padding-bottom: 8px;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stat-badge {
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .admin-split-grid {
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .admin-split-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .table-container-scroll {
+      max-height: 400px;
+      overflow-y: auto;
+      overflow-x: auto;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      background: white;
+    }
+    .table-container-scroll::-webkit-scrollbar,
+    #sessionFleetFeedContainer::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .table-container-scroll::-webkit-scrollbar-thumb,
+    #sessionFleetFeedContainer::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .table-container-scroll::-webkit-scrollbar-thumb:hover,
+    #sessionFleetFeedContainer::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .table-container-scroll table {
+      margin-top: 0;
+    }
+    .table-container-scroll th {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--gray-100);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    th, td {
+      padding: 6px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: middle;
+    }
+    th {
+      background: var(--gray-50);
+      color: var(--gray-600);
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-idle {
+      background: #ecfdf5;
+      color: #065f46;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-inuse {
+      background: #fffbeb;
+      color: #92400e;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tier-badge-new {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .tier-badge-existing {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* 6-Digit OTP Animated Inputs */
+    .otp-input-boxes {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+    .otp-digit {
+      width: 44px;
+      height: 52px;
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      border: 2px solid var(--gray-300);
+      border-radius: 8px;
+      background: white;
+      transition: all 0.2s ease;
+      color: var(--dark);
+    }
+    .otp-digit:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 102, 163, 0.2);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Animated 45-Second Countdown Bar */
+    .otp-timer-container {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .otp-timer-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .otp-progress-bar {
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .otp-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #0066a3);
+      width: 100%;
+      transition: width 1s linear;
+    }
+
+    /* Action Buttons in Table */
+    .btn-action-copy {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-action-copy:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .btn-action-launch {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-action-launch:hover {
+      background: #dbeafe;
+    }
+    .btn-action-del {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-action-del:hover {
+      background: #fee2e2;
+    }
+
+    /* Modern SaaS Admin Navigation Tabs & Quick Stats Layout */
+    .admin-tab-bar {
+      display: flex;
+      gap: 6px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 6px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+      scrollbar-width: thin;
+      position: sticky;
+      top: 10px;
+      z-index: 90;
+    }
+    .admin-nav-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .admin-nav-tab:hover {
+      background: var(--gray-100);
+      color: #0f172a;
+    }
+    .admin-nav-tab.active {
+      background: #0066a3;
+      color: white;
+      box-shadow: 0 2px 6px rgba(0, 102, 163, 0.25);
+    }
+    .admin-nav-tab .tab-badge {
+      background: #f1f5f9;
+      color: #0066a3;
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .admin-nav-tab.active .tab-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+    }
+
+    /* Quick Overview Stats Strip */
+    .quick-stats-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+    .stat-card-mini {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .stat-card-mini:hover {
+      border-color: #0066a3;
+      transform: translateY(-1px);
+    }
+    .stat-card-mini .stat-icon {
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f9ff;
+    }
+    .stat-card-mini .stat-val {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--dark);
+    }
+    .stat-card-mini .stat-lbl {
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .admin-view {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Toast Notification */
+    #adminToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 9999;
+      animation: fadeIn 0.2s ease;
+    }
+  
+    .btn-op-add.active { background: #dcfce7 !important; border-color: #16a34a !important; color: #15803d !important; font-weight: 800 !important; }
+    .btn-op-deduct.active { background: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b !important; font-weight: 800 !important; }
+    .btn-op-set.active { background: #dbeafe !important; border-color: #2563eb !important; color: #1d4ed8 !important; font-weight: 800 !important; }
+
+</style>
+</head>
+<body>
+
+  <!-- Admin Navbar -->
+  <header class="navbar">
+    <div class="logo-container">
+      <div class="logo-icon">⚙️</div>
+      <div>
+        <div class="brand-title">Domino's Order Engine Admin Console</div>
+        <div class="brand-tag">Real Domino's Live Sessions &amp; Voucher Vault</div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="/" class="admin-link">← Customer Storefront</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Quick Stats Overview Strip -->
+    <div class="quick-stats-strip">
+      <div class="stat-card-mini" onclick="switchAdminView('sessions')">
+        <div class="stat-icon">📱</div>
+        <div>
+          <div class="stat-val" id="quickStatSessions">0 Active</div>
+          <div class="stat-lbl">Domino's Sessions Pool</div>
+        </div>
+      </div>
+      <div class="stat-card-mini" onclick="switchAdminView('orders')">
+        <div class="stat-icon">🤖</div>
+        <div>
+          <div class="stat-val" id="quickStatOrders">0 Orders</div>
+          <div class="stat-lbl">Autonomous Robot Orders</div>
+        </div>
+      </div>
+      <div class="stat-card-mini" onclick="switchAdminView('users')">
+        <div class="stat-icon">👥</div>
+        <div>
+          <div class="stat-val" id="quickStatUsers">0 Users</div>
+          <div class="stat-lbl">Storefront Customer Users</div>
+        </div>
+      </div>
+      <div class="stat-card-mini" onclick="switchAdminView('support')">
+        <div class="stat-icon">🎧</div>
+        <div>
+          <div class="stat-val" id="quickStatTickets">0 Tickets</div>
+          <div class="stat-lbl">Customer Support Queue</div>
+        </div>
+      </div>
+      <div class="stat-card-mini" onclick="switchAdminView('vouchers')">
+        <div class="stat-icon">💳</div>
+        <div>
+          <div class="stat-val" id="quickStatVouchers">0 Vouchers</div>
+          <div class="stat-lbl">Gift Card Vault &amp; UPI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Tab Navigation Bar -->
+    <nav class="admin-tab-bar">
+      <button class="admin-nav-tab active" id="tabBtn-sessions" onclick="switchAdminView('sessions')">
+        <span>📱 Sessions &amp; Live OTP</span>
+        <span class="tab-badge" id="navBadgeSessions">0</span>
+      </button>
+      <button class="admin-nav-tab" id="tabBtn-orders" onclick="switchAdminView('orders')">
+        <span>🤖 Robot Orders &amp; Tracker</span>
+        <span class="tab-badge" id="navBadgeOrders">0</span>
+      </button>
+      <button class="admin-nav-tab" id="tabBtn-users" onclick="switchAdminView('users')">
+        <span>👥 Users &amp; Wallet Directory</span>
+        <span class="tab-badge" id="navBadgeUsers">0</span>
+      </button>
+      <button class="admin-nav-tab" id="tabBtn-support" onclick="switchAdminView('support')">
+        <span>🎧 Support Desk &amp; Chat</span>
+        <span class="tab-badge" id="navBadgeSupport">0</span>
+      </button>
+      <button class="admin-nav-tab" id="tabBtn-vouchers" onclick="switchAdminView('vouchers')">
+        <span>💳 Vouchers, PINs &amp; UPI</span>
+      </button>
+      <button class="admin-nav-tab" id="tabBtn-alerts" onclick="switchAdminView('alerts')">
+        <span>📢 Announcements &amp; Alerts</span>
+        <span class="tab-badge" id="navBadgeAlerts">0</span>
+      </button>
+    </nav>
+
+    <!-- VIEW 1: Sessions & Live SMS OTP Pool -->
+    <div class="admin-view" id="view-sessions">
+      <div class="admin-split-grid">
+        <!-- LEFT COLUMN: Live Authenticator Terminal -->
+        <div class="panel" style="margin-bottom: 0;">
+          <div class="panel-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+            <div class="panel-title" style="font-size: 15px; display: flex; align-items: center;">📱 Authenticate Domino's Session <span class="info-dot" onclick="showAdminSystemInfo('session')" title="Domino's Session Authentication &amp; History Detection">i</span></div>
+            <span class="stat-badge" style="background: #fee2e2; color: #b91c1c; font-size: 10px;">Live Gateway</span>
+          </div>
+
+          <!-- Method Switcher Tabs -->
+          <div style="display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">
+            <button id="btnTabOtp" class="tab-btn active" onclick="switchSessionMethod('otp')" style="border-radius: 20px; font-size: 12px; padding: 5px 14px;">
+              📱 Live SMS OTP
+            </button>
+            <button id="btnTabJson" class="tab-btn" onclick="switchSessionMethod('json')" style="border-radius: 20px; font-size: 12px; padding: 5px 14px;">
+              📋 Paste JSON / Token
+            </button>
+          </div>
+
+          <!-- METHOD 1: Live OTP Dispatch & Verification Box -->
+          <div id="methodOtpSection" style="background: var(--gray-50); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); margin-bottom: 14px;">
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label" style="font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 6px; display: block;">
+                10-Digit Indian Mobile Number
+              </label>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; background: white; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); padding: 0 10px; font-weight: 700; color: var(--gray-600); font-size: 13px;">
+                  🇮🇳 +91
+                </div>
+                <input type="tel" id="adminPhone" class="form-input" placeholder="e.g. 7888402429" maxlength="10" style="font-size: 14px; font-weight: 700; letter-spacing: 0.5px; flex: 1; min-width: 140px;" onkeydown="if(event.key==='Enter') adminSendLiveOtp()">
+                <button type="button" class="btn-primary" id="btnSendOtp" style="width: auto; white-space: nowrap; padding: 0 16px; font-size: 13px; font-weight: 800; cursor: pointer; border-radius: 4px; background: #0066a3;" onclick="adminSendLiveOtp()">
+                  📲 Send OTP &rarr;
+                </button>
+                <button type="button" class="btn-secondary" id="btnManualOtp" style="width: auto; white-space: nowrap; padding: 0 12px; font-size: 12px; font-weight: 700; cursor: pointer;" onclick="manuallyOpenOtpSection()" title="Enter OTP already received">
+                  ✏️ Manual OTP
+                </button>
+              </div>
+              <div style="font-size: 11px; color: #64748b; margin-top: 6px;">
+                Domino's India dispatches a 6-digit SMS verification code to this mobile number.
+              </div>
+            </div>
+
+            <!-- Dynamic Live Status Banner -->
+            <div id="otpStatusBanner" style="display: none; margin-top: 8px; margin-bottom: 8px; border-radius: 6px; font-size: 12px; padding: 8px;"></div>
+
+            <!-- Animated OTP Verification Box -->
+            <div id="otpSection" style="display: none; margin-top: 12px; border-top: 1px dashed var(--gray-300); padding-top: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 6px 10px; border-radius: 6px;">
+                <div style="font-size: 11px; color: #166534; font-weight: 600;">
+                  📱 OTP sent to <strong id="otpTargetPhoneDisplay" style="color: #14532d;">+91</strong>
+                </div>
+                <button type="button" onclick="cancelOtpAndChangePhone()" style="background: white; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; color: #0284c7; font-size: 10px; font-weight: 700; cursor: pointer;">
+                  ✏️ Change
+                </button>
+              </div>
+
+              <div class="otp-timer-container" style="margin-bottom: 10px;">
+                <div class="otp-timer-text" style="font-size: 11px;">
+                  <span id="timerIcon">⏱️</span>
+                  <span id="timerStatusText">Validating in 45s...</span>
+                </div>
+                <div class="otp-progress-bar">
+                  <div class="otp-progress-fill" id="timerProgressFill"></div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label class="form-label" style="text-align: center; display: block; margin-bottom: 4px; font-weight: 700; color: #1e293b; font-size: 11px;">
+                  Enter 6-Digit SMS OTP from Domino's:
+                </label>
+                <div style="display: flex; justify-content: center; margin-bottom: 6px;">
+                  <input type="text" id="adminOtpUnifiedInput" class="form-input" placeholder="• • • • • •" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="font-size: 20px; font-weight: 800; letter-spacing: 6px; text-align: center; max-width: 220px; padding: 6px 12px; border: 2px solid #0066a3; border-radius: 6px; background: #ffffff;" oninput="syncUnifiedOtpToBoxes(this.value)" onkeydown="if(event.key==='Enter') adminVerifyLiveOtp()" onpaste="handleOtpPaste(event)">
+                </div>
+              </div>
+
+              <!-- 6 Split OTP Digit Boxes -->
+              <div class="otp-input-boxes" id="otpSplitBoxesContainer" style="gap: 6px; margin: 10px 0;" onpaste="handleOtpPaste(event)">
+                <input type="text" class="otp-digit" maxlength="1" id="otpDigit1" oninput="handleOtpInput(1, event)" onkeydown="handleOtpKey(1, event)" onpaste="handleOtpPaste(event)" inputmode="numeric" style="width: 36px; height: 42px; font-size: 18px;">
+                <input type="text" class="otp-digit" maxlength="1" id="otpDigit2" oninput="handleOtpInput(2, event)" onkeydown="handleOtpKey(2, event)" onpaste="handleOtpPaste(event)" inputmode="numeric" style="width: 36px; height: 42px; font-size: 18px;">
+                <input type="text" class="otp-digit" maxlength="1" id="otpDigit3" oninput="handleOtpInput(3, event)" onkeydown="handleOtpKey(3, event)" onpaste="handleOtpPaste(event)" inputmode="numeric" style="width: 36px; height: 42px; font-size: 18px;">
+                <input type="text" class="otp-digit" maxlength="1" id="otpDigit4" oninput="handleOtpInput(4, event)" onkeydown="handleOtpKey(4, event)" onpaste="handleOtpPaste(event)" inputmode="numeric" style="width: 36px; height: 42px; font-size: 18px;">
+                <input type="text" class="otp-digit" maxlength="1" id="otpDigit5" oninput="handleOtpInput(5, event)" onkeydown="handleOtpKey(5, event)" onpaste="handleOtpPaste(event)" inputmode="numeric" style="width: 36px; height: 42px; font-size: 18px;">
+                <input type="text" class="otp-digit" maxlength="1" id="otpDigit6" oninput="handleOtpInput(6, event)" onkeydown="handleOtpKey(6, event)" onpaste="handleOtpPaste(event)" inputmode="numeric" style="width: 36px; height: 42px; font-size: 18px;">
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <button type="button" id="btnResendOtp" style="background: none; border: none; color: var(--primary); font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: underline;" onclick="adminSendLiveOtp()" disabled>
+                  Resend OTP
+                </button>
+                <span style="font-size: 10px; color: var(--gray-500);">Auto-syncs 50% vs Cheesy tier</span>
+              </div>
+
+              <button class="btn-primary" id="btnVerifyOtp" style="background: #16a34a; font-size: 13px; font-weight: 800; padding: 10px;" onclick="adminVerifyLiveOtp()">
+                🔐 Verify OTP &amp; Save Domino's Live Session
+              </button>
+            </div>
+          </div>
+
+          <!-- METHOD 2: Paste Domino's JSON / Token Key-Value Pair Box -->
+          <div id="methodJsonSection" style="display: none; background: var(--gray-50); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" style="margin-bottom: 0; font-size: 11px;">Paste Domino's JSON / Token *</label>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" class="btn-action-copy" style="font-size: 10px; padding: 2px 6px;" onclick="pasteFromClipboard()">📋 Paste</button>
+                <button type="button" class="btn-action-copy" style="font-size: 10px; padding: 2px 6px;" onclick="copyExtractionScriptToClipboard()">⚡ Script</button>
+                <button type="button" class="btn-action-copy" style="font-size: 10px; padding: 2px 6px;" onclick="clearJsonInput()">🧹</button>
+              </div>
+            </div>
+            <textarea id="adminJsonInput" class="form-input" rows="6" placeholder='Paste session JSON, token, or cookie array here...' style="font-family: monospace; font-size: 11px; line-height: 1.4; margin-bottom: 8px;"></textarea>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+              <input type="tel" id="adminJsonPhone" class="form-input" placeholder="Registered mobile (optional)" maxlength="10" style="font-size: 12px;">
+            </div>
+
+            <button class="btn-primary" id="btnImportJson" style="background: #0284c7; font-size: 13px; font-weight: 800; padding: 9px;" onclick="adminImportJsonSession()">
+              🔐 Verify &amp; Save Session
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Active Sessions Fleet & Automated Promo Rules -->
+        <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+          <!-- Active Sessions Fleet Live Status & Assignment Feed Widget -->
+          <div class="panel" style="margin-bottom: 0;">
+            <div class="panel-header" style="margin-bottom: 8px; padding-bottom: 6px;">
+              <div class="panel-title" style="font-size: 14px;">⚡ Real-Time Session Assignment &amp; Health Feed</div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <span class="stat-badge" id="feedStatSummary" style="font-size: 10px;">0 Total</span>
+                <button type="button" class="btn-action-copy" onclick="loadSessionFleetFeed()" style="padding: 2px 8px; font-size: 10px; cursor: pointer;">🔄 Refresh</button>
+              </div>
+            </div>
+
+            <!-- Fleet Status Counters -->
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 8px;">
+              <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 6px 6px; text-align: center;">
+                <div style="font-size: 15px; font-weight: 900; color: #166534;" id="feedCountIdle">0</div>
+                <div style="font-size: 10px; font-weight: 700; color: #15803d;">🟢 Idle Available</div>
+              </div>
+              <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 6px 6px; text-align: center;">
+                <div style="font-size: 15px; font-weight: 900; color: #92400e;" id="feedCountInUse">0</div>
+                <div style="font-size: 10px; font-weight: 700; color: #b45309;">🟡 In Use</div>
+              </div>
+              <div style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 6px; text-align: center;">
+                <div style="font-size: 15px; font-weight: 900; color: #475569;" id="feedCountDisabled">0</div>
+                <div style="font-size: 10px; font-weight: 700; color: #475569;">⏸️ Disabled</div>
+              </div>
+              <div style="background: #fef3c7; border: 1px solid #fde68a; border-radius: 6px; padding: 6px 6px; text-align: center;">
+                <div style="font-size: 15px; font-weight: 900; color: #b45309;" id="feedCountOld">0</div>
+                <div style="font-size: 10px; font-weight: 700; color: #92400e;">🟠 Old (&gt;14d)</div>
+              </div>
+              <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 6px; text-align: center;">
+                <div style="font-size: 15px; font-weight: 900; color: #dc2626;" id="feedCountExpired">0</div>
+                <div style="font-size: 10px; font-weight: 700; color: #b91c1c;">🔴 Expired</div>
+              </div>
+            </div>
+
+            <!-- Live Assignment Feed Stream -->
+            <div id="sessionFleetFeedContainer" style="display: flex; flex-direction: column; gap: 4px; max-height: 120px; overflow-y: auto; padding-right: 2px; font-size: 11px;">
+              <div style="color: #94a3b8; font-size: 11px; text-align: center; padding: 8px;">Loading live fleet status...</div>
+            </div>
+          </div>
+
+          <!-- Active Sessions Pool Table Panel -->
+          <div class="panel" style="margin-bottom: 0;">
+            <div class="panel-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+              <div class="panel-title" style="font-size: 15px;">👥 Active Domino's Sessions Fleet</div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="stat-badge" id="accountsCount">0 Accounts Active</span>
+                <button type="button" class="btn-action-copy" onclick="loadAccounts()" style="cursor: pointer; padding: 4px 10px; font-size: 11px;">
+                  🔄 Refresh
+                </button>
+              </div>
+            </div>
+
+            <!-- Scrollable Table Container -->
+            <div class="table-container-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Mobile &amp; UID</th>
+                    <th>Account Tier</th>
+                    <th>Order History</th>
+                    <th>Age &amp; Health</th>
+                    <th>Status</th>
+                    <th>Session Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="accountsTableBody">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANEL 1B: Domino's Automated Promo & Coupon Code Engine -->
+          <div class="panel" style="margin-bottom: 0;">
+            <div class="panel-header" style="margin-bottom: 10px; padding-bottom: 6px;">
+              <div class="panel-title" style="font-size: 14px;">🎟️ Automated Promo Engine</div>
+              <span class="stat-badge" style="background: #f0fdf4; color: #15803d; font-size: 11px;">Auto-Applied</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 10px;">1st Order Coupon (New Account) *</label>
+                <input type="text" id="ruleFirstOrderCoupon" class="form-input" placeholder="DOMNEW50" value="DOMNEW50" style="font-weight: 800; font-family: monospace; font-size: 12px;">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 10px;">2nd Order Coupon *</label>
+                <input type="text" id="ruleSecondOrderCoupon" class="form-input" placeholder="CHEESY" value="CHEESY" style="font-weight: 800; font-family: monospace; font-size: 12px;">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 10px;">Repeat Order Coupon *</label>
+                <input type="text" id="ruleRegularOrderCoupon" class="form-input" placeholder="PARTY" value="PARTY" style="font-weight: 800; font-family: monospace; font-size: 12px;">
+              </div>
+            </div>
+            <button class="btn-primary" style="background: #0066a3; width: auto; padding: 7px 16px; font-size: 12px; font-weight: 800; cursor: pointer;" onclick="saveCouponRules()">
+              💾 Save Coupon Rules
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: Autonomous Robot Orders Monitor -->
+    <div class="admin-view" id="view-orders" style="display: none;">
+      <!-- PANEL 3: Live Robot Telemetry & Orders Monitor -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title" style="display: flex; align-items: center;">🤖 Live Autonomous Domino's Robot Orders Monitor <span class="info-dot" onclick="showAdminSystemInfo('robot')" title="Robot Dispatch Telemetry &amp; Live Tracker">i</span></div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="stat-badge" id="ordersCount">0 Orders</span>
+            <button type="button" class="btn-action-copy" onclick="loadOrders()" style="cursor: pointer; padding: 4px 10px; font-size: 11px;">
+              🔄 Refresh Orders
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Robot Dispatches Telemetry Stats Banner -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #166534;">🤖 Active Robot Orders</div>
+            <div id="statActiveRobotOrders" style="font-size: 22px; font-weight: 900; color: #15803d; margin-top: 4px;">0 Active</div>
+            <div style="font-size: 11px; color: #166534;">In-kitchen baking &amp; dispatch</div>
+          </div>
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #1e40af;">✅ Dispatched &amp; Delivered</div>
+            <div id="statDeliveredOrders" style="font-size: 22px; font-weight: 900; color: #1d4ed8; margin-top: 4px;">0 Delivered</div>
+            <div style="font-size: 11px; color: #1e40af;">Completed successfully</div>
+          </div>
+          <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #991b1b;">⚠️ Failed / Needs Review</div>
+            <div id="statFailedOrders" style="font-size: 22px; font-weight: 900; color: #b91c1c; margin-top: 4px;">0 Failed</div>
+            <div style="font-size: 11px; color: #991b1b;">Timeout or session retry</div>
+          </div>
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #475569;">💳 Total Dispatched Volume</div>
+            <div id="statDispatchedVolume" style="font-size: 22px; font-weight: 900; color: #0f172a; margin-top: 4px;">₹0</div>
+            <div style="font-size: 11px; color: #64748b;">Autonomous engine orders</div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <input type="text" id="adminOrderSearchInput" oninput="filterAdminOrders(this.value)" placeholder="🔍 Search by 12-Digit UID, Engine Order Ref (DOM-ENG-...), Domino's Ref (DOM-IND-...), Phone..." class="form-input" style="max-width: 500px; font-size: 13px;">
+          <div style="font-size: 12px; color: var(--gray-600); font-weight: 600;">
+            Auto-Refreshing Live • Real Domino's Delivery Telemetry
+          </div>
+        </div>
+
+        <div class="table-container-scroll" style="max-height: 560px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Engine Ref &amp; Cart ID</th>
+                <th>Domino's Live Ref</th>
+                <th>Customer &amp; 12-Digit UID</th>
+                <th>Assigned Session</th>
+                <th>Voucher / Promo</th>
+                <th>Gift Card Used</th>
+                <th>Bill &amp; UPI</th>
+                <th>Status &amp; Rider</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: App Registered Users & Wallet Directory -->
+    <div class="admin-view" id="view-users" style="display: none;">
+      <!-- PANEL 4: App Registered Users Management (Admin Controls) -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title" style="display: flex; align-items: center;">👥 App Registered Users &amp; Profile Control <span class="info-dot" onclick="showAdminSystemInfo('users')" title="User Profile Management &amp; Audit Trails">i</span></div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="stat-badge" id="appUsersCount">0 Users</span>
+            <button type="button" class="btn-action-copy" onclick="loadAppUsers()" style="cursor: pointer; padding: 4px 10px; font-size: 11px;">
+              🔄 Refresh Users
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          Registered customer accounts in the DominoSync storefront. Each customer has a unique persistent 12-digit numerical User ID. Administrators can adjust wallet balance with audit trails, modify customer phone or name, manage addresses (max 3 allowed per Domino's policy), and review order &amp; transaction history.
+        </p>
+
+        <!-- Real-Time User Search & Quick Filter Controls -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 480px;">
+            <input type="text" id="userSearchInput" class="form-input" placeholder="🔍 Search customers by Name, Email, Phone, or 12-Digit UID..." oninput="filterAppUsersTable()" style="padding: 7px 14px; font-size: 12px; border-radius: 20px; border: 1.5px solid var(--gray-300);">
+            <button type="button" class="btn-action-copy" onclick="document.getElementById('userSearchInput').value=''; filterAppUsersTable();" style="padding: 6px 10px; font-size: 11px; cursor: pointer;">
+              Clear
+            </button>
+          </div>
+          <div style="font-size: 12px; color: var(--gray-600); display: flex; align-items: center; gap: 6px;">
+            <span>ℹ️ Click phone badge to 1-click Lock/Unlock • Click Wallet to Add/Deduct/Set exact balance</span>
+          </div>
+        </div>
+
+        <div class="table-container-scroll" style="max-height: 560px;">
+          <table>
+            <thead>
+              <tr>
+                <th>12-Digit UID</th>
+                <th>Customer Details</th>
+                <th>Registered Phone</th>
+                <th>Phone Lock Status</th>
+                <th>Real Wallet Balance</th>
+                <th>Saved Addresses</th>
+                <th>Registered Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="appUsersTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL 4B: Wallet Deposit Approvals Desk -->
+      <div class="panel" style="margin-top: 16px;">
+        <div class="panel-header" style="margin-bottom: 10px; padding-bottom: 8px;">
+          <div class="panel-title" style="font-size: 15px;">💰 Wallet Deposit Approvals Desk (UPI / QR Deposits)</div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="stat-badge" id="walletDepositsPendingCount" style="background: #fef3c7; color: #b45309;">0 Pending</span>
+            <button type="button" class="btn-action-copy" onclick="loadWalletDeposits()" style="cursor: pointer; padding: 4px 10px; font-size: 11px;">
+              🔄 Refresh Deposits
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size: 12px; color: var(--gray-600); margin-bottom: 12px;">
+          Customers request wallet balance top-ups via dynamic UPI QR code or direct UPI intent deep link. When the customer confirms payment with their transaction reference/UTR, it appears here for instant 1-click administrative audit and credit approval.
+        </p>
+
+        <div class="table-container-scroll" style="max-height: 380px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Reference ID</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Deposit Reference</th>
+                <th>Status</th>
+                <th>Requested At</th>
+                <th>Audit Actions</th>
+              </tr>
+            </thead>
+            <tbody id="walletDepositsTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- VIEW 4: Live Customer Support Desk & Order Tickets -->
+    <div class="admin-view" id="view-support" style="display: none;">
+      <!-- PANEL 4B: Live Customer Support Desk & Order Tickets -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🎧 Live Customer Support Desk &amp; Order Chat</div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="stat-badge" id="adminTicketsCount">0 Active Tickets</span>
+            <button type="button" class="btn-action-copy" onclick="loadAdminTickets()" style="cursor: pointer; padding: 4px 10px; font-size: 11px;">
+              🔄 Refresh Tickets
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          Real-time two-way support desk connecting customer tickets, triage bot diagnostics, photo proof submissions, and live admin response channel.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 340px 1fr; gap: 16px; min-height: 480px;">
+          <!-- Left: Tickets List -->
+          <div style="border: 1px solid var(--gray-200); border-radius: var(--radius-sm); overflow-y: auto; max-height: 520px; background: #f8fafc;">
+            <div style="padding: 10px 12px; background: white; border-bottom: 1px solid var(--gray-200); font-weight: 700; font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span>Customer Ticket Queue</span>
+              <select id="adminTicketFilterStatus" onchange="filterAdminTickets(this.value)" style="font-size: 11px; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--gray-300);">
+                <option value="ALL">All Tickets</option>
+                <option value="OPEN" selected>Open Only</option>
+                <option value="RESOLVED">Resolved Only</option>
+              </select>
+            </div>
+            <div id="adminTicketsListContainer" style="padding: 8px;">
+              <div style="text-align: center; color: var(--gray-500); padding: 20px; font-size: 12px;">Loading tickets...</div>
+            </div>
+          </div>
+
+          <!-- Right: Active Ticket Chat & Resolution Workspace -->
+          <div style="border: 1px solid var(--gray-200); border-radius: var(--radius-sm); display: flex; flex-direction: column; background: white; max-height: 520px;">
+            <!-- Ticket Header Details -->
+            <div id="adminActiveTicketHeader" style="padding: 12px 16px; border-bottom: 1px solid var(--gray-200); background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <strong id="admHeaderTicketId" style="font-size: 14px; color: var(--dark);">Select a ticket from the left</strong>
+                  <span id="admHeaderStatusBadge" style="display: none; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px;"></span>
+                </div>
+                <div id="admHeaderMeta" style="font-size: 11px; color: #64748b; margin-top: 2px;">
+                  Customer &amp; Domino's Order information will appear here
+                </div>
+              </div>
+              <div id="admTicketActions" style="display: none; gap: 6px;">
+                <button type="button" class="btn-action-copy" id="btnAdminResolveTicket" onclick="toggleAdminResolveTicket()" style="background: #ecfdf5; border-color: #86efac; color: #15803d; font-size: 11px; padding: 4px 10px; cursor: pointer; font-weight: 700;">
+                  ✅ Mark Resolved
+                </button>
+              </div>
+            </div>
+
+            <!-- Customer Attached Photo Proof (if any) -->
+            <div id="admProofContainer" style="display: none; padding: 8px 16px; background: #fffbeb; border-bottom: 1px solid #fde68a;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 11px; font-weight: 700; color: #92400e;">📷 Customer Attached Proof:</span>
+                <a id="admProofLink" href="#" target="_blank" style="font-size: 11px; color: #0284c7; text-decoration: underline; font-weight: 600;">View Full Photo</a>
+                <img id="admProofThumbnail" src="" alt="Proof" style="height: 36px; border-radius: 4px; border: 1px solid #cbd5e1; cursor: pointer;" onclick="window.open(this.src, '_blank')">
+              </div>
+            </div>
+
+            <!-- Live Chat Messages Thread -->
+            <div id="adminChatMessagesThread" style="flex: 1; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f1f5f9; min-height: 240px;">
+              <div style="margin: auto; text-align: center; color: var(--gray-500); font-size: 12px;">
+                Select a customer ticket on the left to start live communication
+              </div>
+            </div>
+
+            <!-- Admin Response Input Box -->
+            <div id="adminChatReplyBar" style="padding: 12px; border-top: 1px solid var(--gray-200); background: white; display: none; gap: 8px;">
+              <input type="text" id="adminReplyInput" class="form-input" placeholder="Type direct reply to customer..." style="flex: 1; font-size: 12px; margin-bottom: 0;" onkeydown="if(event.key==='Enter') adminSendReply()">
+              <button type="button" class="btn-primary" onclick="adminSendReply()" style="width: auto; padding: 8px 16px; font-size: 12px; font-weight: 800; cursor: pointer; background: #0066a3;">
+                📤 Reply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 5: Vouchers, PINs & UPI Payment Vault -->
+    <div class="admin-view" id="view-vouchers" style="display: none;">
+      <!-- PANEL 2: 16-Digit Voucher & 6-Digit PIN Vault -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>💳 16-Digit Voucher &amp; 6-Digit PIN Vault</span>
+            <button type="button" class="btn-action-copy" onclick="openAdminInfoModal('voucherInfo')" style="font-size: 11px; padding: 2px 8px; cursor: pointer; color: #0284c7; border-color: #bae6fd;">ℹ️ How Vouchers Work</button>
+          </div>
+          <span class="stat-badge" id="vouchersCount">0 Vouchers</span>
+        </div>
+
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          Domino's Gift Cards used by the robot to settle orders on Domino's India with ₹0 due.
+        </p>
+
+        <!-- Add Voucher Form -->
+        <div style="background: var(--gray-50); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); margin-bottom: 20px;">
+          <h4 style="font-size: 13px; font-weight: 800; margin-bottom: 12px; color: var(--dark);">+ Add Gift Card / Voucher</h4>
+          
+          <div class="form-group">
+            <label class="form-label">16-Digit Voucher / Gift Card Number</label>
+            <input type="text" id="vouchCode" class="form-input" placeholder="e.g. 6014 8293 0192 8471" maxlength="19">
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <div style="flex: 1;" class="form-group">
+              <label class="form-label">6-Digit PIN</label>
+              <input type="password" id="vouchPin" class="form-input" placeholder="e.g. 839201" maxlength="6">
+            </div>
+            <div style="flex: 1;" class="form-group">
+              <label class="form-label">Balance (₹)</label>
+              <input type="number" id="vouchBalance" class="form-input" value="1000" placeholder="1000">
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="addVoucherCard()">Add Voucher to Vault</button>
+        </div>
+
+        <!-- Vouchers List Table -->
+        <div class="table-container-scroll" style="max-height: 480px;">
+          <table>
+            <thead>
+              <tr>
+                <th>16-Digit Card</th>
+                <th>PIN</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Used In Order</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="vouchersTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL 2B: Dynamic UPI Payment Receiver Configuration -->
+      <div class="panel" style="margin-top: 24px;">
+        <div class="panel-header">
+          <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>💳 Dynamic UPI Payment Receiver Configuration</span>
+            <button type="button" class="btn-action-copy" onclick="openAdminInfoModal('upiInfo')" style="font-size: 11px; padding: 2px 8px; cursor: pointer; color: #0284c7; border-color: #bae6fd;">ℹ️ How Dynamic UPI Works</button>
+          </div>
+          <span class="stat-badge" id="payReceiverStatusBadge" style="background: #ecfdf5; color: #047857;">Live Gateway Active</span>
+        </div>
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          Configure the official UPI ID and Payee details that receive payments from customers. The dynamic UPI QR code on the customer checkout drawer will automatically encode these recipient credentials with the exact Domino's verified bill amount.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: var(--gray-50); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); margin-bottom: 16px;">
+          <div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Merchant / Receiver UPI ID (VPA) *</label>
+              <input type="text" id="payReceiverUpiId" class="form-input" placeholder="e.g. dominos.pay@okhdfcbank" style="font-weight: 700; font-family: monospace;">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Receiver Payee Name (Shown in GPay / PhonePe / Paytm) *</label>
+              <input type="text" id="payReceiverPayeeName" class="form-input" placeholder="e.g. Domino's Official Kitchen Outlet" style="font-weight: 700;">
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <div class="form-group" style="flex: 1; margin-bottom: 12px;">
+                <label class="form-label">Merchant Code (MCC)</label>
+                <input type="text" id="payReceiverMerchantCode" class="form-input" placeholder="DOM-5819">
+              </div>
+              <div class="form-group" style="flex: 2; margin-bottom: 12px;">
+                <label class="form-label">Transaction Note Template</label>
+                <input type="text" id="payReceiverNote" class="form-input" placeholder="Domino's Order Payment">
+              </div>
+            </div>
+            <button class="btn-primary" style="background: #0284c7; width: auto; padding: 10px 22px; font-weight: 800; cursor: pointer;" onclick="savePaymentReceiverSettings()">
+              💾 Save Payment Receiver Settings
+            </button>
+          </div>
+          <div style="background: white; border: 1.5px dashed #cbd5e1; border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 8px;">Live QR Code String Preview</div>
+            <div id="adminQrStringPreview" style="font-size: 11px; font-family: monospace; color: #0284c7; word-break: break-all; background: #f0f9ff; padding: 10px; border-radius: 6px; border: 1px solid #bae6fd; width: 100%; margin-bottom: 10px;">
+              upi://pay?pa=dominos.pay@okhdfcbank&pn=Domino's+Outlet&am=1823&tr=DOM-ENG-184773&cu=INR
+            </div>
+            <div style="font-size: 12px; font-weight: 700; color: #166534;">
+              ✅ Encodes Verified Domino's Grand Total Dynamically
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 6: In-App Broadcast Announcements & Alerts -->
+    <div class="admin-view" id="view-alerts" style="display: none;">
+      <!-- PANEL 5: In-App Broadcast Announcements & Notifications -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📢 Broadcast In-App Announcements &amp; Alerts</div>
+          <span class="stat-badge" id="notificationsCount">0 Active</span>
+        </div>
+
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          Send live promotional banners, flash discount alerts, and system announcements to all active users on the customer storefront.
+        </p>
+
+        <div style="background: var(--gray-50); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); margin-bottom: 20px;">
+          <h4 style="font-size: 13px; font-weight: 800; margin-bottom: 12px; color: var(--dark); display: flex; align-items: center; gap: 6px;">
+            <span>📢 Create New In-App Announcement</span>
+          </h4>
+
+          <!-- Quick Announcement Templates -->
+          <div style="margin-bottom: 14px; background: #ffffff; border: 1px solid var(--gray-300); border-radius: 8px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--gray-600); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <span>⚡ Quick Announcement Templates (1-Click Fill):</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-secondary" onclick="applyBroadcastTemplate('flash50')" style="padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 6px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; cursor: pointer;">
+                🍕 50% OFF Flash Deal
+              </button>
+              <button type="button" class="btn-secondary" onclick="applyBroadcastTemplate('express20')" style="padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 6px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; cursor: pointer;">
+                ⚡ Express 20-Min Delivery
+              </button>
+              <button type="button" class="btn-secondary" onclick="applyBroadcastTemplate('weekendDeal')" style="padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 6px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; cursor: pointer;">
+                🎉 Weekend Gourmet Special
+              </button>
+              <button type="button" class="btn-secondary" onclick="applyBroadcastTemplate('maintenance')" style="padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 6px; background: #fffbeb; border: 1px solid #fde68a; color: #b45309; cursor: pointer;">
+                🛠️ Scheduled System Check
+              </button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Notification Title *</label>
+              <input type="text" id="notifTitle" class="form-input" placeholder="e.g. 🍕 Domino's Live Kitchen Update">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Badge Tag</label>
+              <input type="text" id="notifBadge" class="form-input" placeholder="e.g. 50% OFF, FLASH DEAL, NOTICE" value="OFFER">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Message Details *</label>
+            <input type="text" id="notifMessage" class="form-input" placeholder="e.g. Order any Large or Medium Pizza and get flat 50% discount automatically applied!">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <label style="font-size: 12px; font-weight: 700; color: var(--gray-700);">Category Style:</label>
+              <select id="notifType" class="form-input" style="width: auto; padding: 4px 10px; font-size: 12px;">
+                <option value="OFFER">🟢 Promotional Offer (Green Banner)</option>
+                <option value="ANNOUNCEMENT">🔵 System Announcement (Blue Banner)</option>
+                <option value="ALERT">🟠 Important Alert (Orange Banner)</option>
+              </select>
+            </div>
+            <button class="btn-primary" style="background: #0284c7; width: auto; padding: 8px 20px; font-weight: 800; cursor: pointer;" onclick="broadcastNotificationSubmit()">
+              📢 Broadcast to App Storefront
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Notifications Table -->
+        <div class="table-container-scroll" style="max-height: 420px;">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Banner Preview</th>
+                <th>Category Style</th>
+                <th>Broadcasted At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="notificationsTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL 5B: Platform Scheduled Maintenance Mode & Emergency Controls -->
+      <div class="panel" style="margin-top: 20px; border-top: 4px solid #b91c1c;">
+        <div class="panel-header">
+          <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>🛠️ Platform Scheduled Maintenance Mode</span>
+            <span class="info-dot" onclick="showAdminSystemInfo('maintenance')" title="Emergency and Scheduled Maintenance Mode Controls">i</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span class="stat-badge" id="adminMaintenanceStatusBadge" style="background: #f1f5f9; color: #475569; font-weight: 800;">
+              Checking Status...
+            </span>
+            <button type="button" class="btn-action-copy" onclick="loadMaintenanceStatus()" style="cursor: pointer; padding: 4px 10px; font-size: 11px;">
+              🔄 Refresh
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          When active, the customer storefront displays an unmissable high-visibility maintenance banner and automatically pauses checkout, orders, and wallet deposits. Backend APIs reject customer mutations with <code style="color: #b91c1c;">HTTP 503 Service Unavailable</code>.
+        </p>
+
+        <div style="background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+            <div>
+              <div style="font-size: 14px; font-weight: 800; color: #9f1239;">Master Maintenance Switch</div>
+              <div style="font-size: 12px; color: #be123c;">Toggle to immediately pause or resume the Domino's Order Engine storefront.</div>
+            </div>
+            <button type="button" id="btnToggleMaintenanceMaster" onclick="toggleMaintenanceModeAction()" style="background: #b91c1c; color: white; border: none; padding: 9px 20px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(185, 28, 28, 0.3);">
+              <span>⚠️</span> <span id="toggleMaintenanceBtnText">Enable Maintenance Mode</span>
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 12px; font-weight: 700; color: #881337;">Banner Notice Message</label>
+              <input type="text" id="maintenanceMsgInput" class="form-input" placeholder="e.g. Domino's Order Engine is currently undergoing scheduled maintenance. We will be back shortly!" value="Domino's Order Engine is currently undergoing scheduled maintenance. We will be back shortly!">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 12px; font-weight: 700; color: #881337;">Auto-Expire Duration</label>
+              <select id="maintenanceDurationSelect" class="form-input" style="font-size: 12px;">
+                <option value="0">Manual (Until explicitly disabled)</option>
+                <option value="15">15 Minutes</option>
+                <option value="30">30 Minutes</option>
+                <option value="60">1 Hour</option>
+                <option value="120">2 Hours</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+            <button type="button" class="btn-primary" onclick="saveMaintenanceSettingsSubmit()" style="background: #be123c; padding: 7px 18px; font-size: 12px; font-weight: 800; cursor: pointer; width: auto;">
+              💾 Save Banner &amp; Duration Settings
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PANEL 5C: High-Performance Rotating Proxy Gateway (HTTP / HTTPS / SOCKS5) -->
+      <div class="panel" style="margin-top: 20px; border-top: 4px solid #7c3aed;">
+        <div class="panel-header">
+          <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>🌐 High-Performance Rotating Proxy Gateway</span>
+            <span class="info-dot" onclick="showAdminSystemInfo('proxy')" title="Rotating Proxy Setup & Akamai Bypass Configuration">i</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span class="stat-badge" id="adminProxyStatusBadge" style="background: #f1f5f9; color: #475569; font-weight: 800;">
+              Proxy Disabled
+            </span>
+            <button type="button" class="btn-action-copy" onclick="loadProxySettings()" style="cursor: pointer; padding: 4px 10px; font-size: 11px;">
+              🔄 Refresh
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          Connect your premium rotating proxy (HTTP / HTTPS / SOCKS5) to route all autonomous Playwright robot instances, OTP verifiers, and Domino's token probes through private residential IP pools with continuous load-balanced session rotation.
+        </p>
+
+        <div style="background: #fbfbfe; border: 1.5px solid #e9d5ff; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+          <!-- 1-Click Quick String Input -->
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" style="font-size: 12px; font-weight: 700; color: #581c87;">
+              ⚡ 1-Click Quick Paste Proxy String (Auto-Parser):
+            </label>
+            <input type="text" id="proxyRawInput" class="form-input" placeholder="e.g. host:port:username:password OR http://user:pass@host:port OR socks5://host:port" oninput="parseProxyRawInputString()" style="font-family: monospace; font-size: 12px;">
+            <div style="font-size: 11px; color: #7e22ce; margin-top: 4px;">
+              Paste your premium proxy credential string directly from your proxy dashboard. We automatically detect protocol, host, port, and credentials.
+            </div>
+          </div>
+
+          <!-- Structured Fields Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 10px; margin-bottom: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700;">Protocol</label>
+              <select id="proxyProtocol" class="form-input" style="font-size: 12px;">
+                <option value="http">HTTP</option>
+                <option value="https">HTTPS</option>
+                <option value="socks5">SOCKS5</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700;">Host / Gateway IP *</label>
+              <input type="text" id="proxyHost" class="form-input" placeholder="e.g. proxy.rotating-gateway.com or 185.193.x.x" style="font-family: monospace; font-size: 12px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700;">Port *</label>
+              <input type="text" id="proxyPort" class="form-input" placeholder="e.g. 8080 or 1080" style="font-family: monospace; font-size: 12px;">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700;">Username (Optional)</label>
+              <input type="text" id="proxyUsername" class="form-input" placeholder="Leave empty if IP authenticated" style="font-family: monospace; font-size: 12px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700;">Password (Optional)</label>
+              <input type="password" id="proxyPassword" class="form-input" placeholder="••••••••" style="font-family: monospace; font-size: 12px;">
+            </div>
+          </div>
+
+          <!-- Proxy Actions & Live Test Status -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px dashed #d8b4fe; padding-top: 12px;">
+            <div id="proxyTestResultWrap" style="font-size: 12px; font-weight: 700; color: #4c1d95; display: flex; align-items: center; gap: 6px;">
+              <span>ℹ️ Enter proxy details and click "Test Connection" to verify rotating IP.</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-action-copy" id="btnDisableProxy" onclick="disableProxyAction()" style="border-color: #cbd5e1; color: #475569; background: #f8fafc; font-weight: 800; cursor: pointer; padding: 7px 14px; font-size: 12px;" title="Run direct residential connections without proxy">
+                ⚡ Direct Mode (No Proxy)
+              </button>
+              <button type="button" class="btn-action-copy" id="btnTestProxy" onclick="testProxyConnectionAction()" style="border-color: #c084fc; color: #6b21a8; background: #faf5ff; font-weight: 800; cursor: pointer; padding: 7px 16px; font-size: 12px;">
+                🔌 Test Proxy Connection
+              </button>
+              <button type="button" class="btn-primary" id="btnSaveProxy" onclick="saveProxySettingsAction()" style="background: #7c3aed; padding: 7px 20px; font-size: 12px; font-weight: 800; cursor: pointer; width: auto;">
+                💾 Save &amp; Enable Proxy
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 5D: Firebase Cloud Persistence & Google Auth Console -->
+      <div class="panel" style="margin-top: 20px; border-top: 4px solid #ea580c;">
+        <div class="panel-header">
+          <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>🔥 Firebase Cloud Database &amp; Google Auth</span>
+            <span class="info-dot" onclick="showAdminSystemInfo('firebase')" title="Firebase Cloud Database & Authentication Console">i</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <a id="adminFirebaseConsoleLink" href="https://console.firebase.google.com/u/0/project/dominos-order-engine-final/database/dominos-order-engine-final-default-rtdb/data/~2F" target="_blank" style="font-size: 11px; color: #c2410c; text-decoration: none; font-weight: 800; background: #fff7ed; border: 1.5px solid #ffedd5; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 4px;">
+              <span>🔗 Open Firebase RTDB Console &rarr;</span>
+            </a>
+            <span class="stat-badge" id="adminFirebaseStatusBadge" style="background: #f1f5f9; color: #475569; font-weight: 800;">
+              Local Storage Mode
+            </span>
+          </div>
+        </div>
+
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 16px;">
+          Link your official Google Firebase project to store Domino's accounts, orders, customer profiles, and wallet balances permanently in the cloud. Firebase Realtime Database guarantees your data is never lost across server restarts or cloud re-deployments.
+        </p>
+
+        <div style="background: #fff7ed; border: 1.5px solid #ffedd5; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700; color: #9a3412;">Firebase Project ID *</label>
+              <input type="text" id="fbProjectId" class="form-input" placeholder="e.g. dominos-order-engine" style="font-family: monospace; font-size: 12px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700; color: #9a3412;">Realtime Database URL</label>
+              <input type="text" id="fbDatabaseUrl" class="form-input" placeholder="e.g. https://your-project-id-default-rtdb.firebaseio.com" style="font-family: monospace; font-size: 12px;">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 14px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700; color: #9a3412;">Web API Key</label>
+              <input type="text" id="fbApiKey" class="form-input" placeholder="e.g. AIzaSyA... (from Project Settings > General)" style="font-family: monospace; font-size: 12px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 11px; font-weight: 700; color: #9a3412;">Cloud Sync Status</label>
+              <select id="fbEnabledSelect" class="form-input" style="font-size: 12px; font-weight: 700;">
+                <option value="true">🟢 ENABLE Cloud Sync</option>
+                <option value="false">⚪ DISABLE (Local Storage Only)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Firebase Cloud Actions -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px dashed #fed7aa; padding-top: 12px;">
+            <div id="fbTestResultWrap" style="font-size: 12px; font-weight: 700; color: #9a3412;">
+              <span>☁️ Cloud sync automatically mirrors all accounts, orders, and wallet records to Firebase.</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn-action-copy" id="btnSyncFirebaseNow" onclick="syncFirebaseNowAction()" style="border-color: #fb923c; color: #c2410c; background: #fff7ed; font-weight: 800; cursor: pointer; padding: 7px 16px; font-size: 12px;">
+                ☁️ Push All Data to Firebase Now
+              </button>
+              <button type="button" class="btn-primary" id="btnSaveFirebase" onclick="saveFirebaseSettingsAction()" style="background: #ea580c; padding: 7px 20px; font-size: 12px; font-weight: 800; cursor: pointer; width: auto;">
+                💾 Save Firebase Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal: Edit App User & Wallet Credit -->
+  <div class="modal-overlay" id="editUserModal">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">👤 Customer Profile &amp; Account Control</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="editUserIdLabel">12-Digit UID: 948271035824</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('editUserModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <input type="hidden" id="editUserId">
+
+        <!-- Top UID & Registration Pill Banner -->
+        <div style="background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #0369a1; letter-spacing: 0.5px;">Customer 12-Digit Unique Identifier</div>
+            <code id="editUserUidDisplay" style="font-size: 16px; font-weight: 900; color: #0066a3; letter-spacing: 1px;">948271035824</code>
+          </div>
+          <span id="editUserPhoneLockPill" style="font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;">
+            🔓 Phone Unlocked
+          </span>
+        </div>
+
+        <!-- Lifetime Account Metrics Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Orders Placed</div>
+            <div id="editUserOrdersCount" style="font-size: 18px; font-weight: 900; color: #0284c7; margin-top: 2px;">0</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Total Spent</div>
+            <div id="editUserTotalSpent" style="font-size: 18px; font-weight: 900; color: #16a34a; margin-top: 2px;">₹0</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Real Wallet</div>
+            <div id="editUserCurrentWallet" style="font-size: 18px; font-weight: 900; color: #047857; margin-top: 2px;">₹0</div>
+          </div>
+        </div>
+        
+        <!-- Editable Profile Fields -->
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label">Full Customer Name *</label>
+          <input type="text" id="editUserName" class="form-input" placeholder="e.g. Parth Sharma" style="font-weight: 700;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="editUserEmail" class="form-input" placeholder="customer@example.com">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">10-Digit Mobile Number *</label>
+            <input type="tel" id="editUserPhone" class="form-input" maxlength="10" placeholder="9872154310" style="font-weight: 700; font-family: monospace;">
+          </div>
+        </div>
+
+        <!-- Phone Lock Feature -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 14px;">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #1e293b; cursor: pointer;">
+            <input type="checkbox" id="editUserPhoneLocked" style="width: 16px; height: 16px;" onchange="updateEditUserLockPill(this.checked)">
+            <span>🔒 Lock Registered Mobile Number</span>
+          </label>
+          <p style="font-size: 11px; color: #64748b; margin: 4px 0 0 24px; line-height: 1.4;">
+            Prevents the customer from altering their registered phone number in the storefront. Uncheck only if user submits a verified phone change request.
+          </p>
+        </div>
+
+        <!-- Wallet Adjustment -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label">Update Wallet Balance (₹)</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="number" id="editUserWallet" class="form-input" style="font-weight: 800; font-size: 16px; max-width: 160px;">
+            <button type="button" class="btn-secondary" style="white-space: nowrap; font-size: 12px; padding: 0 14px; font-weight: 700;" onclick="addQuickWalletCredit(100)">+₹100</button>
+            <button type="button" class="btn-secondary" style="white-space: nowrap; font-size: 12px; padding: 0 14px; font-weight: 700;" onclick="addQuickWalletCredit(200)">+₹200</button>
+            <button type="button" class="btn-secondary" style="white-space: nowrap; font-size: 12px; padding: 0 14px; font-weight: 700;" onclick="addQuickWalletCredit(500)">+₹500</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="font-size: 14px; font-weight: 800; cursor: pointer; background: #0066a3;" onclick="submitUserUpdate()">
+          💾 Save Customer Profile Updates
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Copy Cookies JSON & Console Script -->
+  <div class="modal-overlay" id="cookiesModal">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">📋 Domino's Session Cookies JSON</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="modalPhoneLabel">+91 XXXXXXXXXX</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('cookiesModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px;">
+        <p style="font-size: 12px; color: var(--gray-600); margin-bottom: 10px;">
+          You can paste these cookies into browser console or import via cookie extensions (like EditThisCookie / Cookie-Editor) to directly log in on any device without OTP.
+        </p>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn-primary" style="padding: 8px 14px; font-size: 12px;" onclick="copyJsonToClipboard()">
+            📋 Copy Standard Cookies JSON
+          </button>
+          <button class="btn-secondary" style="padding: 8px 14px; font-size: 12px;" onclick="copyConsoleScriptToClipboard()">
+            ⚡ Copy Console JavaScript One-Liner
+          </button>
+        </div>
+
+        <textarea id="cookiesJsonDisplay" readonly style="width: 100%; height: 260px; font-family: monospace; font-size: 11px; padding: 10px; background: #0f172a; color: #38bdf8; border-radius: 6px; border: 1px solid #1e293b; outline: none;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Launch Browser Session (Device Choice) -->
+  <div class="modal-overlay" id="launchModal">
+    <div class="modal-card" style="max-width: 580px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🚀 Open Domino's Live Session</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="launchPhoneLabel">+91 XXXXXXXXXX</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('launchModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <!-- Option 1: On this current device / browser -->
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+          <div style="font-weight: 800; font-size: 13px; color: #166534; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+            <span>🌐 1-Click Auto-Login on this Device</span>
+            <span style="background: #dcfce7; color: #15803d; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 800;">Recommended</span>
+          </div>
+          
+          <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <a href="https://m.dominos.co.in/jfl-discovery-ui/en/dt/home" target="_blank" class="btn-primary" style="flex: 1; text-align: center; text-decoration: none; padding: 9px 12px; font-size: 12px; font-weight: 800; background: #0066a3; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <span>1. 🌐 Open Domino's in New Tab &rarr;</span>
+            </a>
+            <button class="btn-primary" style="flex: 1; padding: 9px 12px; font-size: 12px; font-weight: 800; background: #16a34a; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="copyLaunchConsoleScript()">
+              <span>2. 📋 Copy Auto-Login Code</span>
+            </button>
+          </div>
+
+          <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 8px; background: #fefce8; border: 1px dashed #ca8a04; border-radius: 6px; padding: 8px 10px;">
+            <span style="font-size: 11px; font-weight: 800; color: #854d0e;">⚡ 1-Click Bookmarklet:</span>
+            <a id="launchBookmarkletLink" href="#" style="background: #ca8a04; color: #ffffff; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; cursor: move;" title="Drag this button to your Bookmarks Bar. When on m.dominos.co.in, click it to auto-login instantly!">⭐ Drag to Bookmarks: Domino Login</a>
+            <span style="font-size: 10px; color: #a16207;">(Click on Domino's tab to login without DevTools!)</span>
+          </div>
+
+          <div style="background: white; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 10px; font-size: 11px; color: #14532d; line-height: 1.5; margin-bottom: 8px;">
+            <strong>Quick Auto-Login Instructions:</strong><br>
+            • <strong>Method A (Bookmarklet)</strong>: Drag the yellow ⭐ bookmarklet above to your browser's bookmarks bar. Then open Domino's and click the bookmark!<br>
+            • <strong>Method B (Console)</strong>: Click <em>1. Open Domino's</em> &rarr; Press <code>F12</code> &rarr; <strong>Console</strong> &rarr; Click <em>2. Copy Code</em> &rarr; Paste &amp; press <code>Enter</code>!<br>
+            <span style="display:inline-block; margin-top:4px; color:#b45309; font-weight:700;">💡 Tip: If Chrome blocks pasting in Console, first type <code>allow pasting</code> and press Enter, then paste!</span>
+          </div>
+
+          <div style="font-size: 11px; font-weight: 700; color: #166534; margin-bottom: 4px;">Auto-Login Code Preview:</div>
+          <textarea id="launchConsoleScriptPreview" readonly style="width: 100%; height: 95px; font-family: monospace; font-size: 10px; padding: 6px 8px; background: #0f172a; color: #38bdf8; border-radius: 6px; border: 1px solid #1e293b; outline: none;"></textarea>
+        </div>
+
+        <!-- Option 2: On server host machine -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px;">
+          <div style="font-weight: 800; font-size: 13px; color: #1e293b; margin-bottom: 4px;">
+            🖥️ Launch Chrome on Host Window (Server Machine)
+          </div>
+          <p style="font-size: 12px; color: #64748b; margin-bottom: 10px; line-height: 1.5;">
+            Launches a headed Google Chrome window with cookies pre-injected directly on the machine running the DominoSync server.
+          </p>
+          <button class="btn-secondary" style="font-size: 12px; padding: 8px 16px; font-weight: 700; cursor: pointer;" onclick="launchOnServerHost()">
+            🖥️ Launch Chrome on Host Window
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Adjust Wallet Balance (+ / - / =) with Audit Trail -->
+  <div class="modal-overlay" id="adjustWalletModal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">💰 Adjust User Wallet Balance</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="adjWalletUserLabel">User UID</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('adjustWalletModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <input type="hidden" id="adjWalletUserId">
+        
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 13px; font-weight: 600; color: #475569;">Current Wallet Balance:</span>
+          <span id="adjWalletCurrentBal" style="font-size: 18px; font-weight: 900; color: #16a34a;">₹0</span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label">Adjustment Operation *</label>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" id="btnOpAdd" class="btn-action-copy btn-op-add active" style="flex: 1; border-radius: 6px; font-weight: 800; padding: 8px; font-size: 13px; cursor: pointer;" onclick="selectWalletOp('ADD')">➕ Add (+)</button>
+            <button type="button" id="btnOpDeduct" class="btn-action-copy btn-op-deduct" style="flex: 1; border-radius: 6px; font-weight: 800; padding: 8px; font-size: 13px; cursor: pointer;" onclick="selectWalletOp('DEDUCT')">➖ Deduct (-)</button>
+            <button type="button" id="btnOpSet" class="btn-action-copy btn-op-set" style="flex: 1; border-radius: 6px; font-weight: 800; padding: 8px; font-size: 13px; cursor: pointer;" onclick="selectWalletOp('SET')">🎯 Set Exact (=)</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" id="adjAmountLabel">Amount to Add (₹) *</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="number" id="adjWalletAmount" class="form-input" placeholder="e.g. 200" oninput="updateAdjWalletPreview()" style="font-size: 16px; font-weight: 800;">
+            <button type="button" class="btn-secondary" style="padding: 0 10px; font-size: 12px;" onclick="document.getElementById('adjWalletAmount').value = 100">+₹100</button>
+            <button type="button" class="btn-secondary" style="padding: 0 10px; font-size: 12px;" onclick="document.getElementById('adjWalletAmount').value = 500">+₹500</button>
+          </div>
+        </div>
+
+        <div id="adjWalletPreview" style="font-size: 13px; font-weight: 700; color: #1e293b; background: #f8fafc; padding: 10px 14px; border-radius: 6px; margin-bottom: 14px; border: 1.5px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+            <span>Resulting Wallet Balance:</span>
+            <strong id="adjWalletPreviewBal" style="font-size: 17px; font-weight: 900; color: #16a34a;">₹0</strong>
+          </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label">Audit Reason / Note *</label>
+          <input type="text" id="adjWalletReason" class="form-input" placeholder="e.g. Customer support reimbursement / Manual recharge">
+        </div>
+
+        <button class="btn-primary" style="font-size: 14px; font-weight: 800; cursor: pointer;" onclick="submitWalletAdjustment()">
+          💾 Apply Wallet Adjustment &amp; Log Audit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: User Addresses Management (Max 3 Enforced) -->
+  <div class="modal-overlay" id="userAddressesModal">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">📍 Saved Delivery Addresses</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="userAddrModalLabel">User Details</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('userAddressesModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <input type="hidden" id="manageAddrUserId">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 12px; font-weight: 700; color: #475569;">Domino's Policy Limit: Max 3 Addresses</span>
+          <button id="btnAdminAddAddrToggle" class="btn-primary" style="width: auto; padding: 4px 12px; font-size: 11px;" onclick="toggleAdminAddAddrForm()">+ Add New Address</button>
+        </div>
+
+        <!-- Add Address Form (Collapsible) -->
+        <div id="adminAddAddrForm" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 14px; margin-bottom: 16px;">
+          <h5 style="font-size: 12px; font-weight: 800; margin-bottom: 10px;">+ Add Address for Customer</h5>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <input type="text" id="adminAddrTag" class="form-input" placeholder="Label (Home / Work / Other)">
+            <input type="text" id="adminAddrFlat" class="form-input" placeholder="House / Flat / Floor No. *">
+          </div>
+          <div style="margin-bottom: 8px;">
+            <input type="text" id="adminAddrStreet" class="form-input" placeholder="Street / Sector / Area *">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <input type="text" id="adminAddrCity" class="form-input" placeholder="City (e.g. Noida / Chandigarh)">
+            <input type="text" id="adminAddrPincode" class="form-input" placeholder="Pincode (e.g. 201301)">
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-primary" style="font-size: 12px; padding: 6px 14px;" onclick="submitAdminNewAddress()">Save Address</button>
+            <button class="btn-secondary" style="font-size: 12px; padding: 6px 14px;" onclick="toggleAdminAddAddrForm(false)">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Address Cards List -->
+        <div id="adminUserAddrList">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: User History (Wallet Transactions & Orders) -->
+  <div class="modal-overlay" id="userHistoryModal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">📜 User Audit &amp; Activity Dossier</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="userHistoryLabel">12-Digit UID</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('userHistoryModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <div style="display: flex; gap: 8px; border-bottom: 2px solid var(--gray-200); margin-bottom: 16px;">
+          <button id="btnHistTabTxns" class="tab-btn active" style="border-radius: 4px; font-weight: 700; font-size: 12px;" onclick="switchHistoryTab('txns')">💳 Wallet Transactions</button>
+          <button id="btnHistTabOrders" class="tab-btn" style="border-radius: 4px; font-weight: 700; font-size: 12px;" onclick="switchHistoryTab('orders')">📦 Order History</button>
+        </div>
+
+        <div id="histTxnsSection">
+          <div style="overflow-x: auto;">
+            <table style="font-size: 12px;">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Balance After</th>
+                  <th>Audit Reason</th>
+                </tr>
+              </thead>
+              <tbody id="userTxnsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="histOrdersSection" style="display: none;">
+          <div style="overflow-x: auto;">
+            <table style="font-size: 12px;">
+              <thead>
+                <tr>
+                  <th>Engine Ref</th>
+                  <th>Domino's Ref</th>
+                  <th>Store</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="userOrdersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Order Dossier Details -->
+  <div class="modal-overlay" id="orderDossierModal">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">📋 Complete Domino's Order Dossier</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="dossierOrderRefLabel">Order Ref</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('orderDossierModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px;" id="orderDossierBody">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: View Domino's Bill Photo (1-Click Admin Access) -->
+  <div class="modal-overlay" id="adminBillPhotoModal">
+    <div class="modal-card" style="max-width: 640px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🧾 Domino's Verified Kitchen Bill Photo</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="billPhotoHeaderMeta">Order Reference</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('adminBillPhotoModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px;">
+        <!-- Tab Bar for Dual Screenshots (Cart Bill vs Confirmation Proof) -->
+        <div id="billPhotoTabStrip" style="display: flex; gap: 8px; margin-bottom: 10px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">
+          <button type="button" id="btnBillTabCart" class="btn-action-copy active" onclick="switchBillPhotoTab('cart')" style="padding: 5px 12px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #0284c7; color: white;">
+            🛒 Cart &amp; Itemized Bill Review
+          </button>
+          <button type="button" id="btnBillTabProof" class="btn-action-copy" onclick="switchBillPhotoTab('proof')" style="padding: 5px 12px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #f1f5f9; color: #334155;">
+            🧾 Order Confirmation Receipt
+          </button>
+        </div>
+        <div id="billPhotoCurrentTitle" style="font-size: 12px; font-weight: 800; color: #0284c7; margin-bottom: 8px;">
+          🛒 Domino's Cart &amp; Itemized Bill Review (Pre-Submission)
+        </div>
+
+        <div id="billPhotoContent">
+          <!-- Full Resolution Bill Image -->
+          <div style="text-align: center; background: #0f172a; padding: 14px; border-radius: 8px; margin-bottom: 14px; position: relative;">
+            <img id="adminBillPhotoImg" src="" alt="Domino's Bill Screenshot" style="max-width: 100%; max-height: 460px; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
+            <div style="position: absolute; bottom: 20px; right: 20px; display: flex; gap: 8px;">
+              <a id="adminBillPhotoOpenBtn" href="#" target="_blank" style="background: rgba(0, 102, 163, 0.95); color: white; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; backdrop-filter: blur(4px);">
+                🔍 Open Full Resolution
+              </a>
+            </div>
+          </div>
+
+          <!-- Bill Summary Card -->
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 13px; font-weight: 800; color: #0f172a;" id="billPhotoStoreName">Domino's Outlet</div>
+                <div style="font-size: 11px; color: #64748b;" id="billPhotoOrderTokens">Engine: DOM-ENG-... • Domino's: #790007</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 18px; font-weight: 900; color: #16a34a;" id="billPhotoAmount">₹0</div>
+                <span style="font-size: 10px; background: #dcfce7; color: #15803d; padding: 2px 6px; border-radius: 4px; font-weight: 800;">VERIFIED</span>
+              </div>
+            </div>
+            <div id="billPhotoItemsList" style="font-size: 12px; color: #475569; border-top: 1px dashed #cbd5e1; padding-top: 8px; margin-top: 8px;"></div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 10px; padding-top: 6px; border-top: 1px solid #e2e8f0;">
+              <span id="billPhotoTimestamp">Captured: Just now</span>
+              <span id="billPhotoVoucherUsed">Settled via Gift Card</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fallback if photo not yet captured -->
+        <div id="billPhotoEmptyState" style="display: none; text-align: center; padding: 36px 16px;">
+          <div style="font-size: 44px; margin-bottom: 12px;">📸</div>
+          <div style="font-size: 15px; font-weight: 800; color: #1e293b; margin-bottom: 6px;">Invoice Screenshot Pending Capture</div>
+          <p style="font-size: 12px; color: #64748b; max-width: 420px; margin: 0 auto 16px; line-height: 1.5;">
+            The autonomous robot captures a high-resolution screenshot of the verified invoice directly from the official Domino's India site upon completing checkout.
+          </p>
+          <div id="billPhotoEmptyOrderDetails" style="font-size: 12px; color: #0284c7; font-weight: 700; background: #f0f9ff; border: 1px solid #bae6fd; padding: 10px 14px; border-radius: 6px; max-width: 380px; margin: 0 auto;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Live Order Tracking & Telemetry (1-Click Admin Access) -->
+  <div class="modal-overlay" id="adminLiveTrackModal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🛵 Live Domino's Telemetry &amp; Rider Tracker</div>
+          <div style="font-size: 12px; color: var(--gray-600);" id="adminTrackHeaderMeta">Domino's Kitchen Token</div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-action-copy" onclick="refreshAdminLiveTrack()" style="background: #f0fdf4; border-color: #86efac; color: #15803d; font-size: 11px; padding: 4px 10px; cursor: pointer; font-weight: 700;">
+            🔄 Refresh Status
+          </button>
+          <button class="modal-close" onclick="closeModal('adminLiveTrackModal')">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" style="padding: 18px;">
+        <input type="hidden" id="adminTrackOrderId">
+
+        <!-- Domino's Kitchen Token & Status Hero Bar -->
+        <div style="background: linear-gradient(135deg, #0066a3 0%, #004c7a 100%); color: white; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Official Domino's Kitchen Token</div>
+            <div style="font-size: 22px; font-weight: 900; letter-spacing: 1px;" id="adminTrackTokenDisplay">#790022</div>
+            <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;" id="adminTrackEngineRefDisplay">Engine Ref: DOM-ENG-...</div>
+          </div>
+          <div style="text-align: right;">
+            <span id="adminTrackStatusBadge" style="background: #10b981; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; display: inline-block;">
+              BAKING IN OVEN
+            </span>
+            <div style="font-size: 11px; opacity: 0.9; margin-top: 4px;" id="adminTrackEtaDisplay">ETA: ~20-25 mins</div>
+          </div>
+        </div>
+
+        <!-- 5-Step Progress Stepper Bar -->
+        <div style="display: flex; justify-content: space-between; position: relative; margin: 18px 12px 24px 12px;">
+          <div style="position: absolute; top: 13px; left: 24px; right: 24px; height: 3px; background: #e2e8f0; z-index: 1;">
+            <div id="adminTrackProgressBar" style="height: 100%; background: #0066a3; width: 40%; transition: width 0.4s ease;"></div>
+          </div>
+          
+          <div class="adm-step-node" id="admStep1" style="display: flex; flex-direction: column; align-items: center; z-index: 2;">
+            <div class="adm-circle" style="width: 26px; height: 26px; border-radius: 50%; background: #0066a3; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;">✓</div>
+            <span style="font-size: 11px; font-weight: 700; color: #1e293b; margin-top: 6px;">Placed</span>
+          </div>
+
+          <div class="adm-step-node" id="admStep2" style="display: flex; flex-direction: column; align-items: center; z-index: 2;">
+            <div class="adm-circle" style="width: 26px; height: 26px; border-radius: 50%; background: #0066a3; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;">🍕</div>
+            <span style="font-size: 11px; font-weight: 700; color: #1e293b; margin-top: 6px;">Baking</span>
+          </div>
+
+          <div class="adm-step-node" id="admStep3" style="display: flex; flex-direction: column; align-items: center; z-index: 2;">
+            <div class="adm-circle" style="width: 26px; height: 26px; border-radius: 50%; background: #cbd5e1; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;">📦</div>
+            <span style="font-size: 11px; font-weight: 700; color: #64748b; margin-top: 6px;">Packed</span>
+          </div>
+
+          <div class="adm-step-node" id="admStep4" style="display: flex; flex-direction: column; align-items: center; z-index: 2;">
+            <div class="adm-circle" style="width: 26px; height: 26px; border-radius: 50%; background: #cbd5e1; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;">🛵</div>
+            <span style="font-size: 11px; font-weight: 700; color: #64748b; margin-top: 6px;">Dispatched</span>
+          </div>
+
+          <div class="adm-step-node" id="admStep5" style="display: flex; flex-direction: column; align-items: center; z-index: 2;">
+            <div class="adm-circle" style="width: 26px; height: 26px; border-radius: 50%; background: #cbd5e1; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;">🏠</div>
+            <span style="font-size: 11px; font-weight: 700; color: #64748b; margin-top: 6px;">Delivered</span>
+          </div>
+        </div>
+
+        <!-- Rider Telemetry & Store Kitchen Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <!-- Persistent Rider Card (Zero Flicker / Flash) -->
+          <div id="adminTrackRiderCard" style="background: #ecfdf5; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase; margin-bottom: 4px;">
+              🛵 Domino's Delivery Executive (Rider)
+            </div>
+            <div style="font-size: 14px; font-weight: 800; color: #0f172a;" id="adminTrackRiderName">
+              Assigned upon packing
+            </div>
+            <div style="margin-top: 4px;" id="adminTrackRiderPhoneWrap">
+              <span id="adminTrackRiderPhone" style="font-size: 13px; font-weight: 700; color: #0284c7;">—</span>
+            </div>
+            <div style="font-size: 11px; color: #475569; margin-top: 4px;" id="adminTrackRiderStatus">
+              Status: Kitchen preparing order
+            </div>
+            <div style="margin-top: 8px;">
+              <button type="button" onclick="promptAdminUpdateRider()" style="background: white; border: 1.5px solid #10b981; color: #047857; font-size: 11px; font-weight: 800; border-radius: 4px; padding: 4px 10px; cursor: pointer;">
+                ✏️ Edit Rider Phone / Status
+              </button>
+            </div>
+          </div>
+
+          <!-- Domino's Store Kitchen Card -->
+          <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 4px;">
+              🍕 Domino's Store Kitchen
+            </div>
+            <div style="font-size: 13px; font-weight: 800; color: #0f172a;" id="adminTrackStoreName">
+              Domino's Outlet
+            </div>
+            <div style="font-size: 12px; color: #0284c7; margin-top: 4px;" id="adminTrackStorePhone">
+              📞 Store Contact
+            </div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 4px;" id="adminTrackStoreAddr">
+              Store Address
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Delivery Destination Card -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+          <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">
+            📍 Customer Delivery Destination
+          </div>
+          <div style="font-size: 13px; font-weight: 800; color: #0f172a;" id="adminTrackCustomerName">Customer Details</div>
+          <div style="font-size: 12px; color: #475569; margin-top: 2px;" id="adminTrackCustomerAddress">Full Delivery Address</div>
+        </div>
+
+        <!-- Real-Time Telemetry Event Log Stream -->
+        <div style="border-top: 1px solid #e2e8f0; padding-top: 12px;">
+          <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 6px;">
+            📋 Domino's Live Telemetry Event Stream
+          </div>
+          <div id="adminTrackLogStream" style="max-height: 120px; overflow-y: auto; background: #0f172a; color: #38bdf8; font-family: monospace; font-size: 11px; padding: 10px; border-radius: 6px; line-height: 1.5;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Information Modal (Vouchers & Dynamic UPI Explanation) -->
+  <div class="modal-overlay" id="adminInfoModal">
+    <div class="modal-card" style="max-width: 520px; width: 95%;">
+      <div class="modal-header">
+        <div class="modal-title" id="adminInfoModalTitle">ℹ️ How This Feature Works</div>
+        <button class="modal-close" onclick="closeModal('adminInfoModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="adminInfoModalBody" style="padding: 18px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="adminToast">
+    <span id="toastIcon">📋</span>
+    <span id="toastMsg">Notification message</span>
+  </div>
+
+  <script src="/admin.js"></script>
+</body>
+</html>

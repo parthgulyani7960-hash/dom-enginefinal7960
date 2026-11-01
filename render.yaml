@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: dominos-order-engine
+    runtime: docker
+    plan: free
+    region: singapore # Closest region to India for fastest Domino's response
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3005

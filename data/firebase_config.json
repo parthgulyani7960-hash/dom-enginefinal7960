@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "apiKey": "AIzaSyCPhTQI-DyKl-k9_5FAVbINqSfuo1JLxDc",
+  "authDomain": "dominos-order-engine-final.firebaseapp.com",
+  "databaseURL": "https://dominos-order-engine-final-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "dominos-order-engine-final",
+  "storageBucket": "dominos-order-engine-final.firebasestorage.app",
+  "messagingSenderId": "80843429271",
+  "appId": "1:80843429271:web:89125c80af82d1c81f60d2",
+  "measurementId": "G-WCWEPQG2XC",
+  "lastSyncAt": "2026-11-01T19:00:56.671Z",
+  "syncStatus": "SYNCED",
+  "serviceAccountPath": "data/firebase-service-account.json"
+}

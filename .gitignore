@@ -1,0 +1,30 @@
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Sensitive credentials (never commit private keys to GitHub)
+data/firebase-service-account.json
+
+# OS and Temp Files
+.DS_Store
+Thumbs.db
+*.tmp
+*.backup
+*.log
+public/screenshots/
+scratch/
+
+# Root scratch and debug probe scripts
+test-*.js
+test_*.js
+search-*.js
+inspect-*.js
+print-*.js
+trace-*.js
+find-*.js
+explore-*.js
+dump-*.js
+analyze-*.js
+*.png

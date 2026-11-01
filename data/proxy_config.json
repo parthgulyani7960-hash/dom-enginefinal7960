@@ -1,0 +1,13 @@
+{
+  "enabled": false,
+  "protocol": "http",
+  "host": "",
+  "port": "",
+  "username": "",
+  "password": "",
+  "rawInput": "",
+  "lastTestedAt": null,
+  "lastTestedIp": null,
+  "lastLatencyMs": null,
+  "lastStatus": "NOT_TESTED"
+}
