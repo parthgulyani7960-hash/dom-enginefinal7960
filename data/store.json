@@ -63,7 +63,7 @@
       "cartId": "8891932046824263278",
       "accountType": "EXISTING_ACCOUNT",
       "category": "CATEGORY_FLAT_100",
-      "categoryName": "🔵 Party Repeat Order Tier",
+      "categoryName": "Party Repeat Order Tier",
       "couponCode": "PARTY",
       "cookies": [
         {
@@ -272,10 +272,10 @@
         "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..x_Dcc3Com6reep_0NxOvKA.GxsGWszZU4kHdd9SO9Ezm-f2QeJZCaMIbS09pJOU9CQxkVKkou7UTJL2qmfUUvZZwUuOPkAnOcpNSHzPY6paCQ_df1qrcoexfjHeQmH4IaNU3x6AeaO1hWKnutv0e1tMkWDdBeHFMelaV9Y9z6Mmv_EMJ3WZBpqPMjPY4h8Tj8YutOOnT7453UyjiMvQQkpb.chnFuoanUTLy-GdyjqWqb3T6h00SLtpJ1aRlswMooE4",
         "userId": "346377415"
       },
-      "pastOrdersCount": 2,
+      "pastOrdersCount": 3,
       "reorderItems": [],
       "status": "IDLE",
-      "totalOrdersPlaced": 4,
+      "totalOrdersPlaced": 5,
       "storedAt": "2026-11-01T13:35:39.834Z",
       "lastRefreshedAt": "2026-11-01T20:35:45.497Z",
       "accessTokenExpiresAt": "2026-11-01T21:35:45.497Z",
@@ -287,7 +287,7 @@
       "isCheesyRewards": true,
       "loyaltyProgram": "POTP2",
       "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)",
-      "activeOrderId": "DOM-ENG-345071",
+      "activeOrderId": null,
       "lastAssignedAt": "2026-11-01T20:35:45.107Z"
     },
     {
@@ -6421,7 +6421,8 @@
           "[02:06:54] [MIDDLEMAN-ENGINE] 🛡️ Verifying cart contents against customer order...",
           "[02:06:54] [MIDDLEMAN-ENGINE] Cart Contents: 0 item(s). Missing: 1, Rogue: 0",
           "[02:06:54] [MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: Cart verification failed: Ordered item(s) missing from Domino's cart: [Peppy Paneer]. Order blocked to prevent placing incomplete order.",
-          "[02:06:54] ❌ Domino's Placement Notice: Cart verification failed: Ordered item(s) missing from Domino's cart: [Peppy Paneer]. Order blocked to prevent placing incomplete order."
+          "[02:06:54] ❌ Domino's Placement Notice: Cart verification failed: Ordered item(s) missing from Domino's cart: [Peppy Paneer]. Order blocked to prevent placing incomplete order.",
+          "[02:06:54] Domino's session +91 9650146938 released back to pool."
         ],
         "estimatedDelivery": "45 mins",
         "error": "Cart verification failed: Ordered item(s) missing from Domino's cart: [Peppy Paneer]. Order blocked to prevent placing incomplete order."
@@ -6487,7 +6488,7 @@
         "verifiedAt": "2026-11-01T20:35:45.071Z"
       },
       "robot": {
-        "status": "BUILDING_CART",
+        "status": "ERROR",
         "assignedAccountId": "ACC-DOM-3155",
         "accountPhone": "+91 7888422429",
         "sessionPhone": "+91 7888422429",
@@ -6534,12 +6535,20 @@
           "[02:06:33] [MIDDLEMAN-ENGINE] ⚠️ Note: \"Farmhouse\" not clicked on menu page; checking cart...",
           "[02:06:33] [MIDDLEMAN-ENGINE] 📝 Closing search modal to uncover View Cart bar...",
           "[02:06:36] [MIDDLEMAN-ENGINE] 🛒 Navigating to Domino's Cart View...",
-          "[02:06:42] [MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = https://m.dominos.co.in/jfl-discovery-ui/en/pwa/home/63859, navigatedViaClick = true"
+          "[02:06:42] [MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = https://m.dominos.co.in/jfl-discovery-ui/en/pwa/home/63859, navigatedViaClick = true",
+          "[02:06:56] [MIDDLEMAN-ENGINE] 🔍 DOM Snapshot: wraps = 0, cards = 0, snippet = \"Test Customer Second Chandigarh 100/600 Delivery NOW Takeaway Select Store Dine-in Select Store Latest offers & new launches Order status notifications Faster app experience & more Download app for     Install Previously ordered items 1/10 Paneer Maxxx Makhani Fusion ₹299 Add + Chicken Keema & Onion\"",
+          "[02:06:56] [MIDDLEMAN-ENGINE] 🔍 Auditing cart items against customer order...",
+          "[02:06:56] [MIDDLEMAN-ENGINE] 🗑️ Removing unavailable items from cart...",
+          "[02:06:58] [MIDDLEMAN-ENGINE] 🛡️ Verifying cart contents against customer order...",
+          "[02:06:58] [MIDDLEMAN-ENGINE] Cart Contents: 0 item(s). Missing: 1, Rogue: 0",
+          "[02:06:58] [MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: Cart verification failed: Ordered item(s) missing from Domino's cart: [Farmhouse]. Order blocked to prevent placing incomplete order.",
+          "[02:06:58] ❌ Domino's Placement Notice: Cart verification failed: Ordered item(s) missing from Domino's cart: [Farmhouse]. Order blocked to prevent placing incomplete order."
         ],
-        "estimatedDelivery": "45 mins"
+        "estimatedDelivery": "45 mins",
+        "error": "Cart verification failed: Ordered item(s) missing from Domino's cart: [Farmhouse]. Order blocked to prevent placing incomplete order."
       },
       "createdAt": "2026-11-01T20:35:45.072Z",
-      "updatedAt": "2026-11-01T20:35:45.867Z"
+      "updatedAt": "2026-11-01T20:36:58.862Z"
     },
     {
       "id": "DOM-ENG-344877",
@@ -7281,8 +7290,13 @@
       "registeredAt": "2026-11-01T20:17:55.181Z",
       "status": "ACTIVE",
       "userId12": "546683990483",
+      "wallet": {
+        "balance": 0,
+        "currency": "INR"
+      },
       "walletBalance": 0,
-      "transactions": []
+      "transactions": [],
+      "savedAddresses": []
     }
   ],
   "notifications": [
@@ -7324,5 +7338,9 @@
     "USR-3532",
     "483522734315",
     "test.user.1793565403529@gmail.com"
+  ],
+  "deletedAccountIds": [
+    "TEST-ACC-DEL-1793566122448",
+    "9999000111"
   ]
 }

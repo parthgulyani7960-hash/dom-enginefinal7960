@@ -171,7 +171,8 @@ class DominosMenuService {
     try {
       const res = await fetch(url, { headers: DOMINOS_HEADERS });
       if (!res.ok) {
-        console.warn(`[DOMINOS-MENU] Store ${storeId} returned ${res.status}`);
+        console.warn(`[DOMINOS-MENU] Store ${storeId} returned ${res.status} (cached to prevent hammering)`);
+        storeMenuCache.set(cacheKey, { timestamp: Date.now(), data: null });
         return null;
       }
 
@@ -264,6 +265,7 @@ class DominosMenuService {
       return result;
     } catch (err) {
       console.error(`[DOMINOS-MENU] Error fetching store ${storeId} menu:`, err.message);
+      storeMenuCache.set(cacheKey, { timestamp: Date.now(), data: null });
       return null;
     }
   }

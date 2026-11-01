@@ -552,6 +552,11 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  if (pathname === '/favicon.ico') {
+    res.writeHead(204, { 'Content-Type': 'image/x-icon' });
+    return res.end();
+  }
+
   // --- API ROUTES ---
 
   // Public Maintenance Status Endpoint

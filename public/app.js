@@ -658,9 +658,6 @@ async function loadUserProfile() {
     updateUserNavIdentity();
   }
 }
-    console.warn('Profile load note:', err);
-  }
-}
 
 async function saveUserNameOnly() {
   const nameInput = document.getElementById('profUserNameInput');
