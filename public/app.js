@@ -1,5 +1,50 @@
 // Domino's Order Engine Platform Frontend - Pure Real Store Lock, Multi-Address & Real Domino's Catalog Engine
 
+// =========================================================================
+// CONSOLE PRIVACY & SECURITY GUARD (ANTI-LEAK ENFORCEMENT)
+// =========================================================================
+(function() {
+  if (typeof window === 'undefined') return;
+
+  function maskSensitive(val) {
+    if (typeof val === 'string') {
+      return val
+        .replace(/(\+?91[\s-]?)?([6-9]\d{1})\d{4}(\d{4})/g, '$1$2****$3')
+        .replace(/dom-admin-sec-[a-zA-Z0-9_-]+/g, '[PROTECTED_ADMIN_KEY]')
+        .replace(/(eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,})/g, '[REDACTED_JWT]');
+    }
+    if (val && typeof val === 'object') {
+      try {
+        const copy = Array.isArray(val) ? [...val] : { ...val };
+        if (copy.private_key) copy.private_key = '[REDACTED]';
+        if (copy.apiKey) copy.apiKey = '[REDACTED]';
+        if (copy.adminToken) copy.adminToken = '[REDACTED]';
+        if (copy.token && typeof copy.token === 'string') copy.token = '[REDACTED]';
+        return copy;
+      } catch (e) {
+        return '[Protected Object]';
+      }
+    }
+    return val;
+  }
+
+  const origLog = console.log;
+  const origWarn = console.warn;
+  const origError = console.error;
+
+  console.log = function(...args) { origLog.apply(console, args.map(maskSensitive)); };
+  console.warn = function(...args) { origWarn.apply(console, args.map(maskSensitive)); };
+  console.error = function(...args) { origError.apply(console, args.map(maskSensitive)); };
+
+  try {
+    Object.defineProperty(window, 'ADMIN_SECRET_KEY', {
+      get: () => '[PROTECTED_ADMIN_SECRET]',
+      set: () => false,
+      configurable: false
+    });
+  } catch (e) {}
+})();
+
 let catalog = { combos: [], menu: [] };
 let cart = [];
 
@@ -5641,7 +5686,13 @@ function updateUserNavIdentity() {
   if (!container) return;
 
   if (isUserLoggedIn()) {
+    const isAdmin = Boolean(currentUser.email && currentUser.email.toLowerCase() === 'parthgulyani7960@gmail.com' || currentUser.isAdmin || currentUser.role === 'ADMIN');
     container.innerHTML = `
+      ${isAdmin ? `
+        <a href="/admin" class="nav-admin-btn" title="Open Administrator Control Console" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: #38bdf8; border: 1.5px solid #0284c7; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 12px; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 10px rgba(56,189,248,0.25); transition: all 0.2s;">
+          <span>⚙️</span> <span>Admin Console</span>
+        </a>
+      ` : ''}
       <div class="user-identity-btn" id="userIdentityBtn" onclick="openUserProfileModal()" title="View Profile, Wallet & Saved Addresses" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: white; border: 1.5px solid var(--gray-300); padding: 5px 12px; border-radius: 20px; transition: all 0.2s;">
         <img src="${currentUser.picture || 'https://lh3.googleusercontent.com/a/default-user=s96-c'}" id="userAvatar" class="user-avatar" alt="User" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
         <span class="user-name" id="userNameLabel" style="font-weight: 800; font-size: 13px; color: #0f172a;">${currentUser.name || 'User'}</span>
@@ -5819,6 +5870,13 @@ async function handleGoogleCredentialResponse(response) {
     if (!res.ok) throw new Error(data.error);
 
     currentUser = { ...GUEST_USER, ...data.user, isGuest: false };
+    if (data.isAdmin || (currentUser.email && currentUser.email.toLowerCase() === 'parthgulyani7960@gmail.com')) {
+      currentUser.isAdmin = true;
+      currentUser.role = 'ADMIN';
+      if (data.adminToken) {
+        sessionStorage.setItem('dom_admin_token', data.adminToken);
+      }
+    }
     localStorage.setItem('dominos_user', JSON.stringify(currentUser));
     saveKnownGoogleAccount(currentUser);
     updateUserNavIdentity();
@@ -5841,6 +5899,13 @@ async function signInWithDeviceGoogleAccount(email, name, picture) {
     if (!res.ok) throw new Error(data.error);
 
     currentUser = { ...GUEST_USER, ...data.user, isGuest: false };
+    if (data.isAdmin || (currentUser.email && currentUser.email.toLowerCase() === 'parthgulyani7960@gmail.com')) {
+      currentUser.isAdmin = true;
+      currentUser.role = 'ADMIN';
+      if (data.adminToken) {
+        sessionStorage.setItem('dom_admin_token', data.adminToken);
+      }
+    }
     localStorage.setItem('dominos_user', JSON.stringify(currentUser));
     saveKnownGoogleAccount(currentUser);
     updateUserNavIdentity();

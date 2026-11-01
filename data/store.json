@@ -307,7 +307,9 @@
     "upiId": "dominos.pay@okhdfcbank",
     "payeeName": "Domino's Official Kitchen Outlet",
     "merchantCode": "DOM-5819",
-    "note": "Domino's Order Payment"
+    "note": "Domino's Order Payment",
+    "receiverUpiId": "dominos.pay@okhdfcbank",
+    "updatedAt": "2026-11-01T19:48:18.592Z"
   },
   "vouchers": [
     {
@@ -1672,12 +1674,12 @@
   "announcements": [],
   "tickets": [],
   "userProfile": {
-    "email": "parth.google@gmail.com",
-    "name": "Parth Sharma",
+    "email": "parthgulyani7960@gmail.com",
+    "name": "Parth Gulyani",
     "phone": "+91 7893618933",
     "phoneLocked": true,
-    "picture": "https://lh3.googleusercontent.com/a/default-user=s96-c",
-    "userId12": "948271035824",
+    "picture": "https://lh3.googleusercontent.com/a/admin-avatar",
+    "userId12": "591501648476",
     "wallet": {
       "balance": 0,
       "currency": "INR"
@@ -1715,6 +1717,40 @@
       },
       "transactions": [],
       "savedAddresses": []
+    },
+    {
+      "id": "USR-0426",
+      "userId12": "591501648476",
+      "name": "Parth Gulyani",
+      "email": "parthgulyani7960@gmail.com",
+      "googleId": "g-1793562498526",
+      "picture": "https://lh3.googleusercontent.com/a/admin-avatar",
+      "phone": "",
+      "phoneLocked": false,
+      "walletBalance": 0,
+      "savedAddresses": [],
+      "transactions": [],
+      "registeredAt": "2026-11-01T19:46:40.426Z",
+      "lastActive": "2026-11-01T19:48:18.526Z",
+      "status": "ACTIVE",
+      "role": "ADMIN",
+      "isAdmin": true
+    },
+    {
+      "id": "USR-0459",
+      "userId12": "819292137534",
+      "name": "Regular Customer",
+      "email": "regularcustomer99@gmail.com",
+      "googleId": "g-1793562498545",
+      "picture": "https://lh3.googleusercontent.com/a/cust-avatar",
+      "phone": "",
+      "phoneLocked": false,
+      "walletBalance": 0,
+      "savedAddresses": [],
+      "transactions": [],
+      "registeredAt": "2026-11-01T19:46:40.459Z",
+      "lastActive": "2026-11-01T19:48:18.545Z",
+      "status": "ACTIVE"
     }
   ],
   "notifications": [
@@ -1749,7 +1785,7 @@
   "maintenanceMode": {
     "active": false,
     "message": "Scheduled Maintenance: System upgrade in progress. Ordering paused.",
-    "until": "2026-11-01T19:36:18.516Z",
-    "updatedAt": "2026-11-01T19:06:18.536Z"
+    "until": "2026-11-01T20:16:52.610Z",
+    "updatedAt": "2026-11-01T19:46:52.632Z"
   }
 }

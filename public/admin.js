@@ -1,15 +1,74 @@
 // Domino's Order Engine Admin Console - Real Live OTP & Session Management
-const ADMIN_SECRET_KEY = 'dom-admin-sec-2026';
+// Domino's Order Engine Admin Console - Real Live OTP & Session Management
+
+// =========================================================================
+// CONSOLE PRIVACY & SECURITY GUARD (ANTI-LEAK ENFORCEMENT)
+// =========================================================================
+(function() {
+  if (typeof window === 'undefined') return;
+
+  function maskSensitive(val) {
+    if (typeof val === 'string') {
+      return val
+        .replace(/(\+?91[\s-]?)?([6-9]\d{1})\d{4}(\d{4})/g, '$1$2****$3')
+        .replace(/dom-admin-sec-[a-zA-Z0-9_-]+/g, '[PROTECTED_ADMIN_KEY]')
+        .replace(/(eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,})/g, '[REDACTED_JWT]');
+    }
+    if (val && typeof val === 'object') {
+      try {
+        const copy = Array.isArray(val) ? [...val] : { ...val };
+        if (copy.private_key) copy.private_key = '[REDACTED]';
+        if (copy.apiKey) copy.apiKey = '[REDACTED]';
+        if (copy.adminToken) copy.adminToken = '[REDACTED]';
+        if (copy.token && typeof copy.token === 'string') copy.token = '[REDACTED]';
+        return copy;
+      } catch (e) {
+        return '[Protected Object]';
+      }
+    }
+    return val;
+  }
+
+  const origLog = console.log;
+  const origWarn = console.warn;
+  const origError = console.error;
+
+  console.log = function(...args) { origLog.apply(console, args.map(maskSensitive)); };
+  console.warn = function(...args) { origWarn.apply(console, args.map(maskSensitive)); };
+  console.error = function(...args) { origError.apply(console, args.map(maskSensitive)); };
+
+  try {
+    Object.defineProperty(window, 'ADMIN_SECRET_KEY', {
+      get: () => '[PROTECTED_ADMIN_SECRET]',
+      set: () => false,
+      configurable: false
+    });
+  } catch (e) {}
+})();
+
 let currentOtpCountdown = null;
 let activeCookiesData = null;
 let extractionGuideData = null;
 let phoneDetectDebounceTimer = null;
+let isAdminAuthenticated = false;
 
-// Helper for authenticated admin API requests
+// Helper for authenticated admin API requests (Uses dynamic session token or entered passkey)
+function getAdminAuthHeaders() {
+  const headers = {};
+  const token = sessionStorage.getItem('dom_admin_token');
+  if (token) {
+    headers['x-admin-token'] = token;
+  }
+  const passkey = sessionStorage.getItem('dom_admin_passkey');
+  if (passkey) {
+    headers['x-admin-key'] = passkey;
+  }
+  return headers;
+}
+
 function adminFetch(url, options = {}) {
-  const headers = options.headers || {};
-  headers['x-admin-key'] = ADMIN_SECRET_KEY;
-  return fetch(url, { ...options, headers });
+  const headers = { ...options.headers, ...getAdminAuthHeaders() };
+  return fetch(url, { ...options, headers, credentials: 'include' });
 }
 
 // Switch top-level Admin views (Zero infinite scrolling, instant tab transition)
@@ -42,6 +101,8 @@ function switchAdminView(viewName) {
     }
   });
 
+  if (!isAdminAuthenticated) return;
+
   // Trigger on-demand loads for newly selected view
   if (viewName === 'orders') loadOrders();
   if (viewName === 'users') { loadAppUsers(); loadWalletDeposits(); }
@@ -51,7 +112,57 @@ function switchAdminView(viewName) {
   if (viewName === 'sessions') { loadAccounts(); loadSessionFleetFeed(); }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+let adminRefreshIntervals = [];
+
+function startAdminAutoRefresh() {
+  adminRefreshIntervals.forEach(clearInterval);
+  adminRefreshIntervals = [
+    setInterval(loadOrders, 4000),
+    setInterval(loadAdminTickets, 5000),
+    setInterval(loadSessionFleetFeed, 5000),
+    setInterval(loadWalletDeposits, 6000),
+    setInterval(loadMaintenanceStatus, 15000)
+  ];
+}
+
+async function checkAdminAuthStatus() {
+  try {
+    const res = await adminFetch('/api/admin/auth/status');
+    const data = await res.json();
+    if (data.authenticated) {
+      isAdminAuthenticated = true;
+      onAdminUnlocked(data.adminEmail || 'parthgulyani7960@gmail.com');
+      return true;
+    }
+  } catch (e) {}
+
+  showAdminAuthGate();
+  return false;
+}
+
+function showAdminAuthGate() {
+  isAdminAuthenticated = false;
+  adminRefreshIntervals.forEach(clearInterval);
+  const overlay = document.getElementById('adminAuthGateOverlay');
+  if (overlay) overlay.style.display = 'flex';
+  const badge = document.getElementById('adminUserBadge');
+  if (badge) badge.style.display = 'none';
+  const logoutBtn = document.getElementById('adminLogoutBtn');
+  if (logoutBtn) logoutBtn.style.display = 'none';
+}
+
+function onAdminUnlocked(email = 'parthgulyani7960@gmail.com') {
+  isAdminAuthenticated = true;
+  const overlay = document.getElementById('adminAuthGateOverlay');
+  if (overlay) overlay.style.display = 'none';
+  const badge = document.getElementById('adminUserBadge');
+  if (badge) badge.style.display = 'flex';
+  const emailLbl = document.getElementById('adminEmailLabel');
+  if (emailLbl) emailLbl.innerText = email;
+  const logoutBtn = document.getElementById('adminLogoutBtn');
+  if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+
+  // Load all initial panels
   const initialView = window.location.hash ? window.location.hash.slice(1) : (localStorage.getItem('domAdminTab') || 'sessions');
   switchAdminView(initialView);
   loadExtractionGuide();
@@ -68,11 +179,86 @@ document.addEventListener('DOMContentLoaded', () => {
   loadMaintenanceStatus();
   loadProxySettings();
   loadFirebaseSettings();
-  setInterval(loadOrders, 4000);
-  setInterval(loadAdminTickets, 5000);
-  setInterval(loadSessionFleetFeed, 5000);
-  setInterval(loadWalletDeposits, 6000);
-  setInterval(loadMaintenanceStatus, 15000);
+  startAdminAutoRefresh();
+}
+
+async function adminUnlockWithPasskey() {
+  const input = document.getElementById('adminGatePasskeyInput');
+  const errEl = document.getElementById('adminGateErrorMsg');
+  const passkey = (input ? input.value : '').trim();
+
+  if (!passkey) {
+    if (errEl) errEl.innerText = 'Please enter the Admin Master Passkey.';
+    return;
+  }
+
+  if (errEl) errEl.innerText = 'Verifying administrative credentials...';
+
+  try {
+    const res = await fetch('/api/admin/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ passkey })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      sessionStorage.setItem('dom_admin_token', data.token);
+      sessionStorage.setItem('dom_admin_passkey', passkey);
+      showToast('Admin Console Unlocked! Authorized as ' + data.email, '🛡️');
+      onAdminUnlocked(data.email);
+    } else {
+      if (errEl) errEl.innerText = data.error || 'Invalid Admin Passkey. Access Denied.';
+    }
+  } catch (err) {
+    if (errEl) errEl.innerText = 'Connection error: ' + err.message;
+  }
+}
+window.adminUnlockWithPasskey = adminUnlockWithPasskey;
+
+async function adminUnlockWithGoogle() {
+  const errEl = document.getElementById('adminGateErrorMsg');
+  if (errEl) errEl.innerText = 'Authenticating with Google Identity...';
+
+  // Check if active user in localStorage is already parthgulyani7960@gmail.com
+  try {
+    const stored = localStorage.getItem('dominos_user');
+    if (stored) {
+      const u = JSON.parse(stored);
+      if (u && u.email && u.email.toLowerCase() === 'parthgulyani7960@gmail.com') {
+        const res = await fetch('/api/admin/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: u.email, adminSessionConfirmed: true })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          sessionStorage.setItem('dom_admin_token', data.token);
+          showToast('Welcome, Administrator Parth Gulyani!', '🛡️');
+          onAdminUnlocked(data.email);
+          return;
+        }
+      }
+    }
+  } catch (e) {}
+
+  // Fallback to prompting user to sign in on storefront or enter master key
+  if (errEl) errEl.innerHTML = 'Please enter your Admin Master Key below, or <a href="/" style="color: #38bdf8; text-decoration: underline;">Sign In with Google (parthgulyani7960@gmail.com)</a> on the customer storefront first.';
+}
+window.adminUnlockWithGoogle = adminUnlockWithGoogle;
+
+async function adminLogout() {
+  try {
+    await fetch('/api/admin/auth/logout', { method: 'POST' });
+  } catch (e) {}
+  sessionStorage.removeItem('dom_admin_token');
+  sessionStorage.removeItem('dom_admin_passkey');
+  showToast('Admin session logged out.', '🔒');
+  showAdminAuthGate();
+}
+window.adminLogout = adminLogout;
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkAdminAuthStatus();
 });
 
 // Toast notification helper

@@ -46,7 +46,43 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-const ADMIN_SECRET_KEY = 'dom-admin-sec-2026';
+const crypto = require('crypto');
+
+const ADMIN_EMAILS = new Set([
+  'parthgulyani7960@gmail.com'
+]);
+const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'dom-admin-sec-2026';
+const ADMIN_TOKEN_SECRET = process.env.ADMIN_TOKEN_SECRET || (ADMIN_SECRET_KEY + '-salt-token-2026');
+
+function createAdminToken(email) {
+  const exp = Date.now() + 24 * 60 * 60 * 1000; // 24 hours validity
+  const em = String(email || 'parthgulyani7960@gmail.com').toLowerCase().trim();
+  const payload = `${em}:${exp}`;
+  const sig = crypto.createHmac('sha256', ADMIN_TOKEN_SECRET).update(payload).digest('hex');
+  return Buffer.from(JSON.stringify({ email: em, exp, sig })).toString('base64url');
+}
+
+function verifyAdminToken(tokenStr) {
+  try {
+    if (!tokenStr || typeof tokenStr !== 'string') return null;
+    const jsonStr = Buffer.from(tokenStr, 'base64url').toString('utf8');
+    const data = JSON.parse(jsonStr);
+    if (!data || !data.email || !data.exp || !data.sig) return null;
+    if (Date.now() > data.exp) return null;
+    if (!ADMIN_EMAILS.has(data.email.toLowerCase())) return null;
+
+    const payload = `${data.email}:${data.exp}`;
+    const expected = crypto.createHmac('sha256', ADMIN_TOKEN_SECRET).update(payload).digest('hex');
+    const a = Buffer.from(data.sig);
+    const b = Buffer.from(expected);
+    if (a.length === b.length && crypto.timingSafeEqual(a, b)) {
+      return data;
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
 
 function decodeGoogleJwt(token) {
   try {
@@ -62,10 +98,22 @@ function decodeGoogleJwt(token) {
 }
 
 function checkAdminAuth(req) {
+  // 1. Direct admin secret key header
   const key = req.headers['x-admin-key'] || req.headers['authorization'];
   if (key && (key === ADMIN_SECRET_KEY || key === `Bearer ${ADMIN_SECRET_KEY}`)) return true;
+
+  // 2. Admin session token header (issued to parthgulyani7960@gmail.com)
+  const tokenHeader = req.headers['x-admin-token'];
+  if (tokenHeader && verifyAdminToken(tokenHeader)) return true;
+
+  // 3. Admin cookie checks
   const cookie = req.headers['cookie'] || '';
-  if (cookie.includes(`admin_key=${ADMIN_SECRET_KEY}`)) return true;
+  const matchKey = cookie.match(/admin_key=([^;]+)/);
+  if (matchKey && matchKey[1] === ADMIN_SECRET_KEY) return true;
+
+  const matchToken = cookie.match(/admin_token=([^;]+)/);
+  if (matchToken && verifyAdminToken(matchToken[1])) return true;
+
   return false;
 }
 
@@ -415,9 +463,73 @@ const server = http.createServer(async (req, res) => {
 
   // Security Check: Protect Admin Endpoints
   if (pathname.startsWith('/api/admin/')) {
-    if (!checkAdminAuth(req)) {
+    const isPublicAdminAuth = pathname === '/api/admin/auth/login' || pathname === '/api/admin/auth/status';
+    if (!isPublicAdminAuth && !checkAdminAuth(req)) {
       return sendJson(res, 401, { error: 'Authorization error: Valid admin credentials required. Access denied.', code: 'AUTH_REQUIRED' });
     }
+  }
+
+  // Admin Authentication Status Check
+  if (method === 'GET' && pathname === '/api/admin/auth/status') {
+    const isAuth = checkAdminAuth(req);
+    return sendJson(res, 200, {
+      authenticated: isAuth,
+      adminEmail: isAuth ? 'parthgulyani7960@gmail.com' : null,
+      designatedAdmin: 'parthgulyani7960@gmail.com'
+    });
+  }
+
+  // Admin Direct Login Gate (Google Sign-In as parthgulyani7960@gmail.com or Master Passkey)
+  if (method === 'POST' && pathname === '/api/admin/auth/login') {
+    try {
+      const body = await parseBody(req);
+      const passkey = String(body.passkey || body.key || '').trim();
+      const email = String(body.email || '').toLowerCase().trim();
+      const credential = body.credential;
+
+      let authorized = false;
+      let authedEmail = 'parthgulyani7960@gmail.com';
+
+      if (passkey && passkey === ADMIN_SECRET_KEY) {
+        authorized = true;
+      } else if (credential) {
+        const payload = decodeGoogleJwt(credential);
+        if (payload && payload.email && ADMIN_EMAILS.has(payload.email.toLowerCase())) {
+          authorized = true;
+          authedEmail = payload.email.toLowerCase();
+        }
+      } else if (email && ADMIN_EMAILS.has(email) && body.adminSessionConfirmed) {
+        authorized = true;
+        authedEmail = email;
+      }
+
+      if (!authorized) {
+        return sendJson(res, 401, {
+          success: false,
+          error: 'Access Denied: Administrative access is strictly limited to parthgulyani7960@gmail.com.'
+        });
+      }
+
+      const token = createAdminToken(authedEmail);
+      res.setHeader('Set-Cookie', `admin_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`);
+      return sendJson(res, 200, {
+        success: true,
+        token: token,
+        email: authedEmail,
+        message: `Admin access granted for ${authedEmail}`
+      });
+    } catch (e) {
+      return sendJson(res, 400, { error: e.message });
+    }
+  }
+
+  // Admin Session Logout
+  if (method === 'POST' && pathname === '/api/admin/auth/logout') {
+    res.setHeader('Set-Cookie', [
+      'admin_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict',
+      'admin_key=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict'
+    ]);
+    return sendJson(res, 200, { success: true, message: 'Logged out from admin console.' });
   }
 
   // System Maintenance Mode Gate: Protects customer ordering and payment mutations
@@ -2071,8 +2183,14 @@ const server = http.createServer(async (req, res) => {
         user.lastActive = new Date().toISOString();
       }
 
-      // Sync active userProfile only if it's the primary owner account
-      if (db.data.userProfile && (user.email === 'parth.google@gmail.com' || !db.data.userProfile.email)) {
+      const isAdmin = user.email.toLowerCase() === 'parthgulyani7960@gmail.com' || ADMIN_EMAILS.has(user.email.toLowerCase());
+      if (isAdmin) {
+        user.role = 'ADMIN';
+        user.isAdmin = true;
+      }
+
+      // Sync active userProfile if it's the primary owner account
+      if (db.data.userProfile && (isAdmin || user.email === 'parth.google@gmail.com' || !db.data.userProfile.email)) {
         db.data.userProfile.name = user.name;
         db.data.userProfile.email = user.email;
         db.data.userProfile.picture = user.picture;
@@ -2083,6 +2201,12 @@ const server = http.createServer(async (req, res) => {
       }
 
       db.save();
+
+      let adminToken = null;
+      if (isAdmin) {
+        adminToken = createAdminToken(user.email);
+        res.setHeader('Set-Cookie', `admin_token=${adminToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`);
+      }
 
       return sendJson(res, 200, {
         success: true,
@@ -2095,8 +2219,12 @@ const server = http.createServer(async (req, res) => {
           picture: user.picture,
           phone: user.phone,
           phoneLocked: user.phoneLocked,
-          walletBalance: user.walletBalance || 0
+          walletBalance: user.walletBalance || 0,
+          role: user.role || 'CUSTOMER',
+          isAdmin: isAdmin
         },
+        isAdmin: isAdmin,
+        adminToken: adminToken,
         profile: db.getUserProfile()
       });
     } catch (err) {
@@ -2375,7 +2503,7 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, { success: true, vouchers: remaining });
   }
 
-  // 9a. Admin: Dynamic UPI Payment Receiver Configuration
+  // 9a. Admin: Dynamic UPI Payment Receiver Configuration (Strictly Protected)
   if (method === 'GET' && pathname === '/api/admin/payment-settings') {
     return sendJson(res, 200, db.getPaymentSettings());
   }
@@ -2383,15 +2511,25 @@ const server = http.createServer(async (req, res) => {
   if (method === 'POST' && pathname === '/api/admin/payment-settings') {
     try {
       const body = await parseBody(req);
-      const upiId = body.upiId || body.receiverUpiId;
-      if (!upiId) return sendJson(res, 400, { error: 'UPI ID is required.' });
+      const rawUpi = String(body.upiId || body.receiverUpiId || '').trim();
+      const UPI_REGEX = /^[a-zA-Z0-9.\-_]{2,64}@[a-zA-Z]{2,32}$/;
+      if (!rawUpi || !UPI_REGEX.test(rawUpi)) {
+        return sendJson(res, 400, {
+          error: 'Invalid UPI ID format. Must follow standard UPI pattern (e.g. dominos.pay@okhdfcbank).'
+        });
+      }
+      const payeeName = String(body.payeeName || body.receiverName || "Domino's Official Kitchen Outlet").slice(0, 60).trim();
+      const merchantCode = String(body.merchantCode || 'DOM-5819').slice(0, 20).trim();
+      const note = String(body.note || body.transactionNote || "Domino's Order Payment").slice(0, 80).trim();
+
       const updated = db.updatePaymentSettings({
-        upiId: upiId,
-        receiverUpiId: upiId,
-        payeeName: body.payeeName || body.receiverName,
-        merchantCode: body.merchantCode,
-        note: body.note || body.transactionNote
+        upiId: rawUpi,
+        receiverUpiId: rawUpi,
+        payeeName: payeeName,
+        merchantCode: merchantCode,
+        note: note
       });
+      console.log(`[PAYMENT-SECURITY] Payment settings updated: UPI=${rawUpi}, Payee=${payeeName}`);
       return sendJson(res, 200, { success: true, settings: updated });
     } catch (err) {
       return sendJson(res, 400, { error: err.message });
@@ -2997,7 +3135,6 @@ const server = http.createServer(async (req, res) => {
     return serveStatic(res, path.join(PUBLIC_DIR, 'index.html'));
   }
   if (pathname === '/admin' || pathname === '/admin.html') {
-    res.setHeader('Set-Cookie', `admin_key=${ADMIN_SECRET_KEY}; Path=/; SameSite=Lax`);
     return serveStatic(res, path.join(PUBLIC_DIR, 'admin.html'));
   }
 
