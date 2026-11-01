@@ -304,37 +304,66 @@ function renderCombos(combos) {
   const container = document.getElementById('combosGrid');
   if (!container) return;
   if (!combos || combos.length === 0) {
-    container.innerHTML = '<p>No combos currently available.</p>';
+    container.innerHTML = '<p style="padding: 20px; color: var(--gray-600);">No combos currently available.</p>';
     return;
   }
 
-  container.innerHTML = combos.map(combo => `
-    <div class="card">
-      <div class="card-img-wrap">
-        <img src="${combo.image}" class="card-img" alt="${combo.name}" loading="lazy" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
-        <span class="badge-tag">${combo.badge}</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">${combo.name}</h3>
-        <p class="card-desc">${combo.description}</p>
-        
-        <div class="combo-includes">
-          <strong>Includes:</strong>
-          <ul style="padding-left: 16px; margin-top: 4px;">
-            ${combo.includedItems.map(item => `<li>${item.qty}x ${item.name}</li>`).join('')}
-          </ul>
-        </div>
+  container.innerHTML = combos.map(combo => {
+    const isAvail = combo.isAvailable !== false;
+    const availClass = isAvail ? '' : 'unavailable';
+    const hasDiscount = combo.originalPrice && combo.originalPrice > combo.price;
+    const discountPct = hasDiscount ? Math.round(((combo.originalPrice - combo.price) / combo.originalPrice) * 100) : 0;
+    
+    // Check if this combo is in user cart
+    const cartCombo = cart.find(c => c.id === combo.id);
+    const comboQty = cartCombo ? (cartCombo.quantity || 0) : 0;
 
-        <div class="card-footer">
-          <div class="price-wrap">
-            <span class="price-current">₹${combo.price}</span>
-            <span class="price-original">₹${combo.originalPrice}</span>
+    let actionBtnHtml = '';
+    if (!isAvail) {
+      actionBtnHtml = `<button class="btn-add btn-disabled" disabled title="Unavailable at your area">Unavailable</button>`;
+    } else if (comboQty > 0) {
+      actionBtnHtml = `
+        <div class="card-qty-stepper">
+          <button type="button" class="btn-qty-minus" onclick="changeQty('${combo.id}', -1)" aria-label="Decrease quantity">−</button>
+          <span class="card-qty-val">${comboQty}</span>
+          <button type="button" class="btn-qty-plus" onclick="changeQty('${combo.id}', 1)" aria-label="Increase quantity">+</button>
+        </div>
+      `;
+    } else {
+      actionBtnHtml = `<button class="btn-add" onclick="addComboToCart('${combo.id}')">+ Add Combo</button>`;
+    }
+
+    return `
+      <div class="card ${availClass}" id="card-${combo.id}">
+        <div class="card-img-wrap">
+          <img src="${combo.image}" class="card-img" alt="${combo.name}" loading="lazy" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
+          <span class="badge-tag">${combo.badge || combo.tag || 'Special Deal'}</span>
+          ${hasDiscount ? `<span class="badge-discount-float">${discountPct}% OFF</span>` : ''}
+          ${!isAvail ? `<span class="badge-unavailable-tag">🚫 Unavailable</span>` : ''}
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">${combo.name}</h3>
+          <p class="card-desc">${combo.description}</p>
+          
+          <div class="combo-includes">
+            <strong>Includes:</strong>
+            <ul style="padding-left: 16px; margin-top: 4px;">
+              ${(combo.includedItems || []).map(item => `<li>${item.qty}x ${item.name}</li>`).join('')}
+            </ul>
           </div>
-          <button class="btn-add" onclick="addComboToCart('${combo.id}')">+ Add Combo</button>
+
+          <div class="card-footer">
+            <div class="price-wrap">
+              <span class="price-current">₹${combo.price}</span>
+              ${hasDiscount ? `<span class="price-original">₹${combo.originalPrice}</span>` : ''}
+              ${hasDiscount ? `<span class="discount-pill">${discountPct}% OFF</span>` : ''}
+            </div>
+            ${actionBtnHtml}
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function renderMenu(items) {
@@ -354,14 +383,43 @@ function renderMenu(items) {
   container.innerHTML = items.map(item => {
     const isAvail = item.isAvailable !== false;
     const availClass = isAvail ? '' : 'unavailable';
-    const originalPriceHtml = item.originalPrice && item.originalPrice > item.price
-      ? `<span class="price-original">₹${item.originalPrice}</span>`
+    const hasDiscount = item.originalPrice && item.originalPrice > item.price;
+    const discountPct = hasDiscount ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) : 0;
+    const originalPriceHtml = hasDiscount
+      ? `<span class="price-original">₹${item.originalPrice}</span><span class="discount-pill">${item.discount || discountPct + '% OFF'}</span>`
       : '';
 
     const imgUrl = item.imageUrl || item.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
     const isVegFood = item.isVeg !== false && item.type !== 'NON-VEG';
     const typeLabel = isVegFood ? 'VEG' : 'NON-VEG';
     const canCustomize = (item.sizes && Object.keys(item.sizes).length > 1) || (item.allowedSizes && item.allowedSizes.length > 1);
+
+    // Serves badge
+    let servesLabel = '';
+    if (item.category === 'Pizza Mania') {
+      servesLabel = '<span class="serves-pill">Serves 1</span>';
+    } else if (item.category === 'Veg Pizza' || item.category === 'Non-Veg Pizza') {
+      servesLabel = '<span class="serves-pill">Regular/Med/Large</span>';
+    }
+
+    // Check if this item is currently in user's cart
+    const cartItem = cart.find(c => c.id === item.id || (c.dominosCode && c.dominosCode === item.dominosCode));
+    const cartQty = cartItem ? (cartItem.quantity || 0) : 0;
+
+    let actionBtnHtml = '';
+    if (!isAvail) {
+      actionBtnHtml = `<button class="btn-add btn-disabled" disabled title="Unavailable at your nearest Domino's kitchen">Unavailable</button>`;
+    } else if (cartQty > 0) {
+      actionBtnHtml = `
+        <div class="card-qty-stepper">
+          <button type="button" class="btn-qty-minus" onclick="changeCardItemQty('${item.id}', -1)" aria-label="Decrease quantity">−</button>
+          <span class="card-qty-val">${cartQty}</span>
+          <button type="button" class="btn-qty-plus" onclick="changeCardItemQty('${item.id}', 1)" aria-label="Increase quantity">+</button>
+        </div>
+      `;
+    } else {
+      actionBtnHtml = `<button class="btn-add" onclick="addItemToCart('${item.id}')">${canCustomize ? '+ Customize' : '+ Add'}</button>`;
+    }
 
     return `
       <div class="card ${availClass}" id="card-${item.id}">
@@ -371,6 +429,7 @@ function renderMenu(items) {
             <span class="${isVegFood ? 'dot-veg' : 'dot-nonveg'}"></span>
             <span>${typeLabel}</span>
           </div>
+          ${hasDiscount ? `<span class="badge-discount-float">${discountPct}% OFF</span>` : ''}
           ${!isAvail ? `<span class="badge-unavailable-tag" title="${item.unavailableReason || 'Unavailable at your area'}">🚫 Unavailable</span>` : ''}
         </div>
         <div class="card-body">
@@ -378,7 +437,7 @@ function renderMenu(items) {
             <h3 class="card-title">${item.name}</h3>
             <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
               <span style="font-size: 10px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">${item.category}</span>
-              ${canCustomize ? '<span style="font-size: 9px; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 1px 5px; border-radius: 4px;">Customizable</span>' : (item.category === 'Pizza Mania' ? '<span style="font-size: 9px; font-weight: 700; color: #7c2d12; background: #ffedd5; padding: 1px 5px; border-radius: 4px;">Regular Only</span>' : '')}
+              ${servesLabel}
             </div>
           </div>
           <p class="card-desc">${item.description || ''}</p>
@@ -390,15 +449,21 @@ function renderMenu(items) {
               <span class="price-current">₹${item.price}</span>
               ${originalPriceHtml}
             </div>
-            ${isAvail 
-              ? `<button class="btn-add" onclick="addItemToCart('${item.id}')">${canCustomize ? '+ Customize' : '+ Add'}</button>`
-              : `<button class="btn-add btn-disabled" disabled title="Unavailable at your nearest Domino's kitchen">Unavailable</button>`
-            }
+            ${actionBtnHtml}
           </div>
         </div>
       </div>
     `;
   }).join('');
+}
+
+function changeCardItemQty(itemId, delta) {
+  const itemInCart = cart.find(c => c.id === itemId || (c.dominosCode && c.dominosCode === itemId));
+  if (itemInCart) {
+    changeQty(itemInCart.id, delta);
+  } else if (delta > 0) {
+    addItemToCart(itemId);
+  }
 }
 
 function applyCurrentFilters() {
@@ -1683,6 +1748,7 @@ function addComboToCart(comboId) {
 
   updateCartBadge();
   renderFloatingCartBar();
+  applyCurrentFilters();
   showToastNotice(`Added ${combo.name} to cart!`, '🍕');
 }
 
@@ -1974,7 +2040,11 @@ function calculateCustomizationPrice() {
 function updateCustomizationTotalPrice() {
   const total = calculateCustomizationPrice();
   const el = document.getElementById('customTotalPrice');
-  if (el) el.innerText = `₹${total}`;
+  if (el) {
+    const origPrice = Math.round((total * 1.25) / 10) * 10 - 1;
+    const saveAmt = origPrice - total;
+    el.innerHTML = `₹${total} <span style="font-size: 13px; color: #94a3b8; text-decoration: line-through; font-weight: 500; margin-left: 6px;">₹${origPrice}</span> <span style="font-size: 11px; background: #dcfce7; color: #15803d; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">Save ₹${saveAmt}</span>`;
+  }
 }
 
 function confirmAddCustomizedPizzaToCart() {
@@ -2010,6 +2080,7 @@ function confirmAddCustomizedPizzaToCart() {
   closeModal('pizzaCustomizationModal');
   updateCartBadge();
   renderFloatingCartBar();
+  applyCurrentFilters();
   showToastNotice(`Added ${currentCustomizingItem.name} (${selectedPizzaSize}) to cart!`, '🍕');
 }
 
@@ -2061,6 +2132,7 @@ function addItemToCart(itemId) {
 
   updateCartBadge();
   renderFloatingCartBar();
+  applyCurrentFilters();
   showToastNotice(`Added ${item.name} to cart!`, '🍕');
 }
 
@@ -2075,6 +2147,7 @@ function changeQty(itemId, delta) {
 
   updateCartBadge();
   renderCartDrawer();
+  applyCurrentFilters();
 }
 
 function removeFromCart(itemId) {
@@ -2083,6 +2156,7 @@ function removeFromCart(itemId) {
   cart = cart.filter(i => i.id !== itemId);
   updateCartBadge();
   renderCartDrawer();
+  applyCurrentFilters();
   showToastNotice(`Removed ${name} from cart.`, '🗑️');
 }
 
@@ -2093,6 +2167,7 @@ function clearEntireCart() {
     appliedCartPromo = null;
     updateCartBadge();
     renderCartDrawer(false);
+    applyCurrentFilters();
     showToastNotice('Cart has been cleared.', '🗑️');
   }
 }
@@ -2101,6 +2176,8 @@ function updateCartBadge() {
   const count = cart.reduce((acc, i) => acc + (i.quantity || 1), 0);
   const badgeEl = document.getElementById('cartCount');
   if (badgeEl) badgeEl.innerText = count;
+  const mbBadgeEl = document.getElementById('mbCartCount');
+  if (mbBadgeEl) mbBadgeEl.innerText = count;
   renderFloatingCartBar();
 }
 
@@ -5701,6 +5778,8 @@ function updateUserNavIdentity() {
         <span>🚪</span> <span>Log Out</span>
       </button>
     `;
+    const mbLabel = document.getElementById('mbNavAccountLabel');
+    if (mbLabel) mbLabel.innerText = (currentUser.name || 'Account').split(' ')[0];
   } else {
     container.innerHTML = `
       <button class="nav-btn-google-auth" id="btnNavGoogleSignIn" onclick="openGoogleAuthModal()" title="Sign In or Register with Google" style="background: white; border: 1.5px solid #4285f4; color: #1e3a8a; padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2); transition: all 0.2s;">
@@ -5713,6 +5792,8 @@ function updateUserNavIdentity() {
         <span>Sign In with Google</span>
       </button>
     `;
+    const mbLabel = document.getElementById('mbNavAccountLabel');
+    if (mbLabel) mbLabel.innerText = 'Sign In';
   }
 }
 window.updateUserNavIdentity = updateUserNavIdentity;
@@ -5984,3 +6065,36 @@ function showSystemInfo(topic) {
   alert(`${item.title}\n\n${item.body}`);
 }
 window.showSystemInfo = showSystemInfo;
+
+// Mobile navigation and touch interaction helpers
+function scrollToMenu() {
+  const el = document.getElementById('menuSection') || document.querySelector('.tabs-container');
+  if (el) {
+    const yOffset = -70;
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+}
+window.scrollToMenu = scrollToMenu;
+
+function focusSearchInput() {
+  const el = document.getElementById('menuSearchInput');
+  if (el) {
+    const yOffset = -80;
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    setTimeout(() => {
+      try { el.focus(); } catch (e) {}
+    }, 250);
+  }
+}
+window.focusSearchInput = focusSearchInput;
+
+function handleMobileAccountClick() {
+  if (isUserLoggedIn()) {
+    openUserProfileModal();
+  } else {
+    openGoogleAuthModal();
+  }
+}
+window.handleMobileAccountClick = handleMobileAccountClick;

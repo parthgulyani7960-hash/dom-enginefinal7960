@@ -73,7 +73,7 @@ function adminFetch(url, options = {}) {
 
 // Switch top-level Admin views (Zero infinite scrolling, instant tab transition)
 function switchAdminView(viewName) {
-  const views = ['sessions', 'orders', 'users', 'support', 'vouchers', 'alerts'];
+  const views = ['sessions', 'orders', 'users', 'support', 'vouchers', 'alerts', 'menu'];
   if (!views.includes(viewName)) viewName = 'sessions';
 
   // Persist selection
@@ -110,6 +110,7 @@ function switchAdminView(viewName) {
   if (viewName === 'vouchers') { loadVouchers(); loadPaymentReceiverSettings(); }
   if (viewName === 'alerts') { loadNotifications(); loadMaintenanceStatus(); loadProxySettings(); loadFirebaseSettings(); }
   if (viewName === 'sessions') { loadAccounts(); loadSessionFleetFeed(); }
+  if (viewName === 'menu') { loadAdminMenu(); }
 }
 
 let adminRefreshIntervals = [];
@@ -3861,8 +3862,404 @@ function openAdminInfoModal(topic) {
       </ol>
       <button type="button" class="btn-primary" onclick="closeModal('adminInfoModal')" style="width: 100%; padding: 10px; margin-top: 14px; background: #0066a3; cursor: pointer;">Got It</button>
     `;
+  } else if (topic === 'menu') {
+    title.innerHTML = 'ℹ️ Domino\'s Menu Catalog &amp; Real Pricing';
+    body.innerHTML = `
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+        <strong style="color: #0f172a; font-size: 13px;">🍕 Menu Catalog &amp; Slashed Pricing Engine</strong>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #475569;">
+          Controls all 150+ official Domino's India menu items, real offer prices, slashed/cutted MRPs, and stock availability.
+        </p>
+      </div>
+      <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+        <li><strong>Real Pricing:</strong> Offer price is the exact amount charged to customer carts.</li>
+        <li><strong>Slashed / Cutted MRP:</strong> Shown with a strikethrough (e.g. ~~₹299~~) to give users authentic Domino's discounts.</li>
+        <li><strong>Instant 1-Click Save:</strong> Edit Offer Price or Slashed MRP directly in the table and click <code>Save</code>.</li>
+        <li><strong>Stock Availability:</strong> Toggle between 🟢 In Stock and 🔴 Out of Stock anytime.</li>
+      </ol>
+      <button type="button" class="btn-primary" onclick="closeModal('adminInfoModal')" style="width: 100%; padding: 10px; margin-top: 14px; background: #0066a3; cursor: pointer;">Got It</button>
+    `;
   }
   openModal('adminInfoModal');
 }
 window.openAdminInfoModal = openAdminInfoModal;
 window.showAdminSystemInfo = openAdminInfoModal;
+
+// =========================================================================
+// 8. ADMIN MENU CATALOG & REAL PRICING MANAGEMENT ENGINE
+// =========================================================================
+
+let adminMenuCatalog = [];
+
+async function loadAdminMenu() {
+  try {
+    const res = await fetch('/api/admin/menu', {
+      headers: getAdminHeaders()
+    });
+    if (!res.ok) {
+      if (res.status === 401) {
+        showToastNotice('Session expired. Please re-authenticate.', '🔒');
+      }
+      return;
+    }
+    const data = await res.json();
+    adminMenuCatalog = data.menu || [];
+
+    // Update navigation badge
+    const navBadge = document.getElementById('navBadgeMenu');
+    if (navBadge) navBadge.innerText = adminMenuCatalog.length;
+
+    // Update stat chips
+    updateAdminMenuStats(adminMenuCatalog);
+
+    // Render table
+    filterAdminMenuTable();
+  } catch (err) {
+    console.error('[ADMIN-MENU-LOAD-ERR]', err);
+    showToastNotice('Failed to load menu: ' + err.message, '⚠️');
+  }
+}
+window.loadAdminMenu = loadAdminMenu;
+
+function updateAdminMenuStats(items = []) {
+  const total = items.length;
+  const veg = items.filter(i => i.category === 'Veg Pizza').length;
+  const nonVeg = items.filter(i => i.category === 'Non-Veg Pizza').length;
+  const mania = items.filter(i => i.category === 'Pizza Mania').length;
+  const sides = items.filter(i => i.category === 'Garlic Breads & Sides').length;
+  const desserts = items.filter(i => i.category === 'Desserts').length;
+  const beverages = items.filter(i => i.category === 'Beverages').length;
+
+  const setEl = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = `${val} Items`;
+  };
+
+  setEl('statMenuTotal', total);
+  setEl('statMenuVeg', veg);
+  setEl('statMenuNonVeg', nonVeg);
+  setEl('statMenuMania', mania);
+  setEl('statMenuSides', sides);
+  setEl('statMenuDesserts', desserts);
+  setEl('statMenuBeverages', beverages);
+}
+
+function filterAdminMenuTable() {
+  const searchInput = document.getElementById('adminMenuSearchInput');
+  const catSelect = document.getElementById('adminMenuCategoryFilter');
+  const stockSelect = document.getElementById('adminMenuStockFilter');
+
+  const query = (searchInput?.value || '').toLowerCase().trim();
+  const selectedCat = catSelect?.value || 'ALL';
+  const selectedStock = stockSelect?.value || 'ALL';
+
+  const filtered = adminMenuCatalog.filter(item => {
+    // Search query match
+    if (query) {
+      const nameMatch = (item.name || '').toLowerCase().includes(query);
+      const codeMatch = (item.dominosCode || '').toLowerCase().includes(query) || (item.skuId || '').toLowerCase().includes(query);
+      const catMatch = (item.category || '').toLowerCase().includes(query);
+      if (!nameMatch && !codeMatch && !catMatch) return false;
+    }
+
+    // Category filter
+    if (selectedCat !== 'ALL' && item.category !== selectedCat) {
+      return false;
+    }
+
+    // Stock filter
+    if (selectedStock === 'AVAILABLE' && item.isAvailable === false) return false;
+    if (selectedStock === 'UNAVAILABLE' && item.isAvailable !== false) return false;
+
+    return true;
+  });
+
+  renderAdminMenuTable(filtered);
+}
+window.filterAdminMenuTable = filterAdminMenuTable;
+
+function renderAdminMenuTable(items = []) {
+  const tbody = document.getElementById('adminMenuTableBody');
+  if (!tbody) return;
+
+  if (items.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray-600);">
+          No menu items matched your filter criteria.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = items.map(item => {
+    const isAvail = item.isAvailable !== false;
+    const isVeg = item.isVeg !== false && item.type !== 'NON-VEG';
+    const originalPrice = item.originalPrice || Math.round((item.price * 1.25) / 10) * 10 - 1;
+    const discount = originalPrice > item.price
+      ? `${Math.round(((originalPrice - item.price) / originalPrice) * 100)}%`
+      : '0%';
+
+    const imgUrl = item.imageUrl || item.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+
+    return `
+      <tr id="admin-row-${item.id}" style="${!isAvail ? 'background: #fef2f2; opacity: 0.85;' : ''}">
+        <td>
+          <img src="${imgUrl}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
+        </td>
+        <td>
+          <div style="font-weight: 800; font-size: 13px; color: #0f172a;">${item.name}</div>
+          <div style="font-size: 11px; color: #64748b; font-family: monospace;">Code: ${item.dominosCode || item.skuId || item.id}</div>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 2px 6px; border-radius: 4px;">${item.category}</span>
+            <span style="font-size: 10px; font-weight: 800; color: ${isVeg ? '#15803d' : '#b91c1c'}; background: ${isVeg ? '#dcfce7' : '#fee2e2'}; padding: 2px 6px; border-radius: 4px;">
+              ${isVeg ? '🟢 VEG' : '🔴 NON-VEG'}
+            </span>
+          </div>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <span style="font-weight: 800; font-size: 12px; color: #64748b;">₹</span>
+            <input type="number" id="price-input-${item.id}" value="${item.price}" min="1" style="width: 75px; padding: 5px 6px; font-size: 13px; font-weight: 800; border: 1.5px solid #cbd5e1; border-radius: 6px; text-align: right;">
+          </div>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <span style="font-weight: 800; font-size: 12px; color: #64748b;">₹</span>
+            <input type="number" id="origprice-input-${item.id}" value="${originalPrice}" min="1" style="width: 75px; padding: 5px 6px; font-size: 13px; font-weight: 800; border: 1.5px solid #cbd5e1; border-radius: 6px; text-align: right; color: #b45309;">
+          </div>
+        </td>
+        <td>
+          <span style="font-size: 11px; font-weight: 800; color: #166534; background: #f0fdf4; border: 1px solid #86efac; padding: 3px 6px; border-radius: 4px; white-space: nowrap;">
+            ${discount} OFF
+          </span>
+        </td>
+        <td>
+          <button type="button" onclick="toggleAdminItemStock('${item.id}', ${isAvail})" style="border: none; cursor: pointer; padding: 4px 10px; border-radius: 14px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px; ${isAvail ? 'background: #dcfce7; color: #15803d;' : 'background: #fee2e2; color: #b91c1c;'}">
+            <span>${isAvail ? '🟢 In Stock' : '🔴 Out of Stock'}</span>
+          </button>
+        </td>
+        <td>
+          <div style="display: flex; gap: 4px; align-items: center;">
+            <button type="button" onclick="saveItemQuickPrices('${item.id}')" title="Save updated prices" style="background: #0066a3; color: white; border: none; padding: 5px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; cursor: pointer;">
+              💾 Save
+            </button>
+            <button type="button" onclick="openEditMenuItemModal('${item.id}')" title="Edit Full Details" style="background: #f1f5f9; color: #0284c7; border: 1px solid #cbd5e1; padding: 5px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">
+              ✏️
+            </button>
+            <button type="button" onclick="deleteAdminMenuItem('${item.id}')" title="Delete Item" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">
+              🗑️
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function saveItemQuickPrices(id) {
+  const priceInput = document.getElementById(`price-input-${id}`);
+  const origPriceInput = document.getElementById(`origprice-input-${id}`);
+  if (!priceInput || !origPriceInput) return;
+
+  const price = Number(priceInput.value);
+  const originalPrice = Number(origPriceInput.value);
+
+  if (!price || price <= 0) {
+    showToastNotice('Please enter a valid price.', '⚠️');
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/admin/menu/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: {
+        ...getAdminHeaders(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ price, originalPrice })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to update price');
+    }
+
+    // Update in local cache
+    const item = adminMenuCatalog.find(i => i.id === id);
+    if (item) {
+      item.price = price;
+      item.originalPrice = originalPrice;
+      if (originalPrice > price) {
+        item.discount = `${Math.round(((originalPrice - price) / originalPrice) * 100)}% OFF`;
+      }
+    }
+
+    showToastNotice(`Saved ${item?.name || 'Item'} prices! (₹${price} / ~~₹${originalPrice}~~)`, '✅');
+    filterAdminMenuTable();
+  } catch (err) {
+    console.error('[ADMIN-SAVE-PRICES-ERR]', err);
+    showToastNotice(err.message, '⚠️');
+  }
+}
+window.saveItemQuickPrices = saveItemQuickPrices;
+
+async function toggleAdminItemStock(id, currentStatus) {
+  const newStatus = !currentStatus;
+  try {
+    const res = await fetch(`/api/admin/menu/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: {
+        ...getAdminHeaders(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ isAvailable: newStatus })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to update stock');
+    }
+
+    const item = adminMenuCatalog.find(i => i.id === id);
+    if (item) {
+      item.isAvailable = newStatus;
+    }
+
+    showToastNotice(`${item?.name || 'Item'} marked ${newStatus ? '🟢 In Stock' : '🔴 Out of Stock'}!`, '🔄');
+    filterAdminMenuTable();
+  } catch (err) {
+    console.error('[ADMIN-TOGGLE-STOCK-ERR]', err);
+    showToastNotice(err.message, '⚠️');
+  }
+}
+window.toggleAdminItemStock = toggleAdminItemStock;
+
+function openAddMenuItemModal() {
+  document.getElementById('adminMenuItemModalTitle').innerText = '➕ Add New Domino\'s Menu Item';
+  document.getElementById('itemEditId').value = '';
+  document.getElementById('itemEditName').value = '';
+  document.getElementById('itemEditCategory').value = 'Veg Pizza';
+  document.getElementById('itemEditIsVeg').value = 'true';
+  document.getElementById('itemEditPrice').value = '259';
+  document.getElementById('itemEditOriginalPrice').value = '299';
+  document.getElementById('itemEditCode').value = '';
+  document.getElementById('itemEditImage').value = '';
+  document.getElementById('itemEditDesc').value = '';
+  document.getElementById('itemEditAvailable').checked = true;
+  openModal('adminMenuItemModal');
+}
+window.openAddMenuItemModal = openAddMenuItemModal;
+
+function openEditMenuItemModal(id) {
+  const item = adminMenuCatalog.find(i => i.id === id);
+  if (!item) return;
+
+  document.getElementById('adminMenuItemModalTitle').innerText = `✏️ Edit: ${item.name}`;
+  document.getElementById('itemEditId').value = item.id;
+  document.getElementById('itemEditName').value = item.name || '';
+  document.getElementById('itemEditCategory').value = item.category || 'Veg Pizza';
+  document.getElementById('itemEditIsVeg').value = item.isVeg !== false ? 'true' : 'false';
+  document.getElementById('itemEditPrice').value = item.price || 259;
+  document.getElementById('itemEditOriginalPrice').value = item.originalPrice || Math.round((item.price * 1.25) / 10) * 10 - 1;
+  document.getElementById('itemEditCode').value = item.dominosCode || item.skuId || '';
+  document.getElementById('itemEditImage').value = item.imageUrl || item.image || '';
+  document.getElementById('itemEditDesc').value = item.description || '';
+  document.getElementById('itemEditAvailable').checked = item.isAvailable !== false;
+  openModal('adminMenuItemModal');
+}
+window.openEditMenuItemModal = openEditMenuItemModal;
+
+async function submitMenuItemForm() {
+  const id = document.getElementById('itemEditId').value;
+  const name = document.getElementById('itemEditName').value.trim();
+  const category = document.getElementById('itemEditCategory').value;
+  const isVeg = document.getElementById('itemEditIsVeg').value === 'true';
+  const price = Number(document.getElementById('itemEditPrice').value);
+  const originalPrice = Number(document.getElementById('itemEditOriginalPrice').value);
+  const dominosCode = document.getElementById('itemEditCode').value.trim();
+  const imageUrl = document.getElementById('itemEditImage').value.trim();
+  const description = document.getElementById('itemEditDesc').value.trim();
+  const isAvailable = document.getElementById('itemEditAvailable').checked;
+
+  if (!name) {
+    showToastNotice('Item name is required.', '⚠️');
+    return;
+  }
+  if (!price || price <= 0) {
+    showToastNotice('Valid price is required.', '⚠️');
+    return;
+  }
+
+  const payload = {
+    name,
+    category,
+    isVeg,
+    type: isVeg ? 'VEG' : 'NON-VEG',
+    price,
+    originalPrice: originalPrice > price ? originalPrice : Math.round((price * 1.25) / 10) * 10 - 1,
+    dominosCode,
+    imageUrl,
+    description,
+    isAvailable
+  };
+
+  try {
+    const isEdit = Boolean(id);
+    const url = isEdit ? `/api/admin/menu/${encodeURIComponent(id)}` : '/api/admin/menu';
+    const method = isEdit ? 'PUT' : 'POST';
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        ...getAdminHeaders(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to save item');
+    }
+
+    closeModal('adminMenuItemModal');
+    showToastNotice(`Successfully ${isEdit ? 'updated' : 'added'} "${name}"!`, '🎉');
+    await loadAdminMenu();
+  } catch (err) {
+    console.error('[ADMIN-SUBMIT-MENU-ERR]', err);
+    showToastNotice(err.message, '⚠️');
+  }
+}
+window.submitMenuItemForm = submitMenuItemForm;
+
+async function deleteAdminMenuItem(id) {
+  const item = adminMenuCatalog.find(i => i.id === id);
+  const name = item ? item.name : 'this item';
+
+  if (!confirm(`Are you sure you want to delete "${name}" from the menu catalog?`)) {
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/admin/menu/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: getAdminHeaders()
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to delete item');
+    }
+
+    showToastNotice(`Deleted "${name}" from menu.`, '🗑️');
+    await loadAdminMenu();
+  } catch (err) {
+    console.error('[ADMIN-DELETE-MENU-ERR]', err);
+    showToastNotice(err.message, '⚠️');
+  }
+}
+window.deleteAdminMenuItem = deleteAdminMenuItem;

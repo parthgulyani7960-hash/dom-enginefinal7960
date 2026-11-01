@@ -59,7 +59,19 @@ class DominosMenuService {
       this.masterMenu = this.getDefaultFallbackCatalog();
     }
 
-    this.combos = this.getDefaultCombos();
+    const storeJsonPath = path.join(__dirname, '..', 'data', 'store.json');
+    try {
+      if (fs.existsSync(storeJsonPath)) {
+        const storeData = JSON.parse(fs.readFileSync(storeJsonPath, 'utf8'));
+        if (storeData.combos && storeData.combos.length > 0) {
+          this.combos = storeData.combos;
+        }
+      }
+    } catch (e) {}
+
+    if (!this.combos || this.combos.length === 0) {
+      this.combos = this.getDefaultCombos();
+    }
     this.isLoaded = true;
   }
 
@@ -600,6 +612,69 @@ class DominosMenuService {
           { name: 'Veg Loaded Pizza', dominosCode: 'PIZ0140', qty: 1 },
           { name: 'Garlic Breadsticks', dominosCode: 'SID0001', qty: 1 },
           { name: 'Coca-Cola 1.25L Bottle', dominosCode: 'BEV-COKE-125', qty: 1 }
+        ]
+      },
+      {
+        id: 'COMBO-5',
+        name: 'Solo Pizza & Choco Lava Treat',
+        tag: '🍫 Sweet Cravings',
+        badge: 'Save ₹80',
+        price: 249,
+        originalPrice: 329,
+        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp',
+        description: '1 Regular Classic Margherita + 1 Gooey Choco Lava Cake + 1 Coke 250ml',
+        includedItems: [
+          { name: 'Margherita (Regular)', dominosCode: 'PIZ0117', qty: 1 },
+          { name: 'Choco Lava Cake', dominosCode: 'DES0001', qty: 1 },
+          { name: 'Coca-Cola 250ml', dominosCode: 'BEV-COKE-250', qty: 1 }
+        ]
+      },
+      {
+        id: 'COMBO-6',
+        name: 'Cheesy Volcano Feast',
+        tag: '🌋 Molten Cheese Delight',
+        badge: 'Save ₹150',
+        price: 499,
+        originalPrice: 649,
+        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/0b41b2cb-958c-4c17-b0b2-397308538684_volcanoHomePeppyPaneer.webp',
+        description: '1 Cheese Volcano Peppy Paneer + 1 Classic Stuffed Garlic Bread + 2x Coke',
+        includedItems: [
+          { name: 'Cheese Volcano Peppy Paneer', dominosCode: 'PIZ0120', qty: 1 },
+          { name: 'Stuffed Garlic Bread', dominosCode: 'SID0046', qty: 1 },
+          { name: 'Coca-Cola 250ml', dominosCode: 'BEV-COKE-250', qty: 2 }
+        ]
+      },
+      {
+        id: 'COMBO-7',
+        name: 'Weekend Family Feast',
+        tag: '👨‍👩‍👧‍👦 Family Special',
+        badge: 'Save ₹300',
+        price: 899,
+        originalPrice: 1199,
+        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+        description: '2 Medium Pizzas (Farmhouse & Peppy Paneer) + 1 Stuffed Garlic Bread + 2 Choco Lava Cakes + 1.25L Coke',
+        includedItems: [
+          { name: 'Farmhouse (Medium)', dominosCode: 'PIZ0119', qty: 1 },
+          { name: 'Peppy Paneer (Medium)', dominosCode: 'PIZ0120', qty: 1 },
+          { name: 'Stuffed Garlic Bread', dominosCode: 'SID0046', qty: 1 },
+          { name: 'Choco Lava Cake', dominosCode: 'DES0001', qty: 2 },
+          { name: 'Coca-Cola 1.25L Bottle', dominosCode: 'BEV-COKE-125', qty: 1 }
+        ]
+      },
+      {
+        id: 'COMBO-8',
+        name: 'Snack Attack Platter',
+        tag: '⚡ Quick Bites',
+        badge: 'Save ₹100',
+        price: 329,
+        originalPrice: 429,
+        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp',
+        description: '1 Stuffed Garlic Bread + 1 Paneer Zingy Parcel + 1 Cheesy Jalapeno Dip + 2x Coke 250ml',
+        includedItems: [
+          { name: 'Stuffed Garlic Bread', dominosCode: 'SID0046', qty: 1 },
+          { name: 'Veg Parcel', dominosCode: 'SID0002', qty: 1 },
+          { name: 'Cheesy Jalapeno Dip', dominosCode: 'SID0010', qty: 1 },
+          { name: 'Coca-Cola 250ml', dominosCode: 'BEV-COKE-250', qty: 2 }
         ]
       }
     ];

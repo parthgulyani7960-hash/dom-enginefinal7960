@@ -1013,6 +1013,104 @@ class Database {
     return this.data.menu || [];
   }
 
+  updateMenuItem(id, updates = {}) {
+    if (!id) return null;
+    if (!Array.isArray(this.data.menu)) this.data.menu = [];
+    const itemIndex = this.data.menu.findIndex(m => m.id === id || m.dominosCode === id);
+    if (itemIndex === -1) return null;
+
+    const item = this.data.menu[itemIndex];
+    if (updates.price !== undefined) {
+      item.price = Number(updates.price) || item.price;
+    }
+    if (updates.originalPrice !== undefined) {
+      item.originalPrice = Number(updates.originalPrice) || item.originalPrice;
+    }
+    if (updates.isAvailable !== undefined) {
+      item.isAvailable = Boolean(updates.isAvailable);
+    }
+    if (updates.name) item.name = String(updates.name).trim();
+    if (updates.category) item.category = String(updates.category).trim();
+    if (updates.description) item.description = String(updates.description).trim();
+    if (updates.imageUrl) {
+      item.imageUrl = String(updates.imageUrl).trim();
+      item.image = item.imageUrl;
+    }
+
+    if (item.originalPrice && item.originalPrice > item.price) {
+      item.discount = `${Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF`;
+    }
+
+    this.data.menu[itemIndex] = item;
+    this.save();
+
+    // Also persist to dominos_catalog.json
+    try {
+      const catalogPath = path.join(__dirname, '..', 'data', 'dominos_catalog.json');
+      fs.writeFileSync(catalogPath, JSON.stringify(this.data.menu, null, 2), 'utf8');
+    } catch (e) {}
+
+    return item;
+  }
+
+  addMenuItem(itemData) {
+    if (!itemData || !itemData.name) throw new Error('Menu item name is required');
+    if (!Array.isArray(this.data.menu)) this.data.menu = [];
+    const id = itemData.id || `DOM-ITEM-${Date.now()}`;
+    const price = Number(itemData.price) || 99;
+    const originalPrice = Number(itemData.originalPrice) || Math.round((price * 1.25) / 10) * 10 - 1;
+    const isVeg = itemData.isVeg !== false;
+    const cat = itemData.category || (isVeg ? 'Veg Pizza' : 'Non-Veg Pizza');
+    const type = isVeg ? 'VEG' : 'NON-VEG';
+    const imageUrl = itemData.imageUrl || itemData.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+
+    const newItem = {
+      id,
+      name: String(itemData.name).trim(),
+      category: cat,
+      type,
+      price,
+      originalPrice,
+      discount: `${Math.round(((originalPrice - price) / originalPrice) * 100)}% OFF`,
+      isVeg,
+      isAvailable: itemData.isAvailable !== false,
+      dominosCode: itemData.dominosCode || `CODE_${this.data.menu.length + 1}`,
+      skuId: itemData.skuId || `SKU_${this.data.menu.length + 1}`,
+      description: itemData.description || `${itemData.name} freshly baked to perfection.`,
+      imageUrl,
+      image: imageUrl,
+      sizes: itemData.sizes || { 'Regular (Serves 1)': price },
+      allowedSizes: itemData.allowedSizes || ['Regular'],
+      allowedCrusts: itemData.allowedCrusts || ['New Hand Tossed']
+    };
+
+    this.data.menu.unshift(newItem);
+    this.save();
+
+    try {
+      const catalogPath = path.join(__dirname, '..', 'data', 'dominos_catalog.json');
+      fs.writeFileSync(catalogPath, JSON.stringify(this.data.menu, null, 2), 'utf8');
+    } catch (e) {}
+
+    return newItem;
+  }
+
+  deleteMenuItem(id) {
+    if (!id) return false;
+    if (!Array.isArray(this.data.menu)) return false;
+    const idx = this.data.menu.findIndex(m => m.id === id || m.dominosCode === id);
+    if (idx === -1) return false;
+    this.data.menu.splice(idx, 1);
+    this.save();
+
+    try {
+      const catalogPath = path.join(__dirname, '..', 'data', 'dominos_catalog.json');
+      fs.writeFileSync(catalogPath, JSON.stringify(this.data.menu, null, 2), 'utf8');
+    } catch (e) {}
+
+    return true;
+  }
+
   // Orders
   getOrders() {
     return this.data.orders;

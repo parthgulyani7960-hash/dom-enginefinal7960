@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0066a3">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Domino's Order Engine | Official Domino's Store Ordering &amp; Kitchen Dispatch</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -322,7 +326,7 @@
         </span>
         
         <span id="catalogCountBadge" style="background: #e2e8f0; color: #475569; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700;">
-          214 Items Total
+          151 Items Total (Live Domino's Kitchen)
         </span>
       </div>
     </div>
@@ -1958,6 +1962,33 @@
       </div>
     </div>
   </div>
+
+  <!-- Mobile Native Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <button type="button" class="mb-nav-item active" onclick="scrollToMenu()" id="mbNavItemMenu">
+      <span class="mb-icon">🍕</span>
+      <span>Menu</span>
+    </button>
+    <button type="button" class="mb-nav-item" onclick="focusSearchInput()" id="mbNavItemSearch">
+      <span class="mb-icon">🔍</span>
+      <span>Search</span>
+    </button>
+    <button type="button" class="mb-nav-item" onclick="openMyOrdersModal()" id="mbNavItemOrders">
+      <span class="mb-icon">📦</span>
+      <span>Orders</span>
+    </button>
+    <button type="button" class="mb-nav-item" onclick="openCartModal()" id="mbNavItemCart">
+      <span class="mb-icon" style="position: relative;">
+        🛒
+        <span class="cart-count" id="mbCartCount" style="position: absolute; top: -6px; right: -12px; font-size: 10px; padding: 1px 5px;">0</span>
+      </span>
+      <span>Cart</span>
+    </button>
+    <button type="button" class="mb-nav-item" onclick="handleMobileAccountClick()" id="mbNavItemAccount">
+      <span class="mb-icon">👤</span>
+      <span id="mbNavAccountLabel">Account</span>
+    </button>
+  </nav>
 
 </body>
 </html>

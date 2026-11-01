@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Domino's Order Engine Admin | Live Session Manager &amp; Voucher Vault</title>
   <link rel="stylesheet" href="/style.css">
   <style>
@@ -423,6 +427,57 @@
     .btn-op-deduct.active { background: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b !important; font-weight: 800 !important; }
     .btn-op-set.active { background: #dbeafe !important; border-color: #2563eb !important; color: #1d4ed8 !important; font-weight: 800 !important; }
 
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: 40px !important;
+      }
+      .panel {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 14px !important;
+        margin-bottom: 14px !important;
+      }
+      .panel-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+      }
+      table, .data-table {
+        min-width: 580px !important;
+      }
+      .admin-tab-bar {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        padding: 6px 4px !important;
+        gap: 6px !important;
+      }
+      .admin-tab-bar::-webkit-scrollbar {
+        display: none !important;
+      }
+      .admin-nav-tab {
+        flex-shrink: 0 !important;
+        padding: 7px 12px !important;
+        font-size: 11px !important;
+        white-space: nowrap !important;
+      }
+      .stat-grid, .admin-split-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+      .navbar {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        padding: 10px 14px !important;
+      }
+      .nav-actions {
+        width: 100% !important;
+        justify-content: space-between !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -559,6 +614,10 @@
       </button>
       <button class="admin-nav-tab" id="tabBtn-vouchers" onclick="switchAdminView('vouchers')">
         <span>💳 Vouchers, PINs &amp; UPI</span>
+      </button>
+      <button class="admin-nav-tab" id="tabBtn-menu" onclick="switchAdminView('menu')">
+        <span>🍕 Menu &amp; Real Pricing</span>
+        <span class="tab-badge" id="navBadgeMenu">0</span>
       </button>
       <button class="admin-nav-tab" id="tabBtn-alerts" onclick="switchAdminView('alerts')">
         <span>📢 Announcements &amp; Alerts</span>
@@ -1435,6 +1494,113 @@
       </div>
     </div>
 
+    <!-- VIEW 7: Menu Catalog & Real-Time Item Pricing Manager -->
+    <div class="admin-view" id="view-menu" style="display: none;">
+      
+      <!-- Top Metrics Banner -->
+      <div class="panel" style="margin-bottom: 20px; border-top: 4px solid #0066a3;">
+        <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>🍕 Domino's Menu Catalog &amp; Real Pricing Manager</span>
+              <span class="info-dot" onclick="showAdminSystemInfo('menu')" title="Manage real pricing, slashed prices, stock availability, and categories">i</span>
+            </div>
+            <p style="font-size: 13px; color: var(--gray-600); margin: 4px 0 0 0;">
+              Manage active offer prices, slashed/cutted MRPs, item descriptions, and in-stock status across all categories.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button type="button" class="btn-primary" onclick="openAddMenuItemModal()" style="padding: 7px 16px; font-size: 12px; font-weight: 800; width: auto; background: #0066a3; display: flex; align-items: center; gap: 6px;">
+              <span>➕</span> <span>Add New Item</span>
+            </button>
+            <button type="button" class="btn-action-copy" onclick="loadAdminMenu()" style="cursor: pointer; padding: 6px 12px; font-size: 12px; font-weight: 800;">
+              🔄 Refresh Menu
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Stat Chips -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 14px;">
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: #64748b;">Total Menu</div>
+            <div id="statMenuTotal" style="font-size: 18px; font-weight: 900; color: #0f172a; margin-top: 2px;">151 Items</div>
+          </div>
+          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: #166534;">🌱 Veg Pizzas</div>
+            <div id="statMenuVeg" style="font-size: 18px; font-weight: 900; color: #15803d; margin-top: 2px;">37 Items</div>
+          </div>
+          <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: #991b1b;">🍗 Non-Veg</div>
+            <div id="statMenuNonVeg" style="font-size: 18px; font-weight: 900; color: #b91c1c; margin-top: 2px;">36 Items</div>
+          </div>
+          <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: #b45309;">🎯 Pizza Mania</div>
+            <div id="statMenuMania" style="font-size: 18px; font-weight: 900; color: #d97706; margin-top: 2px;">16 Items</div>
+          </div>
+          <div style="background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: #0369a1;">🥖 Sides &amp; Breads</div>
+            <div id="statMenuSides" style="font-size: 18px; font-weight: 900; color: #0284c7; margin-top: 2px;">42 Items</div>
+          </div>
+          <div style="background: #faf5ff; border: 1.5px solid #e9d5ff; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: #6b21a8;">🍫 Desserts</div>
+            <div id="statMenuDesserts" style="font-size: 18px; font-weight: 900; color: #7c3aed; margin-top: 2px;">9 Items</div>
+          </div>
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: #1e40af;">🥤 Beverages</div>
+            <div id="statMenuBeverages" style="font-size: 18px; font-weight: 900; color: #2563eb; margin-top: 2px;">11 Items</div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-top: 16px; background: white; border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px 14px;">
+          <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 240px;">
+            <span style="font-size: 14px;">🔍</span>
+            <input type="text" id="adminMenuSearchInput" oninput="filterAdminMenuTable()" class="form-input" placeholder="Search by item name, Domino's code (e.g. PIZ0119), or category..." style="font-size: 12px; padding: 6px 10px; margin-bottom: 0;">
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <select id="adminMenuCategoryFilter" onchange="filterAdminMenuTable()" class="form-input" style="font-size: 12px; padding: 6px 12px; margin-bottom: 0; width: auto; font-weight: 700;">
+              <option value="ALL">All Categories</option>
+              <option value="Veg Pizza">🌱 Veg Pizza</option>
+              <option value="Non-Veg Pizza">🍗 Non-Veg Pizza</option>
+              <option value="Pizza Mania">🎯 Pizza Mania</option>
+              <option value="Garlic Breads & Sides">🥖 Garlic Breads &amp; Sides</option>
+              <option value="Desserts">🍫 Desserts</option>
+              <option value="Beverages">🥤 Beverages</option>
+            </select>
+            <select id="adminMenuStockFilter" onchange="filterAdminMenuTable()" class="form-input" style="font-size: 12px; padding: 6px 12px; margin-bottom: 0; width: auto; font-weight: 700;">
+              <option value="ALL">All Stock States</option>
+              <option value="AVAILABLE">🟢 Available Only</option>
+              <option value="UNAVAILABLE">🔴 Out of Stock Only</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table of Menu Items -->
+      <div class="panel">
+        <div class="table-responsive" style="max-height: 700px; overflow-y: auto;">
+          <table class="data-table" id="adminMenuTable">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Image</th>
+                <th>Item Details &amp; Domino's Code</th>
+                <th>Category &amp; Diet</th>
+                <th style="width: 130px;">Offer Price (₹)</th>
+                <th style="width: 130px;">Slashed MRP (₹)</th>
+                <th style="width: 90px;">Discount</th>
+                <th style="width: 110px;">Stock State</th>
+                <th style="width: 120px;">Quick Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminMenuTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
   </main>
 
   <!-- Modal: Edit App User & Wallet Credit -->
@@ -1983,6 +2149,81 @@
       </div>
       <div class="modal-body" id="adminInfoModalBody" style="padding: 18px; font-size: 13px; line-height: 1.6; color: #334155;">
         <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add or Edit Menu Item -->
+  <div class="modal-overlay" id="adminMenuItemModal">
+    <div class="modal-card" style="max-width: 540px; width: 95%;">
+      <div class="modal-header">
+        <div class="modal-title" id="adminMenuItemModalTitle">🍕 Add Menu Item</div>
+        <button class="modal-close" onclick="closeModal('adminMenuItemModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <input type="hidden" id="itemEditId">
+        
+        <div class="form-group">
+          <label class="form-label">Item Name *</label>
+          <input type="text" id="itemEditName" class="form-input" placeholder="e.g. Farmhouse Special" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Category *</label>
+            <select id="itemEditCategory" class="form-input">
+              <option value="Veg Pizza">🌱 Veg Pizza</option>
+              <option value="Non-Veg Pizza">🍗 Non-Veg Pizza</option>
+              <option value="Pizza Mania">🎯 Pizza Mania</option>
+              <option value="Garlic Breads & Sides">🥖 Garlic Breads &amp; Sides</option>
+              <option value="Desserts">🍫 Desserts</option>
+              <option value="Beverages">🥤 Beverages</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Diet Classification</label>
+            <select id="itemEditIsVeg" class="form-input">
+              <option value="true">🟢 Pure Veg</option>
+              <option value="false">🔴 Non-Veg</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Offer Price (₹) *</label>
+            <input type="number" id="itemEditPrice" class="form-input" placeholder="259" min="1" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Slashed MRP (₹) *</label>
+            <input type="number" id="itemEditOriginalPrice" class="form-input" placeholder="299" min="1" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Domino's Product Code / Sku</label>
+          <input type="text" id="itemEditCode" class="form-input" placeholder="e.g. PIZ0119">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image URL</label>
+          <input type="url" id="itemEditImage" class="form-input" placeholder="https://images.dominos.co.in/...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Item Description</label>
+          <textarea id="itemEditDesc" class="form-input" rows="2" placeholder="Delightful combination of cheese, toppings and signature crust..."></textarea>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="itemEditAvailable" checked style="width: 18px; height: 18px;">
+          <label for="itemEditAvailable" class="form-label" style="margin-bottom: 0; cursor: pointer;">🟢 In Stock &amp; Available for Ordering</label>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-secondary" onclick="closeModal('adminMenuItemModal')" style="flex: 1; margin-top: 0;">Cancel</button>
+          <button type="button" class="btn-primary" onclick="submitMenuItemForm()" style="flex: 2; background: #0066a3;">Save Menu Item</button>
+        </div>
       </div>
     </div>
   </div>

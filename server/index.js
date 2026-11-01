@@ -2536,6 +2536,46 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // 9b. Admin: Menu Catalog & Real-Time Item Pricing Manager
+  if (method === 'GET' && pathname === '/api/admin/menu') {
+    return sendJson(res, 200, {
+      success: true,
+      menu: db.getMenu(),
+      combos: db.getCombos(),
+      totalItems: db.getMenu().length
+    });
+  }
+
+  if (method === 'POST' && pathname === '/api/admin/menu') {
+    try {
+      const body = await parseBody(req);
+      const created = db.addMenuItem(body);
+      return sendJson(res, 201, { success: true, item: created });
+    } catch (err) {
+      return sendJson(res, 400, { error: err.message });
+    }
+  }
+
+  if ((method === 'PUT' || method === 'POST') && pathname.startsWith('/api/admin/menu/') && !pathname.endsWith('/delete')) {
+    try {
+      const id = decodeURIComponent(pathname.replace('/api/admin/menu/', ''));
+      const body = await parseBody(req);
+      const updated = db.updateMenuItem(id, body);
+      if (!updated) {
+        return sendJson(res, 404, { error: 'Menu item not found' });
+      }
+      return sendJson(res, 200, { success: true, item: updated });
+    } catch (err) {
+      return sendJson(res, 400, { error: err.message });
+    }
+  }
+
+  if (method === 'DELETE' && pathname.startsWith('/api/admin/menu/')) {
+    const id = decodeURIComponent(pathname.replace('/api/admin/menu/', ''));
+    const deleted = db.deleteMenuItem(id);
+    return sendJson(res, 200, { success: deleted });
+  }
+
   // Update User Profile (With One-Time Phone Lock Enforcement)
   if (method === 'POST' && pathname === '/api/user/profile') {
     try {

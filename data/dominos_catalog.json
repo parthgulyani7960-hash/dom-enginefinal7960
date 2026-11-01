@@ -44,7 +44,8 @@
         "Cheese Burst": 574,
         "Fresh Pan Pizza": 519
       }
-    }
+    },
+    "discount": "22% OFF"
   },
   {
     "id": "DOM-PIZ0118",
@@ -91,7 +92,8 @@
         "Cheese Burst": 724,
         "Fresh Pan Pizza": 669
       }
-    }
+    },
+    "discount": "20% OFF"
   },
   {
     "id": "DOM-PIZ0119",
@@ -138,7 +140,8 @@
         "Cheese Burst": 824,
         "Fresh Pan Pizza": 769
       }
-    }
+    },
+    "discount": "13% OFF"
   },
   {
     "id": "DOM-PIZ0120",
@@ -185,7 +188,8 @@
         "Cheese Burst": 824,
         "Fresh Pan Pizza": 769
       }
-    }
+    },
+    "discount": "13% OFF"
   },
   {
     "id": "DOM-PIZ0128",
@@ -232,7 +236,8 @@
         "Cheese Burst": 684,
         "Fresh Pan Pizza": 629
       }
-    }
+    },
+    "discount": "18% OFF"
   },
   {
     "id": "DOM-PIZ0125",
@@ -279,7 +284,8 @@
         "Cheese Burst": 824,
         "Fresh Pan Pizza": 769
       }
-    }
+    },
+    "discount": "13% OFF"
   },
   {
     "id": "DOM-PIZ0121",
@@ -326,7 +332,8 @@
         "Cheese Burst": 924,
         "Fresh Pan Pizza": 869
       }
-    }
+    },
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-PIZ0122",
@@ -373,7 +380,8 @@
         "Cheese Burst": 924,
         "Fresh Pan Pizza": 869
       }
-    }
+    },
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-PIZ5119",
@@ -420,7 +428,8 @@
         "Cheese Burst": 794,
         "Fresh Pan Pizza": 739
       }
-    }
+    },
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-PIZ5123",
@@ -467,7 +476,8 @@
         "Cheese Burst": 874,
         "Fresh Pan Pizza": 819
       }
-    }
+    },
+    "discount": "15% OFF"
   },
   {
     "id": "DOM-PIZ5124",
@@ -514,7 +524,8 @@
         "Cheese Burst": 1024,
         "Fresh Pan Pizza": 969
       }
-    }
+    },
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-PIZ5120",
@@ -561,7 +572,8 @@
         "Cheese Burst": 1024,
         "Fresh Pan Pizza": 969
       }
-    }
+    },
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-PIZ5121",
@@ -608,7 +620,8 @@
         "Cheese Burst": 1024,
         "Fresh Pan Pizza": 969
       }
-    }
+    },
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-PM0001",
@@ -632,7 +645,8 @@
     ],
     "allowedCrusts": [
       "New Hand Tossed"
-    ]
+    ],
+    "discount": "15% OFF"
   },
   {
     "id": "DOM-PM0002",
@@ -656,7 +670,8 @@
     ],
     "allowedCrusts": [
       "New Hand Tossed"
-    ]
+    ],
+    "discount": "23% OFF"
   },
   {
     "id": "DOM-PM0003",
@@ -680,7 +695,8 @@
     ],
     "allowedCrusts": [
       "New Hand Tossed"
-    ]
+    ],
+    "discount": "20% OFF"
   },
   {
     "id": "DOM-PM0004",
@@ -704,7 +720,8 @@
     ],
     "allowedCrusts": [
       "New Hand Tossed"
-    ]
+    ],
+    "discount": "18% OFF"
   },
   {
     "id": "DOM-PM0005",
@@ -728,7 +745,8 @@
     ],
     "allowedCrusts": [
       "New Hand Tossed"
-    ]
+    ],
+    "discount": "22% OFF"
   },
   {
     "id": "DOM-PM5001",
@@ -752,7 +770,8 @@
     ],
     "allowedCrusts": [
       "New Hand Tossed"
-    ]
+    ],
+    "discount": "13% OFF"
   },
   {
     "id": "DOM-BRD0096",
@@ -767,7 +786,8 @@
     "skuId": "4#1#1",
     "description": "Baked to perfection. Your favorite garlic breadsticks seasoned with exotic herbs.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp",
+    "discount": "16% OFF"
   },
   {
     "id": "DOM-BRD0024",
@@ -782,7 +802,8 @@
     "skuId": "4#2#1",
     "description": "Freshly baked garlic bread stuffed with mozzarella cheese, sweet corn and spicy jalapenos.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp",
+    "discount": "16% OFF"
   },
   {
     "id": "DOM-SID0049",
@@ -797,7 +818,8 @@
     "skuId": "4#3#1",
     "description": "Snack on warm, flaky crust parcel stuffed with spicy paneer and harissa sauce.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp",
+    "discount": "17% OFF"
   },
   {
     "id": "DOM-SID0050",
@@ -812,7 +834,8 @@
     "skuId": "4#4#1",
     "description": "Snack parcel stuffed with juicy chicken chunks and creamy spicy sauce.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-DIP0001",
@@ -827,7 +850,8 @@
     "skuId": "4#5#1",
     "description": "Super creamy, delicious cheddar cheese dip for crusts and garlic bread.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/967d3839-a9a3-4b6d-a19f-d31e97d1e815_garlic_breadsticks.webp",
+    "discount": "14% OFF"
   },
   {
     "id": "DOM-CAKE02",
@@ -842,7 +866,8 @@
     "skuId": "5#1#1",
     "description": "Chocolate lovers delight! Indulgent, gooey molten hot chocolate lava inside chocolate cake.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+    "discount": "16% OFF"
   },
   {
     "id": "DOM-CAKE03",
@@ -857,7 +882,8 @@
     "skuId": "5#2#1",
     "description": "Sweet fluffy butterscotch cream mousse layered with crunchy chocolate crispies.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+    "discount": "16% OFF"
   },
   {
     "id": "DOM-CAKE04",
@@ -872,7 +898,8 @@
     "skuId": "5#3#1",
     "description": "Delightful red velvet cake oozing with sweet warm white chocolate lava.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+    "discount": "13% OFF"
   },
   {
     "id": "DOM-BEV0001",
@@ -880,14 +907,15 @@
     "category": "Beverages",
     "type": "VEG",
     "price": 60,
-    "originalPrice": 60,
+    "originalPrice": 79,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0001",
     "skuId": "6#1#1",
     "description": "Sparkling chilled cola to pair with your hot Domino's pizza.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+    "discount": "24% OFF"
   },
   {
     "id": "DOM-BEV0002",
@@ -895,14 +923,15 @@
     "category": "Beverages",
     "type": "VEG",
     "price": 60,
-    "originalPrice": 60,
+    "originalPrice": 79,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0002",
     "skuId": "6#2#1",
     "description": "Fizzy tangy orange soda with vibrant refreshing flavor.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+    "discount": "24% OFF"
   },
   {
     "id": "DOM-BEV0003",
@@ -910,13 +939,4618 @@
     "category": "Beverages",
     "type": "VEG",
     "price": 60,
-    "originalPrice": 60,
+    "originalPrice": 79,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0003",
     "skuId": "6#3#1",
     "description": "Crisp lemon-lime refreshment to cleanse the palate.",
     "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp"
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+    "discount": "24% OFF"
+  },
+  {
+    "id": "DOM-SID0046",
+    "name": "Burger Pizza - Premium Veg",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 151,
+    "originalPrice": 189,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0046",
+    "skuId": "4101",
+    "description": "Oven-baked buns with cheese, paneer, tomato, capsicum & red paprika in creamy mayo",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-CAKE24",
+    "name": "Choco Lava Cake Gift Hamper",
+    "category": "Desserts",
+    "type": "VEG",
+    "price": 357,
+    "originalPrice": 439,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "CAKE24",
+    "skuId": "7161",
+    "description": "Dive into the ultimate dessert experience with our Lavalicious Combo that’s Made to Share. \n*We don't include a spoon or napkin to support sustainability",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5188",
+    "name": "Chicken Keema & Onion with Desi Makhani Sauce",
+    "category": "Pizza Mania",
+    "type": "NON-VEG",
+    "price": 159,
+    "originalPrice": 199,
+    "discount": "20% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5188",
+    "skuId": "6#391#4852",
+    "description": "Authentic Indian Flavor of Makhani Sauce loaded with meaty Chicken Keema and crunchy Onion.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
+    "sizes": {
+      "Regular (Single)": 159
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0306",
+    "name": "Loaded Saucy Veg Taco - Tandoori",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 175,
+    "originalPrice": 219,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0306",
+    "skuId": "6633",
+    "description": "Stuffed with tandoori-spiced paneer for a bold Indian twist. Double tacos for double fun",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5106",
+    "name": "Chicken Sausage",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5106",
+    "skuId": "6#115#7147",
+    "description": "American classic! Spicy, herbed chicken sausage on pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9b676f85-4c99-4ac5-86fb-53556c0b092c_new_chicken_sausage.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9b676f85-4c99-4ac5-86fb-53556c0b092c_new_chicken_sausage.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0302",
+    "name": "Loaded Saucy Veg Taco - Tandoori (Single)",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 89,
+    "originalPrice": 109,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0302",
+    "skuId": "6629",
+    "description": "Taco stuffed with tandoori-spiced paneer and fresh veggies for a bold Indian twist.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e4a4655a-1507-4f66-b7c7-3da24f8a963a_HomeProductV1TandooriLoadedVegTaco(Single)720x700px.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e4a4655a-1507-4f66-b7c7-3da24f8a963a_HomeProductV1TandooriLoadedVegTaco(Single)720x700px.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0126",
+    "name": "Fresh Veggie",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0126",
+    "skuId": "6#115#7140",
+    "description": "Delectable combination of onion & capsicum, a veggie lovers pick",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/2e32cb51-82dd-40c2-8d5d-17a45a447020_new_fresh_veggie.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/2e32cb51-82dd-40c2-8d5d-17a45a447020_new_fresh_veggie.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0162",
+    "name": "Achari Do Pyaza",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 365,
+    "originalPrice": 449,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0162",
+    "skuId": "7#115#6162",
+    "description": "Molten Cheese Indulgence with tangy & spicy achari flavours on a super cheesy onion pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c10971e8-09e3-460f-b8c3-817d39656847_updated_achari_do_pyaza.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c10971e8-09e3-460f-b8c3-817d39656847_updated_achari_do_pyaza.webp",
+    "sizes": {
+      "Regular (Serves 1)": 365,
+      "Medium (Serves 2)": 639,
+      "Large (Serves 4)": 989
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 365,
+        "100% Wheat Thin Crust": 365,
+        "Cheese Burst": 440,
+        "Fresh Pan Pizza": 400
+      },
+      "Medium": {
+        "New Hand Tossed": 639,
+        "100% Wheat Thin Crust": 639,
+        "Cheese Burst": 739,
+        "Fresh Pan Pizza": 689
+      },
+      "Large": {
+        "New Hand Tossed": 989,
+        "100% Wheat Thin Crust": 989,
+        "Cheese Burst": 1114,
+        "Fresh Pan Pizza": 1059
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5460",
+    "name": "Chicken Maxxx - Shawarma",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 239,
+    "originalPrice": 289,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5460",
+    "skuId": "6#1#8369",
+    "description": "45+ gms of Protein: Chicken Rashers, Chicken Keema with Chicken Seekh Kebab in the crust layered with Shawarma Sauce.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/23b735f3-4d17-4220-b80c-2b619d332312_ShawarmaMaxxFHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/23b735f3-4d17-4220-b80c-2b619d332312_ShawarmaMaxxFHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 239,
+      "Medium (Serves 2)": 419,
+      "Large (Serves 4)": 649
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 239,
+        "100% Wheat Thin Crust": 239,
+        "Cheese Burst": 314,
+        "Fresh Pan Pizza": 274
+      },
+      "Medium": {
+        "New Hand Tossed": 419,
+        "100% Wheat Thin Crust": 419,
+        "Cheese Burst": 519,
+        "Fresh Pan Pizza": 469
+      },
+      "Large": {
+        "New Hand Tossed": 649,
+        "100% Wheat Thin Crust": 649,
+        "Cheese Burst": 774,
+        "Fresh Pan Pizza": 719
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0357",
+    "name": "Cheese Volcano Veg Paradise",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0357",
+    "skuId": "9#102#6310",
+    "description": "Centre loaded with Molten Cheese & topped with Golden Corn, Black Olives, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/547ba006-9a6f-48c9-a3f5-5aed3715205b_FullSizeVeggieParadise.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/547ba006-9a6f-48c9-a3f5-5aed3715205b_FullSizeVeggieParadise.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5461",
+    "name": "Chicken Maxxx - BBQ",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 239,
+    "originalPrice": 289,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5461",
+    "skuId": "6#1#8370",
+    "description": "45+ gms of Protein: BBQ Chicken, Chicken Keema with Chicken Seekh Kebab in the crust layered with Masala Curry Sauce.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/dbf9f6bf-baa5-4cd8-adcd-a4b783beb148_KVBBQMaxxKVINappHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/dbf9f6bf-baa5-4cd8-adcd-a4b783beb148_KVBBQMaxxKVINappHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 239,
+      "Medium (Serves 2)": 419,
+      "Large (Serves 4)": 649
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 239,
+        "100% Wheat Thin Crust": 239,
+        "Cheese Burst": 314,
+        "Fresh Pan Pizza": 274
+      },
+      "Medium": {
+        "New Hand Tossed": 419,
+        "100% Wheat Thin Crust": 419,
+        "Cheese Burst": 519,
+        "Fresh Pan Pizza": 469
+      },
+      "Large": {
+        "New Hand Tossed": 649,
+        "100% Wheat Thin Crust": 649,
+        "Cheese Burst": 774,
+        "Fresh Pan Pizza": 719
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0396",
+    "name": "Paneer Tandoori Meltz LXT",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 39,
+    "originalPrice": 49,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0396",
+    "skuId": "8245",
+    "description": "Creamy Cheezy Meltz",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0396",
+    "name": "Classic",
+    "category": "Pizza Mania",
+    "type": "VEG",
+    "price": 59,
+    "originalPrice": 69,
+    "discount": "14% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0396",
+    "skuId": "6#391#6596",
+    "description": "A classic pizza topped with sprinkle of basil and parsley herbs",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
+    "sizes": {
+      "Regular (Single)": 59
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0242",
+    "name": "Grilled Wings Lemon Pepper",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 169,
+    "originalPrice": 209,
+    "discount": "19% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0242",
+    "skuId": "6373",
+    "description": "Juicy grilled chicken wings roasted with zesty lemon pepper seasoning for a delicious taste!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/a3bdd517-494f-4cc2-a08c-4933e01437ec_GrilledWingsLemonPepper.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/a3bdd517-494f-4cc2-a08c-4933e01437ec_GrilledWingsLemonPepper.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-DST0118",
+    "name": "Blueberry Mousse",
+    "category": "Desserts",
+    "type": "VEG",
+    "price": 59,
+    "originalPrice": 69,
+    "discount": "14% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "DST0118",
+    "skuId": "8170",
+    "description": "A light, creamy blueberry mousse bursting with fruity freshness. A perfectly smooth finish!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d9375215-52ed-447f-b0b9-90d107535c1c_BlueberryMousseHOMEPRODUCT.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d9375215-52ed-447f-b0b9-90d107535c1c_BlueberryMousseHOMEPRODUCT.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0355",
+    "name": "Cheese Volcano Peppy Paneer",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0355",
+    "skuId": "9#102#6010",
+    "description": "Centre loaded with Molten Cheese & topped with peppy Paneer, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bc74ba78-bf2c-4c4f-bfd8-53c0bb5d7637_volcanoHomePeppyPaneer.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bc74ba78-bf2c-4c4f-bfd8-53c0bb5d7637_volcanoHomePeppyPaneer.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-BRD0053",
+    "name": "Fiery Corn & Jalapeno Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BRD0053",
+    "skuId": "6199",
+    "description": "Freshly baked garlic bread infused with Spicy Guntur Sauce, Molten cheese, juicy corn & tangy jalapeno",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0498",
+    "name": "Big Big 6in1 Cheeseburst - Veg",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 999,
+    "originalPrice": 1199,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0498",
+    "skuId": "11#115#8390",
+    "description": "Big Big Pizza meets iconic Cheeseburst crust, bursting with gooey molten cheese and 6 bestseller veg flavours.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/201ae372-a245-48eb-95e3-68daeb4d4a65_BBPCBVxHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/201ae372-a245-48eb-95e3-68daeb4d4a65_BBPCBVxHomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 999,
+      "Medium (Serves 2)": 1749,
+      "Large (Serves 4)": 2699
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 999,
+        "100% Wheat Thin Crust": 999,
+        "Cheese Burst": 1074,
+        "Fresh Pan Pizza": 1034
+      },
+      "Medium": {
+        "New Hand Tossed": 1749,
+        "100% Wheat Thin Crust": 1749,
+        "Cheese Burst": 1849,
+        "Fresh Pan Pizza": 1799
+      },
+      "Large": {
+        "New Hand Tossed": 2699,
+        "100% Wheat Thin Crust": 2699,
+        "Cheese Burst": 2824,
+        "Fresh Pan Pizza": 2769
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5458",
+    "name": "Chicken Maxxx - Tandoori",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 239,
+    "originalPrice": 289,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5458",
+    "skuId": "6#1#8610",
+    "description": "45+ gms of Protein: Chicken Tikka, Chicken Keema with Chicken Seekh Kebab in the crust layered with Tandoori Sauce",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 239,
+      "Medium (Serves 2)": 419,
+      "Large (Serves 4)": 649
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 239,
+        "100% Wheat Thin Crust": 239,
+        "Cheese Burst": 314,
+        "Fresh Pan Pizza": 274
+      },
+      "Medium": {
+        "New Hand Tossed": 419,
+        "100% Wheat Thin Crust": 419,
+        "Cheese Burst": 519,
+        "Fresh Pan Pizza": 469
+      },
+      "Large": {
+        "New Hand Tossed": 649,
+        "100% Wheat Thin Crust": 649,
+        "Cheese Burst": 774,
+        "Fresh Pan Pizza": 719
+      }
+    }
+  },
+  {
+    "id": "DOM-BRD0055",
+    "name": "Korean Paneer Tikka Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BRD0055",
+    "skuId": "6201",
+    "description": "Freshly Baked Stuffed Garlic Bread infused with Korean Sweet Chili Sauce, Molten Cheese, Onion and Paneer Tikka fillings",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/582af029-c566-477a-8d74-38d4725ff0b8_CorouselGarlicBreadwithpaneerKorean.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/582af029-c566-477a-8d74-38d4725ff0b8_CorouselGarlicBreadwithpaneerKorean.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5159",
+    "name": "The 5 Chicken Feast Pizza",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 775,
+    "originalPrice": 929,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5159",
+    "skuId": "7#1#4617",
+    "description": "Loaded with 5 different Chicken toppings - grilled Chicken Rashers, Chicken Meatballs, Chicken Tikka, herby Chicken Sausage and flavorful Chicken Keema",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2fe42a32-0138-4612-b3a9-1f8aacb0b5b5_FullsizeThe5FeastChickenCB.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2fe42a32-0138-4612-b3a9-1f8aacb0b5b5_FullsizeThe5FeastChickenCB.webp",
+    "sizes": {
+      "Regular (Serves 1)": 775,
+      "Medium (Serves 2)": 1359,
+      "Large (Serves 4)": 2089
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 775,
+        "100% Wheat Thin Crust": 775,
+        "Cheese Burst": 850,
+        "Fresh Pan Pizza": 810
+      },
+      "Medium": {
+        "New Hand Tossed": 1359,
+        "100% Wheat Thin Crust": 1359,
+        "Cheese Burst": 1459,
+        "Fresh Pan Pizza": 1409
+      },
+      "Large": {
+        "New Hand Tossed": 2089,
+        "100% Wheat Thin Crust": 2089,
+        "Cheese Burst": 2214,
+        "Fresh Pan Pizza": 2159
+      }
+    }
+  },
+  {
+    "id": "DOM-BEV0224",
+    "name": "Packaged Water 500ml",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 29,
+    "originalPrice": 39,
+    "discount": "26% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0224",
+    "skuId": "6236",
+    "description": "Packaged Drinking Water",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5d80611c-3b32-4f47-8c48-8a2965c47961_ClearWaterHomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5d80611c-3b32-4f47-8c48-8a2965c47961_ClearWaterHomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0571",
+    "name": "Reg. Veggie Paradise LXT OAG",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 269,
+    "originalPrice": 329,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0571",
+    "skuId": "6#1#8249",
+    "description": "The awesome foursome! Golden corn, black olives, capsicum, red paprika",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/391142c2-055c-4214-b06a-c2005c5f9768_new_veggie_paradise.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/391142c2-055c-4214-b06a-c2005c5f9768_new_veggie_paradise.webp",
+    "sizes": {
+      "Regular (Serves 1)": 269,
+      "Medium (Serves 2)": 469,
+      "Large (Serves 4)": 729
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 269,
+        "100% Wheat Thin Crust": 269,
+        "Cheese Burst": 344,
+        "Fresh Pan Pizza": 304
+      },
+      "Medium": {
+        "New Hand Tossed": 469,
+        "100% Wheat Thin Crust": 469,
+        "Cheese Burst": 569,
+        "Fresh Pan Pizza": 519
+      },
+      "Large": {
+        "New Hand Tossed": 729,
+        "100% Wheat Thin Crust": 729,
+        "Cheese Burst": 854,
+        "Fresh Pan Pizza": 799
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0631",
+    "name": "Paneer Maxxx Makhani Fusion",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 239,
+    "originalPrice": 289,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ0631",
+    "skuId": "6#1#8609",
+    "description": "Loaded with 2x Paneer with fusion of sweet and spicy Makhani sauce along with crust stuffed with mesmerizing veg kebab.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5e9ed0a0-79b0-46af-bfbf-d0ad8bbc8dea_MakhanixPxHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5e9ed0a0-79b0-46af-bfbf-d0ad8bbc8dea_MakhanixPxHomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 239,
+      "Medium (Serves 2)": 419,
+      "Large (Serves 4)": 649
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 239,
+        "100% Wheat Thin Crust": 239,
+        "Cheese Burst": 314,
+        "Fresh Pan Pizza": 274
+      },
+      "Medium": {
+        "New Hand Tossed": 419,
+        "100% Wheat Thin Crust": 419,
+        "Cheese Burst": 519,
+        "Fresh Pan Pizza": 469
+      },
+      "Large": {
+        "New Hand Tossed": 649,
+        "100% Wheat Thin Crust": 649,
+        "Cheese Burst": 774,
+        "Fresh Pan Pizza": 719
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0358",
+    "name": "Corn & Cheese Volcano",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0358",
+    "skuId": "9#102#6013",
+    "description": "Centre loaded with Molten Cheese & topped with juicy Golden Corn\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/69362a82-26e6-4516-abfa-80e46164ebe4_CartCornCheese.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/69362a82-26e6-4516-abfa-80e46164ebe4_CartCornCheese.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-BRD0030",
+    "name": "Paneer Tikka Stuffed GB",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 179,
+    "originalPrice": 219,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BRD0030",
+    "skuId": "4584",
+    "description": "Freshly Baked Stuffed Garlic Bread with Cheese, Onion and Paneer Tikka fillings. Comes with a dash of Basil Parsley Sprinkle on top",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/fb7e0ca4-a256-4183-947e-bd0e4512f162_paneerGBsidejpgFull2x2702.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/fb7e0ca4-a256-4183-947e-bd0e4512f162_paneerGBsidejpgFull2x2702.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5526",
+    "name": "2in1 Cheese Burst - Double Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 419,
+    "originalPrice": 499,
+    "discount": "16% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5526",
+    "skuId": "6#125#8712",
+    "description": "Burst of molten cheddar and cheesy melt with smoky Pepper Barbecue & fiery Peri Peri Chicken",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e43c7735-cedd-4763-9115-b26bd9c9717e_inCheeseBurstDoubleChickenInappHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e43c7735-cedd-4763-9115-b26bd9c9717e_inCheeseBurstDoubleChickenInappHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 419,
+      "Medium (Serves 2)": 729,
+      "Large (Serves 4)": 1129
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 419,
+        "100% Wheat Thin Crust": 419,
+        "Cheese Burst": 494,
+        "Fresh Pan Pizza": 454
+      },
+      "Medium": {
+        "New Hand Tossed": 729,
+        "100% Wheat Thin Crust": 729,
+        "Cheese Burst": 829,
+        "Fresh Pan Pizza": 779
+      },
+      "Large": {
+        "New Hand Tossed": 1129,
+        "100% Wheat Thin Crust": 1129,
+        "Cheese Burst": 1254,
+        "Fresh Pan Pizza": 1199
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5357",
+    "name": "Cheese Lava Spiced Double Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 329,
+    "originalPrice": 399,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5357",
+    "skuId": "7#121#6882",
+    "description": "8 cheesy pull-aparts loaded with Pepper BBQ Chicken & Peri Peri Chicken! Pull, dip & relish the cheesy heaven.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/21db76fd-0d5d-4228-804e-16c705741722_cheHomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/21db76fd-0d5d-4228-804e-16c705741722_cheHomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 329,
+      "Medium (Serves 2)": 579,
+      "Large (Serves 4)": 889
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 329,
+        "100% Wheat Thin Crust": 329,
+        "Cheese Burst": 404,
+        "Fresh Pan Pizza": 364
+      },
+      "Medium": {
+        "New Hand Tossed": 579,
+        "100% Wheat Thin Crust": 579,
+        "Cheese Burst": 679,
+        "Fresh Pan Pizza": 629
+      },
+      "Large": {
+        "New Hand Tossed": 889,
+        "100% Wheat Thin Crust": 889,
+        "Cheese Burst": 1014,
+        "Fresh Pan Pizza": 959
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0779",
+    "name": "Dominoid - Mexican Sizzle Veg",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 129,
+    "originalPrice": 159,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0779",
+    "skuId": "12#126#8828",
+    "description": "Sweet meets spicy meets cheesy in this loaded slice. Bold flavour, crispy crust. Can't-stop-eating energy.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0c0c354c-8673-49d9-8a20-53aa61fa1421_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0c0c354c-8673-49d9-8a20-53aa61fa1421_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 129,
+      "Medium (Serves 2)": 229,
+      "Large (Serves 4)": 349
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 129,
+        "100% Wheat Thin Crust": 129,
+        "Cheese Burst": 204,
+        "Fresh Pan Pizza": 164
+      },
+      "Medium": {
+        "New Hand Tossed": 229,
+        "100% Wheat Thin Crust": 229,
+        "Cheese Burst": 329,
+        "Fresh Pan Pizza": 279
+      },
+      "Large": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 419
+      }
+    }
+  },
+  {
+    "id": "DOM-BEV0847",
+    "name": "Classic Cold Coffee 300 ml",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 89,
+    "originalPrice": 109,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0847",
+    "skuId": "8359",
+    "description": "Indulge in flavor of our Rich, Creamy Cold Coffee",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/99f3da97-14e5-4cf8-a020-a0a0c10377eb_COFFEEGLASSSearchProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/99f3da97-14e5-4cf8-a020-a0a0c10377eb_COFFEEGLASSSearchProductVxpx.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0625",
+    "name": "Paneer Maxxx Garlic Ranch",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 299,
+    "originalPrice": 359,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ0625",
+    "skuId": "6#1#8463",
+    "description": "Loaded with 2x Paneer and drizzled with bold Garlic Ranch sauce along with crust stuffed with mesmerizing veg kebab.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b92a14d2-1f3a-4f56-b987-5c78b28b574e_GarlicRanchxPxHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b92a14d2-1f3a-4f56-b987-5c78b28b574e_GarlicRanchxPxHomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 299,
+      "Medium (Serves 2)": 519,
+      "Large (Serves 4)": 809
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 299,
+        "100% Wheat Thin Crust": 299,
+        "Cheese Burst": 374,
+        "Fresh Pan Pizza": 334
+      },
+      "Medium": {
+        "New Hand Tossed": 519,
+        "100% Wheat Thin Crust": 519,
+        "Cheese Burst": 619,
+        "Fresh Pan Pizza": 569
+      },
+      "Large": {
+        "New Hand Tossed": 809,
+        "100% Wheat Thin Crust": 809,
+        "Cheese Burst": 934,
+        "Fresh Pan Pizza": 879
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0305",
+    "name": "Tandoori Loaded Chicken Taco",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 205,
+    "originalPrice": 249,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0305",
+    "skuId": "6632",
+    "description": "Stuffed with tandoori sauce, spiced chicken for a bold Indian twist.. Double tacos for double fun",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/44a33bdf-5938-4317-89c4-d00adca521ee_HomeProductV1TandooriLoadedChickenTaco720x700px.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/44a33bdf-5938-4317-89c4-d00adca521ee_HomeProductV1TandooriLoadedChickenTaco720x700px.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0171",
+    "name": "Cheese Overload",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 725,
+    "originalPrice": 869,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0171",
+    "skuId": "7#1#4607",
+    "description": "Cheese Overloaded Pizza with a medley of Mozzarella, Cheddar & Ghost Pepper flavoured Cheese.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/9f0b132c-18e4-4cb3-9ba8-8fdb976a9709_PIZ0171.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/9f0b132c-18e4-4cb3-9ba8-8fdb976a9709_PIZ0171.webp",
+    "sizes": {
+      "Regular (Serves 1)": 725,
+      "Medium (Serves 2)": 1269,
+      "Large (Serves 4)": 1959
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 725,
+        "100% Wheat Thin Crust": 725,
+        "Cheese Burst": 800,
+        "Fresh Pan Pizza": 760
+      },
+      "Medium": {
+        "New Hand Tossed": 1269,
+        "100% Wheat Thin Crust": 1269,
+        "Cheese Burst": 1369,
+        "Fresh Pan Pizza": 1319
+      },
+      "Large": {
+        "New Hand Tossed": 1959,
+        "100% Wheat Thin Crust": 1959,
+        "Cheese Burst": 2084,
+        "Fresh Pan Pizza": 2029
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5554",
+    "name": "Dominoid - Korean Heat Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 149,
+    "originalPrice": 189,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5554",
+    "skuId": "12#126#8831",
+    "description": "Sticky-spicy korean glaze, juicy chicken, cheese pull for days. Heat that's straight-up addictive.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b82befdd-af52-4650-bd20-5f9f57c51814_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b82befdd-af52-4650-bd20-5f9f57c51814_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 149,
+      "Medium (Serves 2)": 259,
+      "Large (Serves 4)": 399
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 149,
+        "100% Wheat Thin Crust": 149,
+        "Cheese Burst": 224,
+        "Fresh Pan Pizza": 184
+      },
+      "Medium": {
+        "New Hand Tossed": 259,
+        "100% Wheat Thin Crust": 259,
+        "Cheese Burst": 359,
+        "Fresh Pan Pizza": 309
+      },
+      "Large": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 524,
+        "Fresh Pan Pizza": 469
+      }
+    }
+  },
+  {
+    "id": "DOM-NVPARCEL",
+    "name": "Chicken Parcel",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 60,
+    "originalPrice": 79,
+    "discount": "24% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "NVPARCEL",
+    "skuId": "185",
+    "description": "Snacky bites! Pizza rolls with chicken sausage & creamy harissa sauce",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-TACVG04",
+    "name": "Taco Mexicana Veg",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 149,
+    "originalPrice": 189,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "TACVG04",
+    "skuId": "157",
+    "description": "Truly irresistible! Crispy taco with veg patty & creamy harissa sauce",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5122",
+    "name": "Chicken Fiesta",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 615,
+    "originalPrice": 739,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5122",
+    "skuId": "7#1#59",
+    "description": "Grilled chicken rashers, peri-peri chicken, onion & capsicum, a complete fiesta",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d5b5a2d5-55ad-4414-9c6b-5f736b399075_FullsizeChickenFiestaCB.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d5b5a2d5-55ad-4414-9c6b-5f736b399075_FullsizeChickenFiestaCB.webp",
+    "sizes": {
+      "Regular (Serves 1)": 615,
+      "Medium (Serves 2)": 1079,
+      "Large (Serves 4)": 1659
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 615,
+        "100% Wheat Thin Crust": 615,
+        "Cheese Burst": 690,
+        "Fresh Pan Pizza": 650
+      },
+      "Medium": {
+        "New Hand Tossed": 1079,
+        "100% Wheat Thin Crust": 1079,
+        "Cheese Burst": 1179,
+        "Fresh Pan Pizza": 1129
+      },
+      "Large": {
+        "New Hand Tossed": 1659,
+        "100% Wheat Thin Crust": 1659,
+        "Cheese Burst": 1784,
+        "Fresh Pan Pizza": 1729
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0233",
+    "name": "Paneer, Onion & Capsicum with Desi Makhani Sauce",
+    "category": "Pizza Mania",
+    "type": "VEG",
+    "price": 129,
+    "originalPrice": 159,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0233",
+    "skuId": "6#391#4850",
+    "description": "Authentic Indian Flavor of Makhani Sauce loaded with juicy Paneer, crisp Capsicum and crunchy Onion.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9197e275-6983-4cc4-a682-c7e9e8868b94_PMOnionCapsicumPaneerMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9197e275-6983-4cc4-a682-c7e9e8868b94_PMOnionCapsicumPaneerMenu.webp",
+    "sizes": {
+      "Regular (Single)": 129
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0404",
+    "name": "Veg Loaded",
+    "category": "Pizza Mania",
+    "type": "VEG",
+    "price": 139,
+    "originalPrice": 169,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0404",
+    "skuId": "6#128#6620",
+    "description": "Tomato, Jalapeno, Corn, Grilled Mushroom & crushed Aranchini Patty in a fresh pan crust",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
+    "sizes": {
+      "Regular (Single)": 139
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-BEV0832",
+    "name": "MINI COKE ZERO",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 19,
+    "originalPrice": 19,
+    "discount": "0% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0832",
+    "skuId": "8292",
+    "description": "Sparkling and Refreshing Beverage",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2713c840-0ab4-4720-af99-5d6c14f4fd37_CokeHomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2713c840-0ab4-4720-af99-5d6c14f4fd37_CokeHomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID003",
+    "name": "Tomato Ketchup",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 2,
+    "originalPrice": -1,
+    "discount": "300% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID003",
+    "skuId": "4110",
+    "description": "Goodness of Tomato Ketchup in mini sachets",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5a733cfb-60cf-4912-b938-9b6286925b94_Tomato-ketchup-8gm_Upsell-Cards_450x216.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5a733cfb-60cf-4912-b938-9b6286925b94_Tomato-ketchup-8gm_Upsell-Cards_450x216.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0468",
+    "name": "Cheese Lava Peppy Paneer",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 329,
+    "originalPrice": 399,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0468",
+    "skuId": "7#121#6890",
+    "description": "8 cheesy pull-aparts topped with paneer, capsicum & red paprika! Pull, dip & let the cheese take over.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0ab070e9-481f-452c-9e8b-51bf04b43df9_CheeseLavaPullApartPeppyPaneerHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0ab070e9-481f-452c-9e8b-51bf04b43df9_CheeseLavaPullApartPeppyPaneerHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 329,
+      "Medium (Serves 2)": 579,
+      "Large (Serves 4)": 889
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 329,
+        "100% Wheat Thin Crust": 329,
+        "Cheese Burst": 404,
+        "Fresh Pan Pizza": 364
+      },
+      "Medium": {
+        "New Hand Tossed": 579,
+        "100% Wheat Thin Crust": 579,
+        "Cheese Burst": 679,
+        "Fresh Pan Pizza": 629
+      },
+      "Large": {
+        "New Hand Tossed": 889,
+        "100% Wheat Thin Crust": 889,
+        "Cheese Burst": 1014,
+        "Fresh Pan Pizza": 959
+      }
+    }
+  },
+  {
+    "id": "DOM-BEV0824",
+    "name": "Sprite 475ml",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 67,
+    "originalPrice": 79,
+    "discount": "15% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0824",
+    "skuId": "6398",
+    "description": "Refreshing clear drink with a natural lemon flavour",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-BRD0052",
+    "name": "Korean Corn & Jalapeno Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BRD0052",
+    "skuId": "6198",
+    "description": "Freshly baked garlic bread infused with Korean Sweet Chili Sauce, Molten cheese, juicy corn & tangy jalapeno",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/43128242-d938-472d-b8d4-ddafb567a9c4_CartGarlicBreadwithcornkorean.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/43128242-d938-472d-b8d4-ddafb567a9c4_CartGarlicBreadwithcornkorean.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0177",
+    "name": "Spicy Chicken Bombs",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 109,
+    "originalPrice": 139,
+    "discount": "22% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0177",
+    "skuId": "6047",
+    "description": "Tender, Juicy, Melt in Mouth Chicken Meatballs in Chili Seasoning!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f9dccbd2-6e3d-4e35-b0dd-f55a6793cea8_Fullsizespicymeatballs.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f9dccbd2-6e3d-4e35-b0dd-f55a6793cea8_Fullsizespicymeatballs.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5161",
+    "name": "Chicken Keema Paratha Pizza",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 269,
+    "originalPrice": 329,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5161",
+    "skuId": "6#3#4649",
+    "description": "Flavourful & meaty chicken keema paratha and goodness of cheesy pizza coming together in an epic crossover!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/ff9b0a6d-7de3-4c54-9c7b-ceb57b6ca489_keemappsidejpgFull2x2702.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/ff9b0a6d-7de3-4c54-9c7b-ceb57b6ca489_keemappsidejpgFull2x2702.webp",
+    "sizes": {
+      "Regular (Serves 1)": 269,
+      "Medium (Serves 2)": 469,
+      "Large (Serves 4)": 729
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 269,
+        "100% Wheat Thin Crust": 269,
+        "Cheese Burst": 344,
+        "Fresh Pan Pizza": 304
+      },
+      "Medium": {
+        "New Hand Tossed": 469,
+        "100% Wheat Thin Crust": 469,
+        "Cheese Burst": 569,
+        "Fresh Pan Pizza": 519
+      },
+      "Large": {
+        "New Hand Tossed": 729,
+        "100% Wheat Thin Crust": 729,
+        "Cheese Burst": 854,
+        "Fresh Pan Pizza": 799
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0266",
+    "name": "Veggie Bites",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 39,
+    "originalPrice": 49,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0266",
+    "skuId": "6411",
+    "description": "Crispy Veggie Bites",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5278",
+    "name": "Big Big 6in1 Pizza - Non Veg",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 999,
+    "originalPrice": 1199,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5278",
+    "skuId": "11#1#6652",
+    "description": "6 Chicken Bangers in 1 Epic Pan Pizza: Pepper Barbeque Chicken, Chicken Dominator, Chicken Fiesta, Spiced Double Chicken, Chicken Golden Delight",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4465ab77-1c41-4d24-b96b-cd26bd92df0f_homep.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4465ab77-1c41-4d24-b96b-cd26bd92df0f_homep.webp",
+    "sizes": {
+      "Regular (Serves 1)": 999,
+      "Medium (Serves 2)": 1749,
+      "Large (Serves 4)": 2699
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 999,
+        "100% Wheat Thin Crust": 999,
+        "Cheese Burst": 1074,
+        "Fresh Pan Pizza": 1034
+      },
+      "Medium": {
+        "New Hand Tossed": 1749,
+        "100% Wheat Thin Crust": 1749,
+        "Cheese Burst": 1849,
+        "Fresh Pan Pizza": 1799
+      },
+      "Large": {
+        "New Hand Tossed": 2699,
+        "100% Wheat Thin Crust": 2699,
+        "Cheese Burst": 2824,
+        "Fresh Pan Pizza": 2769
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5253",
+    "name": "Cheese Volcano Chicken Delight",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5253",
+    "skuId": "9#102#6309",
+    "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken & Golden Corn\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/bda23fb7-fbc5-4b61-b181-9ccdc1398859_CartCheeseVolcanoChickenDelight.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/bda23fb7-fbc5-4b61-b181-9ccdc1398859_CartCheeseVolcanoChickenDelight.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0356",
+    "name": "Cheese Volcano Farmhouse",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0356",
+    "skuId": "9#102#6311",
+    "description": "Centre loaded with Molten Cheese & topped with Onion, Capsicum, Tomato & Grilled Mushroom\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/8d76dc34-bcb2-41d4-9320-49ac8b3035db_CartFarmhouse.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/8d76dc34-bcb2-41d4-9320-49ac8b3035db_CartFarmhouse.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0502",
+    "name": "Big Big 6in1 Lavaburst - Veg",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 1199,
+    "originalPrice": 1439,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0502",
+    "skuId": "11#122#8187",
+    "description": "Big Big crust oozing with molten cheddar cheese with six bestseller veg flavours.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6b1a99c-6029-42a5-97cb-aaf579ec3340_BBPLAVAVxHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6b1a99c-6029-42a5-97cb-aaf579ec3340_BBPLAVAVxHomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 1199,
+      "Medium (Serves 2)": 2099,
+      "Large (Serves 4)": 3239
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 1199,
+        "100% Wheat Thin Crust": 1199,
+        "Cheese Burst": 1274,
+        "Fresh Pan Pizza": 1234
+      },
+      "Medium": {
+        "New Hand Tossed": 2099,
+        "100% Wheat Thin Crust": 2099,
+        "Cheese Burst": 2199,
+        "Fresh Pan Pizza": 2149
+      },
+      "Large": {
+        "New Hand Tossed": 3239,
+        "100% Wheat Thin Crust": 3239,
+        "Cheese Burst": 3364,
+        "Fresh Pan Pizza": 3309
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5355",
+    "name": "Cheese Lava Pepper BBQ Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 399,
+    "originalPrice": 489,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5355",
+    "skuId": "7#121#6874",
+    "description": "8 cheesy pull-aparts topped with pepper BBQ chicken! Pull, dip & melt into cheesy goodness.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/778023ef-a417-4c77-a77a-a7347a7de73f_CheeseLavaPullApartPepperBBQChickenHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/778023ef-a417-4c77-a77a-a7347a7de73f_CheeseLavaPullApartPepperBBQChickenHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 399,
+      "Medium (Serves 2)": 699,
+      "Large (Serves 4)": 1079
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 434
+      },
+      "Medium": {
+        "New Hand Tossed": 699,
+        "100% Wheat Thin Crust": 699,
+        "Cheese Burst": 799,
+        "Fresh Pan Pizza": 749
+      },
+      "Large": {
+        "New Hand Tossed": 1079,
+        "100% Wheat Thin Crust": 1079,
+        "Cheese Burst": 1204,
+        "Fresh Pan Pizza": 1149
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0578",
+    "name": "Reg+ CV Peppy Paneer LXT OAG",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 325,
+    "originalPrice": 399,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0578",
+    "skuId": "9#102#8250",
+    "description": "Centre loaded with Molten Cheese & topped with peppy Paneer, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/441b82be-94f6-4de8-980b-5df660d82ee3_volcanoHomePeppyPaneer.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/441b82be-94f6-4de8-980b-5df660d82ee3_volcanoHomePeppyPaneer.webp",
+    "sizes": {
+      "Regular (Serves 1)": 325,
+      "Medium (Serves 2)": 569,
+      "Large (Serves 4)": 879
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 325,
+        "100% Wheat Thin Crust": 325,
+        "Cheese Burst": 400,
+        "Fresh Pan Pizza": 360
+      },
+      "Medium": {
+        "New Hand Tossed": 569,
+        "100% Wheat Thin Crust": 569,
+        "Cheese Burst": 669,
+        "Fresh Pan Pizza": 619
+      },
+      "Large": {
+        "New Hand Tossed": 879,
+        "100% Wheat Thin Crust": 879,
+        "Cheese Burst": 1004,
+        "Fresh Pan Pizza": 949
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5427",
+    "name": "Reg. Pepper BBQ Chk LXT OAG",
+    "category": "Pizza Mania",
+    "type": "NON-VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5427",
+    "skuId": "6#1#8235",
+    "description": "Pepper barbecue chicken for that extra zing",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b704c14f-309f-446b-8828-1b98128ef440_PMPepperBBqChickenMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b704c14f-309f-446b-8828-1b98128ef440_PMPepperBBqChickenMenu.webp",
+    "sizes": {
+      "Regular (Single)": 249
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-BRD0054",
+    "name": "Makhani Corn & Jalapeno Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BRD0054",
+    "skuId": "6200",
+    "description": "Freshly baked garlic bread infused with Creamy Makhani Sauce, Molten cheese, juicy corn & tangy jalapeno",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b37ea44d-021e-4cd3-a139-7239e569065d_FullsizeGarlicBreadwithcornMakhani.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b37ea44d-021e-4cd3-a139-7239e569065d_FullsizeGarlicBreadwithcornMakhani.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5551",
+    "name": "Dominoid - Italian Truffle Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 149,
+    "originalPrice": 189,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5551",
+    "skuId": "12#126#8830",
+    "description": "Earthy truffle drizzle over tender chicken & gooey cheese — rich, savoury, straight-up indulgent on a crispy pan crust",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/af9bbb9b-3264-4c80-b261-4936661bb201_HomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/af9bbb9b-3264-4c80-b261-4936661bb201_HomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 149,
+      "Medium (Serves 2)": 259,
+      "Large (Serves 4)": 399
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 149,
+        "100% Wheat Thin Crust": 149,
+        "Cheese Burst": 224,
+        "Fresh Pan Pizza": 184
+      },
+      "Medium": {
+        "New Hand Tossed": 259,
+        "100% Wheat Thin Crust": 259,
+        "Cheese Burst": 359,
+        "Fresh Pan Pizza": 309
+      },
+      "Large": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 524,
+        "Fresh Pan Pizza": 469
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5254",
+    "name": "Cheese Volcano Double Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5254",
+    "skuId": "9#102#6016",
+    "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken & Peri Peri Chicken.\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5a5346a4-cf9a-440e-80c6-981b051a3201_UpsellcardsizeCheeseVolcanoDoubleChicken.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5a5346a4-cf9a-440e-80c6-981b051a3201_UpsellcardsizeCheeseVolcanoDoubleChicken.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-BEV0145",
+    "name": "B Natural Alphonsos from Ratnagiri (300 ml)",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 67,
+    "originalPrice": 79,
+    "discount": "15% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0145",
+    "skuId": "4562",
+    "description": "Alphonsos only from Ratnagiri with the Goodness of Fiber",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/df088a5f-6840-4cc7-8511-2207d8da1aac_BNRatnagiriAlphonso-BEV0145-HomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/df088a5f-6840-4cc7-8511-2207d8da1aac_BNRatnagiriAlphonso-BEV0145-HomeProduct.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5251",
+    "name": "Cheese Volcano BBQ Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5251",
+    "skuId": "9#102#6312",
+    "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5d43160f-76b1-4d5d-965a-905ba557eae0_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5d43160f-76b1-4d5d-965a-905ba557eae0_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-TACNV06",
+    "name": "Taco Mexicana Non Veg",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 179,
+    "originalPrice": 219,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "TACNV06",
+    "skuId": "155",
+    "description": "Truly irresistible! Crispy taco with non-veg patty & creamy harissa sauce",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/03504667-bc4c-4cb1-be91-1be18d02fe86_nvtacosidejpgFull2x2702.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/03504667-bc4c-4cb1-be91-1be18d02fe86_nvtacosidejpgFull2x2702.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-TACVG05",
+    "name": "Taco Mexicana-Veg (Single)",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 85,
+    "originalPrice": 109,
+    "discount": "22% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "TACVG05",
+    "skuId": "4200",
+    "description": "Truly irresistible! Crispy taco with a delicious veg patty & creamy sauce",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9fbda5ac-139e-41a9-b420-dd2f83ec0b08_taco.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9fbda5ac-139e-41a9-b420-dd2f83ec0b08_taco.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5555",
+    "name": "Dominoid - Mexican Sizzle Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 149,
+    "originalPrice": 189,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5555",
+    "skuId": "12#126#8832",
+    "description": "Sweet-spicy sauce, juicy chicken, cheesy finish — swicy flavour that keeps you coming back for one more bite.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/392dfd3b-386f-4c33-8b78-030c0c4e35bc_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/392dfd3b-386f-4c33-8b78-030c0c4e35bc_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 149,
+      "Medium (Serves 2)": 259,
+      "Large (Serves 4)": 399
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 149,
+        "100% Wheat Thin Crust": 149,
+        "Cheese Burst": 224,
+        "Fresh Pan Pizza": 184
+      },
+      "Medium": {
+        "New Hand Tossed": 259,
+        "100% Wheat Thin Crust": 259,
+        "Cheese Burst": 359,
+        "Fresh Pan Pizza": 309
+      },
+      "Large": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 524,
+        "Fresh Pan Pizza": 469
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5359",
+    "name": "Cheese Lava Chicken Golden Delight",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 399,
+    "originalPrice": 489,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5359",
+    "skuId": "7#121#6880",
+    "description": "8 cheesy pull-aparts loaded with Pepper BBQ Chicken & golden corn! Pull, dip & melt into cheesy perfection.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5409ab6b-731f-4405-8497-1becf41bf6fb_CheeseLavaPullApartChickenGoldenDelightHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5409ab6b-731f-4405-8497-1becf41bf6fb_CheeseLavaPullApartChickenGoldenDelightHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 399,
+      "Medium (Serves 2)": 699,
+      "Large (Serves 4)": 1079
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 434
+      },
+      "Medium": {
+        "New Hand Tossed": 699,
+        "100% Wheat Thin Crust": 699,
+        "Cheese Burst": 799,
+        "Fresh Pan Pizza": 749
+      },
+      "Large": {
+        "New Hand Tossed": 1079,
+        "100% Wheat Thin Crust": 1079,
+        "Cheese Burst": 1204,
+        "Fresh Pan Pizza": 1149
+      }
+    }
+  },
+  {
+    "id": "DOM-BEV0842",
+    "name": "Coke Zero 255ml LXT",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 47,
+    "originalPrice": 59,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0842",
+    "skuId": "8238",
+    "description": "Maximum Taste, Zero Sugar",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5386",
+    "name": "Big Big 6in1 Cheeseburst - Non Veg",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 1199,
+    "originalPrice": 1439,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5386",
+    "skuId": "11#115#8391",
+    "description": "Big Big Pizza meets iconic Cheeseburst crust, bursting with gooey molten cheese and 6 bestseller non veg flavours.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/59066b33-0b7b-4300-8422-ab1ca0ab3719_BBPCBNVxHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/59066b33-0b7b-4300-8422-ab1ca0ab3719_BBPCBNVxHomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 1199,
+      "Medium (Serves 2)": 2099,
+      "Large (Serves 4)": 3239
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 1199,
+        "100% Wheat Thin Crust": 1199,
+        "Cheese Burst": 1274,
+        "Fresh Pan Pizza": 1234
+      },
+      "Medium": {
+        "New Hand Tossed": 2099,
+        "100% Wheat Thin Crust": 2099,
+        "Cheese Burst": 2199,
+        "Fresh Pan Pizza": 2149
+      },
+      "Large": {
+        "New Hand Tossed": 3239,
+        "100% Wheat Thin Crust": 3239,
+        "Cheese Burst": 3364,
+        "Fresh Pan Pizza": 3309
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0200",
+    "name": "Corn n Cheese Paratha Pizza",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 199,
+    "originalPrice": 249,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0200",
+    "skuId": "6#3#4647",
+    "description": "A crazy fusion like never before. A delicious fusion of corn stuffed paratha and cheesy pizza.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/7ff4bbe1-f228-4ad7-ae4a-aa653b8c36d0_PPcornsidejpgFull2x2702.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/7ff4bbe1-f228-4ad7-ae4a-aa653b8c36d0_PPcornsidejpgFull2x2702.webp",
+    "sizes": {
+      "Regular (Serves 1)": 199,
+      "Medium (Serves 2)": 349,
+      "Large (Serves 4)": 539
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 199,
+        "100% Wheat Thin Crust": 199,
+        "Cheese Burst": 274,
+        "Fresh Pan Pizza": 234
+      },
+      "Medium": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 449,
+        "Fresh Pan Pizza": 399
+      },
+      "Large": {
+        "New Hand Tossed": 539,
+        "100% Wheat Thin Crust": 539,
+        "Cheese Burst": 664,
+        "Fresh Pan Pizza": 609
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0391",
+    "name": "Big Big 6in1 Pizza - Veg",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 799,
+    "originalPrice": 959,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0391",
+    "skuId": "11#1#6560",
+    "description": "6 Veggie Blockbusters in 1 Epic Pan Pizza: Corn N Cheese, Peppy Paneer, Farmhouse, Mexican Green Wave, Veg Paradise, Margherita",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/df5f7ff3-5ed4-47d3-b571-990b436b33be_HomeProductV1BigBigPizzaVeg.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/df5f7ff3-5ed4-47d3-b571-990b436b33be_HomeProductV1BigBigPizzaVeg.webp",
+    "sizes": {
+      "Regular (Serves 1)": 799,
+      "Medium (Serves 2)": 1399,
+      "Large (Serves 4)": 2159
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 799,
+        "100% Wheat Thin Crust": 799,
+        "Cheese Burst": 874,
+        "Fresh Pan Pizza": 834
+      },
+      "Medium": {
+        "New Hand Tossed": 1399,
+        "100% Wheat Thin Crust": 1399,
+        "Cheese Burst": 1499,
+        "Fresh Pan Pizza": 1449
+      },
+      "Large": {
+        "New Hand Tossed": 2159,
+        "100% Wheat Thin Crust": 2159,
+        "Cheese Burst": 2284,
+        "Fresh Pan Pizza": 2229
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0175",
+    "name": "Spicy Chicken Pops",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 109,
+    "originalPrice": 139,
+    "discount": "22% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0175",
+    "skuId": "6045",
+    "description": "Bite sized Chicken Popcorns, cooked to perfection with Chili Seasoning for a delicious snack experience!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/27047ecf-7101-498d-84b7-b7455ddc2bb4_FullsizespicyPops.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/27047ecf-7101-498d-84b7-b7455ddc2bb4_FullsizespicyPops.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-BRD0058",
+    "name": "Korean Pepperoni Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "BRD0058",
+    "skuId": "6204",
+    "description": "Freshly Baked Garlic Bread infused with Korean Sweet Chili Sauce, Delectable Chicken Pepperoni & molten Cheese",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d28ef928-674c-4aac-acfb-03f5fe1c9bf1_FullsizeGarlicBreadwithPepperonikorean.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d28ef928-674c-4aac-acfb-03f5fe1c9bf1_FullsizeGarlicBreadwithPepperonikorean.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5157",
+    "name": "Spiced Double Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 595,
+    "originalPrice": 709,
+    "discount": "16% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5157",
+    "skuId": "7#1#4615",
+    "description": "Delightful combination of our spicy duo- Pepper Barbecue Chicken and Peri Peri Chicken for Chicken Lovers.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/b1a34dfb-ddef-4ddc-9b15-b3effbf23bfa_UpsellcardDoubleSpiceChickenCB.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/b1a34dfb-ddef-4ddc-9b15-b3effbf23bfa_UpsellcardDoubleSpiceChickenCB.webp",
+    "sizes": {
+      "Regular (Serves 1)": 595,
+      "Medium (Serves 2)": 1039,
+      "Large (Serves 4)": 1609
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 595,
+        "100% Wheat Thin Crust": 595,
+        "Cheese Burst": 670,
+        "Fresh Pan Pizza": 630
+      },
+      "Medium": {
+        "New Hand Tossed": 1039,
+        "100% Wheat Thin Crust": 1039,
+        "Cheese Burst": 1139,
+        "Fresh Pan Pizza": 1089
+      },
+      "Large": {
+        "New Hand Tossed": 1609,
+        "100% Wheat Thin Crust": 1609,
+        "Cheese Burst": 1734,
+        "Fresh Pan Pizza": 1679
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0637",
+    "name": "Paneer Maxxx Tandoori Twist",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 549,
+    "originalPrice": 659,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ0637",
+    "skuId": "7#1#8462",
+    "description": "Loaded with 2x Paneer and a minty twist of Tandoori sauce along with crust stuffed with mesmerizing veg kebab.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2534890a-874d-46f0-92f9-c81b4fdfe8ec_TandooriTwistxPxHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2534890a-874d-46f0-92f9-c81b4fdfe8ec_TandooriTwistxPxHomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 549,
+      "Medium (Serves 2)": 959,
+      "Large (Serves 4)": 1479
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 549,
+        "100% Wheat Thin Crust": 549,
+        "Cheese Burst": 624,
+        "Fresh Pan Pizza": 584
+      },
+      "Medium": {
+        "New Hand Tossed": 959,
+        "100% Wheat Thin Crust": 959,
+        "Cheese Burst": 1059,
+        "Fresh Pan Pizza": 1009
+      },
+      "Large": {
+        "New Hand Tossed": 1479,
+        "100% Wheat Thin Crust": 1479,
+        "Cheese Burst": 1604,
+        "Fresh Pan Pizza": 1549
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5390",
+    "name": "Big Big 6in1 Lavaburst - Non Veg",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 1199,
+    "originalPrice": 1439,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5390",
+    "skuId": "11#122#8188",
+    "description": "Big Big crust oozing with molten cheddar cheese with six bestseller non-veg flavours.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/66348821-44bb-4a95-afeb-7750f6435cde_BBPLAVANVxHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/66348821-44bb-4a95-afeb-7750f6435cde_BBPLAVANVxHomeProduct.webp",
+    "sizes": {
+      "Regular (Serves 1)": 1199,
+      "Medium (Serves 2)": 2099,
+      "Large (Serves 4)": 3239
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 1199,
+        "100% Wheat Thin Crust": 1199,
+        "Cheese Burst": 1274,
+        "Fresh Pan Pizza": 1234
+      },
+      "Medium": {
+        "New Hand Tossed": 2099,
+        "100% Wheat Thin Crust": 2099,
+        "Cheese Burst": 2199,
+        "Fresh Pan Pizza": 2149
+      },
+      "Large": {
+        "New Hand Tossed": 3239,
+        "100% Wheat Thin Crust": 3239,
+        "Cheese Burst": 3364,
+        "Fresh Pan Pizza": 3309
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5525",
+    "name": "2in1 Cheese Burst - Pepper BBQ Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5525",
+    "skuId": "6#125#8765",
+    "description": "Molten cheddar & cheesy melt with juicy BBQ chicken chunks for extra zing",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7949e39c-84c1-4377-b960-c467c5609607_inCheeseBurstPepperBBQInappHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7949e39c-84c1-4377-b960-c467c5609607_inCheeseBurstPepperBBQInappHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0474",
+    "name": "Cheese Lava Veg Paradise",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 399,
+    "originalPrice": 489,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0474",
+    "skuId": "7#121#6877",
+    "description": "8 cheesy pull-aparts topped with corn, capsicum, black olives & red paprika. Pull, dip & relish the cheesy indulgence.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d73d1091-199f-4d5e-81a6-4492c9e4fd3a_CheeseLavaPullApartVegParadiseHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d73d1091-199f-4d5e-81a6-4492c9e4fd3a_CheeseLavaPullApartVegParadiseHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 399,
+      "Medium (Serves 2)": 699,
+      "Large (Serves 4)": 1079
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 434
+      },
+      "Medium": {
+        "New Hand Tossed": 699,
+        "100% Wheat Thin Crust": 699,
+        "Cheese Burst": 799,
+        "Fresh Pan Pizza": 749
+      },
+      "Large": {
+        "New Hand Tossed": 1079,
+        "100% Wheat Thin Crust": 1079,
+        "Cheese Burst": 1204,
+        "Fresh Pan Pizza": 1149
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0734",
+    "name": "2in1 Cheese Burst - Farmhouse",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0734",
+    "skuId": "6#125#8709",
+    "description": "Rich molten cheddar & cheesy melt loaded with veggies & grilled mushroom",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fb8143ab-1da9-4fd9-95f0-8ad50c27f604_inCheeseBurstFarmHouseInappHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fb8143ab-1da9-4fd9-95f0-8ad50c27f604_inCheeseBurstFarmHouseInappHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0301",
+    "name": "Loaded Saucy Chicken Parcel - Tandoori",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 75,
+    "originalPrice": 89,
+    "discount": "16% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0301",
+    "skuId": "6628",
+    "description": "Delicious Parcel stuffed with chicken & smoky tandoori sauce and bold spices for a punch of Indian flavour.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0579",
+    "name": "Reg+ CV Veg Paradise LXT OAG",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 325,
+    "originalPrice": 399,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0579",
+    "skuId": "9#102#8239",
+    "description": "Centre loaded with Molten Cheese & topped with Golden Corn, Black Olives, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9aec579a-99b3-4954-99ce-1690069b56cf_FullSizeVeggieParadise.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9aec579a-99b3-4954-99ce-1690069b56cf_FullSizeVeggieParadise.webp",
+    "sizes": {
+      "Regular (Serves 1)": 325,
+      "Medium (Serves 2)": 569,
+      "Large (Serves 4)": 879
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 325,
+        "100% Wheat Thin Crust": 325,
+        "Cheese Burst": 400,
+        "Fresh Pan Pizza": 360
+      },
+      "Medium": {
+        "New Hand Tossed": 569,
+        "100% Wheat Thin Crust": 569,
+        "Cheese Burst": 669,
+        "Fresh Pan Pizza": 619
+      },
+      "Large": {
+        "New Hand Tossed": 879,
+        "100% Wheat Thin Crust": 879,
+        "Cheese Burst": 1004,
+        "Fresh Pan Pizza": 949
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0778",
+    "name": "Dominoid - Korean Heat Veg",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 129,
+    "originalPrice": 159,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0778",
+    "skuId": "12#126#8827",
+    "description": "That iconic korean glaze, melted cheese, loaded veggies on a crispy pan crust. Spicy enough to be a whole mood.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4df9709c-fe78-43d2-9a5c-6c57fdf3ffa1_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4df9709c-fe78-43d2-9a5c-6c57fdf3ffa1_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 129,
+      "Medium (Serves 2)": 229,
+      "Large (Serves 4)": 349
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 129,
+        "100% Wheat Thin Crust": 129,
+        "Cheese Burst": 204,
+        "Fresh Pan Pizza": 164
+      },
+      "Medium": {
+        "New Hand Tossed": 229,
+        "100% Wheat Thin Crust": 229,
+        "Cheese Burst": 329,
+        "Fresh Pan Pizza": 279
+      },
+      "Large": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 419
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0570",
+    "name": "Reg. Peppy Paneer LXT OAG",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 269,
+    "originalPrice": 329,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0570",
+    "skuId": "6#1#8244",
+    "description": "Flavorful trio of juicy paneer, crisp capsicum with spicy red paprika",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/43e3dd97-08a6-4893-90d9-80e1ab2fbc37_new_peppy_paneer.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/43e3dd97-08a6-4893-90d9-80e1ab2fbc37_new_peppy_paneer.webp",
+    "sizes": {
+      "Regular (Serves 1)": 269,
+      "Medium (Serves 2)": 469,
+      "Large (Serves 4)": 729
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 269,
+        "100% Wheat Thin Crust": 269,
+        "Cheese Burst": 344,
+        "Fresh Pan Pizza": 304
+      },
+      "Medium": {
+        "New Hand Tossed": 469,
+        "100% Wheat Thin Crust": 469,
+        "Cheese Burst": 569,
+        "Fresh Pan Pizza": 519
+      },
+      "Large": {
+        "New Hand Tossed": 729,
+        "100% Wheat Thin Crust": 729,
+        "Cheese Burst": 854,
+        "Fresh Pan Pizza": 799
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5556",
+    "name": "Dominoid - Lebanese Shawarma Chicken",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 149,
+    "originalPrice": 189,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5556",
+    "skuId": "12#126#8833",
+    "description": "Warm shawarma spices, tender chicken, garlicky cheesy finish. Slice-sized & drool-worthy.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/cb79c674-ec07-4d42-900e-d3189f99d135_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/cb79c674-ec07-4d42-900e-d3189f99d135_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 149,
+      "Medium (Serves 2)": 259,
+      "Large (Serves 4)": 399
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 149,
+        "100% Wheat Thin Crust": 149,
+        "Cheese Burst": 224,
+        "Fresh Pan Pizza": 184
+      },
+      "Medium": {
+        "New Hand Tossed": 259,
+        "100% Wheat Thin Crust": 259,
+        "Cheese Burst": 359,
+        "Fresh Pan Pizza": 309
+      },
+      "Large": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 524,
+        "Fresh Pan Pizza": 469
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0261",
+    "name": "Chicken Pops (40gm)",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 49,
+    "originalPrice": 59,
+    "discount": "17% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0261",
+    "skuId": "6408",
+    "description": "Bite sized Chicken Popcorns, cooked to perfection with Chili Seasoning for a delicious snack experience!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/78cde41f-e139-4c52-801f-6bf29a95229b_FullsizespicyPops.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/78cde41f-e139-4c52-801f-6bf29a95229b_FullsizespicyPops.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-DST0106",
+    "name": "Choco Bomb",
+    "category": "Desserts",
+    "type": "VEG",
+    "price": 45,
+    "originalPrice": 59,
+    "discount": "24% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "DST0106",
+    "skuId": "6602",
+    "description": "Chocolate lovers delight! Indulgent, gooey Choco Bomb",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/SearchProductV1/9a9b7473-64c4-44e1-bc58-a577cbaf2b8d_CLC_side_small.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/SearchProductV1/9a9b7473-64c4-44e1-bc58-a577cbaf2b8d_CLC_side_small.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-VGPARCEL",
+    "name": "Veg Parcel",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 50,
+    "originalPrice": 59,
+    "discount": "15% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "VGPARCEL",
+    "skuId": "187",
+    "description": "Snacky bites! Pizza rolls with paneer & creamy harissa sauce",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5306",
+    "name": "Non Veg Loaded",
+    "category": "Pizza Mania",
+    "type": "NON-VEG",
+    "price": 169,
+    "originalPrice": 209,
+    "discount": "19% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5306",
+    "skuId": "6#128#6619",
+    "description": "Chicken sausage, pepper barbecue chicken & peri-peri chicken in a fresh pan crust",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
+    "sizes": {
+      "Regular (Single)": 169
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0265",
+    "name": "Spicy Tandoori Meltz",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 39,
+    "originalPrice": 49,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0265",
+    "skuId": "6412",
+    "description": "Spicy Tandoori Meltz",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0777",
+    "name": "Dominoid - Margherita",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 119,
+    "originalPrice": 149,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0777",
+    "skuId": "12#126#8826",
+    "description": "Molten mozzarella, tangy tomato sauce a crispy pan crust base. Simple, cheesy, chef's classic.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a7639cde-da2a-41b9-a1b2-425e446dba02_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a7639cde-da2a-41b9-a1b2-425e446dba02_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 119,
+      "Medium (Serves 2)": 209,
+      "Large (Serves 4)": 319
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 119,
+        "100% Wheat Thin Crust": 119,
+        "Cheese Burst": 194,
+        "Fresh Pan Pizza": 154
+      },
+      "Medium": {
+        "New Hand Tossed": 209,
+        "100% Wheat Thin Crust": 209,
+        "Cheese Burst": 309,
+        "Fresh Pan Pizza": 259
+      },
+      "Large": {
+        "New Hand Tossed": 319,
+        "100% Wheat Thin Crust": 319,
+        "Cheese Burst": 444,
+        "Fresh Pan Pizza": 389
+      }
+    }
+  },
+  {
+    "id": "DOM-BRD0031",
+    "name": "Chicken Pepperoni Stuffed GB",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 179,
+    "originalPrice": 219,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "BRD0031",
+    "skuId": "4585",
+    "description": "Freshly Baked Garlic Bread stuffed with Delectable Chicken Pepperoni, Cheese and sprinkled with Basil Parsley",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5efc2bde-0333-4602-95b6-b3d9914bd6cd_BRD0031.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5efc2bde-0333-4602-95b6-b3d9914bd6cd_BRD0031.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0735",
+    "name": "2in1 Cheese Burst - Corn N Cheese",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 319,
+    "originalPrice": 389,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0735",
+    "skuId": "6#125#8710",
+    "description": "Sweet corn meets 2in1 molten gooey cheese for maximum cheese rush",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/32b437e2-6239-4fa1-9524-5dc416d2da91_inCheeseBurstCornNCheeseInappHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/32b437e2-6239-4fa1-9524-5dc416d2da91_inCheeseBurstCornNCheeseInappHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 319,
+      "Medium (Serves 2)": 559,
+      "Large (Serves 4)": 859
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 319,
+        "100% Wheat Thin Crust": 319,
+        "Cheese Burst": 394,
+        "Fresh Pan Pizza": 354
+      },
+      "Medium": {
+        "New Hand Tossed": 559,
+        "100% Wheat Thin Crust": 559,
+        "Cheese Burst": 659,
+        "Fresh Pan Pizza": 609
+      },
+      "Large": {
+        "New Hand Tossed": 859,
+        "100% Wheat Thin Crust": 859,
+        "Cheese Burst": 984,
+        "Fresh Pan Pizza": 929
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ5432",
+    "name": "Reg. Tndoori Chk Burst LXT OAG",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 349,
+    "originalPrice": 429,
+    "discount": "19% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5432",
+    "skuId": "6#1#8241",
+    "description": "Ultimate 2-layered Chicken Indulgence. Stuffed inside with juicy, garlicky chicken keema & topped with a medley of Peri Peri, BBQ & Chicken Rashers , finished with a drizzle of Tandoori Sauce.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fca8b3ad-42d4-4c2f-82bb-ead92ad663cd_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fca8b3ad-42d4-4c2f-82bb-ead92ad663cd_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 349,
+      "Medium (Serves 2)": 609,
+      "Large (Serves 4)": 939
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 424,
+        "Fresh Pan Pizza": 384
+      },
+      "Medium": {
+        "New Hand Tossed": 609,
+        "100% Wheat Thin Crust": 609,
+        "Cheese Burst": 709,
+        "Fresh Pan Pizza": 659
+      },
+      "Large": {
+        "New Hand Tossed": 939,
+        "100% Wheat Thin Crust": 939,
+        "Cheese Burst": 1064,
+        "Fresh Pan Pizza": 1009
+      }
+    }
+  },
+  {
+    "id": "DOM-DST0117",
+    "name": "Butterscotch Mousse",
+    "category": "Desserts",
+    "type": "VEG",
+    "price": 59,
+    "originalPrice": 69,
+    "discount": "14% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "DST0117",
+    "skuId": "8169",
+    "description": "A smooth, airy butterscotch flavoured mousse. Sweet, creamy, and irresistibly comforting!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0397",
+    "name": "Chicken Tandoori Meltz LXT",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 39,
+    "originalPrice": 49,
+    "discount": "20% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0397",
+    "skuId": "8252",
+    "description": "Chicken Tandoori Meltz",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0397",
+    "name": "Onion",
+    "category": "Pizza Mania",
+    "type": "VEG",
+    "price": 69,
+    "originalPrice": 89,
+    "discount": "22% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0397",
+    "skuId": "6#391#6598",
+    "description": "Our classic Pizza Mania topped with crunchy Onions",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
+    "sizes": {
+      "Regular (Single)": 69
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-BRD0060",
+    "name": "Makhani Pepperoni Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "BRD0060",
+    "skuId": "6206",
+    "description": "Freshly Baked Garlic Bread infused with Creamy Makhani Sauce, Delectable Chicken Pepperoni & molten Cheese",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bbdf833c-2e2f-468f-aa30-e843a142dba1_FullsizeGarlicBreadwithPepperoniMakhani.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bbdf833c-2e2f-468f-aa30-e843a142dba1_FullsizeGarlicBreadwithPepperoniMakhani.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0733",
+    "name": "2in1 Cheese Burst - Peppy Paneer",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 249,
+    "originalPrice": 299,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0733",
+    "skuId": "6#125#8708",
+    "description": "2in1 the cheesy indulgence with juicy paneer, crisp capsicum & spicy red paprika",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1139905a-1fd4-43d9-9eed-6e37422737e9_inCheeseBurstPaneerPeppyInappHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1139905a-1fd4-43d9-9eed-6e37422737e9_inCheeseBurstPaneerPeppyInappHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 249,
+      "Medium (Serves 2)": 439,
+      "Large (Serves 4)": 669
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 249,
+        "100% Wheat Thin Crust": 249,
+        "Cheese Burst": 324,
+        "Fresh Pan Pizza": 284
+      },
+      "Medium": {
+        "New Hand Tossed": 439,
+        "100% Wheat Thin Crust": 439,
+        "Cheese Burst": 539,
+        "Fresh Pan Pizza": 489
+      },
+      "Large": {
+        "New Hand Tossed": 669,
+        "100% Wheat Thin Crust": 669,
+        "Cheese Burst": 794,
+        "Fresh Pan Pizza": 739
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0234",
+    "name": "Paneer & Capsicum with Videshi Hot Sauce",
+    "category": "Pizza Mania",
+    "type": "VEG",
+    "price": 119,
+    "originalPrice": 149,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0234",
+    "skuId": "6#391#4849",
+    "description": "Internationally inspired Hot sauce to cater your spice cravings loaded with juicy Paneer and crisp Capsicum.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
+    "sizes": {
+      "Regular (Single)": 119
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0298",
+    "name": "Loaded Saucy Paneer Parcel - Tandoori",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 70,
+    "originalPrice": 89,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0298",
+    "skuId": "6625",
+    "description": "Delicious Parcel stuffed with smoky tandoori paneer and bold spices for a punch of Indian flavour.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-BEV0825",
+    "name": "Fanta 475ml",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 67,
+    "originalPrice": 79,
+    "discount": "15% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0825",
+    "skuId": "6399",
+    "description": "Delicious Orange Flavoured Beverage",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5429",
+    "name": "Reg. CB Ppr BBQ Chk LXT OAG",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 329,
+    "originalPrice": 399,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5429",
+    "skuId": "6#115#8247",
+    "description": "Molten Cheese Indulgence with Pepper Barbecue chicken for that extra zing",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5a4e8aa9-84d0-4c89-9d11-715f111d6c7a_FullsizePepperBarbequeChickenCB.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5a4e8aa9-84d0-4c89-9d11-715f111d6c7a_FullsizePepperBarbequeChickenCB.webp",
+    "sizes": {
+      "Regular (Serves 1)": 329,
+      "Medium (Serves 2)": 579,
+      "Large (Serves 4)": 889
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 329,
+        "100% Wheat Thin Crust": 329,
+        "Cheese Burst": 404,
+        "Fresh Pan Pizza": 364
+      },
+      "Medium": {
+        "New Hand Tossed": 579,
+        "100% Wheat Thin Crust": 579,
+        "Cheese Burst": 679,
+        "Fresh Pan Pizza": 629
+      },
+      "Large": {
+        "New Hand Tossed": 889,
+        "100% Wheat Thin Crust": 889,
+        "Cheese Burst": 1014,
+        "Fresh Pan Pizza": 959
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0470",
+    "name": "Cheese Lava Farmhouse",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 399,
+    "originalPrice": 489,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0470",
+    "skuId": "7#121#6875",
+    "description": "8 cheesy pull-aparts topped with onion, capsicum, tomato & mushrooms! Pull, dip & taste the cheesy comfort.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/3f97413d-e0a4-453a-8fd1-c7f8c8c95cd3_CheeseLavaPullApartFarmhouseHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/3f97413d-e0a4-453a-8fd1-c7f8c8c95cd3_CheeseLavaPullApartFarmhouseHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 399,
+      "Medium (Serves 2)": 699,
+      "Large (Serves 4)": 1079
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 399,
+        "100% Wheat Thin Crust": 399,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 434
+      },
+      "Medium": {
+        "New Hand Tossed": 699,
+        "100% Wheat Thin Crust": 699,
+        "Cheese Burst": 799,
+        "Fresh Pan Pizza": 749
+      },
+      "Large": {
+        "New Hand Tossed": 1079,
+        "100% Wheat Thin Crust": 1079,
+        "Cheese Burst": 1204,
+        "Fresh Pan Pizza": 1149
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0452",
+    "name": "Double Chicken Kebab Rolls",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 149,
+    "originalPrice": 189,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0452",
+    "skuId": "8704",
+    "description": "Double the yum with our freshly baked rolls stuffed with two indulgent Seekh Kebabs and juicy Keema in creamy harissa sauce. Simply divine!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/edf5d555-ff87-4a34-9747-364c54eee7f1_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/edf5d555-ff87-4a34-9747-364c54eee7f1_HomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-BRD0056",
+    "name": "Fiery Paneer Tikka Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BRD0056",
+    "skuId": "6202",
+    "description": "Freshly Baked Stuffed Garlic Bread infused with Spicy Guntur Sauce, Molten Cheese, Onion and Paneer Tikka fillings",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b66b5373-7858-4caa-b470-df1429818c78_FullsizeGarlicBreadwithpaneerFiery.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b66b5373-7858-4caa-b470-df1429818c78_FullsizeGarlicBreadwithpaneerFiery.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0130",
+    "name": "Golden Corn",
+    "category": "Pizza Mania",
+    "type": "VEG",
+    "price": 89,
+    "originalPrice": 109,
+    "discount": "18% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0130",
+    "skuId": "6#391#97",
+    "description": "Sweet & juicy golden corn for that lipsmacking taste",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
+    "sizes": {
+      "Regular (Single)": 89
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0574",
+    "name": "Reg. CB Peppy Paneer LXT OAG",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 349,
+    "originalPrice": 429,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0574",
+    "skuId": "6#115#8240",
+    "description": "Molten Cheese Indulgence with Flavorful trio of juicy paneer, crisp capsicum & spicy red paprika",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebRecommendedProductV1/3c423a66-e86d-43f9-bada-745b0ddfefa0_CorouselPeppyPaneerCB.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebRecommendedProductV1/3c423a66-e86d-43f9-bada-745b0ddfefa0_CorouselPeppyPaneerCB.webp",
+    "sizes": {
+      "Regular (Serves 1)": 349,
+      "Medium (Serves 2)": 609,
+      "Large (Serves 4)": 939
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 424,
+        "Fresh Pan Pizza": 384
+      },
+      "Medium": {
+        "New Hand Tossed": 609,
+        "100% Wheat Thin Crust": 609,
+        "Cheese Burst": 709,
+        "Fresh Pan Pizza": 659
+      },
+      "Large": {
+        "New Hand Tossed": 939,
+        "100% Wheat Thin Crust": 939,
+        "Cheese Burst": 1064,
+        "Fresh Pan Pizza": 1009
+      }
+    }
+  },
+  {
+    "id": "DOM-BEV0823",
+    "name": "Coca Cola 475ml",
+    "category": "Beverages",
+    "type": "VEG",
+    "price": 67,
+    "originalPrice": 79,
+    "discount": "15% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BEV0823",
+    "skuId": "6397",
+    "description": "Sparkling and Refreshing Beverage",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c75f77f0-987b-45df-b976-12be349df9dc_CokeHomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c75f77f0-987b-45df-b976-12be349df9dc_CokeHomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0575",
+    "name": "Reg. CB Veg Paradise LXT OAG",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 349,
+    "originalPrice": 429,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0575",
+    "skuId": "6#115#8251",
+    "description": "Molten Cheese Indulgence with Golden corn, black olives, capsicum & red paprika",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6f7a75e-7a8f-4d0b-9f08-72bcb749b73f_FullsizeVeggieParadiseCB.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6f7a75e-7a8f-4d0b-9f08-72bcb749b73f_FullsizeVeggieParadiseCB.webp",
+    "sizes": {
+      "Regular (Serves 1)": 349,
+      "Medium (Serves 2)": 609,
+      "Large (Serves 4)": 939
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 424,
+        "Fresh Pan Pizza": 384
+      },
+      "Medium": {
+        "New Hand Tossed": 609,
+        "100% Wheat Thin Crust": 609,
+        "Cheese Burst": 709,
+        "Fresh Pan Pizza": 659
+      },
+      "Large": {
+        "New Hand Tossed": 939,
+        "100% Wheat Thin Crust": 939,
+        "Cheese Burst": 1064,
+        "Fresh Pan Pizza": 1009
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0776",
+    "name": "Dominoid - Italian Truffle Veg",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 129,
+    "originalPrice": 159,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0776",
+    "skuId": "12#126#8825",
+    "description": "That deep truffle aroma layered on melted cheese & veggies. Snack with luxe flavour in every bite.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae65df69-d0ec-4b77-ac44-a1d9eb10bacf_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae65df69-d0ec-4b77-ac44-a1d9eb10bacf_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 129,
+      "Medium (Serves 2)": 229,
+      "Large (Serves 4)": 349
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 129,
+        "100% Wheat Thin Crust": 129,
+        "Cheese Burst": 204,
+        "Fresh Pan Pizza": 164
+      },
+      "Medium": {
+        "New Hand Tossed": 229,
+        "100% Wheat Thin Crust": 229,
+        "Cheese Burst": 329,
+        "Fresh Pan Pizza": 279
+      },
+      "Large": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 419
+      }
+    }
+  },
+  {
+    "id": "DOM-BRD0057",
+    "name": "Makhani Paneer Tikka Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "BRD0057",
+    "skuId": "6203",
+    "description": "Freshly Baked Stuffed Garlic Bread infused with Creamy Makhani Sauce, Molten Cheese, Onion and Paneer Tikka fillings",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a93c2d3d-0ede-43f4-b731-806721a03965_FullsizeGarlicBreadwithpaneerMakhani.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a93c2d3d-0ede-43f4-b731-806721a03965_FullsizeGarlicBreadwithpaneerMakhani.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-DST0116",
+    "name": "Choco Mousse",
+    "category": "Desserts",
+    "type": "VEG",
+    "price": 59,
+    "originalPrice": 69,
+    "discount": "14% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "DST0116",
+    "skuId": "8168",
+    "description": "A rich, velvety chocolate flavoured mousse that melts in your mouth. Pure indulgence in every spoon!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/38ac99b1-497b-4869-9fe8-d6e918006777_ChocolateMousseHOMEPRODUCT.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/38ac99b1-497b-4869-9fe8-d6e918006777_ChocolateMousseHOMEPRODUCT.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0398",
+    "name": "Crispy Veggie Bites LXT",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 39,
+    "originalPrice": 49,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0398",
+    "skuId": "8248",
+    "description": "Crispy Veggie Bites",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5131",
+    "name": "Chicken Pepperoni",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 645,
+    "originalPrice": 769,
+    "discount": "16% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5131",
+    "skuId": "7#115#6171",
+    "description": "Molten Cheese Indulgence with American classic flavored Chicken Pepperoni, topped with extra cheese",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/ba3b9fa4-b6c9-466e-8237-20c2c776d18c_cheesepepperoni.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/ba3b9fa4-b6c9-466e-8237-20c2c776d18c_cheesepepperoni.webp",
+    "sizes": {
+      "Regular (Serves 1)": 645,
+      "Medium (Serves 2)": 1129,
+      "Large (Serves 4)": 1739
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 645,
+        "100% Wheat Thin Crust": 645,
+        "Cheese Burst": 720,
+        "Fresh Pan Pizza": 680
+      },
+      "Medium": {
+        "New Hand Tossed": 1129,
+        "100% Wheat Thin Crust": 1129,
+        "Cheese Burst": 1229,
+        "Fresh Pan Pizza": 1179
+      },
+      "Large": {
+        "New Hand Tossed": 1739,
+        "100% Wheat Thin Crust": 1739,
+        "Cheese Burst": 1864,
+        "Fresh Pan Pizza": 1809
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0732",
+    "name": "2in1 Cheese Burst - Margherita",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 219,
+    "originalPrice": 269,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0732",
+    "skuId": "6#125#8707",
+    "description": "Loaded margherita with molten cheese-filled crust. Elite cheese pull. 10/10 vibes",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4c76a04a-d517-42f1-8cdd-013df121b12f_inCheeseBurstMargaritaInappHomeProductVxpx.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4c76a04a-d517-42f1-8cdd-013df121b12f_inCheeseBurstMargaritaInappHomeProductVxpx.webp",
+    "sizes": {
+      "Regular (Serves 1)": 219,
+      "Medium (Serves 2)": 379,
+      "Large (Serves 4)": 589
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 219,
+        "100% Wheat Thin Crust": 219,
+        "Cheese Burst": 294,
+        "Fresh Pan Pizza": 254
+      },
+      "Medium": {
+        "New Hand Tossed": 379,
+        "100% Wheat Thin Crust": 379,
+        "Cheese Burst": 479,
+        "Fresh Pan Pizza": 429
+      },
+      "Large": {
+        "New Hand Tossed": 589,
+        "100% Wheat Thin Crust": 589,
+        "Cheese Burst": 714,
+        "Fresh Pan Pizza": 659
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0246",
+    "name": "Peri Peri Dip",
+    "category": "Garlic Breads & Sides",
+    "type": "VEG",
+    "price": 39,
+    "originalPrice": 49,
+    "discount": "20% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "SID0246",
+    "skuId": "6371",
+    "description": "A spicy and tangy dip with bold peri peri flavors!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/908f2f7e-2251-4c7c-b201-cc83a7ca343a_CustomPeriPeriDipChickenFeast.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/908f2f7e-2251-4c7c-b201-cc83a7ca343a_CustomPeriPeriDipChickenFeast.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-DST0122",
+    "name": "Choco Lava Cake LXT",
+    "category": "Desserts",
+    "type": "VEG",
+    "price": 109,
+    "originalPrice": 139,
+    "discount": "22% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "DST0122",
+    "skuId": "8237",
+    "description": "Chocolate lovers delight! Indulgent, gooey molten lava inside chocolate cake",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2b9952f1-c487-426b-90f0-b5d1633e06f8_CLC_side.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2b9952f1-c487-426b-90f0-b5d1633e06f8_CLC_side.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0440",
+    "name": "Chicken Kebab Rolls",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 89,
+    "originalPrice": 109,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0440",
+    "skuId": "8683",
+    "description": "Freshly baked rolls stuffed with our indulgent Seekh Kebab and juicy Keema in creamy harissa sauce. Simply divine!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/6c6dca08-de24-4740-a2ef-6f3e8aaaed18_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/6c6dca08-de24-4740-a2ef-6f3e8aaaed18_HomeProductV1.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-SID0241",
+    "name": "Grilled wings Southern Spice",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 169,
+    "originalPrice": 209,
+    "discount": "19% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0241",
+    "skuId": "6375",
+    "description": "Juicy grilled chicken wings roasted with rich Southern spices for a delicious flavor!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/3982b2aa-a60a-449d-b902-a4b4afd0460e_MenuGrilledWingsSouthernSpiceChickenFeast.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/3982b2aa-a60a-449d-b902-a4b4afd0460e_MenuGrilledWingsSouthernSpiceChickenFeast.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5435",
+    "name": "Reg+ CV Ppr BBQ Chk LXT OAG",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 375,
+    "originalPrice": 459,
+    "discount": "18% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5435",
+    "skuId": "9#102#8243",
+    "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken\n*Contains non-edible container under the Pizza",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/4b20775f-1eef-4c09-8596-2a1b86c66251_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/4b20775f-1eef-4c09-8596-2a1b86c66251_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
+    "sizes": {
+      "Regular (Serves 1)": 375,
+      "Medium (Serves 2)": 659,
+      "Large (Serves 4)": 1009
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 375,
+        "100% Wheat Thin Crust": 375,
+        "Cheese Burst": 450,
+        "Fresh Pan Pizza": 410
+      },
+      "Medium": {
+        "New Hand Tossed": 659,
+        "100% Wheat Thin Crust": 659,
+        "Cheese Burst": 759,
+        "Fresh Pan Pizza": 709
+      },
+      "Large": {
+        "New Hand Tossed": 1009,
+        "100% Wheat Thin Crust": 1009,
+        "Cheese Burst": 1134,
+        "Fresh Pan Pizza": 1079
+      }
+    }
+  },
+  {
+    "id": "DOM-PIZ0232",
+    "name": "Capsicum & Red Paprika with Videshi Hot Sauce",
+    "category": "Pizza Mania",
+    "type": "VEG",
+    "price": 99,
+    "originalPrice": 119,
+    "discount": "17% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0232",
+    "skuId": "6#391#4848",
+    "description": "Internationally inspired Hot sauce to cater your spice cravings loaded with crisp Capsicum and spicy Red Paprika.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/f7cfd5ff-d32a-4305-b729-6a7aa8872e80_PMCapsicumPaprikaMenu.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/f7cfd5ff-d32a-4305-b729-6a7aa8872e80_PMCapsicumPaprikaMenu.webp",
+    "sizes": {
+      "Regular (Single)": 99
+    },
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ0780",
+    "name": "Dominoid - Lebanese Shawarma Veg",
+    "category": "Veg Pizza",
+    "type": "VEG",
+    "price": 129,
+    "originalPrice": 159,
+    "discount": "19% OFF",
+    "isVeg": true,
+    "isAvailable": true,
+    "dominosCode": "PIZ0780",
+    "skuId": "12#126#8829",
+    "description": "Aromatic shawarma spice blend, melted cheese, veggie-loaded goodness. Flavour now impossible to resist.",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f1be79ed-1b52-4634-8f95-b9587f5f4493_HomeProductV1.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f1be79ed-1b52-4634-8f95-b9587f5f4493_HomeProductV1.webp",
+    "sizes": {
+      "Regular (Serves 1)": 129,
+      "Medium (Serves 2)": 229,
+      "Large (Serves 4)": 349
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 129,
+        "100% Wheat Thin Crust": 129,
+        "Cheese Burst": 204,
+        "Fresh Pan Pizza": 164
+      },
+      "Medium": {
+        "New Hand Tossed": 229,
+        "100% Wheat Thin Crust": 229,
+        "Cheese Burst": 329,
+        "Fresh Pan Pizza": 279
+      },
+      "Large": {
+        "New Hand Tossed": 349,
+        "100% Wheat Thin Crust": 349,
+        "Cheese Burst": 474,
+        "Fresh Pan Pizza": 419
+      }
+    }
+  },
+  {
+    "id": "DOM-BRD0059",
+    "name": "Fiery Pepperoni Garlic Bread",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 189,
+    "originalPrice": 239,
+    "discount": "21% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "BRD0059",
+    "skuId": "6205",
+    "description": "Freshly Baked Garlic Bread infused with Spicy Guntur Sauce, Delectable Chicken Pepperoni & molten Cheese",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/068426d3-a912-4bbd-894d-c18dd1e8640e_FullsizeGarlicBreadwithPepperoniFiery.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/068426d3-a912-4bbd-894d-c18dd1e8640e_FullsizeGarlicBreadwithPepperoniFiery.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
+  },
+  {
+    "id": "DOM-PIZ5125",
+    "name": "Non Veg Supreme",
+    "category": "Non-Veg Pizza",
+    "type": "NON-VEG",
+    "price": 635,
+    "originalPrice": 759,
+    "discount": "16% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "PIZ5125",
+    "skuId": "7#1#19",
+    "description": "Supreme combination of black olives, onion, capsicum, grilled mushroom, pepper barbecue chicken, peri-peri chicken & grilled chicken rashers",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
+    "sizes": {
+      "Regular (Serves 1)": 635,
+      "Medium (Serves 2)": 1109,
+      "Large (Serves 4)": 1709
+    },
+    "allowedSizes": [
+      "Regular",
+      "Medium",
+      "Large"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed",
+      "100% Wheat Thin Crust",
+      "Cheese Burst",
+      "Fresh Pan Pizza"
+    ],
+    "sizeCrustPricingMap": {
+      "Regular": {
+        "New Hand Tossed": 635,
+        "100% Wheat Thin Crust": 635,
+        "Cheese Burst": 710,
+        "Fresh Pan Pizza": 670
+      },
+      "Medium": {
+        "New Hand Tossed": 1109,
+        "100% Wheat Thin Crust": 1109,
+        "Cheese Burst": 1209,
+        "Fresh Pan Pizza": 1159
+      },
+      "Large": {
+        "New Hand Tossed": 1709,
+        "100% Wheat Thin Crust": 1709,
+        "Cheese Burst": 1834,
+        "Fresh Pan Pizza": 1779
+      }
+    }
+  },
+  {
+    "id": "DOM-SID0243",
+    "name": "Grilled Wings Signature Garlic",
+    "category": "Garlic Breads & Sides",
+    "type": "NON-VEG",
+    "price": 169,
+    "originalPrice": 209,
+    "discount": "19% OFF",
+    "isVeg": false,
+    "isAvailable": true,
+    "dominosCode": "SID0243",
+    "skuId": "6372",
+    "description": "Juicy grilled chicken wings roasted with bold garlic flavors for a delicious taste!",
+    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c7632b6e-337f-4c71-83ae-74a1eb7b879c_FullsizeGrilledWingsSignatureGarlicChickenFeast.webp",
+    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c7632b6e-337f-4c71-83ae-74a1eb7b879c_FullsizeGrilledWingsSignatureGarlicChickenFeast.webp",
+    "sizes": null,
+    "allowedSizes": [
+      "Regular"
+    ],
+    "allowedCrusts": [
+      "New Hand Tossed"
+    ],
+    "sizeCrustPricingMap": null
   }
 ]
