@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Domino's Order Engine | Official Domino's Store Ordering &amp; Kitchen Dispatch</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/style.css?v=20261102.2">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -1519,9 +1519,23 @@
           <span>🛰️</span>
           <span id="modalDetectGpsLabel">Detect My Current Location (GPS)</span>
         </button>
-        <p style="font-size: 11px; color: #64748b; text-align: center; margin: 0;">
+        <p style="font-size: 11px; color: #64748b; text-align: center; margin: 0 0 14px 0;">
           📍 Automatically connects to the verified nearest Domino's kitchen outlet for accurate real-time inventory and pricing.
         </p>
+
+        <!-- Area Search Fallback -->
+        <div style="display: flex; align-items: center; gap: 8px; margin: 12px 0 10px 0; color: #94a3b8; font-size: 11px; font-weight: 700; text-transform: uppercase;">
+          <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+          <span>Or Enter Your Locality / City</span>
+          <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="modalAreaInput" class="form-input" placeholder="e.g. Sector 17, Chandigarh or Indirapuram, Ghaziabad" style="font-size: 13px; padding: 10px 14px; border-radius: 20px; flex: 1; border: 1.5px solid #cbd5e1;" onkeydown="if(event.key==='Enter') modalSearchArea();">
+          <button type="button" class="btn-primary" onclick="modalSearchArea()" style="width: auto; padding: 0 18px; font-size: 13px; font-weight: 700; border-radius: 20px; white-space: nowrap;">
+            Locate
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1906,8 +1920,6 @@
     <span id="toastMsg">Location updated</span>
   </div>
 
-  <script src="/app.js"></script>
-
   <!-- Transaction Details View Modal -->
   <div class="modal-overlay" id="transactionDetailsModal">
     <div class="modal-card" style="max-width: 480px; width: 95%;">
@@ -2025,5 +2037,6 @@
     </button>
   </nav>
 
+  <script src="/app.js?v=20261102.2"></script>
 </body>
 </html>

@@ -581,10 +581,14 @@ function updateCatalogCountBadge(items) {
 
 async function loadUserProfile() {
   try {
+    if (!currentUser || (!currentUser.email && !currentUser.userId12)) {
+      updateUserNavIdentity();
+      return;
+    }
     let url = '/api/user/profile';
-    if (currentUser && currentUser.email) {
+    if (currentUser.email) {
       url += `?email=${encodeURIComponent(currentUser.email)}`;
-    } else if (currentUser && currentUser.userId12) {
+    } else if (currentUser.userId12) {
       url += `?uid=${encodeURIComponent(currentUser.userId12)}`;
     }
     const res = await fetch(url);
@@ -6053,7 +6057,6 @@ function signOutUser() {
   updateUserNavIdentity();
   closeModal('userProfileModal');
   showToastNotice('Signed out from Domino\'s Order Engine', '🚪');
-  loadUserProfile();
 }
 window.signOutUser = signOutUser;
 

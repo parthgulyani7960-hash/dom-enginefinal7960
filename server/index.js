@@ -185,13 +185,21 @@ function serveStatic(res, filePath) {
 
     const ext = path.extname(targetPath).toLowerCase();
     const mime = MIME_TYPES[ext] || 'application/octet-stream';
-    res.writeHead(200, {
+    const headers = {
       'Content-Type': mime,
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'SAMEORIGIN',
       'X-XSS-Protection': '1; mode=block',
       'Referrer-Policy': 'strict-origin-when-cross-origin'
-    });
+    };
+    if (ext === '.html' || ext === '.js' || ext === '.css') {
+      headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+      headers['Pragma'] = 'no-cache';
+      headers['Expires'] = '0';
+    } else {
+      headers['Cache-Control'] = 'public, max-age=3600';
+    }
+    res.writeHead(200, headers);
     res.end(content);
   });
 }
@@ -2293,11 +2301,7 @@ const server = http.createServer(async (req, res) => {
       user = users.find(u => u.userId12 === uStr || u.id === uStr);
     }
 
-    // If no specific match, resolve the primary registered user from directory
-    if (!user && users.length > 0) {
-      user = users.find(u => u.email && u.email.toLowerCase() === 'parthgulyani7960@gmail.com') || users[0];
-    }
-
+    // If no user matches the given email/uid, return guest profile
     if (user) {
       return sendJson(res, 200, {
         profile: {
@@ -2319,7 +2323,8 @@ const server = http.createServer(async (req, res) => {
     }
 
     return sendJson(res, 200, {
-      profile: db.getUserProfile(),
+      profile: null,
+      isGuest: true,
       clientIp: clientIp
     });
   }

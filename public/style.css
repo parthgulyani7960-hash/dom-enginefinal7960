@@ -34,6 +34,12 @@ body {
   padding-bottom: 80px;
 }
 
+button, .btn-primary, .btn-secondary, .btn-add, .cart-toggle-btn, .tab-btn, .mb-nav-item, .modal-close, .qty-btn {
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Modal Open: Completely lock background scrolling */
 body.modal-open {
   overflow: hidden !important;
@@ -428,23 +434,27 @@ body.modal-open {
 
 /* Modals */
 .modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overscroll-behavior: contain;
+  display: none !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(15, 23, 42, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+  z-index: 100000 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  overscroll-behavior: contain !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
 
 .modal-overlay.active {
-  display: flex;
+  display: flex !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
 }
 
 .modal-card {
@@ -1180,6 +1190,7 @@ body.modal-open {
   .modal-overlay {
     align-items: flex-end !important;
     padding: 0 !important;
+    z-index: 100000 !important;
   }
 
   .modal-card {
@@ -1187,6 +1198,7 @@ body.modal-open {
     width: 100% !important;
     border-radius: 20px 20px 0 0 !important;
     max-height: 90vh !important;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0) + 24px) !important;
     animation: mobileSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   }
 
