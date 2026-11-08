@@ -239,7 +239,7 @@ class DominosAutomationRobot {
               addLog(order, msg);
             }
           }),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Middleman Robot timed out after 90 seconds while interacting with Domino\'s site.')), 90000))
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Middleman Robot timed out after 180 seconds while interacting with Domino\'s site.')), 180000))
         ]);
 
         if (robotResult && robotResult.success) {

@@ -484,14 +484,15 @@ async function executeMiddlemanOrderOnDominos({
 
   try {
     // =========================================================================
-    // STEP 1: Add Customer's Address into Domino's "My Addresses" Section First
+    // STEP 1: Direct Fast-Track Navigation to Store Menu & In-Page Address Sync
     // =========================================================================
-    onProgress(`[MIDDLEMAN-ENGINE] 🏠 Registering customer delivery address on Domino's India for ${cleanMobile}...`);
-    await page.goto('https://m.dominos.co.in/postorder-ui/myAddresses?fromProfile=true', {
+    onProgress(`[MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store ${targetStoreId}...`);
+    await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=false&scrollTo=3`, {
       waitUntil: 'domcontentloaded',
       timeout: 25000
     }).catch(() => {});
-    await sleep(1500);
+    await dismissDominosPopups(page);
+    await sleep(800);
 
     const isOtherPerson = Boolean(addr.orderForSomeoneElse || (receiverPhone && cleanMobile && receiverPhone !== cleanMobile) || (receiverName && receiverName !== accountSession?.customerName));
 
@@ -524,8 +525,9 @@ async function executeMiddlemanOrderOnDominos({
       landmark: addr.landmark || ' '
     };
 
-    // Execute authenticated in-page address registration & reuse
+    // Execute authenticated in-page address registration & reuse directly from menu session
     try {
+      onProgress(`[MIDDLEMAN-ENGINE] 🏠 Verifying customer delivery address on Domino's India for ${cleanMobile}...`);
       const saveRes = await page.evaluate(async ({ token, mobile, uId, payload, targetLat, targetLng }) => {
         try {
           const reqId = `pwa-${uId}-${Date.now()}`;
@@ -640,19 +642,11 @@ async function executeMiddlemanOrderOnDominos({
     // =========================================================================
     // STEP 1B: Clear Leftover Cart Items from Domino's Cart (Via Store Menu)
     // =========================================================================
-    onProgress(`[MIDDLEMAN-ENGINE] 🧹 Checking cart and clearing leftover items for Store ${targetStoreId}...`);
+    onProgress(`[MIDDLEMAN-ENGINE] 🧹 Checking cart state for Store ${targetStoreId}...`);
     try {
-      // Navigate to Menu V1 first so Domino's PWA initializes store session and auth without redirects
-      await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=false&scrollTo=3`, {
-        waitUntil: 'domcontentloaded',
-        timeout: 25000
-      }).catch(() => {});
-      await dismissDominosPopups(page);
-      await sleep(1000);
-
       // Check if bottom checkout bar is present on menu (indicates leftover items in cart)
       const menuCartBar = page.locator('.cart-nav, .btn-checkout, .bottom-nav .btn, button:has-text("View Cart")').first();
-      const hasLeftoverInCart = await menuCartBar.isVisible({ timeout: 2000 }).catch(() => false);
+      const hasLeftoverInCart = await menuCartBar.isVisible({ timeout: 1500 }).catch(() => false);
 
       if (hasLeftoverInCart) {
         onProgress(`[MIDDLEMAN-ENGINE] 🧹 Leftover items detected in Domino's cart. Entering cart to purge...`);
@@ -765,6 +759,11 @@ async function executeMiddlemanOrderOnDominos({
     for (const item of flattenedItems) {
       const rawName = item.name.replace(/\(.*\)/g, '').trim();
       const cleanName = rawName.replace(/\bGB\b/g, 'Garlic Bread').replace(/\bCB\b/g, 'Cheese Burst').replace(/\bNHT\b/g, 'New Hand Tossed');
+      const baseSearchName = cleanName
+        .replace(/\bPizza\s+Mania\b/gi, '')
+        .replace(/\bMania\b/gi, '')
+        .replace(/\bPizza\b/gi, '')
+        .trim();
       onProgress(`[MIDDLEMAN-ENGINE] 🍕 Adding "${cleanName}" (Qty: ${item.qty}) to Domino's cart...`);
 
       for (let q = 0; q < item.qty; q++) {
@@ -787,11 +786,12 @@ async function executeMiddlemanOrderOnDominos({
             // Clean name and build resilient search candidates (stripping '&' which breaks Domino's search)
             const noAmp = cleanName.replace(/&/g, ' ').replace(/\s+/g, ' ').trim();
             const searchCandidates = Array.from(new Set([
+              baseSearchName,
               noAmp,
               cleanName.replace(/&/g, 'and'),
               rawName,
-              noAmp.split(' ').slice(0, 2).join(' '),
-              noAmp.split(' ')[0]
+              baseSearchName.split(' ').slice(0, 2).join(' '),
+              baseSearchName.split(' ')[0]
             ])).filter(q => q && q.length >= 3);
 
             for (const query of searchCandidates) {
@@ -815,6 +815,7 @@ async function executeMiddlemanOrderOnDominos({
                   .replace(/\bgb\b/g, 'garlic bread')
                   .replace(/\bcb\b/g, 'cheese burst')
                   .replace(/\bnht\b/g, 'new hand tossed')
+                  .replace(/\bmania\b/g, '')
                   .replace(/\bpizza\b/g, '')
                   .replace(/\s+/g, ' ')
                   .trim();
@@ -831,6 +832,12 @@ async function executeMiddlemanOrderOnDominos({
                 };
 
                 const clickCardBtn = (card) => {
+                  // If card is already added to cart and showing stepper (+ / -), click the plus button!
+                  const plusBtn = card.querySelector('.anim-ico-plus, [class*="plus"], button:has-text("+"), span:has-text("+")');
+                  if (plusBtn) {
+                    plusBtn.click();
+                    return true;
+                  }
                   const btn = card.querySelector('button.cta-add, button, div.main-cta, [class*="cta-add"], [class*="main-cta"]');
                   if (btn) {
                     btn.click();
@@ -890,6 +897,7 @@ async function executeMiddlemanOrderOnDominos({
 
               if (clickResult && clickResult.success) {
                 added = true;
+                break;
               }
             }
 
@@ -935,7 +943,7 @@ async function executeMiddlemanOrderOnDominos({
 
           // If still not added, cycle through lazy carousel category tabs to mount cards in DOM
           if (!added) {
-            const categoryTabs = ['Veg Pizza', 'Menu@89', 'Pizzas@179', 'Cheesy Pizzas@249', 'Non-Veg Pizza', 'Garlic Breads & Dips', 'Beverages', 'Desserts', 'Tacos & Parcels'];
+            const categoryTabs = ['Pizza Mania', 'Veg Pizza', 'Menu@89', 'Pizzas@179', 'Cheesy Pizzas@249', 'Non-Veg Pizza', 'Garlic Breads & Dips', 'Beverages', 'Desserts', 'Tacos & Parcels'];
             for (const tabName of categoryTabs) {
               if (added) break;
               const tabClicked = await page.evaluate((targetCat) => {
@@ -955,6 +963,7 @@ async function executeMiddlemanOrderOnDominos({
                     .replace(/\(.*\)/g, '')
                     .replace(/&/g, ' ')
                     .replace(/\band\b/g, '')
+                    .replace(/\bmania\b/g, '')
                     .replace(/\bpizza\b/g, '')
                     .replace(/\s+/g, ' ')
                     .trim();
@@ -1179,6 +1188,7 @@ async function executeMiddlemanOrderOnDominos({
       .replace(/\bgb\b/g, 'garlic bread')
       .replace(/\bcb\b/g, 'cheese burst')
       .replace(/\bnht\b/g, 'new hand tossed')
+      .replace(/\bmania\b/g, '')
       .replace(/\bpizza\b/g, '')
       .replace(/\s+/g, ' ')
       .trim();
@@ -1280,6 +1290,7 @@ async function executeMiddlemanOrderOnDominos({
         .replace(/\bgb\b/g, 'garlic bread')
         .replace(/\bcb\b/g, 'cheese burst')
         .replace(/\bnht\b/g, 'new hand tossed')
+        .replace(/\bmania\b/g, '')
         .replace(/\bpizza\b/g, '')
         .replace(/\s+/g, ' ')
         .trim();
@@ -1363,6 +1374,7 @@ async function executeMiddlemanOrderOnDominos({
         .replace(/\bgb\b/g, 'garlic bread')
         .replace(/\bcb\b/g, 'cheese burst')
         .replace(/\bnht\b/g, 'new hand tossed')
+        .replace(/\bmania\b/g, '')
         .replace(/\bpizza\b/g, '')
         .replace(/\s+/g, ' ')
         .trim();
