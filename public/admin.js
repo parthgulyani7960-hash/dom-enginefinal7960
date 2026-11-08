@@ -1248,6 +1248,11 @@ async function loadAccounts() {
           </td>
           <td>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              ${(acc.status === 'IN_USE' || isWorking || acc.status === 'BUSY') ? `
+                <button class="btn-action-copy" onclick="adminForceReleaseSession('${acc.id}')" title="Force release session back to IDLE / AVAILABLE" style="border: 1.5px solid #10b981; color: #047857; background: #ecfdf5; cursor: pointer; font-weight: 800; font-size: 11px; padding: 3px 8px;">
+                  🔓 Release
+                </button>
+              ` : ''}
               ${isDisabled 
                 ? `<button class="btn-action-copy" onclick="adminToggleAccountDisabled('${acc.id}')" title="Enable account for autonomous ordering" style="border-color: #86efac; color: #15803d; background: #dcfce7; cursor: pointer; font-weight: 800;">▶️ Enable</button>` 
                 : `<button class="btn-action-copy" onclick="adminToggleAccountDisabled('${acc.id}')" title="Disable account (excluded from autonomous ordering)" style="border-color: #fca5a5; color: #991b1b; background: #fee2e2; cursor: pointer; font-weight: 800;">⏸️ Disable</button>`}
@@ -2517,6 +2522,14 @@ function renderAppUsers(users) {
         <td>
           <strong>${escapeHtml(u.name || 'Anonymous User')}</strong>
           <div style="font-size: 11px; color: #64748b;">${escapeHtml(u.email || 'No email registered')}</div>
+          ${(u.ordersCount > 0) ? `
+            <div style="margin-top: 3px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+              <span style="background: #eff6ff; color: #0284c7; border: 1px solid #bae6fd; font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 4px;">
+                📦 ${u.ordersCount} Order${u.ordersCount > 1 ? 's' : ''} (₹${u.totalSpent})
+              </span>
+              ${u.lastEngineOrderRef ? `<span style="font-size: 10px; color: #475569; font-family: monospace; background: #f8fafc; padding: 1px 4px; border-radius: 3px; border: 1px solid #e2e8f0;">${u.lastEngineOrderRef}</span>` : ''}
+            </div>
+          ` : '<div style="margin-top: 3px;"><span style="color: #94a3b8; font-size: 10px;">No orders yet</span></div>'}
         </td>
         <td style="font-weight: 700;">
           ${(u.phone && u.phone.trim()) ? `<span>${escapeHtml(u.phone)}</span>` : '<span style="color: #94a3b8; font-size: 11px; font-weight: normal;">Not Provided</span>'}
@@ -4030,6 +4043,21 @@ async function adminToggleAccountDisabled(accountId) {
     alert(`Could not toggle account: ${err.message}`);
   }
 }
+
+// 1-Click Force Release Stuck Session
+async function adminForceReleaseSession(accountId) {
+  try {
+    const res = await adminFetch(`/api/admin/accounts/${accountId}/release`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Failed to release session');
+    showToast(data.message || 'Session released to AVAILABLE!', '🔓');
+    loadAccounts();
+    loadSessionFleetFeed();
+  } catch (err) {
+    alert(`Could not release session: ${err.message}`);
+  }
+}
+window.adminForceReleaseSession = adminForceReleaseSession;
 window.adminToggleAccountDisabled = adminToggleAccountDisabled;
 
 // Direct Past Orders Count Editor
@@ -4289,12 +4317,14 @@ function renderAdminMenuTable(items = []) {
       ? `${Math.round(((originalPrice - item.price) / originalPrice) * 100)}%`
       : '0%';
 
-    const imgUrl = item.imageUrl || item.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+    const imgUrl = (item.imageUrl && !item.imageUrl.includes('images.dominos.co.in')) 
+      ? item.imageUrl 
+      : ((item.image && !item.image.includes('images.dominos.co.in')) ? item.image : 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80');
 
     return `
       <tr id="admin-row-${item.id}" style="${!isAvail ? 'background: #fef2f2; opacity: 0.85;' : ''}">
         <td>
-          <img src="${imgUrl}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
+          <img src="${imgUrl}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80'">
         </td>
         <td>
           <div style="font-weight: 800; font-size: 13px; color: #0f172a;">${item.name}</div>

@@ -17,6 +17,7 @@
 const fs = require('fs');
 const path = require('path');
 const locationService = require('./locationService');
+const { getItemImageUrl, CATEGORY_IMAGES } = require('./itemImages');
 
 const DOMINOS_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -141,14 +142,9 @@ class DominosMenuService {
       }
     }
 
-    // High quality official Domino's CDN fallbacks
-    if (category === 'Veg Pizza') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
-    if (category === 'Non-Veg Pizza') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp';
-    if (category === 'Pizza Mania') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp';
-    if (category === 'Garlic Breads & Sides') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7ce1ba9b-aa28-4e50-9bb6-ff32c94314c4_garlic_breadsticks.webp';
-    if (category === 'Desserts') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp';
-    if (category === 'Beverages') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp';
-    return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+    // High quality verified food photography fallbacks (zero 403 / CORS errors)
+    if (CATEGORY_IMAGES[category]) return CATEGORY_IMAGES[category];
+    return CATEGORY_IMAGES['Veg Pizza'];
   }
 
   /**
@@ -236,11 +232,18 @@ class DominosMenuService {
         };
 
         // If item already exists, merge variants so we don't lose sizes/crusts
+        const normKey = (p.name || '').toLowerCase()
+          .replace(/\b(pizza mania|mania|pizza)\b/gi, '')
+          .replace(/&/g, 'and')
+          .replace(/\s+/g, ' ')
+          .trim();
+
         const existing = storeItems.get(p.menuCode);
         if (!existing) {
           if (p.menuCode) storeItems.set(p.menuCode, itemInfo);
           if (p.parentSkuId) storeItems.set(p.parentSkuId, itemInfo);
           if (p.name) storeItems.set(p.name.toLowerCase().trim(), itemInfo);
+          if (normKey && !storeItems.has(normKey)) storeItems.set(normKey, itemInfo);
         } else {
           // Merge variants
           variants.forEach(nv => {
@@ -250,6 +253,9 @@ class DominosMenuService {
           });
           if (p.name && !storeItems.has(p.name.toLowerCase().trim())) {
             storeItems.set(p.name.toLowerCase().trim(), existing);
+          }
+          if (normKey && !storeItems.has(normKey)) {
+            storeItems.set(normKey, existing);
           }
         }
       });
@@ -313,10 +319,17 @@ class DominosMenuService {
         isAvailable = false;
         unavailableReason = unserviceableReason || 'Delivery unavailable at this location';
       } else if (storeInventory) {
-        // Match against store inventory by dominosCode, parentSkuId, or item name
+        // Match against store inventory by dominosCode, parentSkuId, or item name (exact and normalized)
+        const normItemName = (item.name || '').toLowerCase()
+          .replace(/\b(pizza mania|mania|pizza)\b/gi, '')
+          .replace(/&/g, 'and')
+          .replace(/\s+/g, ' ')
+          .trim();
+
         const match = storeInventory.storeItems.get(item.dominosCode) ||
                       (item.parentSkuId && storeInventory.storeItems.get(item.parentSkuId)) ||
-                      storeInventory.storeItems.get(item.name.toLowerCase().trim());
+                      storeInventory.storeItems.get(item.name.toLowerCase().trim()) ||
+                      (normItemName && storeInventory.storeItems.get(normItemName));
 
         if (match && match.isAvailable === false) {
           // Explicitly out of stock or disabled by this store
@@ -357,8 +370,12 @@ class DominosMenuService {
         }
       }
 
+      const verifiedImage = getItemImageUrl(item);
+
       return {
         ...item,
+        image: verifiedImage,
+        imageUrl: verifiedImage,
         price: livePrice,
         originalPrice: liveOriginalPrice,
         isAvailable,
@@ -388,8 +405,10 @@ class DominosMenuService {
           }
         }
       }
+      const comboImg = (combo.image && !combo.image.includes('images.dominos.co.in')) ? combo.image : CATEGORY_IMAGES['Veg Pizza'];
       return {
         ...combo,
+        image: comboImg,
         isAvailable,
         unavailableReason
       };

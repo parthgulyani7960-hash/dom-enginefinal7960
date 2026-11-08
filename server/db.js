@@ -900,6 +900,18 @@ class Database {
     return acc;
   }
 
+
+  forceReleaseAccount(id) {
+    const acc = this.data.accounts.find(a => a.id === id);
+    if (acc) {
+      acc.status = 'IDLE';
+      acc.activeOrderId = null;
+      delete acc.inUseByOrderId;
+      delete acc.validationError;
+      this.save();
+    }
+    return acc;
+  }
   releaseAccount(id) {
     const acc = this.data.accounts.find(a => a.id === id);
     if (acc) {
@@ -1449,6 +1461,41 @@ class Database {
       this.data.users = [];
       this.save();
     }
+
+    // Auto-discover customers from past orders who placed orders but are not yet in this.data.users
+    if (Array.isArray(this.data.orders)) {
+      this.data.orders.forEach(o => {
+        const email = (o.user?.email || o.email || '').toLowerCase().trim();
+        const phone = (o.user?.phone || o.address?.phone || o.customerPhone || '').replace(/[^0-9]/g, '').slice(-10);
+        const uid12 = o.userId12 || (o.user && o.user.userId12);
+
+        let existing = this.data.users.find(u => 
+          (uid12 && u.userId12 === uid12) ||
+          (email && u.email && u.email.toLowerCase() === email) ||
+          (phone && u.phone && u.phone.replace(/[^0-9]/g, '').slice(-10) === phone)
+        );
+
+        if (!existing && (email || phone)) {
+          const newUser = {
+            id: 'USR-' + Date.now().toString().slice(-4) + Math.floor(10 + Math.random() * 90),
+            userId12: uid12 || generate12DigitUid(),
+            name: o.user?.name || o.address?.name || (email ? email.split('@')[0] : 'Customer'),
+            email: email || '',
+            phone: o.user?.phone || o.address?.phone || '',
+            phoneLocked: false,
+            walletBalance: 0,
+            wallet: { balance: 0, currency: 'INR' },
+            savedAddresses: [],
+            transactions: [],
+            registeredAt: o.createdAt || new Date().toISOString(),
+            lastActive: o.createdAt || new Date().toISOString(),
+            status: 'ACTIVE'
+          };
+          this.data.users.push(newUser);
+        }
+      });
+    }
+
     // Guarantee 12-digit numerical User ID & complete profile fields on all users
     this.data.users.forEach((u) => {
       if (!u.userId12) {
@@ -1461,59 +1508,150 @@ class Database {
       if (!u.name) {
         u.name = u.email ? u.email.split('@')[0] : 'User ' + (u.userId12 ? u.userId12.slice(-4) : 'Guest');
       }
-      if (u.phone === undefined || u.phone === null) u.phone = '';
-      if (!u.phone) {
-        if (u.savedAddresses && u.savedAddresses.length > 0) {
-          const addr = u.savedAddresses.find(a => a.contact_number || a.phone || a.receiverPhone || a.customers_mobile);
-          if (addr) u.phone = addr.contact_number || addr.phone || addr.receiverPhone || addr.customers_mobile || '';
-        }
-        if (!u.phone && Array.isArray(this.data.orders)) {
-          const ord = this.data.orders.find(o => 
-            (o.userId === u.id || o.userId12 === u.userId12 || (o.user && o.user.email === u.email) || o.email === u.email) &&
-            (o.user?.phone || o.address?.phone || o.customerPhone)
-          );
-          if (ord) u.phone = ord.user?.phone || ord.address?.phone || ord.customerPhone || '';
+
+      // Calculate order statistics and find latest active phone from orders
+      let ordersCount = 0;
+      let totalSpent = 0;
+      let latestOrderDate = null;
+      let latestOrderPhone = null;
+      let latestEngineRef = null;
+
+      if (Array.isArray(this.data.orders)) {
+        const userOrders = this.data.orders.filter(o => 
+          o.userId === u.id || 
+          o.userId12 === u.userId12 || 
+          (u.email && ((o.user && o.user.email?.toLowerCase() === u.email.toLowerCase()) || o.email?.toLowerCase() === u.email.toLowerCase())) ||
+          (u.phone && ((o.user && o.user.phone?.replace(/[^0-9]/g, '').slice(-10) === u.phone.replace(/[^0-9]/g, '').slice(-10)) || (o.address?.phone && o.address.phone.replace(/[^0-9]/g, '').slice(-10) === u.phone.replace(/[^0-9]/g, '').slice(-10))))
+        );
+
+        ordersCount = userOrders.length;
+        userOrders.forEach(o => {
+          totalSpent += Number(o.payment?.amount || o.robot?.billAmount || 0);
+          if (!latestOrderDate || new Date(o.createdAt) > new Date(latestOrderDate)) {
+            latestOrderDate = o.createdAt;
+            latestEngineRef = o.engineOrderRef || o.id;
+            if (o.address?.phone || o.user?.phone) {
+              latestOrderPhone = o.address?.phone || o.user?.phone;
+            }
+          }
+        });
+
+        // Auto-populate savedAddresses from past orders if user has none
+        if ((!u.savedAddresses || u.savedAddresses.length === 0) && userOrders.length > 0) {
+          u.savedAddresses = [];
+          userOrders.forEach(o => {
+            if (o.address && (o.address.street || o.address.building || o.address.flat) && u.savedAddresses.length < 3) {
+              const addrStr = o.address.street || o.address.building;
+              const exists = u.savedAddresses.some(a => (a.completeAddress && a.completeAddress === addrStr) || a.street === addrStr);
+              if (!exists) {
+                u.savedAddresses.push({
+                  id: 'ADDR-' + Math.floor(100000 + Math.random() * 900000),
+                  label: o.address.label || 'Home',
+                  name: o.address.name || u.name,
+                  phone: o.address.phone || u.phone,
+                  flat: o.address.flat || '',
+                  building: o.address.building || '',
+                  street: o.address.street || '',
+                  landmark: o.address.landmark || '',
+                  city: o.address.city || 'Chandigarh',
+                  pincode: o.address.pincode || '',
+                  isDefault: u.savedAddresses.length === 0
+                });
+              }
+            }
+          });
         }
       }
+
+      u.ordersCount = ordersCount;
+      u.totalSpent = totalSpent;
+      u.lastOrderAt = latestOrderDate;
+      u.lastEngineOrderRef = latestEngineRef;
+
+      // Update phone: if latest verified phone exists and user has no phone or generic dummy phone, use verified phone
+      if (latestOrderPhone && (!u.phone || u.phone.includes('9876543210') || u.phone.length < 10)) {
+        u.phone = latestOrderPhone;
+      } else if (!u.phone && u.savedAddresses && u.savedAddresses.length > 0) {
+        const addr = u.savedAddresses.find(a => a.contact_number || a.phone || a.receiverPhone || a.customers_mobile);
+        if (addr) u.phone = addr.contact_number || addr.phone || addr.receiverPhone || addr.customers_mobile || '';
+      }
+
       if (typeof u.phoneLocked !== 'boolean') u.phoneLocked = false;
       if (typeof u.walletBalance !== 'number') u.walletBalance = Number(u.wallet?.balance) || 0;
       if (!u.wallet) u.wallet = { balance: u.walletBalance, currency: 'INR' };
       if (!u.status) u.status = 'ACTIVE';
-      if (!u.registeredAt) u.registeredAt = u.createdAt || new Date().toISOString();
+      if (!u.registeredAt) u.registeredAt = u.createdAt || latestOrderDate || new Date().toISOString();
       if (!u.transactions) u.transactions = [];
       if (!Array.isArray(u.savedAddresses)) u.savedAddresses = [];
-      if (u.savedAddresses.length === 0 && Array.isArray(this.data.orders)) {
-        const userOrders = this.data.orders.filter(o => 
-          o.userId === u.id || o.userId12 === u.userId12 || (o.user && o.user.email === u.email) || o.email === u.email
-        );
-        userOrders.forEach(o => {
-          if (o.address && (o.address.street || o.address.building) && u.savedAddresses.length < 3) {
-            const addrStr = o.address.street || o.address.building;
-            const exists = u.savedAddresses.some(a => (a.completeAddress && a.completeAddress === addrStr) || a.street === addrStr);
-            if (!exists) {
-              u.savedAddresses.push({
-                id: 'ADDR-' + Math.floor(100000 + Math.random() * 900000),
-                label: o.address.label || 'Home',
-                name: o.address.name || u.name,
-                phone: o.address.phone || u.phone,
-                flat: o.address.flat || '',
-                building: o.address.building || '',
-                street: o.address.street || '',
-                landmark: o.address.landmark || '',
-                city: o.address.city || 'Chandigarh',
-                pincode: o.address.pincode || '',
-                isDefault: u.savedAddresses.length === 0
-              });
-            }
-          }
-        });
-      }
       if (u.savedAddresses.length > 3) {
         u.savedAddresses = u.savedAddresses.slice(0, 3);
       }
       u.addressCount = u.savedAddresses.length;
     });
+
     return this.data.users;
+  }
+
+  upsertUserFromOrder(order) {
+    if (!order) return null;
+    const users = this.getUsers();
+    const uid12 = order.userId12 || (order.user && order.user.userId12);
+    const email = (order.user?.email || order.email || '').toLowerCase().trim();
+    const phone = (order.user?.phone || order.address?.phone || '').trim();
+
+    let user = users.find(u => 
+      (uid12 && u.userId12 === uid12) ||
+      (email && u.email && u.email.toLowerCase() === email) ||
+      (phone && u.phone && u.phone.replace(/[^0-9]/g, '').slice(-10) === phone.replace(/[^0-9]/g, '').slice(-10))
+    );
+
+    if (!user) {
+      user = {
+        id: 'USR-' + Date.now().toString().slice(-4) + Math.floor(10 + Math.random() * 90),
+        userId12: uid12 || generate12DigitUid(),
+        name: order.user?.name || order.address?.name || (email ? email.split('@')[0] : 'Customer'),
+        email: email || '',
+        phone: phone || '',
+        phoneLocked: false,
+        walletBalance: 0,
+        wallet: { balance: 0, currency: 'INR' },
+        savedAddresses: [],
+        transactions: [],
+        registeredAt: new Date().toISOString(),
+        lastActive: new Date().toISOString(),
+        status: 'ACTIVE'
+      };
+      this.data.users.push(user);
+    } else {
+      if (phone && (!user.phone || user.phone.includes('9876543210'))) user.phone = phone;
+      if (order.user?.name && (!user.name || user.name.includes('User'))) user.name = order.user.name;
+      user.lastActive = new Date().toISOString();
+    }
+
+    if (order.address && (order.address.street || order.address.building || order.address.flat)) {
+      if (!Array.isArray(user.savedAddresses)) user.savedAddresses = [];
+      const addrStr = order.address.street || order.address.building;
+      const exists = user.savedAddresses.some(a => (a.completeAddress && a.completeAddress === addrStr) || a.street === addrStr);
+      if (!exists && user.savedAddresses.length < 3) {
+        user.savedAddresses.push({
+          id: 'ADDR-' + Math.floor(100000 + Math.random() * 900000),
+          label: order.address.label || 'Home',
+          name: order.address.name || user.name,
+          phone: order.address.phone || user.phone,
+          flat: order.address.flat || '',
+          building: order.address.building || '',
+          street: order.address.street || '',
+          landmark: order.address.landmark || '',
+          city: order.address.city || 'Chandigarh',
+          pincode: order.address.pincode || '',
+          isDefault: user.savedAddresses.length === 0
+        });
+      }
+      user.addressCount = user.savedAddresses.length;
+    }
+
+    this.save();
+    return user;
   }
 
   getUser(idOrPhone) {

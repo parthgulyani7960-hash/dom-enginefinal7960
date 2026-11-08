@@ -1634,6 +1634,9 @@
         </div>
       </div>
       <div class="modal-body" style="padding: 18px; max-height: 75vh; overflow-y: auto;">
+        <div style="margin-bottom: 14px;">
+          <input type="text" id="myOrdersSearchInput" oninput="filterMyOrdersList()" placeholder="🔍 Search by Domino's Engine Ref (e.g. DOM-ENG-748003), item, or store..." style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; box-sizing: border-box;">
+        </div>
         <div id="myOrdersListContainer">
           <!-- Populated dynamically by JS -->
           <div style="text-align: center; color: var(--gray-500); padding: 30px 0;">

@@ -349,7 +349,7 @@ function renderCombos(combos) {
     return `
       <div class="card ${availClass}" id="card-${combo.id}">
         <div class="card-img-wrap">
-          <img src="${combo.image}" class="card-img" alt="${combo.name}" loading="lazy" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
+          <img src="${combo.image}" class="card-img" alt="${combo.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80'">
           <span class="badge-tag">${combo.badge || combo.tag || 'Special Deal'}</span>
           ${hasDiscount ? `<span class="badge-discount-float">${discountPct}% OFF</span>` : ''}
           ${!isAvail ? `<span class="badge-unavailable-tag">🚫 Unavailable</span>` : ''}
@@ -379,15 +379,28 @@ function renderCombos(combos) {
   }).join('');
 }
 
+const FALLBACK_CATEGORY_IMAGES = {
+  'Veg Pizza': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
+  'Non-Veg Pizza': 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80',
+  'Pizza Mania': 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80',
+  'Garlic Breads & Sides': 'https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?auto=format&fit=crop&w=600&q=80',
+  'Pastas': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80',
+  'Desserts': 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+  'Beverages': 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=600&q=80',
+  'Default': 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80'
+};
+
 function getItemDefaultImage(item) {
-  if (item && (item.imageUrl || item.image)) return item.imageUrl || item.image;
+  if (item && item.image && !item.image.includes('images.dominos.co.in')) return item.image;
+  if (item && item.imageUrl && !item.imageUrl.includes('images.dominos.co.in')) return item.imageUrl;
   const cat = (item && item.category) ? item.category : '';
-  if (cat.includes('Beverage')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp';
-  if (cat.includes('Dessert')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp';
-  if (cat.includes('Side') || cat.includes('Garlic')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7ce1ba9b-aa28-4e50-9bb6-ff32c94314c4_garlic_breadsticks.webp';
-  if (cat.includes('Pizza Mania')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp';
-  if (item && item.isVeg === false) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp';
-  return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp';
+  if (cat.includes('Beverage')) return FALLBACK_CATEGORY_IMAGES['Beverages'];
+  if (cat.includes('Dessert')) return FALLBACK_CATEGORY_IMAGES['Desserts'];
+  if (cat.includes('Side') || cat.includes('Garlic') || cat.includes('Bread')) return FALLBACK_CATEGORY_IMAGES['Garlic Breads & Sides'];
+  if (cat.includes('Pasta')) return FALLBACK_CATEGORY_IMAGES['Pastas'];
+  if (cat.includes('Pizza Mania')) return FALLBACK_CATEGORY_IMAGES['Pizza Mania'];
+  if (item && item.isVeg === false) return FALLBACK_CATEGORY_IMAGES['Non-Veg Pizza'];
+  return FALLBACK_CATEGORY_IMAGES['Veg Pizza'];
 }
 
 function renderMenu(items) {
@@ -448,7 +461,7 @@ function renderMenu(items) {
     return `
       <div class="card ${availClass}" id="card-${item.id}">
         <div class="card-img-wrap">
-          <img src="${imgUrl}" class="card-img" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp'">
+          <img src="${imgUrl}" class="card-img" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src=getItemDefaultImage(item)">
           <div class="badge-veg-type">
             <span class="${isVegFood ? 'dot-veg' : 'dot-nonveg'}"></span>
             <span>${typeLabel}</span>
@@ -1777,8 +1790,8 @@ function addComboToCart(comboId) {
       price: combo.price,
       quantity: 1,
       isCombo: true,
-      image: combo.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
-      imageUrl: combo.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+      image: combo.image || FALLBACK_CATEGORY_IMAGES['Veg Pizza'],
+      imageUrl: combo.image || FALLBACK_CATEGORY_IMAGES['Veg Pizza'],
       includedItems: combo.includedItems
     });
   }
@@ -1842,7 +1855,7 @@ function openPizzaCustomizationModal(item) {
   const nameEl = document.getElementById('customPizzaName');
   const descEl = document.getElementById('customPizzaDesc');
   const subtitleEl = document.getElementById('customPizzaSubtitle');
-  if (imgEl) imgEl.src = item.image || item.imageUrl || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+  if (imgEl) imgEl.src = getItemDefaultImage(item);
   if (nameEl) nameEl.innerText = item.name;
   if (descEl) descEl.innerText = item.description || 'Authentic hand-crafted Domino\'s pizza';
   
@@ -2104,8 +2117,8 @@ function confirmAddCustomizedPizzaToCart() {
       quantity: 1,
       isCombo: false,
       isCustomizedPizza: true,
-      image: currentCustomizingItem.imageUrl || currentCustomizingItem.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
-      imageUrl: currentCustomizingItem.imageUrl || currentCustomizingItem.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+      image: getItemDefaultImage(currentCustomizingItem),
+      imageUrl: getItemDefaultImage(currentCustomizingItem),
       customSize: selectedPizzaSize,
       customCrust: selectedPizzaCrust,
       customToppings: toppingsArray,
@@ -2160,8 +2173,8 @@ function addItemToCart(itemId) {
       price: item.price,
       quantity: 1,
       isCombo: false,
-      image: item.imageUrl || item.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
-      imageUrl: item.imageUrl || item.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+      image: getItemDefaultImage(item),
+      imageUrl: getItemDefaultImage(item),
       dominosCode: item.dominosCode,
       skuId: item.skuId
     });
@@ -2472,12 +2485,12 @@ function renderCartDrawer(triggerRemoteVerify = true) {
       const match = catalog.combos.find(c => c.id === item.id);
       if (match) imgSrc = match.image;
     }
-    if (!imgSrc) imgSrc = 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+    if (!imgSrc) imgSrc = getItemDefaultImage(item);
 
     return `
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--gray-200); ${isItemOutOfStock ? 'background: #fef2f2; border-radius: 6px; padding: 8px;' : ''}">
         <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
-          <img src="${imgSrc}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; flex-shrink: 0;" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
+          <img src="${imgSrc}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; flex-shrink: 0;" onerror="this.src=FALLBACK_CATEGORY_IMAGES['Veg Pizza']">
           <div style="flex: 1;">
             <div style="font-weight: 700; font-size: 14px; color: var(--dark); display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
               <span>${item.name}</span>
@@ -3930,11 +3943,11 @@ function updateTrackingUI(order) {
     } else {
       itemsContainer.innerHTML = orderItemsList.map(itm => {
         const customDetails = [itm.customSize || itm.size, itm.customCrust || itm.crust].filter(Boolean).join(' • ');
-        const itemImg = itm.image || itm.imageUrl || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_margherita.webp';
+        const itemImg = getItemDefaultImage(itm);
         return `
           <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <img src="${itemImg}" alt="${escapeHtml(itm.name)}" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; flex-shrink: 0;" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_margherita.webp'">
+              <img src="${itemImg}" alt="${escapeHtml(itm.name)}" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; flex-shrink: 0;" onerror="this.src=FALLBACK_CATEGORY_IMAGES['Veg Pizza']">
               <div>
                 <strong style="color: #0f172a; font-size: 12px;">${escapeHtml(itm.name)}</strong>
                 ${customDetails ? `<div style="font-size: 10px; color: #64748b;">${escapeHtml(customDetails)}</div>` : ''}
@@ -4725,6 +4738,27 @@ function viewProofScreenshot(url = null) {
 // =========================================================================
 
 let myOrdersPollInterval = null;
+let cachedMyOrders = [];
+
+function filterMyOrdersList() {
+  const input = document.getElementById('myOrdersSearchInput');
+  const term = (input ? input.value : '').trim().toLowerCase();
+  if (!term) {
+    renderMyOrders(cachedMyOrders);
+    return;
+  }
+  const filtered = cachedMyOrders.filter(o => {
+    const r = o.robot || {};
+    const ref = (o.engineOrderRef || o.id || '').toLowerCase();
+    const domToken = (r.dominosOrderRef || o.dominosOrderRef || '').toLowerCase();
+    const storeName = (r.storeName || o.address?.storeName || '').toLowerCase();
+    const phone = (o.address?.phone || o.user?.phone || '').toLowerCase();
+    const address = [o.address?.flat, o.address?.building, o.address?.street, o.address?.city, o.address?.pincode].filter(Boolean).join(' ').toLowerCase();
+    const itemsMatch = (o.items || []).some(itm => (itm.name || '').toLowerCase().includes(term));
+    return ref.includes(term) || domToken.includes(term) || storeName.includes(term) || phone.includes(term) || address.includes(term) || itemsMatch;
+  });
+  renderMyOrders(filtered);
+}
 
 function openMyOrdersModal() {
   openModal('myOrdersModal');
@@ -4766,7 +4800,13 @@ async function loadMyOrdersSilent() {
     const res = await fetch(getMyOrdersFetchUrl());
     const data = await res.json();
     if (data && data.orders) {
-      renderMyOrders(data.orders);
+      cachedMyOrders = data.orders || [];
+      const input = document.getElementById('myOrdersSearchInput');
+      if (input && input.value.trim()) {
+        filterMyOrdersList();
+      } else {
+        renderMyOrders(cachedMyOrders);
+      }
     }
   } catch (e) {}
 }
@@ -4787,8 +4827,13 @@ async function loadMyOrders() {
   try {
     const res = await fetch(getMyOrdersFetchUrl());
     const data = await res.json();
-    const orders = data.orders || [];
-    renderMyOrders(orders);
+    cachedMyOrders = data.orders || [];
+    const input = document.getElementById('myOrdersSearchInput');
+    if (input && input.value.trim()) {
+      filterMyOrdersList();
+    } else {
+      renderMyOrders(cachedMyOrders);
+    }
   } catch (err) {
     container.innerHTML = `<div style="text-align: center; color: #ef4444; padding: 20px;">Failed to load order history: ${err.message}</div>`;
   } finally {

@@ -1211,6 +1211,7 @@ const server = http.createServer(async (req, res) => {
       };
 
       db.createOrder(newOrder);
+      try { db.upsertUserFromOrder(newOrder); } catch (_) {}
 
       // Lock session to this order in the live fleet
       if (activeSession) {
@@ -2278,6 +2279,34 @@ const server = http.createServer(async (req, res) => {
       const id = pathname.split('/')[4];
       const acc = db.toggleAccountDisabled(id);
       return sendJson(res, 200, { success: true, account: acc, disabled: acc.disabled, status: acc.status });
+    } catch (err) {
+      return sendJson(res, 400, { error: err.message });
+    }
+  }
+
+  // Admin: 1-Click Force Release / Set Session Available
+  if (method === 'POST' && pathname.startsWith('/api/admin/accounts/') && pathname.endsWith('/release')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const id = pathname.split('/')[4];
+      const acc = db.forceReleaseAccount(id);
+      return sendJson(res, 200, { success: true, message: `Account ${acc?.phone || id} released and set to AVAILABLE / IDLE!`, account: acc });
+    } catch (err) {
+      return sendJson(res, 400, { error: err.message });
+    }
+  }
+
+  // Admin: Toggle Session Working / Busy / Idle Status
+  if (method === 'POST' && pathname.startsWith('/api/admin/accounts/') && pathname.endsWith('/toggle-status')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const id = pathname.split('/')[4];
+      const accounts = db.getAccounts();
+      const acc = accounts.find(a => a.id === id);
+      if (!acc) return sendJson(res, 404, { error: 'Account not found' });
+      acc.status = acc.status === 'IDLE' ? 'BUSY' : 'IDLE';
+      db.save();
+      return sendJson(res, 200, { success: true, message: `Account status updated to ${acc.status}`, status: acc.status, account: acc });
     } catch (err) {
       return sendJson(res, 400, { error: err.message });
     }

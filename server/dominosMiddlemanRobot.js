@@ -821,7 +821,7 @@ async function executeMiddlemanOrderOnDominos({
                   .trim();
 
                 const normTarget = norm(cName || rName);
-                const searchCards = Array.from(document.querySelectorAll('.card-item-search, .search-card, .search-item, [data-label="product-card"], .card-content')).filter(c => c.querySelector('button.cta-add, button, div.main-cta, [class*="cta-add"], [class*="main-cta"]'));
+                const searchCards = Array.from(document.querySelectorAll('.card-item-search, .search-card, .search-item, [data-label="product-card"], .card-content')).filter(c => c.querySelector('button.cta-add, button, div.main-cta, [class*="cta-add"], [class*="main-cta"], .anim-ico-plus, [class*="plus"]'));
 
                 const hasFamilyConflict = (h, target) => {
                   const families = ['burger', 'dominoid', 'volcano', 'lava', 'paratha', 'taco', 'pasta', 'dip', 'beverage', 'dessert'];
@@ -974,6 +974,11 @@ async function executeMiddlemanOrderOnDominos({
                     if (!heading) continue;
                     const normH = norm(heading.innerText);
                     if (normH === normTarget || normH.startsWith(normTarget) || normTarget.startsWith(normH) || (normTarget.length >= 6 && normH.includes(normTarget))) {
+                      const plusBtn = card.querySelector('.anim-ico-plus, [class*="plus"]');
+                      if (plusBtn) {
+                        plusBtn.click();
+                        return true;
+                      }
                       const btn = card.querySelector('button.cta-add, button, div.main-cta');
                       if (btn) {
                         btn.click();
@@ -1011,6 +1016,45 @@ async function executeMiddlemanOrderOnDominos({
 
         if (added) {
           onProgress(`[MIDDLEMAN-ENGINE] ✓ Successfully added "${cleanName}" to cart!`);
+
+          if (item.qty > 1 && q === 0) {
+            const extraClicks = item.qty - 1;
+            onProgress(`[MIDDLEMAN-ENGINE] ⚡ Fast-tracking ${extraClicks} additional quantity for "${cleanName}" via in-page card stepper...`);
+            await sleep(500);
+            const stepped = await page.evaluate(({ rName, cName, count }) => {
+              const norm = (s) => (s || '').toLowerCase()
+                .replace(/\(.*\)/g, '')
+                .replace(/&/g, ' ')
+                .replace(/\band\b/g, '')
+                .replace(/\bmania\b/g, '')
+                .replace(/\bpizza\b/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+              const normTarget = norm(cName || rName);
+              const allCards = Array.from(document.querySelectorAll('.card-item-search, .search-card, .search-item, [data-label="product-card"], .card-content, .product-card'));
+              for (const card of allCards) {
+                const heading = card.querySelector('h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
+                const normH = norm(heading?.innerText || '');
+                if (normH === normTarget || normH.includes(normTarget) || normTarget.includes(normH)) {
+                  let clicks = 0;
+                  for (let k = 0; k < count; k++) {
+                    const plus = card.querySelector('.anim-ico-plus, [class*="plus"]');
+                    if (plus) {
+                      plus.click();
+                      clicks++;
+                    }
+                  }
+                  return clicks;
+                }
+              }
+              return 0;
+            }, { rName: rawName, cName: cleanName, count: extraClicks });
+
+            if (stepped > 0) {
+              onProgress(`[MIDDLEMAN-ENGINE] ✓ Stepper added +${stepped} extra quantity in 200ms!`);
+              q += stepped;
+            }
+          }
         } else {
           onProgress(`[MIDDLEMAN-ENGINE] ⚠️ Note: "${cleanName}" not clicked on menu page; checking cart...`);
         }
