@@ -379,6 +379,17 @@ function renderCombos(combos) {
   }).join('');
 }
 
+function getItemDefaultImage(item) {
+  if (item && (item.imageUrl || item.image)) return item.imageUrl || item.image;
+  const cat = (item && item.category) ? item.category : '';
+  if (cat.includes('Beverage')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp';
+  if (cat.includes('Dessert')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp';
+  if (cat.includes('Side') || cat.includes('Garlic')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7ce1ba9b-aa28-4e50-9bb6-ff32c94314c4_garlic_breadsticks.webp';
+  if (cat.includes('Pizza Mania')) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp';
+  if (item && item.isVeg === false) return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp';
+  return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp';
+}
+
 function renderMenu(items) {
   const container = document.getElementById('menuGrid');
   if (!container) return;
@@ -402,7 +413,7 @@ function renderMenu(items) {
       ? `<span class="price-original">₹${item.originalPrice}</span><span class="discount-pill">${item.discount || discountPct + '% OFF'}</span>`
       : '';
 
-    const imgUrl = item.imageUrl || item.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+    const imgUrl = getItemDefaultImage(item);
     const isVegFood = item.isVeg !== false && item.type !== 'NON-VEG';
     const typeLabel = isVegFood ? 'VEG' : 'NON-VEG';
     const canCustomize = (item.sizes && Object.keys(item.sizes).length > 1) || (item.allowedSizes && item.allowedSizes.length > 1);
@@ -437,7 +448,7 @@ function renderMenu(items) {
     return `
       <div class="card ${availClass}" id="card-${item.id}">
         <div class="card-img-wrap">
-          <img src="${imgUrl}" class="card-img" alt="${item.name}" loading="lazy" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp'">
+          <img src="${imgUrl}" class="card-img" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp'">
           <div class="badge-veg-type">
             <span class="${isVegFood ? 'dot-veg' : 'dot-nonveg'}"></span>
             <span>${typeLabel}</span>

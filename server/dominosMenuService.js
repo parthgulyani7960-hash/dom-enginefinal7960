@@ -143,11 +143,11 @@ class DominosMenuService {
 
     // High quality official Domino's CDN fallbacks
     if (category === 'Veg Pizza') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
-    if (category === 'Non-Veg Pizza') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e0717098-c280-4fc4-a692-ca6dde1021d6_TandooriMaxxFHomeProductVxpx.webp';
-    if (category === 'Pizza Mania') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp';
-    if (category === 'Garlic Breads & Sides') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp';
+    if (category === 'Non-Veg Pizza') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp';
+    if (category === 'Pizza Mania') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp';
+    if (category === 'Garlic Breads & Sides') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7ce1ba9b-aa28-4e50-9bb6-ff32c94314c4_garlic_breadsticks.webp';
     if (category === 'Desserts') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp';
-    if (category === 'Beverages') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d9375215-52ed-447f-b0b9-90d107535c1c_BlueberryMousseHOMEPRODUCT.webp';
+    if (category === 'Beverages') return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp';
     return 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
   }
 
@@ -706,7 +706,7 @@ class DominosMenuService {
         category: 'Veg Pizza',
         type: 'VEG',
         price: 109,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp',
         description: 'Classic delight with 100% real mozzarella cheese.',
         dominosCode: 'PIZ0117',
         isAvailable: true

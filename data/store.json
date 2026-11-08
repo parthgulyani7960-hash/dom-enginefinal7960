@@ -60,17 +60,17 @@
       "cleanPhone": "7888422429",
       "customerName": "Parth Gulyani",
       "userId": "346377415",
-      "cartId": "2955250203001849138",
+      "cartId": "5448875398048926389",
       "accountType": "EXISTING_ACCOUNT",
       "category": "CATEGORY_FLAT_100",
-      "categoryName": "Party Repeat Order Tier",
+      "categoryName": "🔵 Party Repeat Order Tier",
       "couponCode": "PARTY",
       "cookies": [
         {
           "domain": ".dominos.co.in",
           "name": "token",
           "path": "/",
-          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o"
+          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4"
         },
         {
           "domain": ".dominos.co.in",
@@ -239,9 +239,9 @@
         "analytics_device_id": "dev_a7m8hussz971793566686731",
         "analytics_sdk_config:https://api.dominos.co.in/ambit-web/ingest:proj_a280da1c8a61bb96:__anonymous__": "{\"trackingFlags\":{\"emergencyDisableEventIngest\":false,\"emergencyDisableReplayIngest\":false,\"enableEventTracking\":true,\"trackPageViews\":true,\"trackClicks\":true,\"trackForms\":true,\"networkCaptureEnabled\":true,\"networkCaptureFetch\":true,\"networkCaptureXhr\":true,\"networkCaptureImages\":false,\"networkCaptureStylesheets\":false,\"networkCaptureScripts\":false,\"networkSampleRate\":1,\"networkQueueLimit\":1000,\"enableReplay\":true,\"enableMouseTracking\":true,\"enableScrollTracking\":true,\"replaySampleRate\":0.02,\"mousemoveSamplingMs\":100,\"scrollSamplingMs\":200,\"checkoutEveryNth\":50,\"maxReplayDurationMinutes\":0,\"replayWorkerEnabled\":true,\"replayMaxQueueBytes\":10485760,\"replayMaxQueueEvents\":2000,\"replayUploadConcurrency\":2,\"webFlushIntervalMs\":1000,\"webBatchSize\":500,\"webMaxQueueEvents\":2000,\"webMaxQueueBytes\":5242880,\"webGzipThresholdBytes\":60000,\"webReplayChunkSizeChars\":256000,\"webUploadConcurrency\":2,\"collectFonts\":true,\"recordCanvas\":true,\"configCacheTtlSeconds\":900,\"sessionTimeoutMs\":1800000,\"maskAllInputs\":true,\"maskTextSelectors\":\"\",\"blockSelectors\":\"\",\"ignoreSelectors\":\"\",\"mobileReplayMaskLevel\":\"medium\",\"mobileReplayQuality\":\"high\",\"androidBatchIntervalMs\":1000,\"androidMaxQueueEvents\":10000,\"androidMaxQueueBytes\":10485760,\"androidReplayMaxQueueEvents\":2000,\"androidReplayMaxQueueBytes\":10485760,\"androidReplayBatchSize\":200,\"androidReplayChunkSizeBytes\":50000,\"androidUploadConcurrency\":1,\"androidCaptureImages\":true,\"androidInteractionEvents\":true,\"nodeBatchSize\":100,\"nodeFlushIntervalMs\":1000,\"nodeMaxQueueEvents\":10000,\"nodeGzipThresholdBytes\":60000,\"nodeMaxRetries\":3,\"nodeRetryBaseDelayMs\":250,\"nodeRequestTimeoutMs\":10000,\"nodeAutoFlush\":true,\"timezone\":\"Asia/Kolkata\"},\"userPolicy\":{\"user_id\":null,\"enableReplay\":false,\"forceReplaySample\":false},\"expiresAt\":1793567594837}",
         "analytics_session_state": "{\"id\":\"sess_5oeldter0xb1793566686731\",\"lastActivity\":1793566693835}",
-        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o",
-        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o",
-        "cartId": "2955250203001849138",
+        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4",
+        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4",
+        "cartId": "5448875398048926389",
         "confrimView": "false",
         "currentSelToppObj": "{}",
         "debug": "undefined",
@@ -266,20 +266,20 @@
         "paymentMode": "{}",
         "reorderHistoryId": "",
         "storeId": "6585R",
-        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o",
+        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4",
         "totalWalletBalance": "",
         "userAddresses": "[]",
-        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o\"},\"cartId\":\"2955250203001849138\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
+        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4\"},\"cartId\":\"5448875398048926389\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
         "utm_attributes": "{\"utm_source\":\"direct\",\"utm_medium\":\"direct\",\"utm_campaign\":\"direct\",\"utm_source_medium\":\"direct-direct\"}"
       },
-      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o",
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4",
       "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
       "credentials": {
-        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o",
-        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o",
-        "cartId": "2955250203001849138",
+        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4",
+        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4",
+        "cartId": "5448875398048926389",
         "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
-        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..myLyxLrfwE_I3lp2cruoqA.sAv4YneLpfourwKlRxwIyznbBYIAxmtpX_4FlsLBIs_yPHx365BdKCsK2ZyQLAZ6DNCuYD1bkeenz0Tasp9dIelUY5gSDPLI1klp3MSkco3Ui99v5c3liTqiw7idMaeNME6AA0xmRoh_emfqxcrhqq3hCTA5Qyjo7ZBCEWhC46Ol3Jqyadc23V8ef3z_Er5N.kRFpCgN9XBO-MquIz1BIvQqm-nP3WosIAg_5Gz4qP6o",
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..QJBDfl_1FEi8EE7ySGmN6w.84CN0ghr3Uh3LzlvSkX-VouRMTJhidwukBOTL00GruzLeD4cYQX1_te71k_hd2YPJNiiHa2OFq6PNogJ9Ig5bMPn-U6ZcdeXAFpBGoytid8wZEJEpIrzy8yLdSQMnpGZrJ7HgVAO64KEtpor6BUkm_YF1zpyTTZp3gNOaH6oiEtHQUly5MfWx2RsWXQ9VzDp.jlXGyAr2EcVzy7-g3A2JhI_svXzrKX3aK0SA_SDMwS4",
         "userId": "346377415"
       },
       "pastOrdersCount": 3,
@@ -287,17 +287,17 @@
       "status": "IDLE",
       "totalOrdersPlaced": 7,
       "storedAt": "2026-11-01T13:35:39.834Z",
-      "lastRefreshedAt": "2026-11-08T21:01:54.742Z",
-      "accessTokenExpiresAt": "2026-11-08T22:01:54.742Z",
-      "refreshTokenExpiresAt": "2026-12-08T21:01:54.742Z",
-      "expiresAt": "2026-12-08T21:01:54.742Z",
+      "lastRefreshedAt": "2026-11-08T21:20:46.313Z",
+      "accessTokenExpiresAt": "2026-11-08T22:20:46.313Z",
+      "refreshTokenExpiresAt": "2026-12-08T21:20:46.313Z",
+      "expiresAt": "2026-12-08T21:20:46.313Z",
       "source": "LIVE_SMS_OTP",
-      "lastActive": "2026-11-08T21:01:54.132Z",
-      "lastValidated": "2026-11-08T21:01:54.743Z",
+      "lastActive": "2026-11-08T21:20:43.599Z",
+      "lastValidated": "2026-11-08T21:20:46.313Z",
       "isCheesyRewards": true,
       "loyaltyProgram": "POTP2",
       "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)",
-      "activeOrderId": null,
+      "activeOrderId": "DOM-ENG-212715",
       "lastAssignedAt": "2026-11-08T20:53:31.490Z",
       "disabled": false
     },
@@ -1340,6 +1340,54 @@
       "discount": "18% OFF"
     },
     {
+      "id": "DOM-PIZ0124",
+      "name": "Mexican Green Wave",
+      "category": "Veg Pizza",
+      "type": "VEG",
+      "price": 259,
+      "originalPrice": 319,
+      "isVeg": true,
+      "isAvailable": true,
+      "dominosCode": "PIZ0124",
+      "skuId": "1#4#1",
+      "description": "A pizza loaded with crunchy onions, crisp capsicum, juicy tomatoes and jalapeno with a liberal sprinkling of exotic Mexican herbs.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a7e1cbf-73d9-4184-b157-153947113764_FullsizeMexicanGreenWaveCB.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a7e1cbf-73d9-4184-b157-153947113764_FullsizeMexicanGreenWaveCB.webp",
+      "sizes": {
+        "Regular (Serves 1)": 259,
+        "Medium (Serves 2)": 459,
+        "Large (Serves 4)": 689
+      },
+      "allowedSizes": [
+        "Regular",
+        "Medium",
+        "Large"
+      ],
+      "allowedCrusts": [
+        "New Hand Tossed",
+        "Cheese Burst",
+        "Fresh Pan Pizza"
+      ],
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "New Hand Tossed": 259,
+          "Cheese Burst": 334,
+          "Fresh Pan Pizza": 289
+        },
+        "Medium": {
+          "New Hand Tossed": 459,
+          "Cheese Burst": 559,
+          "Fresh Pan Pizza": 509
+        },
+        "Large": {
+          "New Hand Tossed": 689,
+          "Cheese Burst": 814,
+          "Fresh Pan Pizza": 759
+        }
+      },
+      "discount": "19% OFF"
+    },
+    {
       "id": "DOM-PIZ0125",
       "name": "Veggie Paradise",
       "category": "Veg Pizza",
@@ -1393,14 +1441,14 @@
       "category": "Veg Pizza",
       "type": "VEG",
       "price": 299,
-      "originalPrice": 349,
+      "originalPrice": 359,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PIZ0121",
       "skuId": "1#7#1",
       "description": "Tandoori paneer, red paprika, mint mayo and fresh onion for spicy tandoori lovers.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a7e1cbf-73d9-4184-b157-153947113764_FullsizeMexicanGreenWaveCB.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a7e1cbf-73d9-4184-b157-153947113764_FullsizeMexicanGreenWaveCB.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c0c00ef6-92e1-4560-8f92-91f86f85d263_IndianTandooriPaneer.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c0c00ef6-92e1-4560-8f92-91f86f85d263_IndianTandooriPaneer.webp",
       "sizes": {
         "Regular (Serves 1)": 299,
         "Medium (Serves 2)": 549,
@@ -1487,7 +1535,7 @@
       "id": "DOM-PIZ5119",
       "name": "Pepper Barbecue Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 249,
       "originalPrice": 289,
       "isVeg": false,
@@ -1535,7 +1583,7 @@
       "id": "DOM-PIZ5123",
       "name": "Chicken Golden Delight",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 279,
       "originalPrice": 329,
       "isVeg": false,
@@ -1583,7 +1631,7 @@
       "id": "DOM-PIZ5124",
       "name": "Chicken Dominator",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 359,
       "originalPrice": 419,
       "isVeg": false,
@@ -1631,16 +1679,16 @@
       "id": "DOM-PIZ5120",
       "name": "Non-Veg Supreme",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 359,
-      "originalPrice": 419,
+      "originalPrice": 429,
       "isVeg": false,
       "isAvailable": true,
       "dominosCode": "PIZ5120",
       "skuId": "2#4#1",
       "description": "Supreme feast with black olives, grilled mushrooms, pepper barbecue chicken, peri-peri chicken & grilled rashers.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e0717098-c280-4fc4-a692-ca6dde1021d6_TandooriMaxxFHomeProductVxpx.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e0717098-c280-4fc4-a692-ca6dde1021d6_TandooriMaxxFHomeProductVxpx.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
       "sizes": {
         "Regular (Serves 1)": 359,
         "Medium (Serves 2)": 599,
@@ -1679,7 +1727,7 @@
       "id": "DOM-PIZ5121",
       "name": "Indi Chicken Tikka",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 359,
       "originalPrice": 419,
       "isVeg": false,
@@ -1725,153 +1773,195 @@
     },
     {
       "id": "DOM-PM0001",
-      "name": "Veg Loaded Pizza",
+      "name": "Veg Loaded Pizza Mania",
       "category": "Pizza Mania",
       "type": "VEG",
       "price": 169,
-      "originalPrice": 199,
+      "originalPrice": 169,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PM0001",
       "skuId": "3#1#1",
       "description": "Tomato, jalapeno, golden corn, grilled mushroom & mozzarella cheese.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
       "sizes": {
-        "Regular (Single)": 169
+        "Regular (Serves 1)": 139
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "discount": "15% OFF"
+      "discount": "15% OFF",
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 139,
+          "Cheese Burst": 214
+        }
+      }
     },
     {
       "id": "DOM-PM0002",
-      "name": "Cheesy Pizza",
+      "name": "Cheesy Pizza Mania",
       "category": "Pizza Mania",
       "type": "VEG",
       "price": 99,
-      "originalPrice": 129,
+      "originalPrice": 119,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PM0002",
       "skuId": "3#2#1",
       "description": "Delicious orange cheddar cheese dressing topped on classic crust.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
       "sizes": {
-        "Regular (Single)": 99
+        "Regular (Serves 1)": 99
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "discount": "23% OFF"
+      "discount": "23% OFF",
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 99,
+          "Cheese Burst": 174
+        }
+      }
     },
     {
       "id": "DOM-PM0003",
-      "name": "Paneer & Onion",
+      "name": "Paneer & Onion Pizza Mania",
       "category": "Pizza Mania",
       "type": "VEG",
       "price": 119,
-      "originalPrice": 149,
+      "originalPrice": 139,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PM0003",
       "skuId": "3#3#1",
       "description": "Creamy paneer cubes and crunchy onion with rich mozzarella.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
       "sizes": {
-        "Regular (Single)": 119
+        "Regular (Serves 1)": 119
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "discount": "20% OFF"
+      "discount": "20% OFF",
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 119,
+          "Cheese Burst": 194
+        }
+      }
     },
     {
       "id": "DOM-PM0004",
-      "name": "Golden Corn Pizza",
+      "name": "Golden Corn Pizza Mania",
       "category": "Pizza Mania",
       "type": "VEG",
       "price": 89,
-      "originalPrice": 109,
+      "originalPrice": 99,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PM0004",
       "skuId": "3#4#1",
       "description": "Sweet corn and 100% mozzarella cheese on hand-stretched dough.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
       "sizes": {
-        "Regular (Single)": 89
+        "Regular (Serves 1)": 89
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "discount": "18% OFF"
+      "discount": "18% OFF",
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 89,
+          "Cheese Burst": 164
+        }
+      }
     },
     {
       "id": "DOM-PM0005",
-      "name": "Classic Onion Pizza",
+      "name": "Classic Onion Pizza Mania",
       "category": "Pizza Mania",
       "type": "VEG",
       "price": 69,
-      "originalPrice": 89,
+      "originalPrice": 79,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PM0005",
       "skuId": "3#5#1",
       "description": "Crunchy onion with mozzarella cheese - the all-time pocket-friendly favorite.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
       "sizes": {
-        "Regular (Single)": 69
+        "Regular (Serves 1)": 69
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "discount": "22% OFF"
+      "discount": "22% OFF",
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 69,
+          "Cheese Burst": 144
+        }
+      }
     },
     {
       "id": "DOM-PM5001",
-      "name": "Non-Veg Loaded Pizza",
+      "name": "Non-Veg Loaded Pizza Mania",
       "category": "Pizza Mania",
       "type": "NON-VEG",
       "price": 199,
-      "originalPrice": 229,
+      "originalPrice": 199,
       "isVeg": false,
       "isAvailable": true,
       "dominosCode": "PM5001",
       "skuId": "3#6#1",
       "description": "Peri-peri chicken, pepper barbecue chicken with spicy red paprika.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
       "sizes": {
-        "Regular (Single)": 199
+        "Regular (Serves 1)": 169
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "discount": "13% OFF"
+      "discount": "13% OFF",
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 169,
+          "Cheese Burst": 244
+        }
+      }
     },
     {
       "id": "DOM-BRD0096",
@@ -1916,9 +2006,9 @@
       "isAvailable": true,
       "dominosCode": "SID0049",
       "skuId": "4#3#1",
-      "description": "Snack on warm, flaky crust parcel stuffed with spicy paneer and harissa sauce.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Snappy bite with seasoned vegetables folded inside golden pastry parcel.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
       "discount": "17% OFF"
     },
     {
@@ -1932,9 +2022,9 @@
       "isAvailable": true,
       "dominosCode": "SID0050",
       "skuId": "4#4#1",
-      "description": "Snack parcel stuffed with juicy chicken chunks and creamy spicy sauce.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Crispy warm parcel stuffed with flavorful chicken and savory spices.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
       "discount": "14% OFF"
     },
     {
@@ -1980,9 +2070,9 @@
       "isAvailable": true,
       "dominosCode": "CAKE03",
       "skuId": "5#2#1",
-      "description": "Sweet fluffy butterscotch cream mousse layered with crunchy chocolate crispies.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a3818568-aaf4-40f9-b8c2-2ba85daae769_RVcakehome.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a3818568-aaf4-40f9-b8c2-2ba85daae769_RVcakehome.webp",
+      "description": "Sweet, creamy butterscotch mousse layered over soft sponge.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
       "discount": "16% OFF"
     },
     {
@@ -2007,46 +2097,46 @@
       "category": "Beverages",
       "type": "VEG",
       "price": 60,
-      "originalPrice": 79,
+      "originalPrice": 65,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "BEV0001",
       "skuId": "6#1#1",
-      "description": "Sparkling chilled cola to pair with your hot Domino's pizza.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Refreshing Pepsi cola 475ml.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
       "discount": "24% OFF"
     },
     {
       "id": "DOM-BEV0002",
-      "name": "Mirinda 475ml",
+      "name": "Mirinda / Fanta 475ml",
       "category": "Beverages",
       "type": "VEG",
       "price": 60,
-      "originalPrice": 79,
+      "originalPrice": 65,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "BEV0002",
       "skuId": "6#2#1",
-      "description": "Fizzy tangy orange soda with vibrant refreshing flavor.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Sparkling orange flavour fruit drink 475ml.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
       "discount": "24% OFF"
     },
     {
       "id": "DOM-BEV0003",
-      "name": "7Up 475ml",
+      "name": "7Up / Sprite 475ml",
       "category": "Beverages",
       "type": "VEG",
       "price": 60,
-      "originalPrice": 79,
+      "originalPrice": 65,
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "BEV0003",
       "skuId": "6#3#1",
-      "description": "Crisp lemon-lime refreshment to cleanse the palate.",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Clear, crisp lemon-lime refreshment 475ml.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
       "discount": "24% OFF"
     },
     {
@@ -2113,15 +2203,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
       "sizes": {
-        "Regular (Single)": 159
+        "Regular (Serves 1)": 159
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 159,
+          "Cheese Burst": 234
+        }
+      }
     },
     {
       "id": "DOM-SID0306",
@@ -2151,7 +2247,7 @@
       "id": "DOM-PIZ5106",
       "name": "Chicken Sausage",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 249,
       "originalPrice": 299,
       "discount": "17% OFF",
@@ -2331,7 +2427,7 @@
       "id": "DOM-PIZ5460",
       "name": "Chicken Maxxx - Shawarma",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 239,
       "originalPrice": 289,
       "discount": "17% OFF",
@@ -2435,7 +2531,7 @@
       "id": "DOM-PIZ5461",
       "name": "Chicken Maxxx - BBQ",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 239,
       "originalPrice": 289,
       "discount": "17% OFF",
@@ -2489,15 +2585,15 @@
       "category": "Garlic Breads & Sides",
       "type": "VEG",
       "price": 39,
-      "originalPrice": 49,
+      "originalPrice": 199,
       "discount": "20% OFF",
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "SID0396",
       "skuId": "8245",
-      "description": "Creamy Cheezy Meltz",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Melted cheese with succulent spiced paneer inside crispy folded crust.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
       "sizes": null,
       "allowedSizes": [
         "Regular"
@@ -2523,15 +2619,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
       "sizes": {
-        "Regular (Single)": 59
+        "Regular (Serves 1)": 59
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 59,
+          "Cheese Burst": 134
+        }
+      }
     },
     {
       "id": "DOM-SID0242",
@@ -2713,7 +2815,7 @@
       "id": "DOM-PIZ5458",
       "name": "Chicken Maxxx - Tandoori",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 239,
       "originalPrice": 289,
       "discount": "17% OFF",
@@ -2789,7 +2891,7 @@
       "id": "DOM-PIZ5159",
       "name": "The 5 Chicken Feast Pizza",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 775,
       "originalPrice": 929,
       "discount": "17% OFF",
@@ -2916,12 +3018,12 @@
     {
       "id": "DOM-PIZ0631",
       "name": "Paneer Maxxx Makhani Fusion",
-      "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "category": "Veg Pizza",
+      "type": "VEG",
       "price": 239,
       "originalPrice": 289,
       "discount": "17% OFF",
-      "isVeg": false,
+      "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PIZ0631",
       "skuId": "6#1#8609",
@@ -3045,7 +3147,7 @@
       "id": "DOM-PIZ5526",
       "name": "2in1 Cheese Burst - Double Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 419,
       "originalPrice": 499,
       "discount": "16% OFF",
@@ -3097,7 +3199,7 @@
       "id": "DOM-PIZ5357",
       "name": "Cheese Lava Spiced Double Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 329,
       "originalPrice": 399,
       "discount": "18% OFF",
@@ -3224,12 +3326,12 @@
     {
       "id": "DOM-PIZ0625",
       "name": "Paneer Maxxx Garlic Ranch",
-      "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "category": "Veg Pizza",
+      "type": "VEG",
       "price": 299,
       "originalPrice": 359,
       "discount": "17% OFF",
-      "isVeg": false,
+      "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PIZ0625",
       "skuId": "6#1#8463",
@@ -3353,7 +3455,7 @@
       "id": "DOM-PIZ5554",
       "name": "Dominoid - Korean Heat Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 149,
       "originalPrice": 189,
       "discount": "21% OFF",
@@ -3453,7 +3555,7 @@
       "id": "DOM-PIZ5122",
       "name": "Chicken Fiesta",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 615,
       "originalPrice": 739,
       "discount": "17% OFF",
@@ -3517,15 +3619,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9197e275-6983-4cc4-a682-c7e9e8868b94_PMOnionCapsicumPaneerMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9197e275-6983-4cc4-a682-c7e9e8868b94_PMOnionCapsicumPaneerMenu.webp",
       "sizes": {
-        "Regular (Single)": 129
+        "Regular (Serves 1)": 129
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 129,
+          "Cheese Burst": 204
+        }
+      }
     },
     {
       "id": "DOM-PIZ0404",
@@ -3543,15 +3651,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
       "sizes": {
-        "Regular (Single)": 139
+        "Regular (Serves 1)": 139
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 139,
+          "Cheese Burst": 214
+        }
+      }
     },
     {
       "id": "DOM-BEV0832",
@@ -3559,15 +3673,15 @@
       "category": "Beverages",
       "type": "VEG",
       "price": 19,
-      "originalPrice": 19,
+      "originalPrice": 25,
       "discount": "0% OFF",
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "BEV0832",
       "skuId": "8292",
       "description": "Sparkling and Refreshing Beverage",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2713c840-0ab4-4720-af99-5d6c14f4fd37_CokeHomeProductV1.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2713c840-0ab4-4720-af99-5d6c14f4fd37_CokeHomeProductV1.webp",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
       "sizes": null,
       "allowedSizes": [
         "Regular"
@@ -3729,7 +3843,7 @@
       "id": "DOM-PIZ5161",
       "name": "Chicken Keema Paratha Pizza",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 269,
       "originalPrice": 329,
       "discount": "18% OFF",
@@ -3783,15 +3897,15 @@
       "category": "Garlic Breads & Sides",
       "type": "VEG",
       "price": 39,
-      "originalPrice": 49,
+      "originalPrice": 109,
       "discount": "20% OFF",
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "SID0266",
       "skuId": "6411",
-      "description": "Crispy Veggie Bites",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Golden crunchy vegetarian bite-sized savory snack.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
       "sizes": null,
       "allowedSizes": [
         "Regular"
@@ -3805,7 +3919,7 @@
       "id": "DOM-PIZ5278",
       "name": "Big Big 6in1 Pizza - Non Veg",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 999,
       "originalPrice": 1199,
       "discount": "17% OFF",
@@ -3857,7 +3971,7 @@
       "id": "DOM-PIZ5253",
       "name": "Cheese Volcano Chicken Delight",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 249,
       "originalPrice": 299,
       "discount": "17% OFF",
@@ -4013,7 +4127,7 @@
       "id": "DOM-PIZ5355",
       "name": "Cheese Lava Pepper BBQ Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 399,
       "originalPrice": 489,
       "discount": "18% OFF",
@@ -4119,7 +4233,7 @@
       "category": "Pizza Mania",
       "type": "NON-VEG",
       "price": 249,
-      "originalPrice": 299,
+      "originalPrice": 199,
       "discount": "17% OFF",
       "isVeg": false,
       "isAvailable": true,
@@ -4129,15 +4243,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b704c14f-309f-446b-8828-1b98128ef440_PMPepperBBqChickenMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b704c14f-309f-446b-8828-1b98128ef440_PMPepperBBqChickenMenu.webp",
       "sizes": {
-        "Regular (Single)": 249
+        "Regular (Serves 1)": 169
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 169,
+          "Cheese Burst": 244
+        }
+      }
     },
     {
       "id": "DOM-BRD0054",
@@ -4167,7 +4287,7 @@
       "id": "DOM-PIZ5551",
       "name": "Dominoid - Italian Truffle Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 149,
       "originalPrice": 189,
       "discount": "21% OFF",
@@ -4219,7 +4339,7 @@
       "id": "DOM-PIZ5254",
       "name": "Cheese Volcano Double Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 249,
       "originalPrice": 299,
       "discount": "17% OFF",
@@ -4295,7 +4415,7 @@
       "id": "DOM-PIZ5251",
       "name": "Cheese Volcano BBQ Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 249,
       "originalPrice": 299,
       "discount": "17% OFF",
@@ -4395,7 +4515,7 @@
       "id": "DOM-PIZ5555",
       "name": "Dominoid - Mexican Sizzle Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 149,
       "originalPrice": 189,
       "discount": "21% OFF",
@@ -4447,7 +4567,7 @@
       "id": "DOM-PIZ5359",
       "name": "Cheese Lava Chicken Golden Delight",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 399,
       "originalPrice": 489,
       "discount": "18% OFF",
@@ -4523,7 +4643,7 @@
       "id": "DOM-PIZ5386",
       "name": "Big Big 6in1 Cheeseburst - Non Veg",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 1199,
       "originalPrice": 1439,
       "discount": "17% OFF",
@@ -4727,7 +4847,7 @@
       "id": "DOM-PIZ5157",
       "name": "Spiced Double Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 595,
       "originalPrice": 709,
       "discount": "16% OFF",
@@ -4778,12 +4898,12 @@
     {
       "id": "DOM-PIZ0637",
       "name": "Paneer Maxxx Tandoori Twist",
-      "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "category": "Veg Pizza",
+      "type": "VEG",
       "price": 549,
       "originalPrice": 659,
       "discount": "17% OFF",
-      "isVeg": false,
+      "isVeg": true,
       "isAvailable": true,
       "dominosCode": "PIZ0637",
       "skuId": "7#1#8462",
@@ -4831,7 +4951,7 @@
       "id": "DOM-PIZ5390",
       "name": "Big Big 6in1 Lavaburst - Non Veg",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 1199,
       "originalPrice": 1439,
       "discount": "17% OFF",
@@ -4883,7 +5003,7 @@
       "id": "DOM-PIZ5525",
       "name": "2in1 Cheese Burst - Pepper BBQ Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 249,
       "originalPrice": 299,
       "discount": "17% OFF",
@@ -5219,7 +5339,7 @@
       "id": "DOM-PIZ5556",
       "name": "Dominoid - Lebanese Shawarma Chicken",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 149,
       "originalPrice": 189,
       "discount": "21% OFF",
@@ -5355,15 +5475,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
       "sizes": {
-        "Regular (Single)": 169
+        "Regular (Serves 1)": 169
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 169,
+          "Cheese Burst": 244
+        }
+      }
     },
     {
       "id": "DOM-SID0265",
@@ -5371,15 +5497,15 @@
       "category": "Garlic Breads & Sides",
       "type": "VEG",
       "price": 39,
-      "originalPrice": 49,
+      "originalPrice": 199,
       "discount": "20% OFF",
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "SID0265",
       "skuId": "6412",
-      "description": "Spicy Tandoori Meltz",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Crisp hot folded meltz overflowing with molten cheese and spicy tandoori seasonings.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
       "sizes": null,
       "allowedSizes": [
         "Regular"
@@ -5521,7 +5647,7 @@
       "id": "DOM-PIZ5432",
       "name": "Reg. Tndoori Chk Burst LXT OAG",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 349,
       "originalPrice": 429,
       "discount": "19% OFF",
@@ -5599,15 +5725,15 @@
       "category": "Garlic Breads & Sides",
       "type": "NON-VEG",
       "price": 39,
-      "originalPrice": 49,
+      "originalPrice": 219,
       "discount": "20% OFF",
       "isVeg": false,
       "isAvailable": true,
       "dominosCode": "SID0397",
       "skuId": "8252",
-      "description": "Chicken Tandoori Meltz",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Tender chicken pieces coated in rich tandoori sauce and molten melted cheese.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
       "sizes": null,
       "allowedSizes": [
         "Regular"
@@ -5633,15 +5759,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
       "sizes": {
-        "Regular (Single)": 69
+        "Regular (Serves 1)": 69
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 69,
+          "Cheese Burst": 144
+        }
+      }
     },
     {
       "id": "DOM-BRD0060",
@@ -5735,15 +5867,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
       "sizes": {
-        "Regular (Single)": 119
+        "Regular (Serves 1)": 119
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 119,
+          "Cheese Burst": 194
+        }
+      }
     },
     {
       "id": "DOM-SID0298",
@@ -5797,7 +5935,7 @@
       "id": "DOM-PIZ5429",
       "name": "Reg. CB Ppr BBQ Chk LXT OAG",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 329,
       "originalPrice": 399,
       "discount": "18% OFF",
@@ -5961,15 +6099,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
       "sizes": {
-        "Regular (Single)": 89
+        "Regular (Serves 1)": 89
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 89,
+          "Cheese Burst": 164
+        }
+      }
     },
     {
       "id": "DOM-PIZ0574",
@@ -6205,15 +6349,15 @@
       "category": "Garlic Breads & Sides",
       "type": "VEG",
       "price": 39,
-      "originalPrice": 49,
+      "originalPrice": 109,
       "discount": "20% OFF",
       "isVeg": true,
       "isAvailable": true,
       "dominosCode": "SID0398",
       "skuId": "8248",
-      "description": "Crispy Veggie Bites",
-      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
-      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+      "description": "Extra crispy vegetable nuggets dusted with Domino's signature seasonings.",
+      "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
+      "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
       "sizes": null,
       "allowedSizes": [
         "Regular"
@@ -6227,7 +6371,7 @@
       "id": "DOM-PIZ5131",
       "name": "Chicken Pepperoni",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 645,
       "originalPrice": 769,
       "discount": "16% OFF",
@@ -6427,7 +6571,7 @@
       "id": "DOM-PIZ5435",
       "name": "Reg+ CV Ppr BBQ Chk LXT OAG",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 375,
       "originalPrice": 459,
       "discount": "18% OFF",
@@ -6491,15 +6635,21 @@
       "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/f7cfd5ff-d32a-4305-b729-6a7aa8872e80_PMCapsicumPaprikaMenu.webp",
       "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/f7cfd5ff-d32a-4305-b729-6a7aa8872e80_PMCapsicumPaprikaMenu.webp",
       "sizes": {
-        "Regular (Single)": 99
+        "Regular (Serves 1)": 99
       },
       "allowedSizes": [
         "Regular"
       ],
       "allowedCrusts": [
-        "New Hand Tossed"
+        "Classic Hand Tossed",
+        "Cheese Burst"
       ],
-      "sizeCrustPricingMap": null
+      "sizeCrustPricingMap": {
+        "Regular": {
+          "Classic Hand Tossed": 99,
+          "Cheese Burst": 174
+        }
+      }
     },
     {
       "id": "DOM-PIZ0780",
@@ -6581,7 +6731,7 @@
       "id": "DOM-PIZ5125",
       "name": "Non Veg Supreme",
       "category": "Non-Veg Pizza",
-      "type": "NON-VEG",
+      "type": "NON_VEG",
       "price": 635,
       "originalPrice": 759,
       "discount": "16% OFF",
