@@ -12,9 +12,15 @@ function sleep(ms) {
 function addLog(order, message) {
   const time = new Date().toLocaleTimeString('en-IN', { hour12: false });
   const entry = `[${time}] ${message}`;
+  if (!order.robot) order.robot = {};
   if (!order.robot.logs) order.robot.logs = [];
   order.robot.logs.push(entry);
   console.log(`[ROBOT - ${order.id}] ${entry}`);
+
+  // Real-time synchronization: Persist updated logs & robot state to DB immediately
+  try {
+    db.updateOrder(order.id, { robot: order.robot });
+  } catch (e) {}
 }
 
 class DominosAutomationRobot {
@@ -193,6 +199,7 @@ class DominosAutomationRobot {
 
       // STEP 3: Execute Single Unified Playwright Session against Domino's Site
       order.robot.status = 'BUILDING_CART';
+      db.updateOrder(orderId, order);
       addLog(order, `🤖 Launching unified Middleman Robot on m.dominos.co.in (Address -> Cart -> Cash on Delivery)...`);
 
       let proofUrl = null;
@@ -203,14 +210,26 @@ class DominosAutomationRobot {
         const allVouchers = typeof db.getVouchers === 'function' ? db.getVouchers() : [];
         const availableVoucher = allVouchers.find(v => v.status === 'UNUSED' && Number(v.balance || 0) > 0);
 
-        const robotResult = await executeMiddlemanOrderOnDominos({
-          customerOrder: order,
-          accountSession: { ...account, couponCode: selectedPromo },
-          voucher: availableVoucher || null,
-          paymentMethod: order.payment?.method || 'COD',
-          headless: true,
-          onProgress: (msg) => addLog(order, msg)
-        });
+        const robotResult = await Promise.race([
+          executeMiddlemanOrderOnDominos({
+            customerOrder: order,
+            accountSession: { ...account, couponCode: selectedPromo },
+            voucher: availableVoucher || null,
+            paymentMethod: order.payment?.method || 'COD',
+            headless: true,
+            onProgress: (msg) => {
+              if (msg.includes('Adding') || msg.includes('Menu V1') || msg.includes('Opening Domino')) {
+                order.robot.status = 'BUILDING_CART';
+              } else if (msg.includes('Applying coupon') || msg.includes('Promo Code') || msg.includes('Gift Card')) {
+                order.robot.status = 'APPLYING_COUPON';
+              } else if (msg.includes('Cash on Delivery') || msg.includes('payment') || msg.includes('Payment screen')) {
+                order.robot.status = 'STORE_CONFIRMATION';
+              }
+              addLog(order, msg);
+            }
+          }),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Middleman Robot timed out after 90 seconds while interacting with Domino\'s site.')), 90000))
+        ]);
 
         if (robotResult && robotResult.success) {
           if (availableVoucher && robotResult.voucherApplied) {

@@ -1287,14 +1287,19 @@
 
         <!-- Dedicated Error Alert Banner if robot encountered an issue -->
         <div id="trackerErrorBanner" style="display: none; background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; color: #991b1b;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
             <div>
               <strong style="font-size: 12px; display: block; margin-bottom: 2px;">⚠️ Domino's Order Notice:</strong>
               <span id="trackerErrorMsg" style="font-size: 11px; color: #7f1d1d;"></span>
             </div>
-            <button id="btnTrackerErrorProof" onclick="viewProofScreenshot()" style="background: #ef4444; color: white; border: none; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; cursor: pointer; white-space: nowrap;">
-              View State Proof
-            </button>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button id="btnTrackerRetryPlacement" onclick="retryOrderPlacement()" style="background: #0284c7; color: white; border: none; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; cursor: pointer; white-space: nowrap;">
+                🔄 Retry Placement
+              </button>
+              <button id="btnTrackerErrorProof" onclick="viewProofScreenshot()" style="background: #ef4444; color: white; border: none; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; cursor: pointer; white-space: nowrap;">
+                View State Proof
+              </button>
+            </div>
           </div>
         </div>
         

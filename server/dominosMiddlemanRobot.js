@@ -767,12 +767,12 @@ async function executeMiddlemanOrderOnDominos({
         let added = false;
         let addedViaSearch = false;
 
-        // Strategy 1: Domino's Official In-Page Search Modal (.menu-search-icon -> #searchQueryInputModal)
+        // Strategy 1: Domino's Official In-Page Search Modal (#searchCta / .menu-search-icon -> #searchQueryInputModal)
         try {
           let searchInput = page.locator('#searchQueryInputModal, .search-query-input').first();
           let isSearchOpen = await searchInput.isVisible({ timeout: 600 }).catch(() => false);
           if (!isSearchOpen) {
-            const searchTrigger = page.locator('.menu-search-icon, .jfi-search').first();
+            const searchTrigger = page.locator('#searchCta, .menu-search-icon, .jfi-search, .search-wrap').first();
             if (await searchTrigger.isVisible({ timeout: 1500 }).catch(() => false)) {
               await searchTrigger.click().catch(() => {});
               await sleep(600);
@@ -780,8 +780,16 @@ async function executeMiddlemanOrderOnDominos({
           }
           searchInput = page.locator('#searchQueryInputModal, .search-query-input').first();
           if (await searchInput.isVisible({ timeout: 1200 }).catch(() => false)) {
-            // Try searching with rawName first, fallback to cleanName or primary keywords
-            const searchCandidates = [rawName, cleanName, rawName.split(' ').slice(0, 2).join(' ')];
+            // Clean name and build resilient search candidates (stripping '&' which breaks Domino's search)
+            const noAmp = cleanName.replace(/&/g, ' ').replace(/\s+/g, ' ').trim();
+            const searchCandidates = Array.from(new Set([
+              noAmp,
+              cleanName.replace(/&/g, 'and'),
+              rawName,
+              noAmp.split(' ').slice(0, 2).join(' '),
+              noAmp.split(' ')[0]
+            ])).filter(q => q && q.length >= 3);
+
             for (const query of searchCandidates) {
               if (added) break;
               // Clean search input field
@@ -798,6 +806,8 @@ async function executeMiddlemanOrderOnDominos({
               const clickResult = await page.evaluate(({ rName, cName, expPrice }) => {
                 const norm = (s) => (s || '').toLowerCase()
                   .replace(/\(.*\)/g, '')
+                  .replace(/&/g, ' ')
+                  .replace(/\band\b/g, '')
                   .replace(/\bgb\b/g, 'garlic bread')
                   .replace(/\bcb\b/g, 'cheese burst')
                   .replace(/\bnht\b/g, 'new hand tossed')
@@ -899,7 +909,7 @@ async function executeMiddlemanOrderOnDominos({
           }
         } catch (sErr) {}
 
-        // Strategy 2: Direct on-page item card matching (strictly scoped to item name)
+        // Strategy 2: Direct on-page item card matching & category tab cycling
         if (!added) {
           const addSelectors = [
             `div.product-card:has-text("${cleanName}") button:has-text("Add")`,
@@ -911,11 +921,61 @@ async function executeMiddlemanOrderOnDominos({
 
           for (const sel of addSelectors) {
             const btn = page.locator(sel).first();
-            if (await btn.isVisible({ timeout: 1200 }).catch(() => false)) {
+            if (await btn.isVisible({ timeout: 1000 }).catch(() => false)) {
               await btn.scrollIntoViewIfNeeded().catch(() => {});
               await btn.click({ force: true }).catch(() => {});
               added = true;
               break;
+            }
+          }
+
+          // If still not added, cycle through lazy carousel category tabs to mount cards in DOM
+          if (!added) {
+            const categoryTabs = ['Veg Pizza', 'Menu@89', 'Pizzas@179', 'Cheesy Pizzas@249', 'Non-Veg Pizza', 'Garlic Breads & Dips', 'Beverages', 'Desserts', 'Tacos & Parcels'];
+            for (const tabName of categoryTabs) {
+              if (added) break;
+              const tabClicked = await page.evaluate((targetCat) => {
+                const tabs = Array.from(document.querySelectorAll('.menu-anchor-link, [class*="carousel__item"]'));
+                const target = tabs.find(t => t.innerText && t.innerText.trim().toLowerCase() === targetCat.toLowerCase());
+                if (target) {
+                  target.click();
+                  return true;
+                }
+                return false;
+              }, tabName);
+
+              if (tabClicked) {
+                await sleep(500);
+                const cardAdded = await page.evaluate(({ cName, rName }) => {
+                  const norm = (s) => (s || '').toLowerCase()
+                    .replace(/\(.*\)/g, '')
+                    .replace(/&/g, ' ')
+                    .replace(/\band\b/g, '')
+                    .replace(/\bpizza\b/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                  const normTarget = norm(cName || rName);
+                  const cards = Array.from(document.querySelectorAll('.card-content, .product-card, div[class*="card"]'));
+                  for (const card of cards) {
+                    const heading = card.querySelector('h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
+                    if (!heading) continue;
+                    const normH = norm(heading.innerText);
+                    if (normH === normTarget || normH.startsWith(normTarget) || normTarget.startsWith(normH) || (normTarget.length >= 6 && normH.includes(normTarget))) {
+                      const btn = card.querySelector('button.cta-add, button, div.main-cta');
+                      if (btn) {
+                        btn.click();
+                        return true;
+                      }
+                    }
+                  }
+                  return false;
+                }, { cName: cleanName, rName: rawName });
+
+                if (cardAdded) {
+                  added = true;
+                  break;
+                }
+              }
             }
           }
         }

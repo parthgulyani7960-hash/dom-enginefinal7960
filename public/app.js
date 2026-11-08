@@ -3654,9 +3654,11 @@ async function fetchOrderStatus(orderId, isRefresh = false) {
     }
 
     // High-responsiveness cadence:
+    // Active placement pipeline (SESSION_ASSIGNING, STORE_RESOLVING, BUILDING_CART, APPLYING_COUPON, STORE_CONFIRMATION): 2.5s rapid polling
     // Out for delivery (DISPATCHED): 8s rapid polling for instantaneous rider movement and real-time arrival
-    // Live in-store (ORDER_PLACED, BAKING, PACKED): 12s cadence
-    const nextIntervalMs = (st === 'DISPATCHED') ? 8000 : 12000;
+    // Live in-store (ORDER_PLACED, BAKING, PACKED): 10s cadence
+    const isPlacing = ['SESSION_ASSIGNING', 'STORE_RESOLVING', 'BUILDING_CART', 'APPLYING_COUPON', 'STORE_CONFIRMATION', 'QUEUED_FOR_ROBOT'].includes(st);
+    const nextIntervalMs = isPlacing ? 2500 : ((st === 'DISPATCHED') ? 8000 : 10000);
     pollTimeout = setTimeout(() => {
       fetchOrderStatus(orderId, false);
     }, nextIntervalMs);
@@ -3664,6 +3666,28 @@ async function fetchOrderStatus(orderId, isRefresh = false) {
     console.error('Polling error:', e);
   }
 }
+
+async function retryOrderPlacement() {
+  const orderId = currentOrder?.id || (new URLSearchParams(window.location.search)).get('track');
+  if (!orderId) {
+    showToastNotice('No active order selected to retry.', '⚠️');
+    return;
+  }
+  const btn = document.getElementById('btnTrackerRetryPlacement');
+  if (btn) btn.innerText = '⏳ Retrying...';
+  try {
+    const res = await fetch(`/api/orders/${orderId}/retry`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Retry failed');
+    showToastNotice('Order re-queued for Domino\'s autonomous placement!', '🚀');
+    startLivePolling(orderId);
+  } catch (err) {
+    alert(`Could not retry: ${err.message}`);
+  } finally {
+    if (btn) btn.innerText = '🔄 Retry Placement';
+  }
+}
+window.retryOrderPlacement = retryOrderPlacement;
 
 function copyDominosToken() {
   const token = document.getElementById('trackerKitchenTokenBadge')?.innerText?.trim();
@@ -3754,7 +3778,19 @@ function updateTrackingUI(order) {
     formattedToken = 'Order Cancelled';
   } else if (status === 'STORE_OFFLINE') {
     formattedToken = 'Store Offline';
-  } else if (status === 'ORDER_PLACED' || status === 'BUILDING_CART' || status === 'STORE_RESOLVING' || status === 'QUEUED_FOR_ROBOT') {
+  } else if (status === 'ERROR') {
+    formattedToken = 'Placement Attention';
+  } else if (status === 'BUILDING_CART') {
+    formattedToken = '🛒 Adding items to Domino\'s cart...';
+  } else if (status === 'APPLYING_COUPON') {
+    formattedToken = '🎟️ Applying discount coupon...';
+  } else if (status === 'STORE_CONFIRMATION') {
+    formattedToken = '💵 Confirming order with store...';
+  } else if (status === 'STORE_RESOLVING') {
+    formattedToken = '🏪 Connecting to Domino\'s store kitchen...';
+  } else if (status === 'SESSION_ASSIGNING' || status === 'QUEUED_FOR_ROBOT') {
+    formattedToken = '🤖 Claiming dedicated Domino\'s session...';
+  } else {
     formattedToken = '🤖 Robot placing order on Domino\'s...';
   }
   if (tokenBadge) {
@@ -3764,7 +3800,21 @@ function updateTrackingUI(order) {
 
   const domRefHeader = document.getElementById('trackerDominosRefHeader');
   if (domRefHeader) {
-    domRefHeader.innerText = isAuthenticDominosToken ? formattedToken : 'Awaiting Confirmation';
+    if (isAuthenticDominosToken) {
+      domRefHeader.innerText = formattedToken;
+    } else if (status === 'ERROR') {
+      domRefHeader.innerText = 'Order Notice: Action Required';
+    } else if (status === 'BUILDING_CART') {
+      domRefHeader.innerText = 'Building Cart...';
+    } else if (status === 'APPLYING_COUPON') {
+      domRefHeader.innerText = 'Applying Coupon...';
+    } else if (status === 'STORE_CONFIRMATION') {
+      domRefHeader.innerText = 'Confirming Payment...';
+    } else if (status === 'STORE_RESOLVING') {
+      domRefHeader.innerText = 'Resolving Kitchen Store...';
+    } else {
+      domRefHeader.innerText = 'Awaiting Confirmation';
+    }
   }
 
   const posEl = document.getElementById('trackerPosOrderId');

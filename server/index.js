@@ -1271,6 +1271,26 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // 3b. Retry Robot Placement on Domino's India
+  if (method === 'POST' && pathname.startsWith('/api/orders/') && pathname.endsWith('/retry')) {
+    const orderId = pathname.split('/')[3];
+    const order = db.getOrderById(orderId);
+    if (!order) return sendJson(res, 404, { error: 'Order not found' });
+    if (order.robot?.status === 'DELIVERED') {
+      return sendJson(res, 400, { error: 'Order is already delivered.' });
+    }
+    if (!order.robot) order.robot = {};
+    order.robot.status = 'QUEUED_FOR_ROBOT';
+    order.robot.error = null;
+    db.updateOrder(order.id, order);
+    queue.enqueue(order.id);
+    return sendJson(res, 200, {
+      success: true,
+      message: 'Order re-queued for Domino\'s autonomous placement.',
+      order: order
+    });
+  }
+
   // 4. Get Orders List / Status (for live monitoring & polling)
   if (method === 'GET' && pathname === '/api/orders') {
     return sendJson(res, 200, db.getOrders());
@@ -3277,4 +3297,34 @@ server.listen(PORT, () => {
       }
     } catch (_) {}
   }, 20000);
+
+  // Autonomous Watchdog: Auto-detect and recover interrupted/stalled placement orders on boot
+  setTimeout(() => {
+    try {
+      const orders = db.getOrders();
+      const stalled = orders.filter(o => {
+        const st = o.robot?.status || o.status;
+        return ['STORE_RESOLVING', 'SESSION_ASSIGNING', 'BUILDING_CART', 'APPLYING_COUPON', 'QUEUED_FOR_ROBOT', 'STORE_CONFIRMATION'].includes(st) && !o.robot?.dominosOrderRef;
+      });
+      if (stalled.length > 0) {
+        console.log(`[WATCHDOG] Found ${stalled.length} interrupted placement order(s). Auditing state...`);
+        stalled.forEach(o => {
+          const createdTime = new Date(o.createdAt).getTime();
+          const ageMinutes = (Date.now() - createdTime) / (60 * 1000);
+          if (ageMinutes < 25) {
+            console.log(`[WATCHDOG] Auto-resuming recent order #${o.id} in autonomous placement queue...`);
+            queue.enqueue(o.id);
+          } else {
+            console.log(`[WATCHDOG] Expiring stale interrupted order #${o.id} (${Math.round(ageMinutes)} mins old)...`);
+            if (!o.robot) o.robot = {};
+            o.robot.status = 'ERROR';
+            o.robot.error = 'Order placement timed out during previous server maintenance. Click Retry Placement to re-run.';
+            db.updateOrder(o.id, o);
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('[WATCHDOG-RECOVERY-ERR]', e.message);
+    }
+  }, 3500);
 });
