@@ -46,6 +46,20 @@
   } catch (e) {}
 })();
 
+// Global HTML Escape Utility for safe DOM interpolation
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+if (typeof window !== 'undefined') {
+  window.escapeHtml = escapeHtml;
+}
+
 let currentOtpCountdown = null;
 let activeCookiesData = null;
 let extractionGuideData = null;
@@ -2361,6 +2375,16 @@ async function loadAppUsers() {
   }
 }
 
+function formatUserDate(dateStr) {
+  if (!dateStr) return 'Recent';
+  try {
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? 'Recent' : d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  } catch (e) {
+    return 'Recent';
+  }
+}
+
 function renderAppUsers(users) {
   const tbody = document.getElementById('appUsersTableBody');
   if (!tbody) return;
@@ -2375,7 +2399,7 @@ function renderAppUsers(users) {
       ? `<span onclick="toggleUserPhoneLock('${u.id}')" title="Click to 1-click Unlock this phone" style="background: #fef2f2; color: #b91c1c; border: 1.5px solid #fecaca; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">🔒 Locked</span>`
       : `<span onclick="toggleUserPhoneLock('${u.id}')" title="Click to 1-click Lock this phone" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">🔓 Unlocked</span>`;
 
-    const regDate = u.registeredAt ? new Date(u.registeredAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Recent';
+    const regDate = formatUserDate(u.registeredAt || u.createdAt);
     const uid12 = u.userId12 || u.id;
     const addrCount = u.savedAddresses?.length || u.addressCount || 0;
     const statusText = u.status || 'ACTIVE';
@@ -2418,7 +2442,7 @@ function renderAppUsers(users) {
             <button class="btn-action-copy" onclick="toggleUserStatusAction('${u.id}')" style="cursor: pointer; border-color: ${statusText === 'ACTIVE' ? '#fed7aa' : '#bbf7d0'}; color: ${statusText === 'ACTIVE' ? '#c2410c' : '#15803d'}; font-size: 11px; padding: 3px 8px;" title="${statusText === 'ACTIVE' ? 'Suspend User Account' : 'Activate User Account'}">
               ${statusText === 'ACTIVE' ? '🚫 Suspend' : '✅ Activate'}
             </button>
-            <button class="btn-action-copy" onclick="deleteUserAction('${u.id}', '${escapeHtml(u.name || uid12)}')" style="cursor: pointer; border-color: #fecaca; color: #b91c1c; font-size: 11px; padding: 3px 8px;" title="Delete User from Directory">
+            <button class="btn-action-copy" onclick="deleteUserAction('${u.id}')" style="cursor: pointer; border-color: #fecaca; color: #b91c1c; font-size: 11px; padding: 3px 8px;" title="Delete User from Directory">
               🗑️ Delete
             </button>
           </div>
@@ -2427,6 +2451,8 @@ function renderAppUsers(users) {
     `;
   }).join('');
 }
+window.renderAppUsers = renderAppUsers;
+window.loadAppUsers = loadAppUsers;
 
 function filterAppUsersTable() {
   const query = (document.getElementById('userSearchInput')?.value || '').trim().toLowerCase();
@@ -2486,7 +2512,9 @@ async function toggleUserStatusAction(userId) {
 window.toggleUserStatusAction = toggleUserStatusAction;
 
 async function deleteUserAction(userId, userName) {
-  if (!confirm(`Are you sure you want to permanently delete user "${userName}"?\n\nThis will remove the user, wallet balance, and address directory records.`)) {
+  const targetUser = (cachedAppUsers || []).find(u => u.id === userId || u.userId12 === userId);
+  const targetName = userName || (targetUser ? (targetUser.name || targetUser.userId12 || targetUser.id) : userId);
+  if (!confirm(`Are you sure you want to permanently delete user "${targetName}"?\n\nThis will remove the user, wallet balance, and address directory records.`)) {
     return;
   }
   try {
@@ -2495,7 +2523,7 @@ async function deleteUserAction(userId, userName) {
     });
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Failed to delete user');
-    showToast(`User ${userName} deleted successfully.`, '🗑️');
+    showToast(`User ${targetName} deleted successfully.`, '🗑️');
     loadAppUsers();
   } catch (err) {
     alert('Error deleting user: ' + err.message);
@@ -2598,6 +2626,10 @@ async function submitUserUpdate() {
     alert('Failed to update user profile: ' + err.message);
   }
 }
+window.openEditUserModal = openEditUserModal;
+window.updateEditUserLockPill = updateEditUserLockPill;
+window.addQuickWalletCredit = addQuickWalletCredit;
+window.submitUserUpdate = submitUserUpdate;
 
 // 4B. Wallet Adjustment Modal (+ / - / =)
 let currentWalletOp = 'ADD';
@@ -2691,6 +2723,9 @@ async function submitWalletAdjustment() {
     alert('Failed to adjust wallet balance: ' + err.message);
   }
 }
+window.openAdjustWalletModal = openAdjustWalletModal;
+window.selectWalletOp = selectWalletOp;
+window.submitWalletAdjustment = submitWalletAdjustment;
 
 // 4C. Manage User Addresses (Max 3 Enforced)
 async function openUserAddressesModal(userId) {
@@ -2898,6 +2933,16 @@ async function renderUserOrders(userId) {
     tbody.innerHTML = `<tr><td colspan="5" style="color: red;">Error: ${err.message}</td></tr>`;
   }
 }
+window.openUserAddressesModal = openUserAddressesModal;
+window.renderAdminUserAddresses = renderAdminUserAddresses;
+window.toggleAdminAddAddrForm = toggleAdminAddAddrForm;
+window.submitAdminNewAddress = submitAdminNewAddress;
+window.adminDeleteAddr = adminDeleteAddr;
+window.adminSetDefaultAddr = adminSetDefaultAddr;
+window.openUserHistoryModal = openUserHistoryModal;
+window.switchHistoryTab = switchHistoryTab;
+window.renderUserTxns = renderUserTxns;
+window.renderUserOrders = renderUserOrders;
 
 // =========================================================================
 // 5. IN-APP BROADCAST NOTIFICATIONS

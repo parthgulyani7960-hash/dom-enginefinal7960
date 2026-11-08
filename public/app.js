@@ -45,6 +45,20 @@
   } catch (e) {}
 })();
 
+// Global HTML Escape Utility for safe DOM interpolation
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+if (typeof window !== 'undefined') {
+  window.escapeHtml = escapeHtml;
+}
+
 let catalog = { combos: [], menu: [] };
 let cart = [];
 

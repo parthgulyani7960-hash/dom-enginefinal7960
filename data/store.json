@@ -60,7 +60,7 @@
       "cleanPhone": "7888422429",
       "customerName": "Parth Gulyani",
       "userId": "346377415",
-      "cartId": "3217231560404939484",
+      "cartId": "1357975068186854350",
       "accountType": "SECOND_ORDER_ACCOUNT",
       "category": "CATEGORY_SECOND_ORDER",
       "categoryName": "🟡 Cheesy 2nd Order Tier",
@@ -70,7 +70,7 @@
           "domain": ".dominos.co.in",
           "name": "token",
           "path": "/",
-          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk"
+          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0"
         },
         {
           "domain": ".dominos.co.in",
@@ -239,9 +239,9 @@
         "analytics_device_id": "dev_a7m8hussz971793566686731",
         "analytics_sdk_config:https://api.dominos.co.in/ambit-web/ingest:proj_a280da1c8a61bb96:__anonymous__": "{\"trackingFlags\":{\"emergencyDisableEventIngest\":false,\"emergencyDisableReplayIngest\":false,\"enableEventTracking\":true,\"trackPageViews\":true,\"trackClicks\":true,\"trackForms\":true,\"networkCaptureEnabled\":true,\"networkCaptureFetch\":true,\"networkCaptureXhr\":true,\"networkCaptureImages\":false,\"networkCaptureStylesheets\":false,\"networkCaptureScripts\":false,\"networkSampleRate\":1,\"networkQueueLimit\":1000,\"enableReplay\":true,\"enableMouseTracking\":true,\"enableScrollTracking\":true,\"replaySampleRate\":0.02,\"mousemoveSamplingMs\":100,\"scrollSamplingMs\":200,\"checkoutEveryNth\":50,\"maxReplayDurationMinutes\":0,\"replayWorkerEnabled\":true,\"replayMaxQueueBytes\":10485760,\"replayMaxQueueEvents\":2000,\"replayUploadConcurrency\":2,\"webFlushIntervalMs\":1000,\"webBatchSize\":500,\"webMaxQueueEvents\":2000,\"webMaxQueueBytes\":5242880,\"webGzipThresholdBytes\":60000,\"webReplayChunkSizeChars\":256000,\"webUploadConcurrency\":2,\"collectFonts\":true,\"recordCanvas\":true,\"configCacheTtlSeconds\":900,\"sessionTimeoutMs\":1800000,\"maskAllInputs\":true,\"maskTextSelectors\":\"\",\"blockSelectors\":\"\",\"ignoreSelectors\":\"\",\"mobileReplayMaskLevel\":\"medium\",\"mobileReplayQuality\":\"high\",\"androidBatchIntervalMs\":1000,\"androidMaxQueueEvents\":10000,\"androidMaxQueueBytes\":10485760,\"androidReplayMaxQueueEvents\":2000,\"androidReplayMaxQueueBytes\":10485760,\"androidReplayBatchSize\":200,\"androidReplayChunkSizeBytes\":50000,\"androidUploadConcurrency\":1,\"androidCaptureImages\":true,\"androidInteractionEvents\":true,\"nodeBatchSize\":100,\"nodeFlushIntervalMs\":1000,\"nodeMaxQueueEvents\":10000,\"nodeGzipThresholdBytes\":60000,\"nodeMaxRetries\":3,\"nodeRetryBaseDelayMs\":250,\"nodeRequestTimeoutMs\":10000,\"nodeAutoFlush\":true,\"timezone\":\"Asia/Kolkata\"},\"userPolicy\":{\"user_id\":null,\"enableReplay\":false,\"forceReplaySample\":false},\"expiresAt\":1793567594837}",
         "analytics_session_state": "{\"id\":\"sess_5oeldter0xb1793566686731\",\"lastActivity\":1793566693835}",
-        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk",
-        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk",
-        "cartId": "3217231560404939484",
+        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0",
+        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0",
+        "cartId": "1357975068186854350",
         "confrimView": "false",
         "currentSelToppObj": "{}",
         "debug": "undefined",
@@ -266,20 +266,20 @@
         "paymentMode": "{}",
         "reorderHistoryId": "",
         "storeId": "6585R",
-        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk",
+        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0",
         "totalWalletBalance": "",
         "userAddresses": "[]",
-        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk\"},\"cartId\":\"3217231560404939484\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
+        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0\"},\"cartId\":\"1357975068186854350\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
         "utm_attributes": "{\"utm_source\":\"direct\",\"utm_medium\":\"direct\",\"utm_campaign\":\"direct\",\"utm_source_medium\":\"direct-direct\"}"
       },
-      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk",
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0",
       "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
       "credentials": {
-        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk",
-        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk",
-        "cartId": "3217231560404939484",
+        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0",
+        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0",
+        "cartId": "1357975068186854350",
         "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
-        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..wWkKe8zre-lRtjtTfRrVpQ.pe1Lk7aWdiiAVfj40b7ID9Y4RRUoj3EUbIAkP1hhyy2DXeRbGii33HamZLnBAv9-zrYS1q6931Gf73Z_0LZiQ5CD4TWgw2CktGNiSD4gbG3Ec1g5WtOw6q8prygtf2xNVPU7_TeIUWfoFlWp1plo73U5Jg3iCq861zwnohqn1Bu3h-cNsFely4lR4Pt5C5C4.Uhox8OX8IxmarzMDiOY7BN0brfQoN_Lhj8Pnp8tClsk",
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..IJV5PPTybP0T8vfMdsBGqA.R7RNH9QwvQ_I1B3TABaesAqCizQcuYTY3pu_SkT5rjzcIQwq6bjSDzLfTl08OqnqOelZWWH_GYODB942c_3N0RWYbP3x_gR7Tdrh_nwcyf20CT31o3jHJHSJRXwR9xNabL7AZ36ZSFzsN0S4QQkGQxHOSBRkVDn2n2wPWx74naMl2_uAiUAaDN84AIhYggTw.FWngB5tKngzfWwRe4_uGAaJF_T6cqs4pev4EdVjWnm0",
         "userId": "346377415"
       },
       "pastOrdersCount": 1,
@@ -287,19 +287,19 @@
       "status": "IDLE",
       "totalOrdersPlaced": 5,
       "storedAt": "2026-11-01T13:35:39.834Z",
-      "lastRefreshedAt": "2026-11-02T07:03:53.191Z",
-      "accessTokenExpiresAt": "2026-11-02T08:03:53.191Z",
-      "refreshTokenExpiresAt": "2026-12-02T07:03:53.191Z",
-      "expiresAt": "2026-12-02T07:03:53.191Z",
+      "lastRefreshedAt": "2026-11-08T20:29:43.592Z",
+      "accessTokenExpiresAt": "2026-11-08T21:29:43.592Z",
+      "refreshTokenExpiresAt": "2026-12-08T20:29:43.592Z",
+      "expiresAt": "2026-12-08T20:29:43.592Z",
       "source": "LIVE_SMS_OTP",
-      "lastActive": "2026-11-01T21:12:13.236Z",
-      "lastValidated": "2026-11-02T07:03:53.397Z",
+      "lastActive": "2026-11-08T20:29:42.660Z",
+      "lastValidated": "2026-11-08T20:29:43.593Z",
       "isCheesyRewards": true,
       "loyaltyProgram": "POTP2",
       "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)",
-      "activeOrderId": "DOM-ENG-526929",
-      "lastAssignedAt": "2026-11-01T21:12:08.733Z",
-      "disabled": true
+      "activeOrderId": "DOM-ENG-781861",
+      "lastAssignedAt": "2026-11-08T20:29:42.157Z",
+      "disabled": false
     },
     {
       "id": "test_acc_1",
@@ -542,9 +542,9 @@
       "userId": "348603408"
     },
     {
-      "accessTokenExpiresAt": "2026-11-05T08:35:51.994Z",
+      "accessTokenExpiresAt": "2026-11-08T21:24:59.977Z",
       "accountType": "SECOND_ORDER_ACCOUNT",
-      "cartId": "5390915737544367327",
+      "cartId": "4585995873724500022",
       "category": "CATEGORY_SECOND_ORDER",
       "categoryName": "🟡 Cheesy 2nd Order Tier",
       "cleanPhone": "6283631035",
@@ -553,7 +553,7 @@
           "domain": ".dominos.co.in",
           "name": "token",
           "path": "/",
-          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8"
+          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI"
         },
         {
           "domain": ".dominos.co.in",
@@ -708,20 +708,20 @@
       ],
       "couponCode": "CHEESY",
       "credentials": {
-        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8",
-        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8",
-        "cartId": "5390915737544367327",
+        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI",
+        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI",
+        "cartId": "4585995873724500022",
         "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..P415zHB7O262k7fTR7x3Uw.O7kTmtYQLUw80b1NmqwM3_JBp5CTvfofr_U7FDO2FOIulXLC2nHEiR3fphLJ4TrEbqyo2vAZQNu1AlwuIaoMysmj4tWc86ZrJ5gnnnJBWpTLekoUa5ppQfAVxCaa9dyeaoxddIqd8XlDtVVFw5u3XurzOUrFEok6HurXvWNEptixqqTK2xj8-laF1kn-TRgm.EFsRm70ayv4aLbFMo9o7X5U36qDcFP0PtDctQCgQssw",
-        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8",
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI",
         "userId": "148590759"
       },
       "customerName": "Ashish",
-      "expiresAt": "2026-12-05T07:35:51.994Z",
+      "expiresAt": "2026-12-08T20:24:59.977Z",
       "id": "ACC-DOM-3234",
       "isCheesyRewards": true,
-      "lastActive": "2026-11-05T07:34:53.235Z",
-      "lastRefreshedAt": "2026-11-05T07:35:51.994Z",
-      "lastValidated": "2026-11-05T07:35:52.205Z",
+      "lastActive": "2026-11-08T20:24:58.545Z",
+      "lastRefreshedAt": "2026-11-08T20:24:59.977Z",
+      "lastValidated": "2026-11-08T20:24:59.977Z",
       "localStorage": {
         "AB_TEST_VWO_ID": "870936660",
         "DEVICE_ID": "638128616",
@@ -738,9 +738,9 @@
         "analytics_device_id": "dev_wgtuzsywdxm1793864064033",
         "analytics_sdk_config:https://api.dominos.co.in/ambit-web/ingest:proj_a280da1c8a61bb96:__anonymous__": "{\"trackingFlags\":{\"emergencyDisableEventIngest\":false,\"emergencyDisableReplayIngest\":false,\"enableEventTracking\":true,\"trackPageViews\":true,\"trackClicks\":true,\"trackForms\":true,\"networkCaptureEnabled\":true,\"networkCaptureFetch\":true,\"networkCaptureXhr\":true,\"networkCaptureImages\":false,\"networkCaptureStylesheets\":false,\"networkCaptureScripts\":false,\"networkSampleRate\":1,\"networkQueueLimit\":1000,\"enableReplay\":true,\"enableMouseTracking\":true,\"enableScrollTracking\":true,\"replaySampleRate\":0.02,\"mousemoveSamplingMs\":100,\"scrollSamplingMs\":200,\"checkoutEveryNth\":50,\"maxReplayDurationMinutes\":0,\"replayWorkerEnabled\":true,\"replayMaxQueueBytes\":10485760,\"replayMaxQueueEvents\":2000,\"replayUploadConcurrency\":2,\"webFlushIntervalMs\":1000,\"webBatchSize\":500,\"webMaxQueueEvents\":2000,\"webMaxQueueBytes\":5242880,\"webGzipThresholdBytes\":60000,\"webReplayChunkSizeChars\":256000,\"webUploadConcurrency\":2,\"collectFonts\":true,\"recordCanvas\":true,\"configCacheTtlSeconds\":900,\"sessionTimeoutMs\":1800000,\"maskAllInputs\":true,\"maskTextSelectors\":\"\",\"blockSelectors\":\"\",\"ignoreSelectors\":\"\",\"mobileReplayMaskLevel\":\"medium\",\"mobileReplayQuality\":\"high\",\"androidBatchIntervalMs\":1000,\"androidMaxQueueEvents\":10000,\"androidMaxQueueBytes\":10485760,\"androidReplayMaxQueueEvents\":2000,\"androidReplayMaxQueueBytes\":10485760,\"androidReplayBatchSize\":200,\"androidReplayChunkSizeBytes\":50000,\"androidUploadConcurrency\":1,\"androidCaptureImages\":true,\"androidInteractionEvents\":true,\"nodeBatchSize\":100,\"nodeFlushIntervalMs\":1000,\"nodeMaxQueueEvents\":10000,\"nodeGzipThresholdBytes\":60000,\"nodeMaxRetries\":3,\"nodeRetryBaseDelayMs\":250,\"nodeRequestTimeoutMs\":10000,\"nodeAutoFlush\":true,\"timezone\":\"Asia/Kolkata\"},\"userPolicy\":{\"user_id\":null,\"enableReplay\":false,\"forceReplaySample\":false},\"expiresAt\":1793864970701}",
         "analytics_session_state": "{\"id\":\"sess_y1cjxfjwvwl1793864064032\",\"lastActivity\":1793864070387}",
-        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8",
-        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8",
-        "cartId": "5390915737544367327",
+        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI",
+        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI",
+        "cartId": "4585995873724500022",
         "confrimView": "false",
         "currentSelToppObj": "{}",
         "debug": "undefined",
@@ -765,10 +765,10 @@
         "paymentMode": "{}",
         "reorderHistoryId": "",
         "storeId": "6585R",
-        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8",
+        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI",
         "totalWalletBalance": "",
         "userAddresses": "[{\"address_id\":1027740231,\"building_number\":\"Valmiki Mandir Nayagaon Karora Road\",\"customers_mobile\":\"6283631035\",\"street_name\":\"QQCV+7CM, near Bangali clinic, Nayagaon, Punjab 160103, India\",\"area_level0\":\" \",\"city_region\":\"CHANDIGARH\",\"area_level2\":\" \",\"area_level1\":\" \",\"city\":\"CHANDIGARH\",\"country\":\"\",\"longitude\":76.798471,\"latitude\":30.776303,\"formatted_address\":\"Valmiki Mandir Nayagaon Karora Road, QQCV+7CM, near Bangali clinic, Nayagaon, Punjab 160103, India, CHANDIGARH, CHANDIGARH\",\"address_status\":\"A\",\"zippr_flag\":false,\"address_type\":\"S2\",\"postal_code\":\"\",\"source\":\"web app-chrome\",\"updated_at\":1781446061000,\"floor_number\":\" \",\"landmark\":\" \"}]",
-        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..P415zHB7O262k7fTR7x3Uw.O7kTmtYQLUw80b1NmqwM3_JBp5CTvfofr_U7FDO2FOIulXLC2nHEiR3fphLJ4TrEbqyo2vAZQNu1AlwuIaoMysmj4tWc86ZrJ5gnnnJBWpTLekoUa5ppQfAVxCaa9dyeaoxddIqd8XlDtVVFw5u3XurzOUrFEok6HurXvWNEptixqqTK2xj8-laF1kn-TRgm.EFsRm70ayv4aLbFMo9o7X5U36qDcFP0PtDctQCgQssw\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8\"},\"cartId\":\"5390915737544367327\",\"userId\":\"148590759\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX18G3rNUiq1ZtS6NLjH6Nio144DsU9X0EoB9oHCM588xfZGzueGw5/AzHq8ERSORgE0438bpTlHscWIyterOjF4mhlj7YvOaDk+cNy6z9cjn3a41zJNUGsAQVnVY3srKuECUvJ0S6ouyzMmQLr6PvPNI+jH2S7FVSOI8l+4fxOtzDjXVPiDdGPjFR3ZhXSIjGZ3fgSNLwtIc0imK8ZFcZNI/uRrf/n3UwvI=\"}",
+        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..P415zHB7O262k7fTR7x3Uw.O7kTmtYQLUw80b1NmqwM3_JBp5CTvfofr_U7FDO2FOIulXLC2nHEiR3fphLJ4TrEbqyo2vAZQNu1AlwuIaoMysmj4tWc86ZrJ5gnnnJBWpTLekoUa5ppQfAVxCaa9dyeaoxddIqd8XlDtVVFw5u3XurzOUrFEok6HurXvWNEptixqqTK2xj8-laF1kn-TRgm.EFsRm70ayv4aLbFMo9o7X5U36qDcFP0PtDctQCgQssw\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI\"},\"cartId\":\"4585995873724500022\",\"userId\":\"148590759\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX18G3rNUiq1ZtS6NLjH6Nio144DsU9X0EoB9oHCM588xfZGzueGw5/AzHq8ERSORgE0438bpTlHscWIyterOjF4mhlj7YvOaDk+cNy6z9cjn3a41zJNUGsAQVnVY3srKuECUvJ0S6ouyzMmQLr6PvPNI+jH2S7FVSOI8l+4fxOtzDjXVPiDdGPjFR3ZhXSIjGZ3fgSNLwtIc0imK8ZFcZNI/uRrf/n3UwvI=\"}",
         "utm_attributes": "{\"utm_source\":\"direct\",\"utm_medium\":\"direct\",\"utm_campaign\":\"direct\",\"utm_source_medium\":\"direct-direct\"}"
       },
       "loyaltyProgram": "POTP2",
@@ -776,13 +776,16 @@
       "pastOrdersCount": 1,
       "phone": "+91 6283631035",
       "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..P415zHB7O262k7fTR7x3Uw.O7kTmtYQLUw80b1NmqwM3_JBp5CTvfofr_U7FDO2FOIulXLC2nHEiR3fphLJ4TrEbqyo2vAZQNu1AlwuIaoMysmj4tWc86ZrJ5gnnnJBWpTLekoUa5ppQfAVxCaa9dyeaoxddIqd8XlDtVVFw5u3XurzOUrFEok6HurXvWNEptixqqTK2xj8-laF1kn-TRgm.EFsRm70ayv4aLbFMo9o7X5U36qDcFP0PtDctQCgQssw",
-      "refreshTokenExpiresAt": "2026-12-05T07:35:51.994Z",
-      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..LPpw22kYT5G4Kl_q864ajA.4KGHlYXOfTL88ffhaom2IVU5pwBmsLm0Fy1eQiAEGij0dKlRbPKoNbmR34OvXIy32Y8v2T1sQIgI58BrYcoCTPH7pmsdF5bdocngcXZq5Rvci7Is_x2xbTzQTb-eSf7-NsDpYHqvEzp0tDvd3culgQAylY_ULKIVoCoSAfs7cHJn8wxmYBVqmkkVA9EqbYTw.mt3px_uboLMQhISFvYEhO-PyxgF4ocOuK1LDpvVByr8",
+      "refreshTokenExpiresAt": "2026-12-08T20:24:59.977Z",
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..NiAfDzCPgdJsqscBXToz3w.Q9cD7Gz8CUz-TyvObdvWMy94nrRAG3hLY6zk18BiDmO2m-t1q_xr0RdZt5q6tUkEYeRaY8Slj3g6sANwM0fONxuAk0-81yCRPP4SNPsPUCpyTPKDDfy0NNyBLBNOTpGD10sJMdw3gPRRam0veIxXCYRu1EyNeHC6moG5_iABuVX4b4_xfbyGiJCPsXym6SfH.3_0SBBzHSsFNNagxiKTrajLwzlvNZfUmq5RMAp87xvI",
       "source": "LIVE_SMS_OTP",
-      "status": "IDLE",
+      "status": "DISABLED",
       "storedAt": "2026-11-05T07:34:53.235Z",
       "totalOrdersPlaced": 0,
-      "userId": "148590759"
+      "userId": "148590759",
+      "activeOrderId": "DOM-ENG-497879",
+      "disabled": true,
+      "lastAssignedAt": "2026-11-08T20:24:58.044Z"
     }
   ],
   "couponRules": {
@@ -8506,6 +8509,210 @@
         "storeName": "SECTOR-15C, CHANDIGARH"
       },
       "updatedAt": "2026-11-01T21:40:14.856Z",
+      "user": {
+        "email": "parthgulyani7960@gmail.com",
+        "name": "Parth Gulyani",
+        "phone": "+91 7893618933",
+        "userId12": "591501648476"
+      },
+      "userId12": "591501648476"
+    },
+    {
+      "address": {
+        "building": "NAYAGAON PUNJAB",
+        "city": "CHANDIGARH",
+        "flat": "vv",
+        "landmark": "GPS Verified Location",
+        "latitude": 30.77109747361821,
+        "longitude": 76.79038614854312,
+        "name": "Parth Gulyani",
+        "phone": "+91 7893618933",
+        "pincode": "110001",
+        "storeId": "70336",
+        "storeName": "NAYAGAON PUNJAB",
+        "street": "Ground Floor at B05 00155 Karoran Road Nayagaon 160103 Punjab"
+      },
+      "assignedAccountId": "ACC-DOM-3155",
+      "cartId": "1357975068186854350",
+      "createdAt": "2026-11-08T20:29:41.863Z",
+      "engineOrderRef": "DOM-ENG-781861",
+      "id": "DOM-ENG-781861",
+      "items": [
+        {
+          "baseId": "DOM-PM0003",
+          "customCrust": "New Hand Tossed",
+          "customSize": "Regular",
+          "dominosCode": "PM0003",
+          "id": "DOM-PM0003-Regular-New_Hand_Tossed-none",
+          "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+          "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+          "isAvailable": true,
+          "isCombo": false,
+          "isCustomizedPizza": true,
+          "name": "Paneer & Onion",
+          "price": 119,
+          "quantity": 1,
+          "skuId": "3#3#1"
+        }
+      ],
+      "location": {
+        "latitude": 30.77109747361821,
+        "longitude": 76.79038614854312,
+        "store": {
+          "address": "Ground Floor at B05 00155 Karoran Road Nayagaon 160103 Punjab",
+          "storeId": "70336",
+          "storeName": "NAYAGAON PUNJAB"
+        }
+      },
+      "payment": {
+        "amount": 160,
+        "deliveryFee": 35,
+        "discountAmount": 0,
+        "gst": 5.95,
+        "method": "COD",
+        "originalEstimatedAmount": 154,
+        "packagingFee": 0,
+        "priceDifference": 6,
+        "priceNotice": "Domino's live store price verified at NAYAGAON PUNJAB: Total adjusted by +₹6 (includes 5% GST & standard delivery).",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "receiverUpiId": "Pranjalottery@fam",
+        "status": "CONFIRMED_COD",
+        "subtotal": 119,
+        "transactionId": "COD-69781862",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Domino's%20Official%20Kitchen%20Outlet&am=160&tr=DOM-ENG-781861&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-781861",
+        "verifiedAt": "2026-11-08T20:29:41.862Z"
+      },
+      "robot": {
+        "accountCategory": "CATEGORY_SECOND_ORDER",
+        "accountPhone": "+91 7888422429",
+        "assignedAccountId": "ACC-DOM-3155",
+        "billAmount": 119,
+        "cartId": "1357975068186854350",
+        "categoryName": "🟡 Cheesy 2nd Order Tier",
+        "discountAmount": 0,
+        "estimatedDelivery": "45 mins",
+        "logs": [
+          "[8:29:41 pm] Order created (Cash on Delivery). Engine Ref: DOM-ENG-781861 | Domino's Live Ref: Awaiting Placement | Cart ID: #3217231560404939484. Store: NAYAGAON PUNJAB. Verified Total: ₹160. Session Phone: +91 7888422429. Promo: DOMNEW50.",
+          "[20:29:42] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[20:29:42] Resuming pre-assigned Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🟡 Cheesy 2nd Order Tier",
+          "[20:29:42] Claimed Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🟡 Cheesy 2nd Order Tier",
+          "[20:29:42] Rejuvenating session token with Domino's India live auth API...",
+          "[20:29:43] ✓ Token refreshed! 30-day session extended. Cart ID: 1357975068186854350",
+          "[20:29:43] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[20:29:44] Resolving Domino's delivery kitchen for coordinates: [30.7711, 76.7904]",
+          "[20:29:44] Kitchen Resolved: NAYAGAON PUNJAB (Store ID: 70336) - Delivery ETA: 45 mins"
+        ],
+        "rider": {
+          "status": "AWAITING_KITCHEN_DISPATCH"
+        },
+        "sessionPhone": "+91 7888422429",
+        "status": "STORE_RESOLVING",
+        "storeId": "70336",
+        "storeName": "NAYAGAON PUNJAB"
+      },
+      "updatedAt": "2026-11-08T20:29:44.058Z",
+      "user": {
+        "email": "parthgulyani7960@gmail.com",
+        "name": "Parth Gulyani",
+        "phone": "+91 7893618933",
+        "userId12": "591501648476"
+      },
+      "userId12": "591501648476"
+    },
+    {
+      "address": {
+        "building": "NAYAGAON PUNJAB",
+        "city": "CHANDIGARH",
+        "flat": "canca;",
+        "landmark": "GPS Verified Location",
+        "latitude": 30.77109747361821,
+        "longitude": 76.79038614854312,
+        "name": "Parth Gulyani",
+        "phone": "+91 7893618933",
+        "pincode": "110001",
+        "storeId": "70336",
+        "storeName": "NAYAGAON PUNJAB",
+        "street": "Ground Floor at B05 00155 Karoran Road Nayagaon 160103 Punjab"
+      },
+      "assignedAccountId": "ACC-DOM-3234",
+      "cartId": "4585995873724500022",
+      "createdAt": "2026-11-08T20:24:57.880Z",
+      "engineOrderRef": "DOM-ENG-497879",
+      "id": "DOM-ENG-497879",
+      "items": [
+        {
+          "baseId": "DOM-PM0003",
+          "customCrust": "New Hand Tossed",
+          "customSize": "Regular",
+          "dominosCode": "PM0003",
+          "id": "DOM-PM0003-Regular-New_Hand_Tossed-none",
+          "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+          "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp",
+          "isAvailable": true,
+          "isCombo": false,
+          "isCustomizedPizza": true,
+          "name": "Paneer & Onion",
+          "price": 119,
+          "quantity": 1,
+          "skuId": "3#3#1"
+        }
+      ],
+      "location": {
+        "latitude": 30.77109747361821,
+        "longitude": 76.79038614854312,
+        "store": {
+          "address": "Ground Floor at B05 00155 Karoran Road Nayagaon 160103 Punjab",
+          "storeId": "70336",
+          "storeName": "NAYAGAON PUNJAB"
+        }
+      },
+      "payment": {
+        "amount": 160,
+        "deliveryFee": 35,
+        "discountAmount": 0,
+        "gst": 5.95,
+        "method": "COD",
+        "originalEstimatedAmount": 154,
+        "packagingFee": 0,
+        "priceDifference": 6,
+        "priceNotice": "Domino's live store price verified at NAYAGAON PUNJAB: Total adjusted by +₹6 (includes 5% GST & standard delivery).",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "receiverUpiId": "Pranjalottery@fam",
+        "status": "CONFIRMED_COD",
+        "subtotal": 119,
+        "transactionId": "COD-69497880",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Domino's%20Official%20Kitchen%20Outlet&am=160&tr=DOM-ENG-497879&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-497879",
+        "verifiedAt": "2026-11-08T20:24:57.880Z"
+      },
+      "robot": {
+        "accountCategory": "CATEGORY_SECOND_ORDER",
+        "accountPhone": "+91 6283631035",
+        "assignedAccountId": "ACC-DOM-3234",
+        "billAmount": 119,
+        "cartId": "4585995873724500022",
+        "categoryName": "🟡 Cheesy 2nd Order Tier",
+        "discountAmount": 0,
+        "estimatedDelivery": "45 mins",
+        "logs": [
+          "[8:24:57 pm] Order created (Cash on Delivery). Engine Ref: DOM-ENG-497879 | Domino's Live Ref: Awaiting Placement | Cart ID: #7825468644212944697. Store: NAYAGAON PUNJAB. Verified Total: ₹160. Session Phone: +91 6283631035. Promo: DOMNEW50.",
+          "[20:24:58] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[20:24:59] Resuming pre-assigned Domino's Session: +91 6283631035 (ACC-DOM-3234) - Category: 🟡 Cheesy 2nd Order Tier",
+          "[20:24:59] Claimed Domino's Session: +91 6283631035 (ACC-DOM-3234) - Category: 🟡 Cheesy 2nd Order Tier",
+          "[20:24:59] Rejuvenating session token with Domino's India live auth API...",
+          "[20:25:00] ✓ Token refreshed! 30-day session extended. Cart ID: 4585995873724500022",
+          "[20:25:00] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[20:25:00] Resolving Domino's delivery kitchen for coordinates: [30.7711, 76.7904]",
+          "[20:25:00] Kitchen Resolved: NAYAGAON PUNJAB (Store ID: 70336) - Delivery ETA: 45 mins"
+        ],
+        "rider": {
+          "status": "AWAITING_KITCHEN_DISPATCH"
+        },
+        "sessionPhone": "+91 6283631035",
+        "status": "STORE_RESOLVING",
+        "storeId": "70336",
+        "storeName": "NAYAGAON PUNJAB"
+      },
+      "updatedAt": "2026-11-08T20:25:00.447Z",
       "user": {
         "email": "parthgulyani7960@gmail.com",
         "name": "Parth Gulyani",

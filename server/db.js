@@ -1449,7 +1449,7 @@ class Database {
       this.data.users = [];
       this.save();
     }
-    // Guarantee 12-digit numerical User ID & transactions array on all users
+    // Guarantee 12-digit numerical User ID & complete profile fields on all users
     this.data.users.forEach((u) => {
       if (!u.userId12) {
         u.userId12 = generate12DigitUid();
@@ -1458,11 +1458,21 @@ class Database {
         u.role = 'ADMIN';
         u.isAdmin = true;
       }
-      if (!u.transactions) u.transactions = [];
-      if (Array.isArray(u.savedAddresses) && u.savedAddresses.length > 3) {
-        u.savedAddresses = u.savedAddresses.slice(0, 3);
-        u.addressCount = u.savedAddresses.length;
+      if (!u.name) {
+        u.name = u.email ? u.email.split('@')[0] : 'User ' + (u.userId12 ? u.userId12.slice(-4) : 'Guest');
       }
+      if (u.phone === undefined || u.phone === null) u.phone = '';
+      if (typeof u.phoneLocked !== 'boolean') u.phoneLocked = false;
+      if (typeof u.walletBalance !== 'number') u.walletBalance = Number(u.wallet?.balance) || 0;
+      if (!u.wallet) u.wallet = { balance: u.walletBalance, currency: 'INR' };
+      if (!u.status) u.status = 'ACTIVE';
+      if (!u.registeredAt) u.registeredAt = u.createdAt || new Date().toISOString();
+      if (!u.transactions) u.transactions = [];
+      if (!Array.isArray(u.savedAddresses)) u.savedAddresses = [];
+      if (u.savedAddresses.length > 3) {
+        u.savedAddresses = u.savedAddresses.slice(0, 3);
+      }
+      u.addressCount = u.savedAddresses.length;
     });
     return this.data.users;
   }
