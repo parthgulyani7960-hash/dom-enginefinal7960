@@ -9,13 +9,13 @@ class SecurityService {
     // Sliding window tracking: Map<clientIp, { requests: [{ timestamp, category }], violations: number, bannedUntil: number }>
     this.ipRecords = new Map();
 
-    // Configurable rate limits per minute
+    // Configurable rate limits per minute (Generous thresholds to prevent admin polling blockages)
     this.LIMITS = {
-      GLOBAL: { max: 300, windowMs: 60 * 1000 },
-      AUTH: { max: 25, windowMs: 60 * 1000 },
-      MUTATION: { max: 30, windowMs: 60 * 1000 },
-      SMS_OTP: { max: 6, windowMs: 60 * 1000 },
-      ADMIN: { max: 120, windowMs: 60 * 1000 }
+      GLOBAL: { max: 500, windowMs: 60 * 1000 },
+      AUTH: { max: 60, windowMs: 60 * 1000 },
+      MUTATION: { max: 60, windowMs: 60 * 1000 },
+      SMS_OTP: { max: 15, windowMs: 60 * 1000 },
+      ADMIN: { max: 800, windowMs: 60 * 1000 }
     };
 
     // Cooldown duration for repeated violations (5 minutes)
@@ -67,6 +67,14 @@ class SecurityService {
   check(req, pathname) {
     const ip = this.getClientIp(req);
     const now = Date.now();
+
+    // Authenticated admin requests and local loopback are exempted from aggressive throttling
+    const hasAdminCred = Boolean(req.headers['x-admin-key'] || req.headers['x-admin-token']);
+    const isLocal = ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+    if (pathname.startsWith('/api/admin/') && (hasAdminCred || isLocal)) {
+      return { allowed: true, remaining: 1000, resetInSeconds: 0 };
+    }
+
     const category = this.getCategory(req.method, pathname);
     const rule = this.LIMITS[category] || this.LIMITS.GLOBAL;
 

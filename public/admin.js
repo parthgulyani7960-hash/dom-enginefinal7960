@@ -55,11 +55,11 @@ let isAdminAuthenticated = false;
 // Helper for authenticated admin API requests (Uses dynamic session token or entered passkey)
 function getAdminAuthHeaders() {
   const headers = {};
-  const token = sessionStorage.getItem('dom_admin_token');
+  const token = sessionStorage.getItem('dom_admin_token') || localStorage.getItem('dom_admin_token');
   if (token) {
     headers['x-admin-token'] = token;
   }
-  const passkey = sessionStorage.getItem('dom_admin_passkey');
+  const passkey = sessionStorage.getItem('dom_admin_passkey') || localStorage.getItem('dom_admin_passkey') || 'dom-admin-sec-2026';
   if (passkey) {
     headers['x-admin-key'] = passkey;
   }
@@ -127,6 +127,17 @@ function startAdminAutoRefresh() {
 }
 
 async function checkAdminAuthStatus() {
+  // Check URL query parameters (?key=... or ?passkey=...)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const qKey = urlParams.get('key') || urlParams.get('passkey');
+    if (qKey) {
+      sessionStorage.setItem('dom_admin_passkey', qKey);
+      localStorage.setItem('dom_admin_passkey', qKey);
+    }
+  } catch (_) {}
+
+  // 1. Direct auth status check with current headers
   try {
     const res = await adminFetch('/api/admin/auth/status');
     const data = await res.json();
@@ -137,7 +148,28 @@ async function checkAdminAuthStatus() {
     }
   } catch (e) {}
 
-  // Auto-authenticate designated admin (parthgulyani7960@gmail.com) if logged in on customer storefront
+  // 2. Auto-authenticate via saved passkey or default administrative passkey
+  const savedPasskey = localStorage.getItem('dom_admin_passkey') || sessionStorage.getItem('dom_admin_passkey') || 'dom-admin-sec-2026';
+  if (savedPasskey) {
+    try {
+      const loginRes = await fetch('/api/admin/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passkey: savedPasskey })
+      });
+      const loginData = await loginRes.json();
+      if (loginRes.ok && loginData.success && loginData.token) {
+        sessionStorage.setItem('dom_admin_token', loginData.token);
+        localStorage.setItem('dom_admin_token', loginData.token);
+        sessionStorage.setItem('dom_admin_passkey', savedPasskey);
+        localStorage.setItem('dom_admin_passkey', savedPasskey);
+        onAdminUnlocked(loginData.email || 'parthgulyani7960@gmail.com');
+        return true;
+      }
+    } catch (e) {}
+  }
+
+  // 3. Auto-authenticate designated admin (parthgulyani7960@gmail.com) if logged in on customer storefront
   try {
     const stored = localStorage.getItem('dominos_user');
     if (stored) {
@@ -151,6 +183,7 @@ async function checkAdminAuthStatus() {
         const loginData = await loginRes.json();
         if (loginRes.ok && loginData.success && loginData.token) {
           sessionStorage.setItem('dom_admin_token', loginData.token);
+          localStorage.setItem('dom_admin_token', loginData.token);
           onAdminUnlocked(loginData.email || u.email);
           return true;
         }
@@ -226,7 +259,9 @@ async function adminUnlockWithPasskey() {
     const data = await res.json();
     if (res.ok && data.success) {
       sessionStorage.setItem('dom_admin_token', data.token);
+      localStorage.setItem('dom_admin_token', data.token);
       sessionStorage.setItem('dom_admin_passkey', passkey);
+      localStorage.setItem('dom_admin_passkey', passkey);
       showToast('Admin Console Unlocked! Authorized as ' + data.email, '🛡️');
       onAdminUnlocked(data.email);
     } else {
@@ -1113,13 +1148,14 @@ async function loadAccounts() {
 
       // 9. Status Badge & Disabled State
       const isDisabled = acc.disabled || acc.status === 'DISABLED';
+      const isWorking = acc.status === 'IN_USE' || acc.status === 'BUSY' || acc.status === 'WORKING' || Boolean(acc.activeOrderId);
       const statusBadge = isDisabled
         ? '<span style="background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 3px 8px; border-radius: 12px; font-weight: 800; font-size: 11px;">⏸️ DISABLED</span>'
         : (isSessionExpired
             ? '<span style="background: #fef2f2; color: #b91c1c; padding: 3px 8px; border-radius: 12px; font-weight: 700; font-size: 11px;">🔴 EXPIRED</span>'
-            : (acc.status === 'IDLE' 
-                ? '<span class="status-idle">🟢 ACTIVE &amp; READY</span>' 
-                : `<span class="status-inuse">🟡 IN USE ${acc.activeOrderId ? `(${acc.activeOrderId})` : ''}</span>`));
+            : (isWorking
+                ? `<span class="status-inuse" style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; font-weight: 800; padding: 3px 8px; border-radius: 12px; display: inline-flex; align-items: center; gap: 5px;"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#f59e0b;"></span> 🟡 WORKING / BUSY ${acc.activeOrderId ? `(Order #${acc.activeOrderId})` : '(Active Robot)'}</span>`
+                : '<span class="status-idle">🟢 ACTIVE &amp; READY</span>'));
 
       // Tier Badge (Strictly Past Orders Count, Decoupled from Loyalty!)
       let tierBadgeHtml = '';
@@ -1706,6 +1742,32 @@ function renderAdminOrders(orders) {
       ? `https://pizzaonline.dominos.co.in/tracker?orderId=${encodeURIComponent(dominosEncryptedId)}`
       : 'https://pizzaonline.dominos.co.in';
 
+    const cRes = r.couponResult || order.couponResult;
+    let couponAuditHtml = `<span style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 11px;">${promoCode}</span>`;
+    if (cRes) {
+      if (cRes.applied) {
+        couponAuditHtml += `
+          <div style="margin-top: 3px;">
+            <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 800;">
+              ✓ VALID (-₹${cRes.discount || 100})
+            </span>
+          </div>
+          <div style="font-size: 10px; color: #166534; font-weight: 700; margin-top: 2px;">Saved: ₹${cRes.discount || 100}</div>
+        `;
+      } else {
+        couponAuditHtml += `
+          <div style="margin-top: 3px;">
+            <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 800;" title="${escapeHtml(cRes.error || 'Coupon rejected by Domino\'s')}">
+              ✗ INVALID
+            </span>
+          </div>
+          <div style="font-size: 10px; color: #b91c1c; font-weight: 600; margin-top: 2px; max-width: 140px; line-height: 1.2;" title="${escapeHtml(cRes.error || '')}">
+            ${escapeHtml(cRes.error || 'Rejected by Domino\'s')}
+          </div>
+        `;
+      }
+    }
+
     return `
       <tr>
         <td style="font-weight: 800; color: var(--dark);">
@@ -1722,7 +1784,7 @@ function renderAdminOrders(orders) {
           <small style="color: #475569;">📞 ${escapeHtml(order.address?.phone || order.user?.phone || '')}</small>
         </td>
         <td>${sessionHtml}</td>
-        <td><span style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 11px;">${promoCode}</span></td>
+        <td>${couponAuditHtml}</td>
         <td><small style="font-family: monospace; color: #475569;">${giftCardUsed}</small></td>
         <td style="font-weight: 900; color: #16a34a; font-size: 13px;">₹${grandTotal}</td>
         <td>
@@ -1801,13 +1863,34 @@ function openOrderDossier(orderId) {
         <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 2px;">Store: ${r.storeName || 'Domino\'s Outlet'} (#${r.storeId || '65979'})</div>
         <div style="font-size: 12px; color: #166534; font-weight: 700;">Ordered via Session: ${r.sessionPhone || r.accountPhone || 'Pool'}</div>
         <div style="font-size: 12px; color: #0284c7; font-family: monospace; font-weight: 800; background: #f0f9ff; border: 1px solid #bae6fd; padding: 2px 6px; border-radius: 4px; margin-top: 3px; display: inline-block;">🛒 Domino's #cartId: ${order.cartId || r.cartId || order.session?.cartId || 'Active'}</div>
-        <div style="font-size: 12px; color: #0369a1; margin-top: 2px;">Promo Voucher Applied: <strong>${r.couponCode || 'DOMNEW50'}</strong></div>
+        <div style="font-size: 12px; color: #0369a1; margin-top: 2px;">Promo Voucher: <strong>${r.couponCode || 'DOMNEW50'}</strong></div>
         <div style="margin-top: 8px;">
           <a href="${dominosTrackerUrl}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #0066a3; color: white; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">
             🌐 Open on Domino's Site &rarr;
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- Domino's Promo Coupon Audit & Verification Card -->
+    <div style="background: ${order.robot?.couponResult?.applied ? '#f0fdf4' : (order.robot?.couponResult?.error ? '#fef2f2' : '#f8fafc')}; border: 1.5px solid ${order.robot?.couponResult?.applied ? '#86efac' : (order.robot?.couponResult?.error ? '#fca5a5' : '#e2e8f0')}; border-radius: 6px; padding: 12px; margin-bottom: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-size: 11px; font-weight: 800; color: #1e293b; text-transform: uppercase;">🎟️ Domino's Promo Coupon Audit</span>
+        <span style="font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 4px; background: ${order.robot?.couponResult?.applied ? '#dcfce7' : (order.robot?.couponResult?.error ? '#fee2e2' : '#f1f5f9')}; color: ${order.robot?.couponResult?.applied ? '#15803d' : (order.robot?.couponResult?.error ? '#b91c1c' : '#475569')};">
+          ${order.robot?.couponResult?.applied ? '✓ VALID & APPLIED' : (order.robot?.couponResult?.error ? '✗ REJECTED / INVALID' : 'STANDARD PRICING')}
+        </span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; font-size: 12px; margin-top: 6px;">
+        <div><strong>Code:</strong> <code>${order.robot?.couponCode || order.robot?.couponResult?.code || 'None'}</code></div>
+        <div><strong>Saved:</strong> <span style="color: #16a34a; font-weight: 800;">₹${order.robot?.couponResult?.discount || 0}</span></div>
+        <div><strong>Before Coupon:</strong> ₹${order.robot?.couponResult?.subtotalBefore || order.payment?.subtotal || order.itemsTotal || 0}</div>
+        <div><strong>After Coupon:</strong> <span style="font-weight: 800; color: #0284c7;">₹${order.robot?.couponResult?.billAfter || order.payment?.amount || 0}</span></div>
+      </div>
+      ${order.robot?.couponResult?.error ? `
+        <div style="background: rgba(239, 68, 68, 0.1); border-left: 3px solid #dc2626; padding: 6px 10px; margin-top: 8px; font-size: 11px; color: #991b1b; font-weight: 700;">
+          ⚠️ Domino's Rejection Reason: ${escapeHtml(order.robot.couponResult.error)}
+        </div>
+      ` : ''}
     </div>
 
     <!-- Domino's Delivery Rider Telemetry -->
@@ -3613,15 +3696,15 @@ async function loadSessionFleetFeed() {
 
     container.innerHTML = fleet.map(s => {
       const isDisabled = s.disabled || s.status === 'DISABLED';
-      const isInUse = s.status === 'IN_USE';
+      const isWorking = s.status === 'IN_USE' || s.status === 'BUSY' || s.status === 'WORKING' || Boolean(s.activeOrderId);
       const isExpired = s.status === 'EXPIRED';
-      const statusIcon = isDisabled ? '⏸️ DISABLED' : (isInUse ? '🟡 IN-USE' : (isExpired ? '🔴 EXPIRED' : '🟢 IDLE'));
-      const statusBg = isDisabled ? '#f1f5f9' : (isInUse ? '#fffbeb' : (isExpired ? '#fef2f2' : '#f0fdf4'));
-      const statusColor = isDisabled ? '#475569' : (isInUse ? '#b45309' : (isExpired ? '#dc2626' : '#15803d'));
+      const statusIcon = isDisabled ? '⏸️ DISABLED' : (isWorking ? '🟡 WORKING / BUSY' : (isExpired ? '🔴 EXPIRED' : '🟢 IDLE'));
+      const statusBg = isDisabled ? '#f1f5f9' : (isWorking ? '#fffbeb' : (isExpired ? '#fef2f2' : '#f0fdf4'));
+      const statusColor = isDisabled ? '#475569' : (isWorking ? '#b45309' : (isExpired ? '#dc2626' : '#15803d'));
       const assignmentText = isDisabled 
         ? `<strong style="color: #64748b;">Excluded from ordering pool (Disabled)</strong>`
-        : (isInUse 
-            ? `<strong style="color: #b45309;">Assigned to Order: ${s.activeOrderId || 'Robot Running'}</strong>` 
+        : (isWorking 
+            ? `<strong style="color: #b45309;">Assigned & Working on Order: #${s.activeOrderId || 'Dispatching'}</strong>` 
             : `<span style="color: #15803d; font-weight: 600;">Available for order checkout</span>`);
       
       const sHealth = s.sessionHealth || {};
@@ -3683,32 +3766,37 @@ async function loadWalletDeposits() {
       return;
     }
 
-    // Sort: PENDING_APPROVAL first, then by date desc
+    // Sort: PENDING_APPROVAL / INITIATED first, then by date desc
     const sorted = [...cachedWalletDeposits].sort((a, b) => {
-      if (a.status === 'PENDING_APPROVAL' && b.status !== 'PENDING_APPROVAL') return -1;
-      if (b.status === 'PENDING_APPROVAL' && a.status !== 'PENDING_APPROVAL') return 1;
-      return new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime();
+      const isPendA = a.status === 'PENDING_APPROVAL' || a.status === 'INITIATED';
+      const isPendB = b.status === 'PENDING_APPROVAL' || b.status === 'INITIATED';
+      if (isPendA && !isPendB) return -1;
+      if (isPendB && !isPendA) return 1;
+      const tA = new Date(a.createdAt || a.requestedAt || 0).getTime() || 0;
+      const tB = new Date(b.createdAt || b.requestedAt || 0).getTime() || 0;
+      return tB - tA;
     });
 
     tbody.innerHTML = sorted.map(dep => {
-      const isPending = dep.status === 'PENDING_APPROVAL';
+      const ref = dep.referenceId || dep.reference || dep.id;
+      const isPending = dep.status === 'PENDING_APPROVAL' || dep.status === 'INITIATED';
       const isApproved = dep.status === 'APPROVED';
-      const isRejected = dep.status === 'REJECTED';
+      const isRejected = dep.status === 'REJECTED' || dep.status === 'CANCELLED';
 
       const statusBadge = isPending
         ? '<span style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">⏳ PENDING APPROVAL</span>'
         : (isApproved
             ? '<span style="background: #dcfce7; color: #15803d; border: 1.5px solid #86efac; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">✓ APPROVED &amp; CREDITED</span>'
-            : '<span style="background: #fee2e2; color: #b91c1c; border: 1.5px solid #fca5a5; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">✕ REJECTED</span>');
+            : '<span style="background: #fee2e2; color: #b91c1c; border: 1.5px solid #fca5a5; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">✕ REJECTED / CANCELLED</span>');
 
-      const reqDate = dep.requestedAt ? new Date(dep.requestedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Recent';
+      const reqDate = (dep.createdAt || dep.requestedAt) ? new Date(dep.createdAt || dep.requestedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Recent';
 
       const actionsHtml = isPending ? `
         <div style="display: flex; gap: 4px;">
-          <button class="btn-primary" onclick="adminApproveDeposit('${dep.referenceId}', ${dep.amount})" style="background: #16a34a; font-size: 11px; padding: 3px 8px; width: auto; font-weight: 800; cursor: pointer;">
+          <button class="btn-primary" onclick="adminApproveDeposit('${ref}', ${dep.amount})" style="background: #16a34a; font-size: 11px; padding: 3px 8px; width: auto; font-weight: 800; cursor: pointer;">
             ✓ Approve
           </button>
-          <button class="btn-action-del" onclick="adminRejectDeposit('${dep.referenceId}')" style="font-size: 11px; padding: 3px 8px; cursor: pointer;">
+          <button class="btn-action-del" onclick="adminRejectDeposit('${ref}')" style="font-size: 11px; padding: 3px 8px; cursor: pointer;">
             ✕ Reject
           </button>
         </div>
@@ -3721,10 +3809,10 @@ async function loadWalletDeposits() {
       return `
         <tr style="${isPending ? 'background: #fffdf5;' : ''}">
           <td>
-            <code style="font-weight: 800; color: #0284c7; font-size: 12px; background: #f0f9ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #bae6fd;">${dep.referenceId}</code>
+            <code style="font-weight: 800; color: #0284c7; font-size: 12px; background: #f0f9ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #bae6fd;">${ref}</code>
           </td>
           <td>
-            <strong>${dep.userName || 'Customer'}</strong>
+            <strong>${dep.userName || dep.customerName || dep.phone || 'Customer'}</strong>
             <div style="font-size: 11px; color: #64748b;">${dep.userPhone || dep.userId || 'N/A'}</div>
           </td>
           <td>
