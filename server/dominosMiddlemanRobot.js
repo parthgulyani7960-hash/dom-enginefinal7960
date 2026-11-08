@@ -748,13 +748,17 @@ async function executeMiddlemanOrderOnDominos({
       }
     }
 
-    onProgress(`[MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store ${targetStoreId}...`);
-    await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=false&scrollTo=3`, {
-      waitUntil: 'domcontentloaded',
-      timeout: 25000
-    }).catch(() => {});
-    await dismissDominosPopups(page);
-    await sleep(2000);
+    if (!page.url().includes(`/menu-v1/${targetStoreId}`)) {
+      onProgress(`[MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store ${targetStoreId}...`);
+      await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=false&scrollTo=3`, {
+        waitUntil: 'domcontentloaded',
+        timeout: 25000
+      }).catch(() => {});
+      await dismissDominosPopups(page);
+      await sleep(1000);
+    } else {
+      onProgress(`[MIDDLEMAN-ENGINE] 🛒 Already at Domino's Menu V1 for Store ${targetStoreId}. Fast-tracking item selection...`);
+    }
 
     onProgress(`[MIDDLEMAN-ENGINE] 🛒 Adding ${flattenedItems.length} constituent item(s) to Domino's cart...`);
 
@@ -775,7 +779,7 @@ async function executeMiddlemanOrderOnDominos({
             const searchTrigger = page.locator('#searchCta, .menu-search-icon, .jfi-search, .search-wrap').first();
             if (await searchTrigger.isVisible({ timeout: 1500 }).catch(() => false)) {
               await searchTrigger.click().catch(() => {});
-              await sleep(600);
+              await sleep(400);
             }
           }
           searchInput = page.locator('#searchQueryInputModal, .search-query-input').first();
@@ -796,11 +800,11 @@ async function executeMiddlemanOrderOnDominos({
               const clearIcon = page.locator('.search-clear-icon, .jfi-close, .close-icon').first();
               if (await clearIcon.isVisible({ timeout: 400 }).catch(() => false)) {
                 await clearIcon.click().catch(() => {});
-                await sleep(200);
+                await sleep(150);
               }
               await searchInput.fill('');
               await searchInput.fill(query);
-              await sleep(1200);
+              await sleep(450);
 
               // Strictly match and click target card directly in the DOM without index mismatch
               const clickResult = await page.evaluate(({ rName, cName, expPrice }) => {
@@ -1023,9 +1027,12 @@ async function executeMiddlemanOrderOnDominos({
     // Method 1: Click uncovered View Cart bar on menu
     const viewCartBtn = page.locator('.cart-nav, .btn-checkout, .bottom-nav .btn, button:has-text("View Cart")').first();
     let navigatedViaClick = false;
-    if (await viewCartBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (await viewCartBtn.isVisible({ timeout: 2500 }).catch(() => false)) {
       await viewCartBtn.click({ force: true }).catch(() => {});
-      await sleep(3500);
+      await Promise.race([
+        page.waitForURL(url => url.includes('/cart/'), { timeout: 3500 }),
+        sleep(2000)
+      ]).catch(() => {});
       navigatedViaClick = page.url().includes('/cart/');
     }
 
@@ -1039,7 +1046,12 @@ async function executeMiddlemanOrderOnDominos({
         }
         return false;
       });
-      if (navigatedViaClick) await sleep(3000);
+      if (navigatedViaClick) {
+        await Promise.race([
+          page.waitForURL(url => url.includes('/cart/'), { timeout: 3000 }),
+          sleep(1500)
+        ]).catch(() => {});
+      }
     }
 
     // Method 3: Direct fallback route
@@ -1048,14 +1060,14 @@ async function executeMiddlemanOrderOnDominos({
         waitUntil: 'domcontentloaded',
         timeout: 20000
       }).catch(() => {});
-      await sleep(2000);
+      await sleep(1000);
     }
 
     onProgress(`[MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = ${page.url()}, navigatedViaClick = ${navigatedViaClick}`);
 
     // Wait for cart items or empty cart state to render in DOM
-    await page.waitForSelector('.cart-item-wrap, .card-iteration-wrapper, .cart-empty, [class*="empty-cart"]', { timeout: 8000 }).catch(() => {});
-    await sleep(2000);
+    await page.waitForSelector('.cart-item-wrap, .card-iteration-wrapper, .cart-empty, [class*="empty-cart"]', { timeout: 6000 }).catch(() => {});
+    await sleep(800);
 
     // Wait up to 5 seconds for cart items to hydrate if DOM cards are still mounting
     for (let cWait = 0; cWait < 5; cWait++) {

@@ -1020,7 +1020,11 @@
       <div class="modal-header">
         <div>
           <div class="modal-title" id="trackerOrderTitle">Official Domino's Order &amp; Delivery Tracking</div>
-          <div style="font-size: 12px; color: var(--gray-600);">Platform Ref: <span id="trackerOrderId">ORD-XXXXXX</span></div>
+          <div style="font-size: 12px; color: var(--gray-600); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+            <span>Engine Ref:</span>
+            <strong id="trackerOrderId" style="font-family: monospace; color: #0066a3;">ORD-XXXXXX</strong>
+            <button type="button" onclick="copyEngineRef()" style="background: #eff6ff; color: #0066a3; border: 1px solid #93c5fd; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; cursor: pointer;" title="Copy Domino's Order Engine reference for search & support">📋 Copy</button>
+          </div>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
           <span id="autoSyncBadgeTracking" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;" title="Automatic Realtime Telemetry from Domino's India Cloud">
@@ -1199,6 +1203,21 @@
             <div id="trackerLiveStageBadge" style="background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 10px;">
               🔥 IN OVEN BAKING
             </div>
+          </div>
+        </div>
+
+        <!-- Ordered Items Breakdown in Tracker -->
+        <div id="trackerItemsListCard" style="background: white; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 11px; font-weight: 800; color: #1e293b; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+              <span>🍕</span> <span>Ordered Items (<span id="trackerItemCountText">0</span>)</span>
+            </div>
+            <div style="font-size: 11px; color: #0284c7; font-weight: 700;">
+              Domino's Order Engine: <span id="trackerSummaryEngineRef" style="font-family: monospace; font-weight: 900; background: #eff6ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #bfdbfe;">DOM-ENG-...</span>
+            </div>
+          </div>
+          <div id="trackerItemsContainer" style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+            <!-- Populated dynamically -->
           </div>
         </div>
 

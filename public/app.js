@@ -282,7 +282,7 @@ function closeModal(id) {
 // 1. CATALOG RENDERING & DYNAMIC STORE-SPECIFIC AVAILABILITY
 // =========================================================================
 
-async function fetchCatalog(lat, lng, hideUnavailable = true) {
+async function fetchCatalog(lat, lng, hideUnavailable = false) {
   try {
     let url = '/api/catalog';
     const params = new URLSearchParams();
@@ -3712,6 +3712,21 @@ function copyDominosToken() {
   }
 }
 
+function copyEngineRef() {
+  const ref = document.getElementById('trackerOrderId')?.innerText?.trim() || currentTrackingOrderId;
+  if (!ref) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(ref).then(() => {
+      showToastNotice(`Copied Engine Ref ${ref}!`, '📋');
+    }).catch(() => {
+      showToastNotice(`Engine Ref: ${ref}`, '📋');
+    });
+  } else {
+    showToastNotice(`Engine Ref: ${ref}`, '📋');
+  }
+}
+window.copyEngineRef = copyEngineRef;
+
 function formatRiderContact(phone) {
   if (!phone) return 'Connecting with driver...';
   const clean = String(phone).replace(/[^0-9]/g, '');
@@ -3844,10 +3859,19 @@ function updateTrackingUI(order) {
   const domRefEl = document.getElementById('trackerDominosRef');
   if (domRefEl) domRefEl.innerText = formattedToken;
 
+  const engRefDisplay = order.engineOrderRef || order.id || 'DOM-ENG-...';
+  const engRefEl = document.getElementById('trackerSummaryEngineRef');
+  if (engRefEl) engRefEl.innerText = engRefDisplay;
+
+  const trackerOrderIdEl = document.getElementById('trackerOrderId');
+  if (trackerOrderIdEl) trackerOrderIdEl.innerText = engRefDisplay;
+
   const addrTextEl = document.getElementById('trackerAddressText');
   if (addrTextEl) {
-    const full = [order.address?.flat, order.address?.building, order.address?.street, order.address?.city].filter(Boolean).join(', ');
-    addrTextEl.innerText = full || 'GPS Verified Area';
+    const full = [order.address?.flat, order.address?.building, order.address?.street, order.address?.city, order.address?.pincode].filter(Boolean).join(', ');
+    const lat = order.address?.latitude || order.location?.latitude || 30.7339;
+    const lng = order.address?.longitude || order.location?.longitude || 76.7889;
+    addrTextEl.innerHTML = `${escapeHtml(full || 'GPS Verified Area')} <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color: #0284c7; font-size: 10px; font-weight: 700; text-decoration: none; background: #e0f2fe; padding: 1px 6px; border-radius: 4px; margin-left: 4px;">🗺️ Map</a>`;
   }
 
   const receiverTextEl = document.getElementById('trackerReceiverText');
@@ -3862,6 +3886,39 @@ function updateTrackingUI(order) {
 
   const payMethodEl = document.getElementById('trackerPayMethod');
   if (payMethodEl) payMethodEl.innerText = p.method === 'COD' ? '💵 Cash to Rider' : '📱 Instant UPI';
+
+  // Populate Ordered Items in Tracker
+  const itemsContainer = document.getElementById('trackerItemsContainer');
+  const itemsCountText = document.getElementById('trackerItemCountText');
+  const orderItemsList = order.items || [];
+  const totalUnits = orderItemsList.reduce((sum, itm) => sum + (itm.quantity || 1), 0);
+  if (itemsCountText) itemsCountText.innerText = totalUnits;
+
+  if (itemsContainer) {
+    if (orderItemsList.length === 0) {
+      itemsContainer.innerHTML = '<div style="color: #64748b; font-style: italic; padding: 4px 0;">Items being verified with Domino\'s kitchen...</div>';
+    } else {
+      itemsContainer.innerHTML = orderItemsList.map(itm => {
+        const customDetails = [itm.customSize || itm.size, itm.customCrust || itm.crust].filter(Boolean).join(' • ');
+        const itemImg = itm.image || itm.imageUrl || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_margherita.webp';
+        return `
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="${itemImg}" alt="${escapeHtml(itm.name)}" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; flex-shrink: 0;" onerror="this.src='https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_margherita.webp'">
+              <div>
+                <strong style="color: #0f172a; font-size: 12px;">${escapeHtml(itm.name)}</strong>
+                ${customDetails ? `<div style="font-size: 10px; color: #64748b;">${escapeHtml(customDetails)}</div>` : ''}
+              </div>
+            </div>
+            <div style="text-align: right; flex-shrink: 0;">
+              <span style="font-size: 11px; background: #e0f2fe; color: #0369a1; padding: 1px 6px; border-radius: 4px; font-weight: 800;">${itm.quantity || 1}x</span>
+              <strong style="color: #16a34a; font-size: 12px; margin-left: 6px;">₹${(itm.price || 0) * (itm.quantity || 1)}</strong>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
 
   // Handle Delay Banner (~8-9 mins delay)
   const delayBanner = document.getElementById('trackerDelayBanner');
@@ -4762,36 +4819,71 @@ function renderMyOrders(orders) {
       </button>
     ` : '';
 
-    const itemsSummary = (o.items || []).map(i => `${i.quantity || 1}x ${i.name}`).join(', ');
+    const engRef = o.engineOrderRef || o.id;
     const domToken = r.dominosOrderRef || o.dominosOrderRef;
     const tokenDisplay = domToken ? (domToken.startsWith('#') ? domToken : `#${domToken}`) : null;
+    const fullDeliveryAddress = [o.address?.flat, o.address?.building, o.address?.street, o.address?.city, o.address?.pincode].filter(Boolean).join(', ') || 'Doorstep Delivery Address';
+    const lat = o.address?.latitude || o.location?.latitude || 30.7339;
+    const lng = o.address?.longitude || o.location?.longitude || 76.7889;
+    const amountPaid = o.payment?.amount || r.billAmount || 0;
+    const discountSaved = o.payment?.discountAmount || r.discountAmount || 0;
+    const receiverPhone = (o.address?.phone || o.user?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+
+    const itemsRowsHtml = (o.items || []).map(itm => {
+      const customDetails = [itm.customSize || itm.size, itm.customCrust || itm.crust].filter(Boolean).join(' • ');
+      return `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; font-size: 11px;">
+          <div>
+            <strong style="color: #0f172a;">${escapeHtml(itm.name)}</strong>
+            ${customDetails ? `<span style="color: #64748b; margin-left: 4px;">(${escapeHtml(customDetails)})</span>` : ''}
+          </div>
+          <div style="text-align: right; flex-shrink: 0;">
+            <span style="background: #e0f2fe; color: #0369a1; padding: 1px 6px; border-radius: 4px; font-weight: 800; font-size: 10px;">${itm.quantity || 1}x</span>
+            <strong style="color: #16a34a; margin-left: 6px;">₹${(itm.price || 0) * (itm.quantity || 1)}</strong>
+          </div>
+        </div>
+      `;
+    }).join('');
 
     return `
-      <div style="background: white; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: var(--shadow-sm);">
+      <div style="background: white; border: 1.5px solid var(--gray-200); border-radius: 10px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
           <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-            <span style="font-weight: 800; font-size: 13px; color: var(--dark);">${o.id}</span>
+            <span style="font-weight: 900; font-size: 13px; color: #0284c7; font-family: monospace; background: #eff6ff; border: 1px solid #bfdbfe; padding: 2px 8px; border-radius: 4px;">${engRef}</span>
+            <button type="button" onclick="navigator.clipboard.writeText('${engRef}'); showToastNotice('Copied Engine Ref ${engRef}!', '📋')" style="background: white; border: 1px solid #cbd5e1; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; cursor: pointer;" title="Copy Domino's Order Engine Reference">📋 Copy</button>
             ${tokenDisplay ? `<span style="font-size: 11px; color: #15803d; background: #dcfce7; padding: 2px 6px; border-radius: 4px; border: 1px solid #86efac; font-weight: 800; font-family: monospace;">Token: ${tokenDisplay}</span>` : ''}
-            <button type="button" onclick="syncOrderToCloud('${o.id}')" style="background: #eff6ff; color: #0284c7; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="Click to refresh live telemetry from Domino's Cloud">
-              ☁️ Domino's Cloud Synced
-            </button>
           </div>
           <div>${statusBadge}</div>
         </div>
 
-        <div style="font-size: 12px; color: #475569; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+        <div style="font-size: 12px; color: #475569; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
           <div>
-            <strong>Store:</strong> ${r.storeName || o.address?.storeName || "Domino's Kitchen"} • <span style="color: #64748b;">${dateFormatted}</span>
+            <strong>🏪 Domino's Kitchen:</strong> ${r.storeName || o.address?.storeName || "Domino's Kitchen"} • <span style="color: #64748b;">${dateFormatted}</span>
           </div>
           ${r.storePhone ? `
-            <a href="tel:${r.storePhone}" style="color: #0284c7; text-decoration: none; font-weight: 700; font-size: 11px;">
-              📞 Call: ${r.storePhone}
+            <a href="tel:${r.storePhone}" style="color: #0284c7; text-decoration: none; font-weight: 800; font-size: 11px; background: #f0f9ff; padding: 2px 8px; border-radius: 4px; border: 1px solid #bae6fd;">
+              📞 Store: ${r.storePhone}
             </a>
           ` : ''}
         </div>
 
-        <div style="font-size: 12px; color: #334155; margin-bottom: 8px; background: #f8fafc; padding: 6px 10px; border-radius: 4px;">
-          <strong>Items (${itemsCount}):</strong> ${itemsSummary}
+        <!-- Doorstep Address & Location Details -->
+        <div style="font-size: 11px; color: #334155; margin-bottom: 8px; background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 6px;">
+            <div>
+              <strong style="color: #64748b;">📍 Destination:</strong> ${escapeHtml(fullDeliveryAddress)}
+              ${receiverPhone ? `<div style="margin-top: 2px;"><strong style="color: #64748b;">📞 Receiver:</strong> <a href="tel:${receiverPhone}" style="color: #0284c7; font-weight: 700; text-decoration: none;">+91 ${receiverPhone}</a></div>` : ''}
+            </div>
+            <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 800; font-size: 10px; background: #e0f2fe; border: 1px solid #7dd3fc; padding: 3px 8px; border-radius: 4px; white-space: nowrap;">🗺️ View Map</a>
+          </div>
+        </div>
+
+        <!-- Itemized Ordered Items -->
+        <div style="margin-bottom: 8px; background: #ffffff; border: 1px solid #f1f5f9; padding: 8px 10px; border-radius: 6px;">
+          <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">
+            🍕 Ordered Items (${itemsCount}):
+          </div>
+          ${itemsRowsHtml || '<div style="font-size: 11px; color: #64748b;">1x Domino\'s Meal</div>'}
         </div>
 
         ${statusText === 'CANCELLED' ? `
@@ -4806,7 +4898,7 @@ function renderMyOrders(orders) {
 
         ${(r.rider && (r.rider.name || r.rider.phone) && !r.rider.name?.includes('Ramesh Kumar')) ? `
           <div style="font-size: 11px; color: #065f46; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 6px 10px; border-radius: 6px; margin-bottom: 8px;">
-            <div style="font-weight: 800; font-size: 11px; margin-bottom: 2px;">🛵 This is the rider and you can contact the rider for your order:</div>
+            <div style="font-weight: 800; font-size: 11px; margin-bottom: 2px;">🛵 Domino's Delivery Executive:</div>
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
               <span><strong>${r.rider.name || "Domino's Delivery Executive"}</strong></span>
               ${r.rider.phone ? `
@@ -4818,9 +4910,24 @@ function renderMyOrders(orders) {
           </div>
         ` : ''}
 
-        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-100); padding-top: 10px; margin-top: 6px; flex-wrap: wrap; gap: 6px;">
-          <div style="font-weight: 800; font-size: 14px; color: #16a34a;">
-            Total: ₹${o.payment?.amount || 0}
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1.5px solid var(--gray-100); padding-top: 10px; margin-top: 6px; flex-wrap: wrap; gap: 6px;">
+          <div>
+            <span style="font-weight: 900; font-size: 15px; color: #16a34a;">Paid: ₹${amountPaid}</span>
+            <span style="font-size: 11px; background: #f1f5f9; color: #334155; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px;">${isCod ? '💵 COD' : '📱 Instant UPI'}</span>
+            ${discountSaved > 0 ? `<span style="font-size: 10px; background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 1px 6px; border-radius: 4px; font-weight: 800; margin-left: 4px;">Saved ₹${discountSaved}</span>` : ''}
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button onclick="reorderOrderItems('${o.id}')" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #1e293b; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Reorder exact items to cart">
+              🔁 Reorder
+            </button>
+            <button onclick="openTrackingModal('${o.id}')" style="background: #0066a3; border: none; color: white; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+              🔍 Track Live
+            </button>
+            ${proofBtn}
+          </div>
+        </div>
+      </div>
+    `;
           </div>
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
             <button onclick="reorderOrderItems('${o.id}')" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #1e293b; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Reorder exact items to cart">

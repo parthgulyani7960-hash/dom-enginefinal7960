@@ -395,13 +395,18 @@ class DominosMenuService {
       };
     });
 
-    const finalCombos = hideUnavailable
+    const finalCombos = (hideUnavailable && combosWithAvailability.some(c => c.isAvailable))
       ? combosWithAvailability.filter(c => c.isAvailable)
       : combosWithAvailability;
 
-    const finalMenu = hideUnavailable
+    let finalMenu = (hideUnavailable && menuWithAvailability.some(i => i.isAvailable))
       ? menuWithAvailability.filter(i => i.isAvailable)
       : menuWithAvailability;
+
+    // Safety guarantee: Never return an empty catalog if catalog items exist
+    if (finalMenu.length === 0 && menuWithAvailability.length > 0) {
+      finalMenu = menuWithAvailability;
+    }
 
     return {
       success: true,
