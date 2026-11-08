@@ -1023,14 +1023,46 @@
           <div style="font-size: 12px; color: var(--gray-600);">Platform Ref: <span id="trackerOrderId">ORD-XXXXXX</span></div>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
-          <button id="btnRefreshTracking" onclick="refreshLiveOrderStatus()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Refresh live status from Domino's kitchen">
-            <span id="refreshTrackingIcon">🔄</span> <span>Refresh</span>
-          </button>
+          <span id="autoSyncBadgeTracking" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;" title="Automatic Realtime Telemetry from Domino's India Cloud">
+            <span style="width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block;"></span> Auto-Synced
+          </span>
           <button class="modal-close" onclick="closeModal('trackingModal')">&times;</button>
         </div>
       </div>
       <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
         
+        <!-- Domino's Clean Delivered Success Card (Prominently displayed when order is DELIVERED) -->
+        <div id="trackerDeliveredSuccessCard" style="display: none; background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 18px; margin-bottom: 14px; text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);">
+          <div style="font-size: 38px; margin-bottom: 6px;">🍕 🎉</div>
+          <h2 style="font-size: 20px; font-weight: 900; color: #166534; margin-bottom: 4px;">Order Delivered Successfully!</h2>
+          <p style="font-size: 13px; color: #15803d; font-weight: 700; margin-bottom: 10px;">
+            Your hot Domino's pizza has been delivered to your doorstep at your area.
+          </p>
+          <div style="font-size: 12px; color: #334155; background: white; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px;">
+            📍 <span id="deliveredAddressText">Your Delivery Area</span>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+            <span style="background: white; border: 1px solid #86efac; color: #15803d; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; font-family: monospace;">Token: <span id="deliveredTokenText">#---</span></span>
+            <span style="background: white; border: 1px solid #bae6fd; color: #0284c7; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; font-family: monospace;">Ref: <span id="deliveredOrderRef">---</span></span>
+            <span style="background: white; border: 1px solid #cbd5e1; color: #475569; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; font-family: monospace;">UID: <span id="deliveredUserUid">---</span></span>
+          </div>
+          <div style="font-size: 12px; color: #1e293b; background: white; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 6px; text-align: left; margin-bottom: 14px;">
+            <div style="font-weight: 800; color: #64748b; font-size: 11px; text-transform: uppercase; margin-bottom: 4px;">Verified Delivered Items:</div>
+            <div id="deliveredItemsList" style="font-weight: 600; color: #0f172a;">1x Item</div>
+            <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed #cbd5e1; font-weight: 800; color: #166534; display: flex; justify-content: space-between;">
+              <span>Total Paid:</span> <span id="deliveredTotalPaid">₹0</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" onclick="openHelpSupportModal(currentTrackingOrderId)" style="background: #0066a3; color: white; border: none; font-size: 13px; font-weight: 800; padding: 10px 18px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              💬 Contact Support &amp; Help
+            </button>
+            <button type="button" onclick="reorderOrderItems(currentTrackingOrderId)" style="background: #10b981; color: white; border: none; font-size: 13px; font-weight: 800; padding: 10px 18px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              🔁 Reorder Meal
+            </button>
+          </div>
+        </div>
+
         <!-- Domino's Official Kitchen Store Token Card (Primary Authentic Reference) -->
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
@@ -1557,12 +1589,9 @@
           <div style="font-size: 12px; color: var(--gray-600);">Track your live orders &amp; view official Domino's bill invoices</div>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
-          <button id="btnSyncDominosCloud" onclick="syncAllOrdersToDominosCloud()" style="background: #f0fdf4; color: #166534; border: 1px solid #86efac; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Sync active orders with Domino's India live cloud">
-            <span>☁️ Domino's Cloud Sync</span>
-          </button>
-          <button id="btnRefreshMyOrders" onclick="loadMyOrders()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Refresh order history from Domino's platform">
-            <span id="refreshMyOrdersIcon">🔄</span> <span>Refresh</span>
-          </button>
+          <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;" title="Realtime automatic synchronization with Domino's India Cloud">
+            <span style="width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block;"></span> Live Cloud Auto-Sync
+          </span>
           <button class="modal-close" onclick="closeModal('myOrdersModal')">&times;</button>
         </div>
       </div>

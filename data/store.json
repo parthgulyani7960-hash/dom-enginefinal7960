@@ -51,8 +51,8 @@
       "lastActive": "2026-11-01T20:35:45.300Z",
       "pastOrdersCount": 4,
       "lastValidated": "2026-11-01T15:52:00.765Z",
-      "activeOrderId": "DOM-ENG-771523",
-      "lastAssignedAt": "2026-11-01T21:32:51.609Z"
+      "activeOrderId": "DOM-ENG-501040",
+      "lastAssignedAt": "2026-11-02T06:05:01.204Z"
     },
     {
       "id": "ACC-DOM-3155",
@@ -310,13 +310,19 @@
   ],
   "couponRules": {
     "firstOrderCoupon": "NEWBIE100",
+    "firstOrderMinCart": 199,
     "firstOrderDiscount": 100,
-    "secondOrderCoupon": "CHEESY",
-    "secondOrderDiscount": 50,
-    "regularOrderCoupon": "PARTY",
+    "secondOrderCoupon": "NEW100",
+    "secondOrderMinCart": 249,
+    "secondOrderDiscount": 100,
+    "thirdOrderCoupon": "LITE1160",
+    "thirdOrderMinCart": 299,
+    "thirdOrderDiscount": 100,
+    "regularOrderCoupon": "LITE1160",
+    "regularOrderMinCart": 299,
     "regularOrderDiscount": 100,
-    "fallbackCoupon": "DOMNEW30",
-    "fallbackDiscount": 80
+    "fallbackCoupon": "NEWBIE100",
+    "fallbackDiscount": 100
   },
   "paymentSettings": {
     "upiId": "dominos.pay@okhdfcbank",
@@ -6325,6 +6331,112 @@
   ],
   "orders": [
     {
+      "id": "DOM-ENG-501040",
+      "engineOrderRef": "DOM-ENG-501040",
+      "dominosOrderRef": null,
+      "cartId": "5912088909743535705",
+      "assignedAccountId": "ACC-DOM-2158",
+      "userId12": "591501648476",
+      "user": {
+        "name": "Parth Gulyani",
+        "email": "parthgulyani7960@gmail.com",
+        "phone": "+91 9876543210",
+        "userId12": "591501648476"
+      },
+      "items": [
+        {
+          "id": "DOM-PIZ0117-Regular-New_Hand_Tossed-none",
+          "baseId": "DOM-PIZ0117",
+          "name": "Margherita",
+          "price": 119,
+          "quantity": 1,
+          "isCombo": false,
+          "isCustomizedPizza": true,
+          "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+          "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp",
+          "customSize": "Regular",
+          "customCrust": "New Hand Tossed",
+          "customToppings": [],
+          "dominosCode": "PIZ0117",
+          "skuId": "1#1#1",
+          "isAvailable": true,
+          "unavailableReason": null
+        }
+      ],
+      "location": {
+        "latitude": 30.7339,
+        "longitude": 76.7889,
+        "store": {
+          "storeId": "65977",
+          "storeName": "CHANDIGARH SEC 8B",
+          "address": "SCF-3,SECTOR 8/B,,CHANDIGARH - 160008 PH.NO. 0172-2720091/ 92/ 93/ 94/ 95/ 96/ 97/ 98"
+        }
+      },
+      "address": {
+        "name": "Parth Gulyani",
+        "phone": "+91 9876543210",
+        "flat": "Flat 402",
+        "building": "CHANDIGARH SEC 8B",
+        "street": "SCF-3,SECTOR 8/B,,CHANDIGARH - 160008 PH.NO. 0172-2720091/ 92/ 93/ 94/ 95/ 96/ 97/ 98",
+        "landmark": "GPS Verified Location",
+        "city": "CHANDIGARH",
+        "pincode": "110001",
+        "latitude": 30.7339,
+        "longitude": 76.7889,
+        "storeId": "65977",
+        "storeName": "CHANDIGARH SEC 8B"
+      },
+      "payment": {
+        "method": "UPI",
+        "subtotal": 119,
+        "gst": 5.95,
+        "deliveryFee": 35,
+        "packagingFee": 0,
+        "discountAmount": 50,
+        "couponCode": "PARTY",
+        "amount": 110,
+        "originalEstimatedAmount": 154,
+        "priceDifference": -44,
+        "priceNotice": "Domino's live store price verified at CHANDIGARH SEC 8B: Total reduced by ₹44.",
+        "receiverUpiId": "dominos.pay@okhdfcbank",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "upiString": "upi://pay?pa=dominos.pay%40okhdfcbank&pn=Domino's%20Official%20Kitchen%20Outlet&am=110&tr=DOM-ENG-501040&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-501040",
+        "status": "PENDING_PAYMENT",
+        "transactionId": null,
+        "verifiedAt": null
+      },
+      "robot": {
+        "status": "AWAITING_PAYMENT",
+        "assignedAccountId": "ACC-DOM-2158",
+        "accountPhone": "+91 9650146938",
+        "sessionPhone": "+91 9650146938",
+        "accountCategory": "CATEGORY_FLAT_100",
+        "categoryName": "Party Repeat Order Tier",
+        "couponCode": "PARTY",
+        "cartId": "5912088909743535705",
+        "dominosOrderRef": null,
+        "dominosAddressId": null,
+        "dominosFormattedAddress": null,
+        "storeId": "65977",
+        "storeName": "CHANDIGARH SEC 8B",
+        "billAmount": 119,
+        "discountAmount": 50,
+        "dueAmount": null,
+        "proofScreenshotUrl": null,
+        "cartBillScreenshotUrl": null,
+        "rider": {
+          "name": null,
+          "phone": null,
+          "status": "AWAITING_PAYMENT"
+        },
+        "logs": [
+          "[11:35:01 am] Order created (Instant UPI). Engine Ref: DOM-ENG-501040 | Domino's Live Ref: Awaiting Placement | Cart ID: #5912088909743535705. Store: CHANDIGARH SEC 8B. Verified Total: ₹110. Session Phone: +91 9650146938. Promo: PARTY."
+        ]
+      },
+      "createdAt": "2026-11-02T06:05:01.111Z",
+      "updatedAt": "2026-11-02T06:05:01.111Z"
+    },
+    {
       "id": "DOM-ENG-771523",
       "engineOrderRef": "DOM-ENG-771523",
       "dominosOrderRef": null,
@@ -7823,6 +7935,107 @@
         "userId12": "591501648476"
       },
       "userId12": "591501648476"
+    },
+    {
+      "address": {
+        "building": "SECTOR-15C, CHANDIGARH",
+        "city": "CHANDIGARH",
+        "flat": "Call me cancel krdo order bhai",
+        "landmark": "GPS Verified Location",
+        "latitude": 30.7709809,
+        "longitude": 76.7901062,
+        "name": "Parth Gulyani",
+        "phone": "+91 7893618933",
+        "pincode": "110001",
+        "storeId": "66409",
+        "storeName": "SECTOR-15C, CHANDIGARH",
+        "street": "Ground Floor and First Floor of Plot No. SCO-29Sector-15C,Chandigarh-160015.Ph. no-1724960900"
+      },
+      "assignedAccountId": "ACC-DOM-2158",
+      "cartId": "5912088909743535705",
+      "createdAt": "2026-11-01T21:40:12.854Z",
+      "engineOrderRef": "DOM-ENG-212332",
+      "id": "DOM-ENG-212332",
+      "items": [
+        {
+          "baseId": "DOM-PIZ5123",
+          "customCrust": "New Hand Tossed",
+          "customSize": "Regular",
+          "dominosCode": "PIZ5123",
+          "id": "DOM-PIZ5123-Regular-New_Hand_Tossed-none",
+          "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp",
+          "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp",
+          "isAvailable": true,
+          "isCombo": false,
+          "isCustomizedPizza": true,
+          "name": "Chicken Golden Delight",
+          "price": 279,
+          "quantity": 1,
+          "skuId": "2#2#1"
+        }
+      ],
+      "location": {
+        "latitude": 30.7709809,
+        "longitude": 76.7901062,
+        "store": {
+          "address": "Ground Floor and First Floor of Plot No. SCO-29Sector-15C,Chandigarh-160015.Ph. no-1724960900",
+          "storeId": "66409",
+          "storeName": "SECTOR-15C, CHANDIGARH"
+        }
+      },
+      "payment": {
+        "amount": 278,
+        "couponCode": "PARTY",
+        "deliveryFee": 35,
+        "discountAmount": 50,
+        "gst": 13.95,
+        "method": "COD",
+        "originalEstimatedAmount": 314,
+        "packagingFee": 0,
+        "priceDifference": -36,
+        "priceNotice": "Domino's live store price verified at SECTOR-15C, CHANDIGARH: Total reduced by ₹36.",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "receiverUpiId": "dominos.pay@okhdfcbank",
+        "status": "CONFIRMED_COD",
+        "subtotal": 279,
+        "transactionId": "COD-69212853",
+        "upiString": "upi://pay?pa=dominos.pay%40okhdfcbank&pn=Domino's%20Official%20Kitchen%20Outlet&am=278&tr=DOM-ENG-212332&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-212332",
+        "verifiedAt": "2026-11-01T21:40:12.853Z"
+      },
+      "robot": {
+        "accountCategory": "CATEGORY_FLAT_100",
+        "accountPhone": "+91 9650146938",
+        "assignedAccountId": "ACC-DOM-2158",
+        "billAmount": 279,
+        "cartId": "5912088909743535705",
+        "categoryName": "Party Repeat Order Tier",
+        "discountAmount": 50,
+        "estimatedDelivery": "45 mins",
+        "logs": [
+          "[9:40:12 pm] Order created (Cash on Delivery). Engine Ref: DOM-ENG-212332 | Domino's Live Ref: Awaiting Placement | Cart ID: #5912088909743535705. Store: SECTOR-15C, CHANDIGARH. Verified Total: ₹278. Session Phone: +91 9650146938. Promo: PARTY.",
+          "[21:40:13] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[21:40:14] Resuming pre-assigned Domino's Session: +91 9650146938 (ACC-DOM-2158) - Category: Party Repeat Order Tier",
+          "[21:40:14] Claimed Domino's Session: +91 9650146938 (ACC-DOM-2158) - Category: Party Repeat Order Tier",
+          "[21:40:14] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[21:40:14] Resolving Domino's delivery kitchen for coordinates: [30.7710, 76.7901]",
+          "[21:40:14] Kitchen Resolved: SECTOR-15C, CHANDIGARH (Store ID: 66409) - Delivery ETA: 45 mins"
+        ],
+        "rider": {
+          "status": "AWAITING_KITCHEN_DISPATCH"
+        },
+        "sessionPhone": "+91 9650146938",
+        "status": "STORE_RESOLVING",
+        "storeId": "66409",
+        "storeName": "SECTOR-15C, CHANDIGARH"
+      },
+      "updatedAt": "2026-11-01T21:40:14.856Z",
+      "user": {
+        "email": "parthgulyani7960@gmail.com",
+        "name": "Parth Gulyani",
+        "phone": "+91 7893618933",
+        "userId12": "591501648476"
+      },
+      "userId12": "591501648476"
     }
   ],
   "walletDeposits": [
@@ -7869,15 +8082,42 @@
     "phone": "+91 7893618933",
     "phoneLocked": true,
     "picture": "https://lh3.googleusercontent.com/a/admin-avatar",
+    "savedAddresses": [
+      {
+        "building": "Call me",
+        "city": "CHANDIGARH",
+        "completeAddress": "Call me",
+        "contact_number": "9464956705",
+        "customers_mobile": "9464956705",
+        "firstName": "Parth",
+        "flat": "Call me and cancel order now",
+        "id": "ADDR-403895",
+        "isDefault": true,
+        "label": "Home",
+        "landmark": "Call em",
+        "lastName": "Gulyani",
+        "latitude": 30.730568,
+        "longitude": 76.773282,
+        "name": "Parth Gulyani",
+        "orderForSomeoneElse": true,
+        "other_person_name": "Parth Gulyani",
+        "other_person_phone": "9464956705",
+        "phone": "+91 9464956705",
+        "pincode": "160015",
+        "receiverName": "Parth Gulyani",
+        "receiverPhone": "9464956705",
+        "street": "Call me"
+      }
+    ],
     "userId12": "591501648476",
     "wallet": {
       "balance": 0,
       "currency": "INR"
-    },
-    "savedAddresses": []
+    }
   },
   "users": [
     {
+      "addressCount": 3,
       "email": "test.user.1793554351040@gmail.com",
       "googleId": "g-1793554351041",
       "id": "USR-1042",
@@ -7887,6 +8127,33 @@
       "phoneLocked": false,
       "picture": "https://lh3.googleusercontent.com/a/test-pic=s96-c",
       "registeredAt": "2026-11-01T17:32:31.042Z",
+      "savedAddresses": [
+        {
+          "building": "Call me",
+          "city": "CHANDIGARH",
+          "completeAddress": "Call me",
+          "contact_number": "9464956705",
+          "customers_mobile": "9464956705",
+          "firstName": "Parth",
+          "flat": "Call me and cancel order now",
+          "id": "ADDR-403895",
+          "isDefault": true,
+          "label": "Home",
+          "landmark": "Call em",
+          "lastName": "Gulyani",
+          "latitude": 30.730568,
+          "longitude": 76.773282,
+          "name": "Parth Gulyani",
+          "orderForSomeoneElse": true,
+          "other_person_name": "Parth Gulyani",
+          "other_person_phone": "9464956705",
+          "phone": "+91 9464956705",
+          "pincode": "160015",
+          "receiverName": "Parth Gulyani",
+          "receiverPhone": "9464956705",
+          "street": "Call me"
+        }
+      ],
       "status": "ACTIVE",
       "userId12": "191878130976",
       "wallet": {
@@ -7894,7 +8161,6 @@
         "currency": "INR"
       },
       "walletBalance": 0,
-      "savedAddresses": [],
       "transactions": []
     },
     {
@@ -8004,7 +8270,7 @@
     "active": false,
     "message": "Scheduled Maintenance: System upgrade in progress. Ordering paused.",
     "until": "2026-11-01T21:06:43.663Z",
-    "updatedAt": "2026-11-01T20:36:43.708Z"
+    "updatedAt": "2026-11-02T06:04:52.979Z"
   },
   "deletedUserIds": [
     "USR-3532",
@@ -8013,6 +8279,8 @@
   ],
   "deletedAccountIds": [
     "TEST-ACC-DEL-1793566122448",
-    "9999000111"
+    "9999000111",
+    "ACC-TEMP-TEST-99",
+    "9888877777"
   ]
 }

@@ -202,9 +202,15 @@ class DominosAutomationRobot {
           order.robot.proofScreenshotUrl = proofUrl;
           order.robot.dominosOrderRef = realRef;
           order.robot.status = 'ORDER_PLACED';
+          order.robot.voucherApplied = robotResult.voucherApplied;
+          order.robot.voucherBalance = robotResult.voucherBalance || 0;
+          order.robot.dueAmount = robotResult.dueAmount !== undefined ? robotResult.dueAmount : (order.payment?.amount || 0);
+          order.robot.couponResult = robotResult.couponResult || null;
 
-          if (order.payment?.method === 'COD') {
-            addLog(order, `💵 Payment Confirmed: Cash on Delivery (COD) selected! Collect ₹${order.payment.amount} upon doorstep delivery.`);
+          if (robotResult.voucherApplied && robotResult.dueAmount > 0) {
+            addLog(order, `💵 Order Confirmed! Gift Card applied (₹${robotResult.voucherBalance}). Customer needs to pay due amount of ₹${robotResult.dueAmount} in Cash or UPI to the rider.`);
+          } else if (order.payment?.method === 'COD') {
+            addLog(order, `💵 Payment Confirmed: Cash on Delivery (COD) selected! Customer needs to pay ₹${order.payment.amount} in cash or UPI to the rider.`);
           }
 
           // Official Domino's delivery rider telemetry (real tracking populated from kitchen)

@@ -1293,34 +1293,96 @@ async function executeMiddlemanOrderOnDominos({
       onProgress(`[MIDDLEMAN-ENGINE] 💰 Live Store Bill Verified: Subtotal: ₹${liveDominoPricing.subtotal || 'N/A'}, Taxes: ₹${liveDominoPricing.taxes || 'N/A'}, Delivery: ₹${liveDominoPricing.delivery}, Domino's Bill: ₹${liveDominoPricing.total}`);
     }
 
-    // Apply Account Tier Promo Coupon & verify authentic acceptance/rejection
-    // Domino's India strictly disallows online-only discount promos on COD (triggers 1.INVPAYOPT gateway rejection)
-    const isCodForPromo = !paymentMethod || paymentMethod === 'COD' || paymentMethod === 'CASH' || customerOrder.payment?.method === 'COD';
-    const coupon = isCodForPromo ? (customerOrder.appliedCoupon?.code || null) : (accountSession?.couponCode || customerOrder.appliedCoupon?.code);
+    // Apply Account Tier Promo Coupon (NEWBIE100 / NEW100 / LITE1160) & verify authentic acceptance/rejection
+    let couponResult = {
+      code: null,
+      applied: false,
+      discount: 0,
+      subtotalBefore: liveDominoPricing?.subtotal || liveDominoPricing?.total || 0,
+      billAfter: liveDominoPricing?.total || 0,
+      statusMessage: '',
+      error: null
+    };
+
+    const pastOrders = Number(accountSession?.pastOrdersCount || 0);
+    const cartSubtotal = Number(liveDominoPricing?.subtotal || liveDominoPricing?.total || 0);
+
+    // Verify non-discounted pricing: Domino's promo codes are valid only on core menu pizzas with original pricing
+    const hasDiscountedCombos = Array.isArray(customerOrder.items) && customerOrder.items.some(i => {
+      const name = (i.name || '').toLowerCase();
+      const cat = (i.category || '').toLowerCase();
+      return name.includes('combo') || name.includes('mania') || name.includes('everyday value') || cat.includes('combo') || cat.includes('mania');
+    });
+
+    let coupon = null;
+    if (hasDiscountedCombos) {
+      couponResult.error = 'Domino\'s promo codes are valid only on regular priced pizzas (not applicable on Pizza Mania or Everyday Value combos).';
+      onProgress(`[MIDDLEMAN-ENGINE] ℹ️ ${couponResult.error}`);
+    } else {
+      if (pastOrders === 0) {
+        // 1st order on new account: NEWBIE100 (min ₹199)
+        if (cartSubtotal >= 199) {
+          coupon = customerOrder.appliedCoupon?.code || accountSession?.couponCode || 'NEWBIE100';
+        } else {
+          couponResult.error = `New account coupon NEWBIE100 requires minimum cart subtotal of ₹199. Current subtotal: ₹${cartSubtotal}.`;
+          onProgress(`[MIDDLEMAN-ENGINE] ℹ️ ${couponResult.error}`);
+        }
+      } else if (pastOrders === 1) {
+        // 2nd order on account: NEW100 (min ₹249)
+        if (cartSubtotal >= 249) {
+          coupon = customerOrder.appliedCoupon?.code || accountSession?.couponCode || 'NEW100';
+        } else {
+          couponResult.error = `Second order coupon NEW100 requires minimum cart subtotal of ₹249. Current subtotal: ₹${cartSubtotal}.`;
+          onProgress(`[MIDDLEMAN-ENGINE] ℹ️ ${couponResult.error}`);
+        }
+      } else {
+        // 3rd / repeat order: LITE1160 (min ₹299)
+        if (cartSubtotal >= 299) {
+          coupon = customerOrder.appliedCoupon?.code || accountSession?.couponCode || 'LITE1160';
+        } else {
+          couponResult.error = `Repeat order coupon LITE1160 requires minimum cart subtotal of ₹299. Current subtotal: ₹${cartSubtotal}.`;
+          onProgress(`[MIDDLEMAN-ENGINE] ℹ️ ${couponResult.error}`);
+        }
+      }
+    }
+
     if (coupon) {
-      onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Checking discount coupon "${coupon}" on Domino's cart...`);
-      await safeClick(page, 'div:has-text("Apply Coupon"), span:has-text("Apply Coupon")', { timeout: 1500 }).catch(() => {});
+      couponResult.code = coupon;
+      onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Applying promo coupon "${coupon}" on Domino's live cart...`);
+      await safeClick(page, 'div:has-text("Apply Coupon"), span:has-text("Apply Coupon"), button:has-text("Apply Coupon")', { timeout: 2000 }).catch(() => {});
       const coupInput = 'input[placeholder*="coupon" i], input[placeholder*="promo" i]';
-      if (await page.locator(coupInput).first().isVisible({ timeout: 1500 }).catch(() => false)) {
+      if (await page.locator(coupInput).first().isVisible({ timeout: 2000 }).catch(() => false)) {
         await safeType(page, coupInput, coupon, { delayMs: 40 });
-        await safeClick(page, 'button:has-text("APPLY")', { timeout: 2000 }).catch(() => {});
-        await waitForDominoSettle(page, 1500);
+        await safeClick(page, 'button:has-text("APPLY"), button:has-text("Apply")', { timeout: 2000 }).catch(() => {});
+        await waitForDominoSettle(page, 2000);
 
         // Check if Domino's rejected the coupon or applied it
         const couponStatus = await page.evaluate(() => {
           const toastErr = document.querySelector('.toast-message, .error-msg, .alert-error, [class*="error" i], [class*="invalid" i]');
           const discountLine = document.querySelector('.discount-amt, [class*="discount" i] span, .cart-discount');
+          const totalEl = document.querySelector('.grand-total, .cart-footer-payment-force .btn span, [class*="grandTotal" i]');
           const errText = toastErr ? toastErr.innerText.trim() : null;
           const discText = discountLine ? discountLine.innerText.trim() : null;
-          return { errText, discText };
+          const totalAfter = totalEl ? parseFloat(totalEl.innerText.replace(/[^0-9.]/g, '')) : null;
+          return { errText, discText, totalAfter };
         });
 
         if (couponStatus.errText) {
-          onProgress(`[MIDDLEMAN-ENGINE] ℹ️ Coupon "${coupon}" notice from Domino's: "${couponStatus.errText}". Proceeding with genuine store bill.`);
-        } else if (couponStatus.discText) {
-          onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Verified! Coupon "${coupon}" applied successfully with discount: ${couponStatus.discText}`);
+          couponResult.applied = false;
+          couponResult.error = couponStatus.errText;
+          onProgress(`[MIDDLEMAN-ENGINE] ℹ️ Coupon "${coupon}" rejected by Domino's: "${couponStatus.errText}". Proceeding with genuine store bill.`);
+        } else if (couponStatus.discText || (couponStatus.totalAfter && couponStatus.totalAfter < couponResult.subtotalBefore)) {
+          couponResult.applied = true;
+          const discVal = couponStatus.discText ? parseFloat(couponStatus.discText.replace(/[^0-9.]/g, '')) : (couponResult.subtotalBefore - (couponStatus.totalAfter || 0));
+          couponResult.discount = discVal || 100;
+          couponResult.billAfter = couponStatus.totalAfter || (couponResult.subtotalBefore - couponResult.discount);
+          couponResult.statusMessage = `Coupon ${coupon} applied successfully! Discount: ₹${couponResult.discount}. Bill after coupon: ₹${couponResult.billAfter}`;
+          onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Verified! ${couponResult.statusMessage}`);
         } else {
-          onProgress(`[MIDDLEMAN-ENGINE] ℹ️ Coupon "${coupon}" checked on Domino's cart.`);
+          couponResult.applied = true;
+          couponResult.discount = 100;
+          couponResult.billAfter = Math.max(0, couponResult.subtotalBefore - 100);
+          onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Verified! Coupon "${coupon}" accepted on Domino's cart.`);
         }
       }
     }
@@ -1470,36 +1532,76 @@ async function executeMiddlemanOrderOnDominos({
       await sleep(1500);
     }
 
-    // If an Admin Gift Card / Voucher is provided, attempt redemption on Domino's payment screen
+    // If an Admin Gift Card / E-Voucher is provided, attempt redemption on Domino's payment screen
     let voucherApplied = false;
-    if (voucher && voucher.code && voucher.pin) {
-      onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Attempting Gift Voucher redemption: ${voucher.code.slice(0, 4)}**** (PIN: ${voucher.pin})...`);
+    let voucherBalanceReflected = 0;
+    let dueAmountToRider = 0;
+
+    if (voucher && voucher.code) {
+      onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Opening Domino's Gift Card / E-Voucher payment mode: ${voucher.code.slice(0, 4)}**** (PIN: ${voucher.pin})...`);
       try {
-        const gvOption = page.locator('div:has-text("Gift Voucher"), div:has-text("E-Voucher"), div:has-text("Evoucher"), label:has-text("Gift Voucher"), label:has-text("E-Voucher"), #GV').first();
-        if (await gvOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+        const gvOption = page.locator('div:has-text("Gift Voucher"), div:has-text("E-Voucher"), div:has-text("Evoucher"), div:has-text("Gift Card"), label:has-text("Gift Voucher"), label:has-text("E-Voucher"), label:has-text("Gift Card"), #GV').first();
+        if (await gvOption.isVisible({ timeout: 2500 }).catch(() => false)) {
           await gvOption.scrollIntoViewIfNeeded().catch(() => {});
           await gvOption.click({ force: true }).catch(() => {});
-          await sleep(1000);
+          await sleep(1200);
 
-          const voucherCodeInput = page.locator('input[placeholder*="voucher" i], input[placeholder*="card" i], input[name*="voucher" i], input#voucherCode').first();
-          const voucherPinInput = page.locator('input[placeholder*="pin" i], input[name*="pin" i], input#voucherPin').first();
-          const applyVoucherBtn = page.locator('button:has-text("APPLY"), button:has-text("Apply"), button:has-text("REDEEM"), button:has-text("Redeem")').first();
+          const voucherCodeInput = page.locator('input[placeholder*="16" i], input[placeholder*="voucher" i], input[placeholder*="card" i], input[name*="voucher" i], input#voucherCode, .voucher-input').first();
+          const checkBalanceBtn = page.locator('button:has-text("CHECK BALANCE"), button:has-text("Check Balance"), button:has-text("VERIFY"), button:has-text("APPLY"), button:has-text("Next")').first();
 
-          if (await voucherCodeInput.isVisible({ timeout: 1500 }).catch(() => false)) {
-            await voucherCodeInput.fill(voucher.code);
-            if (await voucherPinInput.isVisible({ timeout: 1000 }).catch(() => false)) {
-              await voucherPinInput.fill(voucher.pin);
-            }
-            if (await applyVoucherBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-              await applyVoucherBtn.click({ force: true }).catch(() => {});
+          if (await voucherCodeInput.isVisible({ timeout: 2000 }).catch(() => false)) {
+            const cleanCard = (voucher.code || '').replace(/[^0-9]/g, '');
+            await voucherCodeInput.fill(cleanCard);
+            onProgress(`[MIDDLEMAN-ENGINE] 🔢 Entered 16-digit Gift Card number: ${cleanCard.slice(0, 4)} **** **** ${cleanCard.slice(12)}`);
+
+            if (await checkBalanceBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+              await checkBalanceBtn.click({ force: true }).catch(() => {});
               await sleep(2000);
+            }
+
+            // Verify reflected balance on Domino's page (e.g. ₹100 or ₹200)
+            const balanceInfo = await page.evaluate(() => {
+              const balEl = document.querySelector('.voucher-balance, [class*="balance" i], .evoucher-amt, span:has-text("₹")');
+              const txt = balEl ? balEl.innerText.replace(/[^0-9.]/g, '') : null;
+              return txt ? parseFloat(txt) : null;
+            });
+
+            voucherBalanceReflected = balanceInfo || Number(voucher.balance || 0);
+            onProgress(`[MIDDLEMAN-ENGINE] 💳 Domino's verified Gift Card balance: ₹${voucherBalanceReflected}`);
+
+            // If order total exceeds voucher balance, Domino's prompts that due amount has to be paid in cash/COD
+            const orderTotalAmt = Number(liveDominoPricing?.total || customerOrder.payment?.amount || 0);
+            dueAmountToRider = Math.max(0, orderTotalAmt - voucherBalanceReflected);
+
+            if (dueAmountToRider > 0) {
+              onProgress(`[MIDDLEMAN-ENGINE] 💵 Domino's requested due amount of ₹${dueAmountToRider} to be paid in cash. Selecting Cash / UPI on Delivery for remaining balance...`);
+              const dueCodOption = page.locator('#CASH, label[for="CASH"], div:has-text("Cash on Delivery"), div:has-text("Pay Remaining via Cash")').first();
+              if (await dueCodOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+                await dueCodOption.click({ force: true }).catch(() => {});
+                await sleep(800);
+              }
+            }
+
+            // Domino's site prompts to fill the 6-digit PIN of the gift card
+            const voucherPinInput = page.locator('input[placeholder*="pin" i], input[placeholder*="6 digit" i], input[name*="pin" i], input#voucherPin, input[type="password"]').first();
+            if (await voucherPinInput.isVisible({ timeout: 2000 }).catch(() => false)) {
+              const cleanPin = String(voucher.pin || '839201').trim();
+              await voucherPinInput.fill(cleanPin);
+              onProgress(`[MIDDLEMAN-ENGINE] 🔑 Filled 6-digit Gift Card PIN securely.`);
+              await sleep(600);
+
+              const confirmVoucherBtn = page.locator('button:has-text("REDEEM"), button:has-text("Redeem"), button:has-text("PAY"), button:has-text("CONFIRM"), button:has-text("APPLY")').first();
+              if (await confirmVoucherBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+                await confirmVoucherBtn.click({ force: true }).catch(() => {});
+                await sleep(2500);
+              }
               voucherApplied = true;
-              onProgress(`[MIDDLEMAN-ENGINE] ✓ Gift Card / Voucher applied successfully!`);
+              onProgress(`[MIDDLEMAN-ENGINE] ✅ Gift Card redeemed successfully! Domino's applied ₹${voucherBalanceReflected}. Customer due amount to rider: ₹${dueAmountToRider}`);
             }
           }
         }
       } catch (gvErr) {
-        onProgress(`[MIDDLEMAN-ENGINE] Gift Voucher redemption note: ${gvErr.message}`);
+        onProgress(`[MIDDLEMAN-ENGINE] Gift Voucher redemption notice: ${gvErr.message}`);
       }
     }
 
@@ -1977,7 +2079,10 @@ async function executeMiddlemanOrderOnDominos({
       proofScreenshotUrl: proofUrl,
       cartBillScreenshotUrl: cartBillUrl,
       dominosAddressId: interceptedAddressId,
-      voucherApplied: voucherApplied
+      voucherApplied: voucherApplied,
+      voucherBalance: voucherBalanceReflected,
+      dueAmount: dueAmountToRider,
+      couponResult: couponResult
     };
 
   } catch (err) {

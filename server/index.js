@@ -1081,31 +1081,20 @@ const server = http.createServer(async (req, res) => {
         assignedCategory = activeSession.category;
         assignedCategoryName = activeSession.categoryName;
 
-        const couponRules = db.getCouponRules ? db.getCouponRules() : {
-          firstOrderCoupon: 'DOMNEW50',
-          secondOrderCoupon: 'CHEESY',
-          regularOrderCoupon: 'PARTY'
-        };
-        const pastOrders = Number(activeSession.pastOrdersCount || 0);
+        // Intelligent Promo Coupon Evaluation & Verification
+        let couponReason = null;
         if (!couponCode) {
-          if (pastOrders === 0 && !isExistingDominoUser) {
-            if (verifiedSubtotal >= 200) {
-              couponCode = couponRules.firstOrderCoupon || 'DOMNEW50';
-              promoDiscount = Math.min(100, Math.round(verifiedSubtotal * 0.5));
-            }
-          } else if (pastOrders === 1 || custRegStatus?.pastOrdersCount === 1) {
-            if (verifiedSubtotal >= 150) {
-              couponCode = couponRules.secondOrderCoupon || 'CHEESY';
-              promoDiscount = 50;
-            }
-          } else {
-            if (verifiedSubtotal >= 500) {
-              couponCode = activeSession.couponCode || custRegStatus?.autoCoupon || couponRules.regularOrderCoupon || 'PARTY';
-              promoDiscount = 100;
-            } else {
-              couponCode = activeSession.couponCode || custRegStatus?.autoCoupon || 'PARTY';
-              promoDiscount = 50;
-            }
+          const couponEval = typeof db.getApplicableCouponForAccount === 'function'
+            ? db.getApplicableCouponForAccount(activeSession, verifiedSubtotal, payload.items)
+            : null;
+
+          if (couponEval && couponEval.isEligible) {
+            couponCode = couponEval.couponCode;
+            promoDiscount = Number(couponEval.discountAmount || 100);
+            console.log(`[COUPON-ASSIGN] 🎟️ Applied tier coupon ${couponCode} (-₹${promoDiscount}) for account ${activeSession.phone} (Tier: ${couponEval.tier})`);
+          } else if (couponEval && !couponEval.isEligible) {
+            couponReason = couponEval.reason;
+            console.log(`[COUPON-ASSIGN] ℹ️ Coupon ${couponEval.couponCode} not applicable for account ${activeSession.phone}: ${couponEval.reason}`);
           }
         }
       }
@@ -1775,11 +1764,12 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (method === 'GET' && pathname === '/api/user/orders') {
-    if (parsedUrl.query?.sync === 'true') {
-      await syncOrdersWithDominosCloud().catch(() => null);
-    }
+    // Auto-sync with Domino's Cloud in background for transparent, live updates
+    syncOrdersWithDominosCloud().catch(() => null);
+
     const email = (req.headers['x-user-email'] || parsedUrl.query?.email || '').trim().toLowerCase();
     const uid = (req.headers['x-user-uid'] || parsedUrl.query?.uid || '').trim();
+    const orderRef = (parsedUrl.query?.ref || parsedUrl.query?.orderRef || '').trim().toLowerCase();
     const rawPhone = (parsedUrl.query?.phone || '').trim();
     const cleanPhone = rawPhone.replace(/[^0-9]/g, '').slice(-10);
     const orderIdsParam = (parsedUrl.query?.orderIds || '').trim();
@@ -1789,11 +1779,25 @@ const server = http.createServer(async (req, res) => {
     const matchedOrders = allOrders.filter(o => {
       // 1. Order placed on this browser device
       if (localOrderIds.includes(o.id)) return true;
-      // 2. Order matches user email
+      // 2. Order matches specific Order Engine Reference ID or Domino's Order Ref
+      if (orderRef && (
+        o.id?.toLowerCase() === orderRef || 
+        o.engineOrderRef?.toLowerCase() === orderRef || 
+        o.dominosOrderRef?.toLowerCase() === orderRef || 
+        o.robot?.dominosOrderRef?.toLowerCase() === orderRef
+      )) return true;
+      // 3. Order matches user email
       if (email && (o.user?.email?.toLowerCase() === email || o.address?.email?.toLowerCase() === email)) return true;
-      // 3. Order matches user numerical UID
-      if (uid && (o.userId12 === uid || o.user?.userId12 === uid)) return true;
-      // 4. Order matches receiver / user 10-digit mobile
+      // 4. Order matches user numerical UID
+      if (uid && (
+        o.userId12 === uid || 
+        o.user?.userId12 === uid || 
+        o.user?.uid === uid || 
+        o.uid === uid || 
+        o.userId === uid || 
+        o.user?.id === uid
+      )) return true;
+      // 5. Order matches receiver / user 10-digit mobile
       if (cleanPhone && cleanPhone.length === 10) {
         const uPhone = (o.user?.phone || '').replace(/[^0-9]/g, '').slice(-10);
         const aPhone = (o.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
@@ -1802,7 +1806,12 @@ const server = http.createServer(async (req, res) => {
       return false;
     });
 
-    return sendJson(res, 200, { success: true, orders: matchedOrders });
+    // Return strictly isolated orders, sorted newest first, capped at 30 orders
+    const sortedOrders = matchedOrders
+      .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+      .slice(0, 30);
+
+    return sendJson(res, 200, { success: true, count: sortedOrders.length, orders: sortedOrders });
   }
 
   // --- ADMIN ROUTES ---
@@ -2126,14 +2135,29 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 8. Admin: Delete Account (Permanently remove from pool, database & cloud)
-  if (method === 'DELETE' && pathname.startsWith('/api/admin/accounts/')) {
+  // 8. Admin & Session Extension: Delete Account / Session (Permanently purge from pool, storage system & cloud)
+  if (
+    (method === 'DELETE' && (pathname.startsWith('/api/admin/accounts/') || pathname.startsWith('/api/admin/sessions/') || pathname.startsWith('/api/session/'))) ||
+    (method === 'POST' && (pathname === '/api/admin/sessions/delete' || pathname === '/api/admin/accounts/delete' || pathname === '/api/extension/session/delete' || pathname === '/api/session/delete'))
+  ) {
     try {
-      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized: Admin authentication required to delete session.' });
-      const id = pathname.split('/')[4];
-      if (!id) return sendJson(res, 400, { error: 'Missing account ID' });
+      let id = pathname.startsWith('/api/admin/accounts/') || pathname.startsWith('/api/admin/sessions/') || pathname.startsWith('/api/session/')
+        ? pathname.split('/')[4] || pathname.split('/')[3]
+        : null;
+
+      if (!id && method === 'POST') {
+        const body = await parseBody(req).catch(() => ({}));
+        id = body.id || body.accountId || body.phone || body.sessionToken || body.cleanPhone;
+      }
+
+      if (!id) return sendJson(res, 400, { error: 'Missing account ID or session identifier to delete.' });
+
       db.deleteAccount(id);
-      return sendJson(res, 200, { success: true, message: `Account ${id} permanently removed from pool and database.` });
+      if (typeof cleanupSession === 'function') {
+        cleanupSession(id);
+      }
+      console.log(`[STORAGE-PURGE] 🗑️ Account/Session ${id} permanently deleted from pool, disk storage, and cloud.`);
+      return sendJson(res, 200, { success: true, message: `Account ${id} permanently removed from pool and storage system.` });
     } catch (err) {
       return sendJson(res, 400, { error: err.message });
     }
@@ -3262,4 +3286,19 @@ server.listen(PORT, () => {
   console.log(`👉 Customer Storefront : http://localhost:${PORT}`);
   console.log(`👉 Admin Panel         : http://localhost:${PORT}/admin`);
   console.log(`=======================================================`);
+
+  // Domino's SNC Cloud Automatic Realtime Synchronizer
+  // Automatically polls & syncs active orders in background every 20s with zero manual user refresh needed
+  setInterval(async () => {
+    try {
+      const orders = db.getOrders();
+      const activeOrders = orders.filter(o => {
+        const st = o.robot?.status || o.status;
+        return st && !['DELIVERED', 'CANCELLED', 'ERROR'].includes(st);
+      });
+      if (activeOrders.length > 0) {
+        await syncOrdersWithDominosCloud();
+      }
+    } catch (_) {}
+  }, 20000);
 });

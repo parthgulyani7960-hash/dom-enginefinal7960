@@ -3875,7 +3875,45 @@ function updateTrackingUI(order) {
     }
   };
 
+  const deliveredSuccessCard = document.getElementById('trackerDeliveredSuccessCard');
+  const animTrackCard = document.getElementById('trackerAnimatedTrackCard');
+  const bigEtaCard = document.getElementById('trackerBigEtaCard');
+  const gpsBtn = document.getElementById('btnToggleGpsMap');
+  const gpsMapCard = document.getElementById('trackerLiveMapCard');
+  const terminalLogsCard = document.getElementById('terminalLogs')?.parentElement;
+
   if (status === 'DELIVERED') {
+    if (deliveredSuccessCard) {
+      deliveredSuccessCard.style.display = 'block';
+      const addrFull = [order.address?.flat, order.address?.building, order.address?.street, order.address?.city].filter(Boolean).join(', ');
+      const addrEl = document.getElementById('deliveredAddressText');
+      if (addrEl) addrEl.innerText = addrFull || 'Your Verified Area';
+
+      const tokenEl = document.getElementById('deliveredTokenText');
+      if (tokenEl) tokenEl.innerText = formattedToken;
+
+      const refEl = document.getElementById('deliveredOrderRef');
+      if (refEl) refEl.innerText = order.id || '---';
+
+      const uidEl = document.getElementById('deliveredUserUid');
+      if (uidEl) uidEl.innerText = order.userId12 || order.user?.userId12 || (currentUser?.userId12 || 'Verified Customer');
+
+      const itemsEl = document.getElementById('deliveredItemsList');
+      if (itemsEl) {
+        itemsEl.innerHTML = (order.items || []).map(i => `<div>${i.quantity || 1}x ${i.name}</div>`).join('') || '1x Domino\'s Meal';
+      }
+
+      const totalEl = document.getElementById('deliveredTotalPaid');
+      if (totalEl) totalEl.innerText = `₹${p.amount || r.billAmount || 0}`;
+    }
+
+    // Keep page compact & clean when delivered - no giant unscrollable console walls
+    if (animTrackCard) animTrackCard.style.display = 'none';
+    if (bigEtaCard) bigEtaCard.style.display = 'none';
+    if (gpsBtn) gpsBtn.style.display = 'none';
+    if (gpsMapCard) gpsMapCard.style.display = 'none';
+    if (terminalLogsCard) terminalLogsCard.style.display = 'none';
+
     if (bigEtaEl) bigEtaEl.innerText = 'Delivered at Doorstep';
     if (bigStagePillEl) {
       bigStagePillEl.innerText = '🟢 DELIVERED';
@@ -3891,7 +3929,15 @@ function updateTrackingUI(order) {
     setMarkerState(mOven, true, '#10b981');
     setMarkerState(mRoad, true, '#10b981');
     setMarkerState(mDoor, true, '#10b981');
-  } else if (status === 'DISPATCHED') {
+  } else {
+    if (deliveredSuccessCard) deliveredSuccessCard.style.display = 'none';
+    if (animTrackCard) animTrackCard.style.display = 'block';
+    if (bigEtaCard) bigEtaCard.style.display = 'flex';
+    if (gpsBtn) gpsBtn.style.display = 'block';
+    if (terminalLogsCard) terminalLogsCard.style.display = 'block';
+  }
+
+  if (status === 'DISPATCHED') {
     const riderEtaStr = r.rider?.eta || '~10-12 Mins';
     if (bigEtaEl) bigEtaEl.innerText = `${riderEtaStr} • On the way`;
     if (bigStagePillEl) {

@@ -548,34 +548,54 @@ class Database {
 
   deleteAccount(id) {
     if (!Array.isArray(this.data.accounts)) this.data.accounts = [];
-    const accountToDelete = this.data.accounts.find(a => a.id === id);
-    this.data.accounts = this.data.accounts.filter(a => a.id !== id);
+    const idStr = String(id || '').trim();
+    const cleanDigits = idStr.replace(/[^0-9]/g, '').slice(-10);
+
+    const accountsToDelete = this.data.accounts.filter(a => {
+      if (a.id === idStr) return true;
+      if (cleanDigits && cleanDigits.length === 10) {
+        if (a.cleanPhone === cleanDigits) return true;
+        const p = (a.phone || '').replace(/[^0-9]/g, '').slice(-10);
+        if (p === cleanDigits) return true;
+      }
+      if (a.sessionToken === idStr || a.userId === idStr) return true;
+      return false;
+    });
+
+    this.data.accounts = this.data.accounts.filter(a => !accountsToDelete.includes(a));
     
-    // Tombstone the deleted account ID so it is never re-pulled from cloud merge
+    // Tombstone all deleted identifiers so they are never re-pulled from cloud merge
     if (!Array.isArray(this.data.deletedAccountIds)) {
       this.data.deletedAccountIds = [];
     }
-    if (!this.data.deletedAccountIds.includes(id)) {
-      this.data.deletedAccountIds.push(id);
+    if (!this.data.deletedAccountIds.includes(idStr)) {
+      this.data.deletedAccountIds.push(idStr);
     }
-    if (accountToDelete?.cleanPhone && !this.data.deletedAccountIds.includes(accountToDelete.cleanPhone)) {
-      this.data.deletedAccountIds.push(accountToDelete.cleanPhone);
+    if (cleanDigits && cleanDigits.length === 10 && !this.data.deletedAccountIds.includes(cleanDigits)) {
+      this.data.deletedAccountIds.push(cleanDigits);
     }
+    accountsToDelete.forEach(acc => {
+      if (acc.id && !this.data.deletedAccountIds.includes(acc.id)) this.data.deletedAccountIds.push(acc.id);
+      if (acc.cleanPhone && !this.data.deletedAccountIds.includes(acc.cleanPhone)) this.data.deletedAccountIds.push(acc.cleanPhone);
+      const cp = (acc.phone || '').replace(/[^0-9]/g, '').slice(-10);
+      if (cp && cp.length === 10 && !this.data.deletedAccountIds.includes(cp)) this.data.deletedAccountIds.push(cp);
+    });
     this.save();
 
-    // Explicitly delete/update accounts in Firebase Cloud
+    // Explicitly delete/update accounts and deletedAccountIds in Firebase Cloud immediately
     if (this.firebaseService) {
       if (this.firebaseService.rtdbInstance) {
         try {
           const cleanAccounts = this.firebaseService.sanitizeForFirebase(this.data.accounts);
           this.firebaseService.rtdbInstance.ref('dominos_order_engine/accounts').set(cleanAccounts).catch(() => {});
+          this.firebaseService.rtdbInstance.ref('dominos_order_engine/deletedAccountIds').set(this.data.deletedAccountIds).catch(() => {});
         } catch (_) {}
       } else {
         const baseUrl = this.firebaseService.getRtdbBaseUrl();
         if (baseUrl) {
-          const endpoint = `${baseUrl}/dominos_order_engine/accounts.json`;
           const cleanAccounts = this.firebaseService.sanitizeForFirebase(this.data.accounts);
-          this.firebaseService.httpsRequest(endpoint, 'PUT', cleanAccounts).catch(() => {});
+          this.firebaseService.httpsRequest(`${baseUrl}/dominos_order_engine/accounts.json`, 'PUT', cleanAccounts).catch(() => {});
+          this.firebaseService.httpsRequest(`${baseUrl}/dominos_order_engine/deletedAccountIds.json`, 'PUT', this.data.deletedAccountIds).catch(() => {});
         }
       }
     }
@@ -2078,11 +2098,33 @@ class Database {
     if (!identifier) return [];
     const allOrders = this.getOrders();
     const cleanId = String(identifier).trim().toLowerCase();
-    const cleanDigits = identifier.replace(/[^0-9]/g, '').slice(-10);
+    const cleanDigits = String(identifier).replace(/[^0-9]/g, '').slice(-10);
 
-    return allOrders.filter(o => {
-      if (cleanId && (o.userId12 === cleanId || o.user?.userId12 === cleanId)) return true;
-      if (cleanId && (o.user?.email?.toLowerCase() === cleanId || o.address?.email?.toLowerCase() === cleanId)) return true;
+    const matched = allOrders.filter(o => {
+      // 1. Match User Numerical UID (12-digit UID or arbitrary user UID)
+      if (cleanId && (
+        o.userId12 === cleanId || 
+        o.user?.userId12 === cleanId || 
+        o.user?.uid === cleanId || 
+        o.uid === cleanId || 
+        o.userId === cleanId || 
+        o.user?.id === cleanId
+      )) return true;
+
+      // 2. Match User Email
+      if (cleanId && (
+        o.user?.email?.toLowerCase() === cleanId || 
+        o.address?.email?.toLowerCase() === cleanId
+      )) return true;
+
+      // 3. Match Order Reference ID or Domino's Token
+      if (cleanId && (
+        o.id?.toLowerCase() === cleanId || 
+        o.dominosOrderRef?.toLowerCase() === cleanId || 
+        o.robot?.dominosOrderRef?.toLowerCase() === cleanId
+      )) return true;
+
+      // 4. Match 10-digit Phone
       if (cleanDigits && cleanDigits.length === 10) {
         const uPhone = (o.user?.phone || '').replace(/[^0-9]/g, '').slice(-10);
         const aPhone = (o.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
@@ -2090,6 +2132,72 @@ class Database {
       }
       return false;
     });
+
+    // Sort newest first and limit to 30 orders
+    return matched.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)).slice(0, 30);
+  }
+
+  /**
+   * Determine applicable promo coupon based on account order history and cart subtotal:
+   * - 1st order on new account: NEWBIE100 (min ₹199 subtotal, non-discounted items)
+   * - 2nd order on account: NEW100 (min ₹249 subtotal) or admin assigned coupon
+   * - 3rd / repeat order on account: LITE1160 (min ₹299 subtotal) or admin assigned coupon
+   */
+  getApplicableCouponForAccount(account, cartSubtotal = 0, cartItems = []) {
+    const rules = this.data.couponRules || {};
+    const pastOrders = Number(account?.pastOrdersCount || 0);
+
+    // Verify non-discounted pricing:
+    // Domino's India promo coupons are rejected on Pizza Mania, Value Combos, or items already discounted below original menu MRP
+    const hasDiscountedCombos = Array.isArray(cartItems) && cartItems.some(i => {
+      const name = (i.name || '').toLowerCase();
+      const cat = (i.category || '').toLowerCase();
+      return name.includes('combo') || name.includes('mania') || name.includes('everyday value') || cat.includes('combo') || cat.includes('mania');
+    });
+
+    if (pastOrders === 0) {
+      // Tier 1: Brand New Account
+      const couponCode = rules.firstOrderCoupon || 'NEWBIE100';
+      const minOrderVal = Number(rules.firstOrderMinCart || 199);
+      const isEligible = cartSubtotal >= minOrderVal && !hasDiscountedCombos;
+      return {
+        tier: 'NEW_ACCOUNT',
+        pastOrders: 0,
+        couponCode,
+        minOrderVal,
+        isEligible,
+        discountAmount: Number(rules.firstOrderDiscount || 100),
+        reason: !isEligible ? (hasDiscountedCombos ? 'Domino\'s promo codes are valid only on regular priced pizzas (not applicable on Pizza Mania / Combos).' : `Minimum cart value of ₹${minOrderVal} required for coupon ${couponCode}. Current: ₹${cartSubtotal}`) : null
+      };
+    } else if (pastOrders === 1) {
+      // Tier 2: Second Order Account
+      const couponCode = rules.secondOrderCoupon || 'NEW100';
+      const minOrderVal = Number(rules.secondOrderMinCart || 249);
+      const isEligible = cartSubtotal >= minOrderVal && !hasDiscountedCombos;
+      return {
+        tier: 'SECOND_ORDER_ACCOUNT',
+        pastOrders: 1,
+        couponCode,
+        minOrderVal,
+        isEligible,
+        discountAmount: Number(rules.secondOrderDiscount || 100),
+        reason: !isEligible ? (hasDiscountedCombos ? 'Domino\'s promo codes are valid only on regular priced pizzas (not applicable on Pizza Mania / Combos).' : `Minimum cart value of ₹${minOrderVal} required for coupon ${couponCode}. Current: ₹${cartSubtotal}`) : null
+      };
+    } else {
+      // Tier 3: Third / Repeat Order Account
+      const couponCode = rules.thirdOrderCoupon || rules.regularOrderCoupon || 'LITE1160';
+      const minOrderVal = Number(rules.thirdOrderMinCart || rules.regularOrderMinCart || 299);
+      const isEligible = cartSubtotal >= minOrderVal && !hasDiscountedCombos;
+      return {
+        tier: 'REPEAT_ACCOUNT',
+        pastOrders,
+        couponCode,
+        minOrderVal,
+        isEligible,
+        discountAmount: Number(rules.thirdOrderDiscount || rules.regularOrderDiscount || 100),
+        reason: !isEligible ? (hasDiscountedCombos ? 'Domino\'s promo codes are valid only on regular priced pizzas (not applicable on Pizza Mania / Combos).' : `Minimum cart value of ₹${minOrderVal} required for coupon ${couponCode}. Current: ₹${cartSubtotal}`) : null
+      };
+    }
   }
 
   // Admin User Address Management (Max 3 Addresses Enforced)

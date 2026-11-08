@@ -1398,3 +1398,76 @@ body.modal-open {
 }
 
 
+
+/* Mobile layout protection and touch target enhancements */
+
+/* Ensure primary action buttons have minimum 50px touch targets */
+.btn-primary,
+#cartProceedBtn,
+#btnExecuteConfirmedOrder,
+#confirmPaymentAndRelease,
+.btn-checkout,
+.btn-place-order-color {
+  min-height: 52px !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 10px !important;
+  touch-action: manipulation !important;
+}
+
+/* Sticky modal footers for cart, order confirmation, and payment dialogs */
+.modal-footer {
+  position: sticky !important;
+  bottom: 0 !important;
+  background: #ffffff !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08) !important;
+  z-index: 100 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Modal bodies: ensure smooth touch scrolling and prevent cutoffs */
+.modal-body {
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  padding-bottom: 24px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 640px) {
+  .modal-card {
+    max-height: 94vh !important;
+    width: 95vw !important;
+    margin: 10px auto !important;
+    border-radius: 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .modal-body {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    max-height: calc(94vh - 140px) !important;
+  }
+
+  /* Prevent button clipping and horizontal overflow */
+  .modal-footer button {
+    width: 100% !important;
+    white-space: normal !important;
+    line-height: 1.3 !important;
+    padding: 12px 14px !important;
+  }
+}
+
+/* Improve touch interaction on inputs and selects */
+input, select, textarea {
+  font-size: 16px !important;
+  min-height: 44px !important;
+  box-sizing: border-box !important;
+}
