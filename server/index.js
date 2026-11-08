@@ -2231,13 +2231,27 @@ const server = http.createServer(async (req, res) => {
 
   // 8. Admin & Session Extension: Delete Account / Session (Permanently purge from pool, storage system & cloud)
   if (
-    (method === 'DELETE' && (pathname.startsWith('/api/admin/accounts/') || pathname.startsWith('/api/admin/sessions/') || pathname.startsWith('/api/session/'))) ||
-    (method === 'POST' && (pathname === '/api/admin/sessions/delete' || pathname === '/api/admin/accounts/delete' || pathname === '/api/extension/session/delete' || pathname === '/api/session/delete'))
+    (method === 'DELETE' && (
+      pathname.startsWith('/api/admin/accounts/') || 
+      pathname.startsWith('/api/admin/sessions/') || 
+      pathname.startsWith('/api/session/') ||
+      pathname.startsWith('/api/extension/session/') ||
+      pathname.startsWith('/api/extension/accounts/') ||
+      pathname.startsWith('/api/extension/account/')
+    )) ||
+    (method === 'POST' && (
+      pathname === '/api/admin/sessions/delete' || 
+      pathname === '/api/admin/accounts/delete' || 
+      pathname === '/api/extension/session/delete' || 
+      pathname === '/api/extension/session/remove' ||
+      pathname === '/api/extension/delete' ||
+      pathname === '/api/session/delete'
+    ))
   ) {
     try {
-      let id = pathname.startsWith('/api/admin/accounts/') || pathname.startsWith('/api/admin/sessions/') || pathname.startsWith('/api/session/')
+      let id = pathname.startsWith('/api/admin/accounts/') || pathname.startsWith('/api/admin/sessions/') || pathname.startsWith('/api/extension/session/') || pathname.startsWith('/api/extension/accounts/') || pathname.startsWith('/api/extension/account/')
         ? pathname.split('/')[4] || pathname.split('/')[3]
-        : null;
+        : (pathname.startsWith('/api/session/') ? pathname.split('/')[3] : null);
 
       if (!id && method === 'POST') {
         const body = await parseBody(req).catch(() => ({}));

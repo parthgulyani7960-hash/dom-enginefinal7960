@@ -3836,16 +3836,20 @@ function updateTrackingUI(order) {
       domRefHeader.innerText = formattedToken;
     } else if (status === 'ERROR') {
       domRefHeader.innerText = 'Order Notice: Action Required';
-    } else if (status === 'BUILDING_CART') {
-      domRefHeader.innerText = 'Building Cart...';
-    } else if (status === 'APPLYING_COUPON') {
-      domRefHeader.innerText = 'Applying Coupon...';
-    } else if (status === 'STORE_CONFIRMATION') {
-      domRefHeader.innerText = 'Confirming Payment...';
     } else if (status === 'STORE_RESOLVING') {
       domRefHeader.innerText = 'Resolving Kitchen Store...';
+    } else if (status === 'SESSION_ASSIGNING' || status === 'QUEUED_FOR_ROBOT') {
+      domRefHeader.innerText = 'Assigning Robot Session...';
+    } else if (status === 'BUILDING_CART') {
+      domRefHeader.innerText = 'Building Cart on Domino\'s...';
+    } else if (status === 'APPLYING_COUPON') {
+      domRefHeader.innerText = 'Applying Coupon & Benefits...';
+    } else if (status === 'STORE_CONFIRMATION') {
+      domRefHeader.innerText = 'Confirming Store Order...';
+    } else if (status === 'AWAITING_PAYMENT') {
+      domRefHeader.innerText = 'Awaiting Payment Confirmation';
     } else {
-      domRefHeader.innerText = 'Awaiting Confirmation';
+      domRefHeader.innerText = 'Connecting to Kitchen...';
     }
   }
 
@@ -3853,7 +3857,23 @@ function updateTrackingUI(order) {
   if (posEl) posEl.style.display = 'none';
 
   const liveStateLabel = document.getElementById('trackerLiveStateLabel');
-  if (liveStateLabel) liveStateLabel.innerText = r.dominosLiveStatus || status;
+  if (liveStateLabel) {
+    const friendlyStatusMap = {
+      'STORE_RESOLVING': 'Connecting Kitchen',
+      'SESSION_ASSIGNING': 'Session Assigned',
+      'QUEUED_FOR_ROBOT': 'Robot Queued',
+      'BUILDING_CART': 'Adding Items',
+      'APPLYING_COUPON': 'Applying Coupon',
+      'STORE_CONFIRMATION': 'Confirming Order',
+      'ORDER_PLACED': 'Order Confirmed',
+      'BAKING': 'Baking in Oven',
+      'PACKED': 'Packed Hot',
+      'DISPATCHED': 'Out for Delivery',
+      'DELIVERED': 'Delivered',
+      'AWAITING_PAYMENT': 'Awaiting Payment'
+    };
+    liveStateLabel.innerText = friendlyStatusMap[status] || r.dominosLiveStatus || status;
+  }
 
   // 2. Populate Delivering Kitchen Card & Telephone
   const storeNameEl = document.getElementById('trackerStoreName');

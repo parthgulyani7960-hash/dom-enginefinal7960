@@ -1462,6 +1462,19 @@ class Database {
         u.name = u.email ? u.email.split('@')[0] : 'User ' + (u.userId12 ? u.userId12.slice(-4) : 'Guest');
       }
       if (u.phone === undefined || u.phone === null) u.phone = '';
+      if (!u.phone) {
+        if (u.savedAddresses && u.savedAddresses.length > 0) {
+          const addr = u.savedAddresses.find(a => a.contact_number || a.phone || a.receiverPhone || a.customers_mobile);
+          if (addr) u.phone = addr.contact_number || addr.phone || addr.receiverPhone || addr.customers_mobile || '';
+        }
+        if (!u.phone && Array.isArray(this.data.orders)) {
+          const ord = this.data.orders.find(o => 
+            (o.userId === u.id || o.userId12 === u.userId12 || (o.user && o.user.email === u.email) || o.email === u.email) &&
+            (o.user?.phone || o.address?.phone || o.customerPhone)
+          );
+          if (ord) u.phone = ord.user?.phone || ord.address?.phone || ord.customerPhone || '';
+        }
+      }
       if (typeof u.phoneLocked !== 'boolean') u.phoneLocked = false;
       if (typeof u.walletBalance !== 'number') u.walletBalance = Number(u.wallet?.balance) || 0;
       if (!u.wallet) u.wallet = { balance: u.walletBalance, currency: 'INR' };
@@ -1469,6 +1482,32 @@ class Database {
       if (!u.registeredAt) u.registeredAt = u.createdAt || new Date().toISOString();
       if (!u.transactions) u.transactions = [];
       if (!Array.isArray(u.savedAddresses)) u.savedAddresses = [];
+      if (u.savedAddresses.length === 0 && Array.isArray(this.data.orders)) {
+        const userOrders = this.data.orders.filter(o => 
+          o.userId === u.id || o.userId12 === u.userId12 || (o.user && o.user.email === u.email) || o.email === u.email
+        );
+        userOrders.forEach(o => {
+          if (o.address && (o.address.street || o.address.building) && u.savedAddresses.length < 3) {
+            const addrStr = o.address.street || o.address.building;
+            const exists = u.savedAddresses.some(a => (a.completeAddress && a.completeAddress === addrStr) || a.street === addrStr);
+            if (!exists) {
+              u.savedAddresses.push({
+                id: 'ADDR-' + Math.floor(100000 + Math.random() * 900000),
+                label: o.address.label || 'Home',
+                name: o.address.name || u.name,
+                phone: o.address.phone || u.phone,
+                flat: o.address.flat || '',
+                building: o.address.building || '',
+                street: o.address.street || '',
+                landmark: o.address.landmark || '',
+                city: o.address.city || 'Chandigarh',
+                pincode: o.address.pincode || '',
+                isDefault: u.savedAddresses.length === 0
+              });
+            }
+          }
+        });
+      }
       if (u.savedAddresses.length > 3) {
         u.savedAddresses = u.savedAddresses.slice(0, 3);
       }

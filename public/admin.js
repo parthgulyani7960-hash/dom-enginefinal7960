@@ -2518,7 +2518,9 @@ function renderAppUsers(users) {
           <strong>${escapeHtml(u.name || 'Anonymous User')}</strong>
           <div style="font-size: 11px; color: #64748b;">${escapeHtml(u.email || 'No email registered')}</div>
         </td>
-        <td style="font-weight: 700;">${escapeHtml(u.phone || 'N/A')}</td>
+        <td style="font-weight: 700;">
+          ${(u.phone && u.phone.trim()) ? `<span>${escapeHtml(u.phone)}</span>` : '<span style="color: #94a3b8; font-size: 11px; font-weight: normal;">Not Provided</span>'}
+        </td>
         <td>${lockBadge}</td>
         <td>
           <strong style="color: #16a34a; font-size: 14px;">₹${u.walletBalance || 0}</strong>
