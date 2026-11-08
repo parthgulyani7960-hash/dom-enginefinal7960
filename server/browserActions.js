@@ -66,14 +66,33 @@ async function safeType(page, selector, text, { delayMs = 45, clearFirst = true,
  * Automatically detects and dismisses intrusive Domino's upsells, location popups, or banner dialogs.
  */
 async function dismissDominosPopups(page) {
+  try {
+    await page.evaluate(() => {
+      const masks = document.querySelectorAll('#generic-modal-mask-id, .modal-mask, .modal-bg-blackout');
+      masks.forEach(m => {
+        try { m.remove(); } catch(e) {}
+      });
+      const popups = document.querySelectorAll('.deal-offer-wrap, .c-modal');
+      popups.forEach(p => {
+        try {
+          const btn = p.querySelector('button, [aria-label="close"], [aria-label="Close"], .jfi-close, .close-icon');
+          if (btn) btn.click();
+        } catch(e) {}
+      });
+    });
+  } catch(e) {}
+
   const dismissSelectors = [
     'button:has-text("No Thanks")',
     'button:has-text("Skip")',
     'button:has-text("Don\'t Allow")',
     'button:has-text("Later")',
+    'button:has-text("Ask Later")',
     'span:has-text("✕")',
     'button[aria-label="Close"]',
-    '.modal-close'
+    'button[aria-label="close"]',
+    '.modal-close',
+    '.jfi-close'
   ];
 
   for (const sel of dismissSelectors) {

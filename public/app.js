@@ -3357,7 +3357,6 @@ async function executeFinalConfirmedOrder() {
   }
 
   const rName = (document.getElementById('confirmModalReceiverName')?.value || '').trim();
-  const rPhone = (document.getElementById('confirmModalReceiverPhone')?.value || '').replace(/[^0-9]/g, '').slice(-10);
   let flat = (document.getElementById('confirmModalFlat')?.value || '').trim();
   if (!flat) {
     flat = pendingOrderPayload.address?.flat || pendingOrderPayload.address?.building || pendingOrderPayload.address?.street || 'Doorstep Delivery';
@@ -4946,19 +4945,6 @@ function renderMyOrders(orders) {
             <span style="font-weight: 900; font-size: 15px; color: #16a34a;">Paid: ₹${amountPaid}</span>
             <span style="font-size: 11px; background: #f1f5f9; color: #334155; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px;">${isCod ? '💵 COD' : '📱 Instant UPI'}</span>
             ${discountSaved > 0 ? `<span style="font-size: 10px; background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 1px 6px; border-radius: 4px; font-weight: 800; margin-left: 4px;">Saved ₹${discountSaved}</span>` : ''}
-          </div>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button onclick="reorderOrderItems('${o.id}')" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #1e293b; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Reorder exact items to cart">
-              🔁 Reorder
-            </button>
-            <button onclick="openTrackingModal('${o.id}')" style="background: #0066a3; border: none; color: white; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-              🔍 Track Live
-            </button>
-            ${proofBtn}
-          </div>
-        </div>
-      </div>
-    `;
           </div>
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
             <button onclick="reorderOrderItems('${o.id}')" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #1e293b; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Reorder exact items to cart">

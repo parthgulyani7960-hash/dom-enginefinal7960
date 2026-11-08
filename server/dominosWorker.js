@@ -131,23 +131,34 @@ class DominosAutomationRobot {
         }
       } else {
         const couponRules = db.getCouponRules ? db.getCouponRules() : {
-          firstOrderCoupon: 'DOMNEW50',
-          secondOrderCoupon: 'CHEESY',
+          firstOrderCoupon: 'NEWBIE100',
+          firstOrderMinCart: 199,
+          secondOrderCoupon: 'NEW100',
+          secondOrderMinCart: 249,
+          thirdOrderCoupon: 'LITE1160',
+          thirdOrderMinCart: 299,
           regularOrderCoupon: 'PARTY'
         };
         const pastOrders = Number(account.pastOrdersCount || 0);
-        // If order already had a verified coupon from checkout, prioritize it unless customer has order history and code is DOMNEW50
+        const cartTotal = Number(order.payment?.subtotal || order.payment?.amount || 0);
         const preSelectedCoupon = order.payment?.couponCode || order.robot?.couponCode;
-        if (preSelectedCoupon && !(pastOrders > 0 && preSelectedCoupon === 'DOMNEW50')) {
+
+        if (preSelectedCoupon && !['DOMNEW50', 'NEWBIE100'].includes(preSelectedCoupon) && pastOrders > 0) {
           selectedPromo = preSelectedCoupon;
         } else if (pastOrders === 0) {
-          selectedPromo = couponRules.firstOrderCoupon || 'DOMNEW50';
+          selectedPromo = cartTotal >= (couponRules.firstOrderMinCart || 199) ? (couponRules.firstOrderCoupon || 'NEWBIE100') : null;
         } else if (pastOrders === 1) {
-          selectedPromo = couponRules.secondOrderCoupon || 'CHEESY';
+          selectedPromo = cartTotal >= (couponRules.secondOrderMinCart || 249) ? (couponRules.secondOrderCoupon || 'NEW100') : null;
+        } else if (pastOrders === 2) {
+          selectedPromo = cartTotal >= (couponRules.thirdOrderMinCart || 299) ? (couponRules.thirdOrderCoupon || 'LITE1160') : null;
         } else {
           selectedPromo = account.couponCode || couponRules.regularOrderCoupon || 'PARTY';
         }
-        addLog(order, `🎟️ Selected Domino's Promo Code: ${selectedPromo} (Order #${pastOrders + 1} for session ${account.phone})`);
+        if (selectedPromo) {
+          addLog(order, `🎟️ Selected Domino's Promo Code: ${selectedPromo} (Order #${pastOrders + 1} for session ${account.phone}, Cart Total: ₹${cartTotal})`);
+        } else {
+          addLog(order, `ℹ️ Cart total ₹${cartTotal} below coupon minimum threshold; proceeding with standard Domino's menu pricing.`);
+        }
       }
       order.robot.couponCode = selectedPromo;
       db.updateOrder(orderId, order);

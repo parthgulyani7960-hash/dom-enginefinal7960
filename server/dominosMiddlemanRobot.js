@@ -1019,51 +1019,117 @@ async function executeMiddlemanOrderOnDominos({
     // =========================================================================
     // STEP 3: Navigate to Domino's Cart View, Audit/Prune Items & Apply Coupon
     // =========================================================================
-    // Wait for in-page Domino's cart creation API to settle
     await waitForDominoSettle(page, 1500);
 
     onProgress(`[MIDDLEMAN-ENGINE] 🛒 Navigating to Domino's Cart View...`);
 
-    // Method 1: Click uncovered View Cart bar on menu
-    const viewCartBtn = page.locator('.cart-nav, .btn-checkout, .bottom-nav .btn, button:has-text("View Cart")').first();
-    let navigatedViaClick = false;
-    if (await viewCartBtn.isVisible({ timeout: 2500 }).catch(() => false)) {
-      await viewCartBtn.click({ force: true }).catch(() => {});
+    // Ensure any open search modal or blackout mask is dismissed
+    await page.evaluate(() => {
+      const masks = document.querySelectorAll('#generic-modal-mask-id, .modal-mask, .modal-bg-blackout');
+      masks.forEach(m => { try { m.remove(); } catch(e) {} });
+      const closeBtns = document.querySelectorAll('.jfi-close, .close-search, .jfi-back-v2, button.search-back, [aria-label="close"], [aria-label="Close"]');
+      closeBtns.forEach(b => { try { b.click(); } catch(e) {} });
+    });
+    await sleep(600);
+
+    // Method 1: Direct DOM evaluation click on any element containing "VIEW CART" or checkout classes
+    let navigatedViaClick = await page.evaluate(() => {
+      const all = Array.from(document.querySelectorAll('button, div, span, a'));
+      const cartEl = all.find(el => {
+        const t = (el.innerText || '').toUpperCase();
+        return (t.includes('VIEW CART') || t.includes('CHECKOUT') || t.includes('GO TO CART')) && el.offsetHeight > 15;
+      });
+      if (cartEl) {
+        cartEl.scrollIntoView({ behavior: 'instant', block: 'center' });
+        cartEl.click();
+        cartEl.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        return true;
+      }
+      const bar = document.querySelector('.botm-bar-wrap, .cart-strip, .btn-checkout, .m-cart, .cart-nav');
+      if (bar) {
+        bar.click();
+        bar.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        return true;
+      }
+      return false;
+    });
+
+    if (navigatedViaClick) {
       await Promise.race([
-        page.waitForURL(url => url.includes('/cart/'), { timeout: 3500 }),
-        sleep(2000)
+        page.waitForURL(url => url.includes('/cart'), { timeout: 4000 }),
+        sleep(2500)
       ]).catch(() => {});
-      navigatedViaClick = page.url().includes('/cart/');
     }
 
-    // Method 2: Direct DOM evaluation click on .btn-checkout or .cart-nav
-    if (!page.url().includes('/cart/')) {
-      navigatedViaClick = await page.evaluate(() => {
-        const btn = document.querySelector('.btn-checkout') || document.querySelector('.cart-nav');
-        if (btn) {
-          btn.click();
-          return true;
-        }
-        return false;
-      });
-      if (navigatedViaClick) {
-        await Promise.race([
-          page.waitForURL(url => url.includes('/cart/'), { timeout: 3000 }),
-          sleep(1500)
-        ]).catch(() => {});
+    // Method 2: Playwright locator click with comprehensive Domino's mobile selectors
+    if (!page.url().includes('/cart')) {
+      const viewCartSelectors = [
+        '.botm-bar-wrap',
+        '.cart-strip',
+        '.btn-checkout',
+        '.m-cart',
+        '.cart-nav',
+        '.bottom-nav .btn',
+        'div:has-text("View Cart")',
+        'span:has-text("View Cart")',
+        'button:has-text("View Cart")',
+        'div:has-text("VIEW CART")',
+        'span:has-text("VIEW CART")',
+        'button:has-text("VIEW CART")',
+        '[class*="bottom-bar"]',
+        '[class*="cart-bar"]'
+      ];
+      for (const sel of viewCartSelectors) {
+        try {
+          const btn = page.locator(sel).first();
+          if (await btn.isVisible({ timeout: 800 }).catch(() => false)) {
+            await btn.click({ force: true }).catch(() => {});
+            await Promise.race([
+              page.waitForURL(url => url.includes('/cart'), { timeout: 3500 }),
+              sleep(2000)
+            ]).catch(() => {});
+            if (page.url().includes('/cart')) {
+              navigatedViaClick = true;
+              break;
+            }
+          }
+        } catch(e) {}
       }
     }
 
-    // Method 3: Direct fallback route
-    if (!page.url().includes('/cart/')) {
-      await page.goto(`https://m.dominos.co.in/jfl-discovery-payment/en/dt/cart/${targetStoreId}`, {
+    // Method 3: Direct PWA cart navigation (pwa NOT dt!)
+    if (!page.url().includes('/cart')) {
+      const pwaCartUrl = `https://m.dominos.co.in/jfl-discovery-payment/en/pwa/cart/${targetStoreId}`;
+      onProgress(`[MIDDLEMAN-ENGINE] 🛒 Direct navigation to PWA cart: ${pwaCartUrl}`);
+      await page.goto(pwaCartUrl, {
         waitUntil: 'domcontentloaded',
-        timeout: 20000
+        timeout: 25000
       }).catch(() => {});
-      await sleep(1000);
+      await sleep(1500);
     }
 
-    onProgress(`[MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = ${page.url()}, navigatedViaClick = ${navigatedViaClick}`);
+    // Method 4: Fallback standard cart-ui route
+    if (!page.url().includes('/cart')) {
+      onProgress(`[MIDDLEMAN-ENGINE] 🛒 Direct navigation to fallback cart-ui: https://m.dominos.co.in/cart-ui/cart`);
+      await page.goto('https://m.dominos.co.in/cart-ui/cart', {
+        waitUntil: 'domcontentloaded',
+        timeout: 25000
+      }).catch(() => {});
+      await sleep(1500);
+    }
+
+    if (!page.url().includes('/cart')) {
+      // Direct window.location assignment to PWA cart
+      await page.evaluate((sid) => {
+        window.location.href = `https://m.dominos.co.in/jfl-discovery-payment/en/pwa/cart/${sid}`;
+      }, targetStoreId).catch(() => {});
+      await Promise.race([
+        page.waitForURL(url => url.includes('/cart'), { timeout: 5000 }),
+        sleep(2500)
+      ]).catch(() => {});
+    }
+
+    onProgress(`[MIDDLEMAN-ENGINE] 🛒 Cart navigation status: URL = ${page.url()}, onCartPage = ${page.url().includes('/cart')}`);
 
     // Wait for cart items or empty cart state to render in DOM
     await page.waitForSelector('.cart-item-wrap, .card-iteration-wrapper, .cart-empty, [class*="empty-cart"]', { timeout: 6000 }).catch(() => {});
