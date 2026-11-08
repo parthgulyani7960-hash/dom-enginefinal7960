@@ -12,14 +12,20 @@ function generate12DigitUid() {
 const INITIAL_DATA = {
   accounts: [],
   couponRules: {
-    firstOrderCoupon: 'DOMNEW50',
+    firstOrderCoupon: 'NEWBIE100',
     firstOrderDiscount: 100,
-    secondOrderCoupon: 'CHEESY',
-    secondOrderDiscount: 50,
-    regularOrderCoupon: 'PARTY',
+    firstOrderMinCart: 199,
+    secondOrderCoupon: 'NEW100',
+    secondOrderDiscount: 100,
+    secondOrderMinCart: 249,
+    thirdOrderCoupon: 'LITE1160',
+    thirdOrderDiscount: 100,
+    thirdOrderMinCart: 299,
+    regularOrderCoupon: 'LITE1160',
     regularOrderDiscount: 100,
-    fallbackCoupon: 'DOMNEW30',
-    fallbackDiscount: 80
+    regularOrderMinCart: 299,
+    fallbackCoupon: 'NEWBIE100',
+    fallbackDiscount: 100
   },
   paymentSettings: {
     upiId: 'dominos.pay@okhdfcbank',

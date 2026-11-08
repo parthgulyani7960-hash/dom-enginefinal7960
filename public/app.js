@@ -4119,9 +4119,10 @@ function updateTrackingUI(order) {
   setStep('step-dominos', ['BAKING', 'PACKED'].includes(status) ? 'active' : (['DISPATCHED', 'DELIVERED'].includes(status) ? 'done' : ''));
   setStep('step-dispatch', status === 'DISPATCHED' ? 'active' : (status === 'DELIVERED' ? 'done' : ''));
 
-  // 6. Proof Screenshot Card
+  // 6. Proof Screenshot Card (Order Confirmation & Cart Bill)
   const proofCard = document.getElementById('proofPhotoCard');
-  if (r.proofScreenshotUrl && proofCard) {
+  const proofUrl = r.proofScreenshotUrl || r.cartBillScreenshotUrl;
+  if (proofUrl && proofCard) {
     proofCard.style.display = 'block';
   }
 
@@ -4550,7 +4551,7 @@ async function promptUpdateRiderPhone() {
 }
 
 function viewProofScreenshot(url = null) {
-  const targetUrl = url || currentOrder?.robot?.proofScreenshotUrl;
+  const targetUrl = url || currentOrder?.robot?.proofScreenshotUrl || currentOrder?.robot?.cartBillScreenshotUrl;
   if (!targetUrl) {
     alert('Domino\'s settlement proof photo is still being generated. Please wait a moment.');
     return;
@@ -4682,8 +4683,9 @@ function renderMyOrders(orders) {
       statusBadge = '<span style="background: #eff6ff; color: #0284c7; border: 1px solid #93c5fd; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">💵 COD (Pay on Delivery)</span>';
     }
 
-    const proofBtn = r.proofScreenshotUrl ? `
-      <button onclick="viewProofScreenshot('${r.proofScreenshotUrl}')" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+    const proofPhotoUrl = r.proofScreenshotUrl || r.cartBillScreenshotUrl;
+    const proofBtn = proofPhotoUrl ? `
+      <button onclick="viewProofScreenshot('${proofPhotoUrl}')" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
         🧾 View Bill Photo
       </button>
     ` : '';

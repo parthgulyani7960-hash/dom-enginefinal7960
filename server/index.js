@@ -148,7 +148,7 @@ function sendJson(res, statusCode, data) {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-admin-key',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-admin-key, x-admin-token',
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'SAMEORIGIN',
     'X-XSS-Protection': '1; mode=block',
@@ -452,7 +452,7 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-admin-key'
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-admin-key, x-admin-token'
     });
     res.end();
     return;
@@ -2387,44 +2387,20 @@ const server = http.createServer(async (req, res) => {
       address.street = address.street || address.completeAddress || address.building || 'Main Street';
       address.completeAddress = address.completeAddress || address.street;
       address.building = address.building || address.street;
-      const fullAddrText = `${address.street || ''} ${address.flat || ''} ${address.city || ''} ${address.completeAddress || ''}`.toLowerCase();
-      if (!address.latitude || (address.latitude === 28.5355 && address.longitude === 77.3910 && !fullAddrText.includes('noida') && !fullAddrText.includes('150'))) {
-        if (fullAddrText.includes('sector 22') || fullAddrText.includes('sec 22') || fullAddrText.includes('aroma')) {
-          address.latitude = 30.7245;
-          address.longitude = 76.7766;
-          if (!address.city) address.city = 'Chandigarh';
-        } else if (fullAddrText.includes('sector 15') || fullAddrText.includes('sec 15')) {
-          address.latitude = 30.7521;
-          address.longitude = 76.7722;
-          if (!address.city) address.city = 'Chandigarh';
-        } else if (fullAddrText.includes('sector 8') || fullAddrText.includes('sec 8')) {
-          address.latitude = 30.7333;
-          address.longitude = 76.7794;
-          if (!address.city) address.city = 'Chandigarh';
-        } else if (fullAddrText.includes('sector 35') || fullAddrText.includes('sec 35')) {
-          address.latitude = 30.7185;
-          address.longitude = 76.7645;
-          if (!address.city) address.city = 'Chandigarh';
-        } else if (fullAddrText.includes('chandigarh')) {
-          address.latitude = 30.7339;
-          address.longitude = 76.7889;
-          if (!address.city) address.city = 'Chandigarh';
-        } else if (fullAddrText.includes('delhi') || fullAddrText.includes('hauz khas') || fullAddrText.includes('green park')) {
-          address.latitude = 28.5494;
-          address.longitude = 77.2001;
-          if (!address.city) address.city = 'New Delhi';
-        } else if (fullAddrText.includes('gurgaon') || fullAddrText.includes('gurugram') || fullAddrText.includes('cyber city') || fullAddrText.includes('sector 24')) {
-          address.latitude = 28.4900;
-          address.longitude = 77.0900;
-          if (!address.city) address.city = 'Gurugram';
-        } else if (fullAddrText.includes('noida') || fullAddrText.includes('sector 150')) {
-          address.latitude = 28.5355;
-          address.longitude = 77.3910;
-          if (!address.city) address.city = 'Noida';
-        } else {
-          address.latitude = address.latitude || 30.7339;
-          address.longitude = address.longitude || 76.7889;
-        }
+
+      // Real-Time Domino's Geocoding for coordinates if not provided
+      if (!address.latitude || !address.longitude) {
+        try {
+          const query = `${address.building || ''} ${address.street || ''} ${address.city || ''}`.trim();
+          if (query) {
+            const resolved = await locationService.searchStoresByQuery(query);
+            if (resolved && resolved.coordinates) {
+              address.latitude = resolved.coordinates.latitude;
+              address.longitude = resolved.coordinates.longitude;
+              if (!address.city && resolved.nearestCity) address.city = resolved.nearestCity;
+            }
+          }
+        } catch (_) {}
       }
 
       if (!address.flat || !address.street || !address.name || !address.phone) {

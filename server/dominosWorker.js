@@ -47,14 +47,43 @@ class DominosAutomationRobot {
       if (!account) {
         const preferredCategory = order.preferredCategory || null;
         const cartSubtotal = order.pricing?.subtotal || order.itemsTotal || 0;
-        account = db.claimAvailableAccount(preferredCategory, orderId, order.payment?.method, cartSubtotal);
+        
+        // Multi-order concurrency handler: If pool is temporarily busy, wait and retry up to 6 times (30 seconds)
+        let retryAttempts = 0;
+        while (!account && retryAttempts < 6) {
+          account = db.claimAvailableAccount(preferredCategory, orderId, order.payment?.method, cartSubtotal);
+          if (account) break;
+          retryAttempts++;
+          if (retryAttempts < 6) {
+            addLog(order, `⏳ Account pool busy. Concurrent order queueing in progress (attempt ${retryAttempts}/6). Retrying in 5 seconds...`);
+            await sleep(5000);
+          }
+        }
       }
 
       if (!account) {
-        addLog(order, '❌ Error: No available Domino\'s account sessions in pool. Please import an active account in Admin Panel.');
+        addLog(order, '❌ Error: No available Domino\'s account sessions in pool after waiting. Admin alerted automatically.');
         order.robot.status = 'ERROR';
         order.robot.error = 'NO_IDLE_ACCOUNTS_IN_POOL';
         db.updateOrder(orderId, order);
+
+        // Auto-report capacity alert to Admin Console
+        try {
+          db.broadcastNotification({
+            title: `⚠️ Session Pool Exhausted (Order #${order.id})`,
+            message: `All Domino's accounts were in-use or unavailable. Order #${order.id} needs an active session.`,
+            type: 'ALERT',
+            badge: 'POOL_ALERT'
+          });
+          db.createTicket({
+            orderId: order.id,
+            userId: order.customer?.userId || null,
+            userPhone: order.customer?.phone || null,
+            userName: order.customer?.name || 'Customer',
+            category: 'OTHER',
+            description: `[AUTOMATED ROBOT ALERT] Order #${order.id} could not claim an idle Domino's account from the pool. Please import or release an active session.`
+          });
+        } catch (_) {}
         return;
       }
 
@@ -274,6 +303,27 @@ class DominosAutomationRobot {
             addLog(order, `📸 State snapshot captured at rejection: ${order.robot.proofScreenshotUrl}`);
           }
           db.updateOrder(orderId, order);
+
+          // Automated Real-Time Error Reporting to Admin Console
+          try {
+            db.broadcastNotification({
+              title: `🚨 Robot Placement ${isStoreTiming ? 'Offline Notice' : 'Alert'}: #${order.id}`,
+              message: `Order #${order.id} for ${order.customer?.name || 'Customer'} (${order.customer?.phone || ''}) could not be completed: ${failureMsg}`,
+              type: 'ALERT',
+              badge: isStoreTiming ? 'OFFLINE' : 'ROBOT_FAIL'
+            });
+            db.createTicket({
+              orderId: order.id,
+              userId: order.customer?.userId || null,
+              userPhone: order.customer?.phone || null,
+              userName: order.customer?.name || 'Customer',
+              category: 'OTHER',
+              description: `[AUTOMATED ROBOT INCIDENT] Robot failed to complete order #${order.id}. Error reason: ${failureMsg}. Review customer cart & Domino's store status.`
+            });
+          } catch (alertErr) {
+            console.warn('[ROBOT-ADMIN-ALERT-ERR]', alertErr.message);
+          }
+
           if (account) {
             if (failureMsg.includes('payment option is not allowed') || failureMsg.includes('INVPAYOPT') || robotResult?.codDisabled) {
               account.codDisabledUntil = Date.now() + 60 * 60 * 1000;
@@ -290,6 +340,25 @@ class DominosAutomationRobot {
         order.robot.status = 'ERROR';
         order.robot.error = botErr.message;
         db.updateOrder(orderId, order);
+
+        // Auto-report error to Admin
+        try {
+          db.broadcastNotification({
+            title: `🚨 Robot Execution Exception: #${order.id}`,
+            message: `Robot exception for Order #${order.id}: ${botErr.message}`,
+            type: 'ALERT',
+            badge: 'BOT_ERR'
+          });
+          db.createTicket({
+            orderId: order.id,
+            userId: order.customer?.userId || null,
+            userPhone: order.customer?.phone || null,
+            userName: order.customer?.name || 'Customer',
+            category: 'OTHER',
+            description: `[AUTOMATED EXCEPTION REPORT] Robot execution crashed on order #${order.id}: ${botErr.message}`
+          });
+        } catch (_) {}
+
         if (account) {
           db.releaseAccount(account.id);
           account = null;
@@ -302,6 +371,16 @@ class DominosAutomationRobot {
       order.robot.error = err.message;
       addLog(order, `❌ Execution Error: ${err.message}`);
       db.updateOrder(orderId, order);
+
+      try {
+        db.broadcastNotification({
+          title: `🚨 Uncaught Robot Error: #${orderId}`,
+          message: `Uncaught error for Order #${orderId}: ${err.message}`,
+          type: 'ALERT',
+          badge: 'ERROR'
+        });
+      } catch (_) {}
+
       if (account) {
         db.releaseAccount(account.id);
       }

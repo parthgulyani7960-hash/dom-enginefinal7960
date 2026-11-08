@@ -137,6 +137,27 @@ async function checkAdminAuthStatus() {
     }
   } catch (e) {}
 
+  // Auto-authenticate designated admin (parthgulyani7960@gmail.com) if logged in on customer storefront
+  try {
+    const stored = localStorage.getItem('dominos_user');
+    if (stored) {
+      const u = JSON.parse(stored);
+      if (u && u.email && u.email.toLowerCase() === 'parthgulyani7960@gmail.com') {
+        const loginRes = await fetch('/api/admin/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: u.email, adminSessionConfirmed: true })
+        });
+        const loginData = await loginRes.json();
+        if (loginRes.ok && loginData.success && loginData.token) {
+          sessionStorage.setItem('dom_admin_token', loginData.token);
+          onAdminUnlocked(loginData.email || u.email);
+          return true;
+        }
+      }
+    }
+  } catch (e) {}
+
   showAdminAuthGate();
   return false;
 }

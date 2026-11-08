@@ -7,13 +7,16 @@
  */
 
 const DOMINOS_HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
   'Accept': 'application/json, text/plain, */*',
-  'Origin': 'https://pizzaonline.dominos.co.in',
-  'Referer': 'https://pizzaonline.dominos.co.in/'
+  'api_key': 'd2aeb489bb8df385',
+  'client_type': 'web app-chrome',
+  'source': 'PWA18',
+  'Origin': 'https://m.dominos.co.in',
+  'Referer': 'https://m.dominos.co.in/'
 };
 
-// In-memory cache for live coordinate lookups (10 min TTL)
+// In-memory cache for live coordinate lookups (3 min TTL for high real-time accuracy)
 const liveStoreCache = new Map();
 
 /**
@@ -27,10 +30,10 @@ async function resolveStoreByCoordinates(lat, lng) {
     throw new Error(`Invalid coordinates: [${lat}, ${lng}]`);
   }
 
-  const cacheKey = `${latitude.toFixed(3)},${longitude.toFixed(3)}`;
+  const cacheKey = `${latitude.toFixed(4)},${longitude.toFixed(4)}`;
   if (liveStoreCache.has(cacheKey)) {
     const cached = liveStoreCache.get(cacheKey);
-    if (Date.now() - cached.timestamp < 10 * 60 * 1000) {
+    if (Date.now() - cached.timestamp < 3 * 60 * 1000) {
       return cached.data;
     }
   }
@@ -40,103 +43,8 @@ async function resolveStoreByCoordinates(lat, lng) {
 
   const res = await fetch(url, { headers: DOMINOS_HEADERS });
   if (res.status === 404 || !res.ok) {
-    console.log(`[DOMINOS-LOCATOR] Location [${latitude}, ${longitude}] returned ${res.status} from live locator. Checking regional Domino's store network...`);
+    console.log(`[DOMINOS-LOCATOR] Location [${latitude}, ${longitude}] returned ${res.status} from live locator.`);
     
-    // Check known regional store coverage for major Indian cities
-    let regionalStore = null;
-    let cityName = 'Chandigarh';
-
-    if (latitude >= 30.76 && latitude <= 30.785 && longitude >= 76.78 && longitude <= 76.81) {
-      cityName = 'Nayagaon / Chandigarh';
-      regionalStore = {
-        storeId: '70336',
-        storeName: 'NAYAGAON PUNJAB',
-        address: 'Ground Floor at B05 00155 Karoran Road Nayagaon 160103 Punjab',
-        city: 'NAYAGAON',
-        phone: '18002081234',
-        latitude: 30.7712,
-        longitude: 76.7904,
-        deliveryEnable: true,
-        isOperational: true,
-        driveDistanceKm: 1.0,
-        driveDistanceMeters: 1000,
-        polygonTime: '30 mins',
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Nayagaon%20Punjab'
-      };
-    } else if (latitude >= 30.5 && latitude <= 31.0 && longitude >= 76.5 && longitude <= 77.1) {
-      cityName = 'Chandigarh';
-      regionalStore = {
-        storeId: '63859',
-        storeName: 'SECTOR 22 C CHANDIGARH',
-        address: 'SCO 24-25, Sector 22-C, Chandigarh 160022',
-        city: 'CHANDIGARH',
-        phone: '18002081234',
-        latitude: 30.7410,
-        longitude: 76.7735,
-        deliveryEnable: true,
-        isOperational: true,
-        driveDistanceKm: 1.5,
-        driveDistanceMeters: 1500,
-        polygonTime: '30 mins',
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Sector%2022%20Chandigarh'
-      };
-    } else if (latitude >= 28.3 && latitude <= 28.9 && longitude >= 76.8 && longitude <= 77.6) {
-      cityName = 'Noida / Delhi NCR';
-      regionalStore = {
-        storeId: '64567',
-        storeName: 'TGIP MALL NOIDA UTTAR PRADESH',
-        address: 'TGIP Mall, Sector 38 A, Noida 201301',
-        city: 'NOIDA',
-        phone: '9411269916',
-        latitude: 28.5675,
-        longitude: 77.3265,
-        deliveryEnable: true,
-        isOperational: true,
-        driveDistanceKm: 2.1,
-        driveDistanceMeters: 2100,
-        polygonTime: '30 mins',
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20TGIP%20Mall%20Noida'
-      };
-    } else if (latitude >= 18.8 && latitude <= 19.4 && longitude >= 72.6 && longitude <= 73.2) {
-      cityName = 'Mumbai';
-      regionalStore = {
-        storeId: '64677',
-        storeName: 'SWAROOP ADITYA AVENUE ANDHERI MUMBAI',
-        address: 'Swaroop Aditya Avenue, Andheri East, Mumbai 400069',
-        city: 'MUMBAI',
-        phone: '18002081234',
-        latitude: 19.1136,
-        longitude: 72.8697,
-        deliveryEnable: true,
-        isOperational: true,
-        driveDistanceKm: 1.8,
-        driveDistanceMeters: 1800,
-        polygonTime: '30 mins',
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Andheri%20Mumbai'
-      };
-    }
-
-    if (regionalStore) {
-      const avail = {
-        store: regionalStore,
-        distanceKm: regionalStore.driveDistanceKm,
-        estimatedDeliveryTime: regionalStore.polygonTime,
-        isServiceable: true,
-        unserviceableReason: null
-      };
-      const formatted = {
-        serviceable: true,
-        nearestCity: cityName,
-        assignedStore: regionalStore,
-        nearestStore: avail,
-        availability: avail,
-        stores: [regionalStore],
-        nearbyStores: [regionalStore]
-      };
-      liveStoreCache.set(cacheKey, { timestamp: Date.now() - (9.5 * 60 * 1000), data: formatted }); // 30s TTL for fallbacks
-      return formatted;
-    }
-
     const unserviceable = {
       serviceable: false,
       nearestCity: 'Outside Service Area',
@@ -147,14 +55,14 @@ async function resolveStoreByCoordinates(lat, lng) {
         distanceKm: 0,
         estimatedDeliveryTime: 'N/A',
         isServiceable: false,
-        unserviceableReason: 'Domino\'s India does not currently service this location or region.'
+        unserviceableReason: "Domino's India does not currently service this location or region."
       },
       availability: {
         store: null,
         distanceKm: 0,
         estimatedDeliveryTime: 'N/A',
         isServiceable: false,
-        unserviceableReason: 'Domino\'s India does not currently service this location or region.'
+        unserviceableReason: "Domino's India does not currently service this location or region."
       },
       stores: [],
       nearbyStores: []
@@ -456,107 +364,18 @@ function formatDominoStoreResponse(data, lat, lng) {
     };
   });
 
-  // Strictly and deterministically sort ALL stores to prevent race conditions or store flipping:
-  // 1. Operational & delivery-enabled first
-  // 2. Currently accepting orders first
-  // 3. Within maximum hot-delivery radius (7.5 km) first
-  // 4. Exact driving distance in meters (1160m beats 1244m)
-  // 5. Mathematical Haversine distance
-  // 6. Deterministic tie-breaker by storeId
+  // Official Domino's Polygon Rule:
+  // stores[0] directly corresponds to storeStationDetails[0], which is Domino's designated delivery store for this location polygon.
   const maxDeliveryKm = 7.5;
-  stores.sort((a, b) => {
-    const aServ = (a.deliveryEnable && a.isOperational) ? 1 : 0;
-    const bServ = (b.deliveryEnable && b.isOperational) ? 1 : 0;
-    if (aServ !== bServ) return bServ - aServ;
+  const primary = stores[0];
 
-    const aAccept = a.isAcceptingOrders ? 1 : 0;
-    const bAccept = b.isAcceptingOrders ? 1 : 0;
-    if (aAccept !== bAccept) return bAccept - aAccept;
-
-    const aWithin = (a.driveDistanceKm <= maxDeliveryKm) ? 1 : 0;
-    const bWithin = (b.driveDistanceKm <= maxDeliveryKm) ? 1 : 0;
-    if (aWithin !== bWithin) return bWithin - aWithin;
-
-    if (a.driveDistanceMeters !== b.driveDistanceMeters) {
-      return a.driveDistanceMeters - b.driveDistanceMeters;
-    }
-
-    if (Math.abs(a.haversineKm - b.haversineKm) > 0.001) {
-      return a.haversineKm - b.haversineKm;
-    }
-
-    return String(a.storeId).localeCompare(String(b.storeId));
-  });
-
-  let primary = stores[0];
-
-  // If Domino's locator returned a distant store (> 7.5 km) because the local store is outside delivery hours:
-  if (primary && primary.driveDistanceKm > maxDeliveryKm) {
-    let regionalPreset = null;
-    if (lat >= 30.76 && lat <= 30.785 && lng >= 76.78 && lng <= 76.81) {
-      regionalPreset = {
-        storeId: '70336',
-        storeName: 'NAYAGAON PUNJAB',
-        address: 'Ground Floor at B05 00155 Karoran Road Nayagaon 160103 Punjab',
-        city: 'NAYAGAON',
-        phone: '18002081234',
-        latitude: 30.7712,
-        longitude: 76.7904,
-        deliveryEnable: true,
-        isOperational: true,
-        driveDistanceKm: 1.0,
-        driveDistanceMeters: 1000,
-        haversineKm: 0.8,
-        polygonTime: '30 mins',
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Nayagaon%20Punjab'
-      };
-    } else if (lat >= 30.65 && lat <= 30.85 && lng >= 76.68 && lng <= 76.85) {
-      regionalPreset = {
-        storeId: '63859',
-        storeName: 'SECTOR 22 C CHANDIGARH',
-        address: 'SCO 24-25, Sector 22-C, Chandigarh 160022',
-        city: 'CHANDIGARH',
-        phone: '18002081234',
-        latitude: 30.7410,
-        longitude: 76.7735,
-        deliveryEnable: true,
-        isOperational: true,
-        driveDistanceKm: 1.5,
-        driveDistanceMeters: 1500,
-        haversineKm: 1.1,
-        polygonTime: '30 mins',
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Sector%2022%20Chandigarh'
-      };
-    } else if (lat >= 28.50 && lat <= 28.60 && lng >= 77.35 && lng <= 77.45) {
-      regionalPreset = {
-        storeId: '65979',
-        storeName: 'NOIDA SEC 110',
-        address: 'Sector 110, Noida, Uttar Pradesh 201304',
-        city: 'NOIDA',
-        phone: '18002081234',
-        latitude: 28.5355,
-        longitude: 77.3910,
-        deliveryEnable: true,
-        isOperational: true,
-        driveDistanceKm: 1.1,
-        driveDistanceMeters: 1100,
-        haversineKm: 0.9,
-        polygonTime: '30 mins',
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Domino%27s%20Pizza%20Noida%20Sector%20110'
-      };
-    }
-
-    if (regionalPreset) {
-      primary = regionalPreset;
-      stores.unshift(regionalPreset);
-    }
-  }
-
-  const isWithinRadius = primary.driveDistanceKm <= maxDeliveryKm;
-  const isServiceable = primary.deliveryEnable && primary.isOperational && isWithinRadius;
+  const isWithinRadius = primary ? primary.driveDistanceKm <= maxDeliveryKm : false;
+  const isServiceable = primary ? (primary.deliveryEnable && primary.isOperational && isWithinRadius) : false;
   
   let unserviceableReason = null;
-  if (!primary.deliveryEnable) {
+  if (!primary) {
+    unserviceableReason = "No Domino's store found for this location.";
+  } else if (!primary.deliveryEnable) {
     unserviceableReason = 'Online delivery temporarily suspended by this Domino\'s store.';
   } else if (!primary.isOperational) {
     unserviceableReason = 'This Domino\'s kitchen is currently closed or outside delivery hours.';
@@ -564,7 +383,7 @@ function formatDominoStoreResponse(data, lat, lng) {
     unserviceableReason = `Your location is ${primary.driveDistanceKm} km away, exceeding Domino's maximum 7.5 km hot-delivery radius.`;
   }
 
-  const availability = {
+  const availability = primary ? {
     store: primary,
     distanceKm: primary.driveDistanceKm,
     estimatedDeliveryTime: primary.polygonTime,
@@ -572,13 +391,19 @@ function formatDominoStoreResponse(data, lat, lng) {
     isAcceptingOrders: primary.isAcceptingOrders,
     deliveryTimingNotice: primary.deliveryTimingNotice,
     unserviceableReason: unserviceableReason
+  } : {
+    store: null,
+    distanceKm: 0,
+    estimatedDeliveryTime: 'N/A',
+    isServiceable: false,
+    unserviceableReason: 'No Domino\'s store found.'
   };
 
   return {
     serviceable: isServiceable,
-    isAcceptingOrders: primary.isAcceptingOrders,
-    deliveryTimingNotice: primary.deliveryTimingNotice,
-    nearestCity: data.nearestCity || primary.city,
+    isAcceptingOrders: primary ? primary.isAcceptingOrders : false,
+    deliveryTimingNotice: primary ? primary.deliveryTimingNotice : null,
+    nearestCity: data.nearestCity || (primary ? primary.city : 'India'),
     coordinates: { latitude: lat, longitude: lng },
     assignedStore: primary,
     nearestStore: availability,
