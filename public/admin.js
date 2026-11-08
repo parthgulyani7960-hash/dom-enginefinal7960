@@ -118,7 +118,7 @@ function switchAdminView(viewName) {
   if (!isAdminAuthenticated) return;
 
   // Trigger on-demand loads for newly selected view
-  if (viewName === 'orders') loadOrders();
+  if (viewName === 'orders') { loadOrders(); loadRobotStatus(); }
   if (viewName === 'users') { loadAppUsers(); loadWalletDeposits(); }
   if (viewName === 'support') loadAdminTickets();
   if (viewName === 'vouchers') { loadVouchers(); loadPaymentReceiverSettings(); }
@@ -1782,6 +1782,27 @@ function renderAdminOrders(orders) {
       }
     }
 
+    const isFailed = r.status === 'ERROR' || r.status === 'FAILED' || order.status === 'ERROR';
+    const isFinished = r.status === 'DELIVERED' || r.status === 'COMPLETED' || order.status === 'CANCELLED';
+    
+    let retryBtnHtml = '';
+    if (isFailed) {
+      retryBtnHtml = `
+        <button class="btn-action-launch" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: white; background: #0284c7; border: none; font-weight: 700; border-radius: 4px;" onclick="retryAdminOrder('${order.id}')" title="Re-queue order for autonomous Domino's placement">
+          🔄 Retry Dispatch
+        </button>
+      `;
+    }
+
+    let cancelBtnHtml = '';
+    if (!isFinished) {
+      cancelBtnHtml = `
+        <button class="btn-action-del" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #dc2626; border-color: #fca5a5; background: #fef2f2; font-weight: 700; border-radius: 4px;" onclick="cancelAdminOrder('${order.id}')" title="Cancel order and free assigned Domino's fleet account">
+          ❌ Cancel
+        </button>
+      `;
+    }
+
     return `
       <tr>
         <td style="font-weight: 800; color: var(--dark);">
@@ -1802,11 +1823,13 @@ function renderAdminOrders(orders) {
         <td><small style="font-family: monospace; color: #475569;">${giftCardUsed}</small></td>
         <td style="font-weight: 900; color: #16a34a; font-size: 13px;">₹${grandTotal}</td>
         <td>
-          <span class="status-idle" style="background:#f0fdf4; color:#15803d; font-size: 10px;">${r.status || 'ORDER_PLACED'}</span>
+          <span class="status-idle" style="background:${isFailed ? '#fef2f2' : (r.status === 'DELIVERED' ? '#f0fdf4' : '#eff6ff')}; color:${isFailed ? '#dc2626' : (r.status === 'DELIVERED' ? '#15803d' : '#0284c7')}; font-size: 10px; font-weight: 800;">${r.status || 'ORDER_PLACED'}</span>
           <div style="margin-top: 4px;">${riderText}</div>
         </td>
         <td>
           <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+            ${retryBtnHtml}
+            ${cancelBtnHtml}
             <button class="btn-action-copy" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #0066a3; border-color: #93c5fd; background: #f0f9ff; font-weight: 700;" onclick="window.open('${dominosTrackerUrl}', '_blank')" title="Open official Domino's website / live tracker">
               🌐 Domino's Site
             </button>
@@ -1824,6 +1847,84 @@ function renderAdminOrders(orders) {
       </tr>
     `;
   }).join('');
+}
+
+// Admin: Retry Order Placement
+async function retryAdminOrder(orderId) {
+  try {
+    const res = await adminFetch(`/api/orders/${orderId}/retry`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to retry order');
+    showToast(`Order #${orderId} re-enqueued for placement!`, '🔄');
+    loadOrders();
+  } catch (err) {
+    alert(`Retry error: ${err.message}`);
+  }
+}
+window.retryAdminOrder = retryAdminOrder;
+
+// Admin: Cancel Order Action
+async function cancelAdminOrder(orderId) {
+  if (!confirm(`Are you sure you want to cancel order #${orderId}? This will free the allocated Domino's session.`)) {
+    return;
+  }
+  try {
+    const res = await adminFetch(`/api/orders/${orderId}/cancel`, {
+      method: 'POST',
+      body: JSON.stringify({ reason: 'Cancelled by Administrator via Admin Console' })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to cancel order');
+    showToast(`Order #${orderId} cancelled & session released.`, '❌');
+    loadOrders();
+  } catch (err) {
+    alert(`Cancel error: ${err.message}`);
+  }
+}
+window.cancelAdminOrder = cancelAdminOrder;
+
+// Admin: Robot Queue Mode Toggle
+async function toggleRobotAutomationMode() {
+  try {
+    const res = await adminFetch('/api/admin/robot/toggle-mode', { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to toggle robot queue mode');
+    updateRobotModeUI(data.paused);
+    showToast(data.message, data.paused ? '⏸️' : '▶️');
+  } catch (err) {
+    alert(`Could not toggle robot mode: ${err.message}`);
+  }
+}
+window.toggleRobotAutomationMode = toggleRobotAutomationMode;
+
+// Admin: Load Robot Queue Status
+async function loadRobotStatus() {
+  try {
+    const res = await adminFetch('/api/admin/robot/status');
+    const data = await res.json();
+    if (res.ok) {
+      updateRobotModeUI(data.paused);
+    }
+  } catch (e) {}
+}
+window.loadRobotStatus = loadRobotStatus;
+
+function updateRobotModeUI(isPaused) {
+  const btn = document.getElementById('btnToggleRobotQueue');
+  const lbl = document.getElementById('robotQueueStatusLabel');
+  if (!btn || !lbl) return;
+
+  if (isPaused) {
+    btn.style.background = '#d97706';
+    btn.style.color = '#ffffff';
+    lbl.innerText = 'Robot Dispatch: PAUSED';
+    btn.title = 'Click to RESUME autonomous robot dispatch';
+  } else {
+    btn.style.background = '#15803d';
+    btn.style.color = '#ffffff';
+    lbl.innerText = 'Robot Dispatch: ACTIVE';
+    btn.title = 'Click to PAUSE autonomous robot dispatch';
+  }
 }
 
 function jumpToSession(phoneClean) {

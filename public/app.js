@@ -3347,20 +3347,26 @@ async function executeFinalConfirmedOrder() {
 
   const rName = (document.getElementById('confirmModalReceiverName')?.value || '').trim();
   const rPhone = (document.getElementById('confirmModalReceiverPhone')?.value || '').replace(/[^0-9]/g, '').slice(-10);
-  const flat = (document.getElementById('confirmModalFlat')?.value || '').trim();
-
+  let flat = (document.getElementById('confirmModalFlat')?.value || '').trim();
   if (!flat) {
-    alert('Please enter your House / Flat Number.');
+    flat = pendingOrderPayload.address?.flat || pendingOrderPayload.address?.building || pendingOrderPayload.address?.street || 'Doorstep Delivery';
     const flatInput = document.getElementById('confirmModalFlat');
-    if (flatInput) { flatInput.focus(); flatInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-    return;
+    if (flatInput) flatInput.value = flat;
   }
 
+  let rPhone = (document.getElementById('confirmModalReceiverPhone')?.value || '').replace(/[^0-9]/g, '').slice(-10);
   if (!rPhone || rPhone.length !== 10 || !/^[6-9]\d{9}$/.test(rPhone)) {
-    alert('Please enter a valid 10-digit Indian mobile number for the rider delivery contact (starting with 6, 7, 8, or 9). Domino\'s rider will call this number.');
-    const pInput = document.getElementById('confirmModalReceiverPhone');
-    if (pInput) { pInput.focus(); pInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-    return;
+    const fallbackPhone = (pendingOrderPayload.user?.phone || pendingOrderPayload.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+    if (fallbackPhone && fallbackPhone.length === 10 && /^[6-9]\d{9}$/.test(fallbackPhone)) {
+      rPhone = fallbackPhone;
+      const pInput = document.getElementById('confirmModalReceiverPhone');
+      if (pInput) pInput.value = rPhone;
+    } else {
+      alert('Please enter a valid 10-digit Indian mobile number for the rider delivery contact (starting with 6, 7, 8, or 9). Domino\'s rider will call this number.');
+      const pInput = document.getElementById('confirmModalReceiverPhone');
+      if (pInput) { pInput.focus(); pInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      return;
+    }
   }
 
   // Commit verified receiver details into payload
@@ -4658,11 +4664,13 @@ function getMyOrdersFetchUrl(sync = false) {
       const clean = currentUser.phone.replace(/[^0-9]/g, '').slice(-10);
       if (clean) params.append('phone', clean);
     }
+  } else {
+    // Only pass browser device order IDs if unauthenticated guest
+    try {
+      const localIds = JSON.parse(localStorage.getItem('dominos_my_order_ids') || '[]');
+      if (localIds.length > 0) params.append('orderIds', localIds.join(','));
+    } catch (e) {}
   }
-  try {
-    const localIds = JSON.parse(localStorage.getItem('dominos_my_order_ids') || '[]');
-    if (localIds.length > 0) params.append('orderIds', localIds.join(','));
-  } catch (e) {}
   return `/api/user/orders?${params.toString()}`;
 }
 

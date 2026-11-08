@@ -1291,6 +1291,67 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
+  // 3c. Cancel Order & Release Allocated Fleet Account
+  if (method === 'POST' && pathname.startsWith('/api/orders/') && pathname.endsWith('/cancel')) {
+    const orderId = pathname.split('/')[3];
+    const order = db.getOrderById(orderId);
+    if (!order) return sendJson(res, 404, { error: 'Order not found' });
+    if (order.robot?.status === 'DELIVERED') {
+      return sendJson(res, 400, { error: 'Order is already delivered and cannot be cancelled.' });
+    }
+    const body = await parseBody(req).catch(() => ({}));
+    const reason = body.reason || 'Order cancelled by administrator';
+
+    if (!order.robot) order.robot = {};
+    order.robot.status = 'CANCELLED';
+    order.robot.error = reason;
+    order.status = 'CANCELLED';
+    if (!order.robot.logs) order.robot.logs = [];
+    order.robot.logs.push(`[${new Date().toISOString()}] ❌ Order marked CANCELLED: ${reason}`);
+
+    // If an account was actively assigned, mark account back to IDLE
+    const accountPhone = order.robot.accountPhone || order.robot.sessionPhone;
+    if (accountPhone) {
+      try {
+        const accounts = db.getAccounts();
+        const acc = accounts.find(a => (a.phone || '').replace(/[^0-9]/g, '').slice(-10) === accountPhone.replace(/[^0-9]/g, '').slice(-10));
+        if (acc && acc.status === 'BUSY') {
+          acc.status = 'IDLE';
+          db.saveAccounts(accounts);
+        }
+      } catch (e) {
+        console.warn('[ORDER-CANCEL] Failed to release account:', e.message);
+      }
+    }
+
+    db.updateOrder(order.id, order);
+    console.log(`[ORDER-CANCEL] Order #${order.id} cancelled successfully.`);
+    return sendJson(res, 200, { success: true, message: `Order #${order.id} cancelled.`, order });
+  }
+
+  // 3d. Robot Automation Status & Mode Toggle
+  if (method === 'GET' && pathname === '/api/admin/robot/status') {
+    return sendJson(res, 200, {
+      success: true,
+      paused: queue.isPaused(),
+      activeWorkers: queue.activeWorkers,
+      queueLength: queue.queue.length
+    });
+  }
+
+  if (method === 'POST' && pathname === '/api/admin/robot/toggle-mode') {
+    if (queue.isPaused()) {
+      queue.resume();
+    } else {
+      queue.pause();
+    }
+    return sendJson(res, 200, {
+      success: true,
+      paused: queue.isPaused(),
+      message: queue.isPaused() ? 'Robot dispatch queue PAUSED.' : 'Robot dispatch queue ACTIVE.'
+    });
+  }
+
   // 4. Get Orders List / Status (for live monitoring & polling)
   if (method === 'GET' && pathname === '/api/orders') {
     return sendJson(res, 200, db.getOrders());
@@ -1797,32 +1858,45 @@ const server = http.createServer(async (req, res) => {
 
     const allOrders = db.getOrders();
     const matchedOrders = allOrders.filter(o => {
-      // 1. Order placed on this browser device
-      if (localOrderIds.includes(o.id)) return true;
-      // 2. Order matches specific Order Engine Reference ID or Domino's Order Ref
+      const uPhone = (o.user?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+      const aPhone = (o.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
+      const rPhone = (o.address?.receiverPhone || '').replace(/[^0-9]/g, '').slice(-10);
+
+      // 1. If queried with a specific phone number, STRICTLY require the order to belong to this phone!
+      if (cleanPhone && cleanPhone.length === 10) {
+        return (uPhone === cleanPhone || aPhone === cleanPhone || rPhone === cleanPhone);
+      }
+
+      // 2. If queried with user email:
+      if (email) {
+        return (o.user?.email?.toLowerCase() === email || o.address?.email?.toLowerCase() === email);
+      }
+
+      // 3. If queried with user numerical UID:
+      if (uid) {
+        return (
+          o.userId12 === uid || 
+          o.user?.userId12 === uid || 
+          o.user?.uid === uid || 
+          o.uid === uid || 
+          o.userId === uid || 
+          o.user?.id === uid
+        );
+      }
+
+      // 4. Order matches specific Order Engine Reference ID or Domino's Order Ref
       if (orderRef && (
         o.id?.toLowerCase() === orderRef || 
         o.engineOrderRef?.toLowerCase() === orderRef || 
         o.dominosOrderRef?.toLowerCase() === orderRef || 
         o.robot?.dominosOrderRef?.toLowerCase() === orderRef
       )) return true;
-      // 3. Order matches user email
-      if (email && (o.user?.email?.toLowerCase() === email || o.address?.email?.toLowerCase() === email)) return true;
-      // 4. Order matches user numerical UID
-      if (uid && (
-        o.userId12 === uid || 
-        o.user?.userId12 === uid || 
-        o.user?.uid === uid || 
-        o.uid === uid || 
-        o.userId === uid || 
-        o.user?.id === uid
-      )) return true;
-      // 5. Order matches receiver / user 10-digit mobile
-      if (cleanPhone && cleanPhone.length === 10) {
-        const uPhone = (o.user?.phone || '').replace(/[^0-9]/g, '').slice(-10);
-        const aPhone = (o.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
-        if (uPhone === cleanPhone || aPhone === cleanPhone) return true;
+
+      // 5. Unauthenticated guest browser device (only when neither phone nor email nor uid filter is set)
+      if (localOrderIds.length > 0 && localOrderIds.includes(o.id)) {
+        return true;
       }
+
       return false;
     });
 

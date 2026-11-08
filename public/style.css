@@ -1399,75 +1399,170 @@ body.modal-open {
 
 
 
-/* Mobile layout protection and touch target enhancements */
+/* =========================================================================
+   COMPREHENSIVE MOBILE LAYOUT PROTECTION, NATIVE BOTTOM SHEETS & TOUCH TARGETS
+   ========================================================================= */
 
-/* Ensure primary action buttons have minimum 50px touch targets */
-.btn-primary,
-#cartProceedBtn,
-#btnExecuteConfirmedOrder,
-#confirmPaymentAndRelease,
-.btn-checkout,
-.btn-place-order-color {
-  min-height: 52px !important;
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  border-radius: 10px !important;
-  touch-action: manipulation !important;
-}
+@media (max-width: 768px) {
+  /* All dialogs act as native high-performance bottom sheets */
+  .modal-overlay {
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    z-index: 100000 !important;
+  }
 
-/* Sticky modal footers for cart, order confirmation, and payment dialogs */
-.modal-footer {
-  position: sticky !important;
-  bottom: 0 !important;
-  background: #ffffff !important;
-  padding: 12px 16px !important;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08) !important;
-  z-index: 100 !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-/* Modal bodies: ensure smooth touch scrolling and prevent cutoffs */
-.modal-body {
-  -webkit-overflow-scrolling: touch !important;
-  overscroll-behavior: contain !important;
-  padding-bottom: 24px !important;
-  box-sizing: border-box !important;
-}
-
-@media (max-width: 640px) {
   .modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 22px 22px 0 0 !important;
     max-height: 94vh !important;
-    width: 95vw !important;
-    margin: 10px auto !important;
-    border-radius: 16px !important;
     display: flex !important;
     flex-direction: column !important;
+    overflow: hidden !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25) !important;
+    animation: mobileSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+
+  .modal-card::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 5px;
+    background: #cbd5e1;
+    border-radius: 10px;
+    margin: 10px auto 4px auto;
+    flex-shrink: 0;
+  }
+
+  .modal-header {
+    padding: 10px 16px !important;
+    flex-shrink: 0 !important;
+    border-bottom: 1px solid var(--gray-200) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .modal-title {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+  }
+
+  .modal-close {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 22px !important;
+    border-radius: 50% !important;
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: none !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
   }
 
   .modal-body {
+    padding: 14px 16px 20px 16px !important;
     flex: 1 1 auto !important;
     overflow-y: auto !important;
-    max-height: calc(94vh - 140px) !important;
+    max-height: calc(94vh - 145px) !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    overscroll-behavior: contain !important;
+    box-sizing: border-box !important;
   }
 
-  /* Prevent button clipping and horizontal overflow */
-  .modal-footer button {
+  /* Pinned, Safe-Area-Aware Sticky Footer */
+  .modal-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #ffffff !important;
+    border-top: 1.5px solid #e2e8f0 !important;
+    z-index: 1000 !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px)) 16px !important;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08) !important;
     width: 100% !important;
-    white-space: normal !important;
-    line-height: 1.3 !important;
-    padding: 12px 14px !important;
+    box-sizing: border-box !important;
   }
-}
 
-/* Improve touch interaction on inputs and selects */
-input, select, textarea {
-  font-size: 16px !important;
-  min-height: 44px !important;
-  box-sizing: border-box !important;
+  /* Primary Touch Action Buttons */
+  .btn-primary,
+  #cartProceedBtn,
+  #btnExecuteConfirmedOrder,
+  #confirmPaymentAndRelease,
+  .btn-checkout,
+  .btn-place-order-color {
+    min-height: 52px !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: 12px !important;
+    touch-action: manipulation !important;
+    box-shadow: 0 4px 14px rgba(0, 102, 163, 0.25) !important;
+  }
+
+  .btn-secondary,
+  .modal-footer .btn-secondary {
+    min-height: 44px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+    touch-action: manipulation !important;
+  }
+
+  /* Cart Quantity Stepper Buttons */
+  .qty-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    touch-action: manipulation !important;
+  }
+
+  /* Floating Cart Bar position above bottom nav */
+  #floatingCartBar {
+    bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: calc(100% - 24px) !important;
+    max-width: 440px !important;
+    transform: none !important;
+    padding: 8px 14px !important;
+    box-sizing: border-box !important;
+    z-index: 9998 !important;
+  }
+
+  /* Inputs, selects, and textareas */
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+    font-size: 16px !important;
+    min-height: 44px !important;
+    box-sizing: border-box !important;
+    border-radius: 8px !important;
+  }
 }
