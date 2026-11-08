@@ -6141,7 +6141,7 @@ function updateUserNavIdentity() {
           <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
           <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
         </svg>
-        <span>Sign In with Google</span>
+        <span>Continue with Google</span>
       </button>
     `;
     const mbLabel = document.getElementById('mbNavAccountLabel');
@@ -6187,6 +6187,16 @@ async function initFirebaseClient() {
   }
 }
 
+function getKnownGoogleAccounts() {
+  try {
+    const raw = localStorage.getItem('dominos_known_google_accounts');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+window.getKnownGoogleAccounts = getKnownGoogleAccounts;
+
 function initGoogleAuth() {
   initFirebaseClient().catch(() => {});
   if (window.google && window.google.accounts && window.google.accounts.id) {
@@ -6196,16 +6206,6 @@ function initGoogleAuth() {
         callback: handleGoogleCredentialResponse,
         auto_select: false
       });
-      const btnEl = document.getElementById('googleBtnContainer');
-      if (btnEl) {
-        window.google.accounts.id.renderButton(btnEl, {
-          theme: 'outline',
-          size: 'large',
-          width: 280,
-          text: 'signin_with',
-          shape: 'pill'
-        });
-      }
     } catch (e) {
       console.warn('Google GIS init note:', e.message);
     }
@@ -6213,79 +6213,106 @@ function initGoogleAuth() {
 }
 
 async function handleContinueWithGoogle() {
-  await initFirebaseClient();
-
-  // 1. If Firebase Client SDK is initialized with user config, execute Firebase Google Popup
-  if (isFirebaseInitialized && window.firebase && window.firebase.auth) {
-    try {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      provider.addScope('email');
-      provider.addScope('profile');
-      const result = await firebase.auth().signInWithPopup(provider);
-      if (result && result.user) {
-        const u = result.user;
-        const idToken = await u.getIdToken();
-        const res = await fetch('/api/auth/google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            credential: idToken,
-            firebaseUser: {
-              uid: u.uid,
-              email: u.email,
-              displayName: u.displayName || 'Google User',
-              photoURL: u.photoURL || 'https://lh3.googleusercontent.com/a/default-user=s96-c'
-            }
-          })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Authentication rejected by server');
-
-        currentUser = { ...GUEST_USER, ...data.user, isGuest: false };
-        localStorage.setItem('dominos_user', JSON.stringify(currentUser));
-        updateUserNavIdentity();
-        closeModal('googleAuthModal');
-        showToastNotice(`Welcome, ${currentUser.name}! Signed in via Firebase Google Auth.`, '🎉');
-        loadUserProfile();
-        return;
-      }
-    } catch (fbErr) {
-      console.warn('[FIREBASE] Google Popup notice:', fbErr.message);
-      if (fbErr.code === 'auth/popup-closed-by-user') return;
-      // Fall through to GIS / direct prompt if popup closed
-    }
+  const btn = document.getElementById('btnContinueGoogle');
+  const originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.85';
+    btn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" style="animation: spin 1s linear infinite; flex-shrink: 0;" fill="none" stroke="#4285f4" stroke-width="2.5">
+        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+        <path d="M12 2a10 10 0 0 1 10 10"></path>
+      </svg>
+      <span>Connecting to Google...</span>
+    `;
   }
 
-  // 2. Fallback to GIS (Google Identity Services)
-  if (window.google && window.google.accounts && window.google.accounts.id) {
-    try {
-      window.google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          console.log('Google prompt note:', notification.getNotDisplayedReason?.() || notification.getSkippedReason?.());
+  const resetBtn = () => {
+    if (btn) {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.innerHTML = originalHtml;
+    }
+  };
+
+  try {
+    await initFirebaseClient();
+
+    // 1. If Firebase Client SDK is initialized with user config, execute Firebase Google Popup
+    if (isFirebaseInitialized && window.firebase && window.firebase.auth) {
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('email');
+        provider.addScope('profile');
+        const result = await firebase.auth().signInWithPopup(provider);
+        if (result && result.user) {
+          const u = result.user;
+          const idToken = await u.getIdToken();
+          const res = await fetch('/api/auth/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              credential: idToken,
+              firebaseUser: {
+                uid: u.uid,
+                email: u.email,
+                displayName: u.displayName || 'Google User',
+                photoURL: u.photoURL || 'https://lh3.googleusercontent.com/a/default-user=s96-c'
+              }
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Authentication rejected by server');
+
+          currentUser = { ...GUEST_USER, ...data.user, isGuest: false };
+          localStorage.setItem('dominos_user', JSON.stringify(currentUser));
+          updateUserNavIdentity();
+          closeModal('googleAuthModal');
+          showToastNotice(`Welcome, ${currentUser.name}! Signed in via Google.`, '🎉');
+          loadUserProfile();
+          resetBtn();
+          return;
         }
-      });
-    } catch (e) {
-      console.warn('GIS prompt error:', e);
+      } catch (fbErr) {
+        console.warn('[FIREBASE] Google Popup notice:', fbErr.message);
+        if (fbErr.code === 'auth/popup-closed-by-user') {
+          resetBtn();
+          return;
+        }
+      }
     }
-  }
 
-  // Check if native GIS button exists inside container and click it
-  const gisBtn = document.querySelector('#googleBtnContainer div[role="button"]');
-  if (gisBtn) {
-    gisBtn.click();
-    return;
-  }
+    // 2. Fallback to GIS (Google Identity Services) One-Tap Prompt
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      try {
+        window.google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            console.log('Google prompt note:', notification.getNotDisplayedReason?.() || notification.getSkippedReason?.());
+          }
+        });
+      } catch (e) {
+        console.warn('GIS prompt error:', e);
+      }
+    }
 
-  // 3. Direct seamless Google Account Sign-In (Zero OTP / Zero Passwords)
-  const email = prompt('Sign In with Google\n\nEnter your Google Account email (e.g. yourname@gmail.com):');
-  if (!email || !email.includes('@')) {
-    if (email) alert('Please enter a valid Google Account email address.');
-    return;
-  }
+    // 3. Direct Google Account authentication fallback (for local/testing or popups blocked)
+    const knownAccounts = getKnownGoogleAccounts();
+    const defaultEmail = (knownAccounts[0] && knownAccounts[0].email) || 'parthgulyani7960@gmail.com';
+    const email = prompt('Continue with Google\n\nEnter your Google Account email address:', defaultEmail);
+    if (!email || !email.includes('@')) {
+      resetBtn();
+      return;
+    }
 
-  const nameParts = email.split('@')[0].split(/[._-]/);
-  const guessedName = nameParts.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') || 'Google User';
-  await signInWithDeviceGoogleAccount(email.trim(), guessedName, 'https://lh3.googleusercontent.com/a/default-user=s96-c');
+    const nameParts = email.split('@')[0].split(/[._-]/);
+    const guessedName = nameParts.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') || 'Google User';
+    await signInWithDeviceGoogleAccount(email.trim(), guessedName, 'https://lh3.googleusercontent.com/a/default-user=s96-c');
+  } catch (err) {
+    console.error('Sign-in error:', err);
+    showToastNotice('Google Sign-In: ' + (err.message || 'Failed'), '⚠️');
+  } finally {
+    resetBtn();
+  }
 }
 async function submitModalGoogleEmail() {
   const input = document.getElementById('modalGoogleEmailInput');
