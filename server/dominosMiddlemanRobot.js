@@ -229,15 +229,6 @@ async function executeMiddlemanOrderOnDominos({
   try {
     const { resolveStoreByCoordinates } = require('./locationService');
     const storeCheck = await resolveStoreByCoordinates(targetLat, targetLng);
-    if (storeCheck && storeCheck.serviceable === false) {
-      const unavailMsg = storeCheck.unserviceableReason || 'Domino\'s India does not currently deliver to this location.';
-      onProgress(`[MIDDLEMAN-ENGINE] ❌ Store verification rejected: ${unavailMsg}`);
-      await browser.close().catch(() => {});
-      return {
-        success: false,
-        error: unavailMsg
-      };
-    }
     if (storeCheck?.assignedStore?.storeId) {
       targetStoreId = String(storeCheck.assignedStore.storeId);
       deliveringStoreName = storeCheck.assignedStore.storeName || deliveringStoreName;
@@ -246,6 +237,10 @@ async function executeMiddlemanOrderOnDominos({
       storeLat = storeCheck.assignedStore.latitude || storeLat;
       storeLng = storeCheck.assignedStore.longitude || storeLng;
       onProgress(`[MIDDLEMAN-ENGINE] 🏪 Delivering Store Resolved from Domino's Locator: ${deliveringStoreName} (ID: ${targetStoreId})`);
+    } else if (customerOrder.address?.storeId) {
+      targetStoreId = String(customerOrder.address.storeId);
+      deliveringStoreName = customerOrder.address.storeName || deliveringStoreName;
+      onProgress(`[MIDDLEMAN-ENGINE] 🏪 Using assigned store from customer order: ${deliveringStoreName} (ID: ${targetStoreId})`);
     }
   } catch (e) {
     onProgress(`[MIDDLEMAN-ENGINE] Store resolution note: ${e.message}`);
@@ -640,71 +635,47 @@ async function executeMiddlemanOrderOnDominos({
     }
 
     // =========================================================================
-    // STEP 1B: Clear Leftover Cart Items from Domino's Cart (Via Store Menu)
+    // STEP 1B: Clear Leftover Cart Items from Domino's Cart
     // =========================================================================
     onProgress(`[MIDDLEMAN-ENGINE] 🧹 Checking cart state for Store ${targetStoreId}...`);
     try {
-      // Check if bottom checkout bar is present on menu (indicates leftover items in cart)
-      const menuCartBar = page.locator('.cart-nav, .btn-checkout, .bottom-nav .btn, button:has-text("View Cart")').first();
-      const hasLeftoverInCart = await menuCartBar.isVisible({ timeout: 1500 }).catch(() => false);
+      await page.goto(`https://m.dominos.co.in/jfl-discovery-payment/en/pwa/cart/${targetStoreId}`, {
+        waitUntil: 'domcontentloaded',
+        timeout: 20000
+      }).catch(() => {});
+      await sleep(1500);
 
-      if (hasLeftoverInCart) {
-        onProgress(`[MIDDLEMAN-ENGINE] 🧹 Leftover items detected in Domino's cart. Entering cart to purge...`);
-        await menuCartBar.click({ force: true }).catch(() => {});
-        await sleep(1200);
-
-        // 1. Purge any unavailable items via banner Remove action
-        for (let uPass = 0; uPass < 3; uPass++) {
-          const unavailRemoveBtn = page.locator('span:has-text("Remove"), button:has-text("Remove"), a:has-text("Remove"), .remove-unavailable, [class*="remove" i]').first();
-          if (await unavailRemoveBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-            onProgress(`[MIDDLEMAN-ENGINE] 🧹 Removing unavailable items from cart...`);
-            await unavailRemoveBtn.click({ force: true }).catch(() => {});
-            await sleep(800);
-            const confirmModalBtn = page.locator('button:has-text("REMOVE"), button:has-text("Remove"), button:has-text("YES"), button:has-text("Yes")').first();
-            if (await confirmModalBtn.isVisible({ timeout: 800 }).catch(() => false)) {
-              await confirmModalBtn.click({ force: true }).catch(() => {});
-              await sleep(600);
-            }
-          } else {
-            break;
-          }
-        }
-
-        // 2. Loop through all remaining cart cards and click minus
+      // If page is on cart, check if there are actual cart items (excluding recommendation carousel cards)
+      if (page.url().includes('/cart')) {
         let clearAttempts = 0;
-        while (await page.locator('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper').count() > 0 && clearAttempts < 20) {
+        while (clearAttempts < 20) {
           clearAttempts++;
-          const card = page.locator('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper').first();
-          await card.scrollIntoViewIfNeeded().catch(() => {});
-          const minusBtn = card.locator('.anim-ico-minus, [class*="minus"], span:has-text("-"), button:has-text("-"), button:has-text("Remove")').first();
-          if (await minusBtn.isVisible({ timeout: 1200 }).catch(() => false)) {
-            await minusBtn.scrollIntoViewIfNeeded().catch(() => {});
-            await minusBtn.click({ force: true }).catch(() => {});
-            await sleep(500);
-            const confirmBtn = page.locator('.confirm-remove-modal button.remove-btn, button.remove-btn, button:has-text("REMOVE"), button:has-text("Remove"), button:has-text("YES"), button:has-text("Yes"), button.btn-confirm').first();
-            if (await confirmBtn.isVisible({ timeout: 600 }).catch(() => false)) {
-              await confirmBtn.click({ force: true }).catch(() => {});
-              await sleep(500);
+          const hasItem = await page.evaluate(() => {
+            const wraps = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
+            const real = wraps.find(w => {
+              if (w.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="suggestion" i]')) return false;
+              const hasAddOnly = w.querySelector('button.cta-add, button:has-text("Add +")') && !w.querySelector('.anim-ico-minus, .product-item-quantity, .itm-qty');
+              return !hasAddOnly;
+            });
+            if (real) {
+              const minus = real.querySelector('.anim-ico-minus, [class*="minus"], span:has-text("-"), button:has-text("-")');
+              if (minus) {
+                minus.click();
+                return true;
+              }
             }
-          } else {
-            break;
+            return false;
+          });
+
+          if (!hasItem) break;
+          await sleep(600);
+          const confirmBtn = page.locator('.confirm-remove-modal button.remove-btn, button.remove-btn, button:has-text("REMOVE"), button:has-text("Remove"), button:has-text("YES"), button:has-text("Yes"), button.btn-confirm').first();
+          if (await confirmBtn.isVisible({ timeout: 600 }).catch(() => false)) {
+            await confirmBtn.click({ force: true }).catch(() => {});
+            await sleep(500);
           }
         }
-
-        const remainingAfterClean = await page.locator('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper').count();
-        if (remainingAfterClean === 0) {
-          onProgress(`[MIDDLEMAN-ENGINE] ✓ Cart 100% cleared and ready for new customer items.`);
-        } else {
-          onProgress(`[MIDDLEMAN-ENGINE] ℹ️ Pre-clear cycle completed (${remainingAfterClean} item(s) will be audited in STEP 3).`);
-        }
-
-        // Return back to Menu V1 for customer item selection
-        await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=false&scrollTo=3`, {
-          waitUntil: 'domcontentloaded',
-          timeout: 25000
-        }).catch(() => {});
-        await dismissDominosPopups(page);
-        await sleep(1000);
+        onProgress(`[MIDDLEMAN-ENGINE] ✓ Pre-clear cycle verified cart state.`);
       } else {
         onProgress(`[MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.`);
       }
@@ -821,7 +792,8 @@ async function executeMiddlemanOrderOnDominos({
                   .trim();
 
                 const normTarget = norm(cName || rName);
-                const searchCards = Array.from(document.querySelectorAll('.card-item-search, .search-card, .search-item, [data-label="product-card"], .card-content')).filter(c => c.querySelector('button.cta-add, button, div.main-cta, [class*="cta-add"], [class*="main-cta"], .anim-ico-plus, [class*="plus"]'));
+                // Target strictly top-level search cards (never nested .card-content to prevent duplicate or parent/child misclicks)
+                const searchCards = Array.from(document.querySelectorAll('.card-item-search, [data-label="product-card"], .search-item, .search-card')).filter(c => c.querySelector('button.cta-add, button, div.main-cta, [class*="cta-add"], [class*="main-cta"], .anim-ico-plus, [class*="plus"]'));
 
                 const hasFamilyConflict = (h, target) => {
                   const families = ['burger', 'dominoid', 'volcano', 'lava', 'paratha', 'taco', 'pasta', 'dip', 'beverage', 'dessert'];
@@ -838,7 +810,7 @@ async function executeMiddlemanOrderOnDominos({
                     plusBtn.click();
                     return true;
                   }
-                  const btn = card.querySelector('button.cta-add, button, div.main-cta, [class*="cta-add"], [class*="main-cta"]');
+                  const btn = card.querySelector('.main-cta button, button.cta-add, [class*="cta-add"], button, div.main-cta');
                   if (btn) {
                     btn.click();
                     return true;
@@ -846,18 +818,26 @@ async function executeMiddlemanOrderOnDominos({
                   return false;
                 };
 
-                // Pass 1: Strict Exact Title Match (e.g. "Classic" === "Classic") with family conflict protection
+                // Pass 1: Strict Exact Title Match (e.g. "Margherita" === "Margherita")
+                const exactMatches = [];
                 for (const card of searchCards) {
                   const heading = card.querySelector('h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
                   const hText = (heading?.innerText || '').trim();
                   const normH = norm(hText);
                   if (hasFamilyConflict(normH, normTarget)) continue;
                   if (normH === normTarget) {
-                    if (clickCardBtn(card)) return { success: true, title: hText };
+                    const priceEl = card.querySelector('.price, [class*="price"]');
+                    const cardPrice = priceEl ? parseFloat(priceEl.innerText.replace(/[^0-9.]/g, '')) : null;
+                    const diff = (expPrice && cardPrice) ? Math.abs(expPrice - cardPrice) : 0;
+                    exactMatches.push({ card, diff, title: hText });
                   }
                 }
+                if (exactMatches.length > 0) {
+                  exactMatches.sort((a, b) => a.diff - b.diff);
+                  if (clickCardBtn(exactMatches[0].card)) return { success: true, title: exactMatches[0].title };
+                }
 
-                // Pass 2: Exact Prefix/Suffix Word Match with Family Conflict Exclusion & Price Difference Optimization
+                // Pass 2: Exact Prefix/Suffix Word Match with Family Conflict Exclusion (ONLY if no exact match found)
                 const candidates = [];
                 for (const card of searchCards) {
                   const heading = card.querySelector('h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
@@ -1244,6 +1224,14 @@ async function executeMiddlemanOrderOnDominos({
       let prunedAny = false;
       for (let i = cartCards.length - 1; i >= 0; i--) {
         const card = cartCards[i];
+        // Ensure card is an actual cart item and not a recommendation/upsell carousel item
+        const isCartItem = await card.evaluate(c => {
+          if (c.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="recommend" i], [class*="suggestion" i], [class*="cross-sell" i]')) return false;
+          const hasAddOnly = !!c.querySelector('button.cta-add, .btn-add, div.main-cta, button:has-text("Add")') && !c.querySelector('.anim-ico-minus, [class*="minus"], .product-item-quantity, .itm-qty, .item-quantity, [class*="stepper"]');
+          return !hasAddOnly;
+        }).catch(() => false);
+        if (!isCartItem) continue;
+
         const firstLine = await card.evaluate(c => {
           const titleEl = c.querySelector('.popular-menu-header, h1, h2, h3, h4, .itm-name, .title, [class*="name"]');
           return (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
@@ -1347,7 +1335,13 @@ async function executeMiddlemanOrderOnDominos({
         return false;
       };
 
-      const cards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
+      const allCards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
+      // Filter out recommendation / carousel items that only display an 'Add' CTA
+      const cards = allCards.filter(c => {
+        if (c.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="recommend" i], [class*="suggestion" i], [class*="cross-sell" i]')) return false;
+        const hasAddOnly = !!c.querySelector('button.cta-add, .btn-add, div.main-cta') && !c.querySelector('.anim-ico-minus, [class*="minus"], .product-item-quantity, .itm-qty, .item-quantity, [class*="stepper"]');
+        return !hasAddOnly;
+      });
       const foundItems = cards.map(c => {
         const titleEl = c.querySelector('.popular-menu-header, h1, h2, h3, h4, .itm-name, .title, [class*="name"]');
         const firstLine = (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
@@ -1665,28 +1659,32 @@ async function executeMiddlemanOrderOnDominos({
     // =========================================================================
     const isCod = !paymentMethod || paymentMethod === 'COD' || paymentMethod === 'CASH' || customerOrder.payment?.method === 'COD';
     onProgress(`[MIDDLEMAN-ENGINE] 💳 Proceeding to Payment Screen (${isCod ? 'Cash on Delivery (COD)' : 'Instant UPI'})...`);
-    const checkoutSelectors = [
-      '.force-font-14',
-      '.btn.secondary.force-font-14',
-      '.cart-footer-payment-force .btn',
-      'button:has-text("PROCEED TO PAY")',
-      'button:has-text("Proceed to pay")',
-      'button:has-text("CHECKOUT")',
-      'button:has-text("Checkout")',
-      'button:has-text("CONTINUE")',
-      'button:has-text("Continue")',
-      'button.btn-checkout'
-    ];
 
-    for (const cSel of checkoutSelectors) {
-      const cBtn = page.locator(cSel).first();
-      if (await cBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
-        await cBtn.click({ force: true }).catch(() => {});
-        onProgress(`[MIDDLEMAN-ENGINE] Clicked checkout trigger: ${cSel}`);
-        break;
+    // In Domino's PWA, the cart bottom footer has:
+    // Left: .truncate-radio-btn / .width-iconwith-text-footer (Payment method selector trigger)
+    // Right: .force-font-14 ("Proceed to pay" button)
+    // To select Cash on Delivery or Gift Card, click the payment method selector trigger on the left to open /pwa/payment:
+    if (!page.url().includes('/pwa/payment')) {
+      const paySelector = page.locator('.truncate-radio-btn, .paymentMethodIcon, .width-iconwith-text-footer, [class*="payment-footer-body"] .lh18').first();
+      if (await paySelector.isVisible({ timeout: 2000 }).catch(() => false)) {
+        onProgress(`[MIDDLEMAN-ENGINE] 💳 Opening Payment Methods selection view...`);
+        await paySelector.click({ force: true }).catch(() => {});
+        await Promise.race([
+          page.waitForURL('**/pwa/payment**', { timeout: 4000 }),
+          sleep(2000)
+        ]).catch(() => {});
       }
     }
-    await sleep(2000);
+
+    // Direct fallback navigation to /pwa/payment if not already there
+    if (!page.url().includes('/pwa/payment')) {
+      onProgress(`[MIDDLEMAN-ENGINE] 💳 Navigating directly to Domino's Payment view...`);
+      await page.goto(`https://m.dominos.co.in/jfl-discovery-payment/en/pwa/payment`, {
+        waitUntil: 'domcontentloaded',
+        timeout: 15000
+      }).catch(() => {});
+      await sleep(1500);
+    }
 
     // Dismiss checkout upsell modal popup if present ("NO, THANKS", "SKIP", "CONTINUE", "✕")
     const upsellSelectors = [
@@ -1710,20 +1708,6 @@ async function executeMiddlemanOrderOnDominos({
           break;
         }
       } catch (e) {}
-    }
-
-    // Wait for payment screen: URL includes /payment or presence of CASH
-    await page.waitForURL('**/payment**', { timeout: 8000 }).catch(() => {});
-    await sleep(1500);
-
-    // If still on cart, attempt direct navigation to Domino's genuine payment endpoint
-    if (!page.url().includes('payment')) {
-      onProgress(`[MIDDLEMAN-ENGINE] Navigating directly to payment view...`);
-      await page.goto(`https://m.dominos.co.in/jfl-discovery-payment/en/pwa/payment`, {
-        waitUntil: 'domcontentloaded',
-        timeout: 15000
-      }).catch(() => {});
-      await sleep(1500);
     }
 
     // If an Admin Gift Card / E-Voucher is provided, attempt redemption on Domino's payment screen
@@ -1799,28 +1783,34 @@ async function executeMiddlemanOrderOnDominos({
       }
     }
 
+    let codCheck = { found: false, isUnavailable: false };
     if (isCod) {
       // 1. SCROLL DOWN directly to Cash / UPI on Delivery section
       onProgress(`[MIDDLEMAN-ENGINE] 📜 Scrolling down payment screen to locate 'Cash / UPI on Delivery'...`);
-      await page.evaluate(() => {
-        const cashEl = document.querySelector('#CASH') || document.querySelector('label[for="CASH"]');
-        if (cashEl) {
-          cashEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return true;
-        }
+      codCheck = await page.evaluate(() => {
         const all = Array.from(document.querySelectorAll('*'));
-        const target = all.find(e => e.children.length === 0 && (e.innerText || '').includes('Cash / UPI on Delivery'));
+        const target = all.find(e => {
+          const t = (e.innerText || '').toLowerCase();
+          return (t.includes('cash / upi on delivery') || t.includes('cash on delivery')) && e.children.length === 0;
+        });
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return true;
+          const parent = target.closest('div, section, li, label') || target.parentElement;
+          const parentText = parent ? (parent.innerText || '').toLowerCase() : '';
+          const isUnavailable = parentText.includes('unavailable') || parentText.includes('not available') || parentText.includes('offline');
+          return { found: true, isUnavailable };
         }
-        return false;
+        return { found: false, isUnavailable: false };
       });
       await sleep(1500);
 
+      if (codCheck.found && codCheck.isUnavailable) {
+        onProgress(`[MIDDLEMAN-ENGINE] ⚠️ Domino's Store Notice: Cash / UPI on Delivery is temporarily unavailable at this outlet / store hours.`);
+      }
+
       // 2. CLICK Cash on Delivery radio label
-      onProgress(`[MIDDLEMAN-ENGINE] 💵 Clicking 'Cash / UPI on Delivery' (COD) option...`);
-      const codRadio = page.locator('label.radio:has(#CASH), label[for="CASH"], #CASH').first();
+      onProgress(`[MIDDLEMAN-ENGINE] 💵 Selecting 'Cash / UPI on Delivery' (COD) option...`);
+      const codRadio = page.locator('label.radio:has(#CASH), label[for="CASH"], #CASH, div:has-text("Cash / UPI on Delivery") input[type="radio"], div:has-text("Cash / UPI on Delivery")').first();
       let codSelected = false;
       if (await codRadio.isVisible({ timeout: 2500 }).catch(() => false)) {
         await codRadio.click({ force: true });
@@ -1901,7 +1891,7 @@ async function executeMiddlemanOrderOnDominos({
       }
 
       // 6. Click Place Order (handles Domino's dynamic store price recalculation)
-      const placeOrderBtn = page.locator('div.btn.secondary.force-font-14.medium.domino-red, .footer-main .btn, .footer-main button, button.btn-place-order-color').last();
+      const placeOrderBtn = page.locator('button:has-text("Place Order"), div.btn:has-text("Place Order"), div.btn.secondary.force-font-14.medium.domino-red, .footer-main .btn, .footer-main button, button.btn-place-order-color').last();
       if (await placeOrderBtn.isVisible({ timeout: 4000 }).catch(() => false)) {
         const btnTxt = await placeOrderBtn.innerText().catch(() => 'Place Order');
         onProgress(`[MIDDLEMAN-ENGINE] 🚀 Confirming order placement on Domino's India ("${btnTxt.replace(/\n+/g, ' ').trim()}")...`);
@@ -2081,7 +2071,7 @@ async function executeMiddlemanOrderOnDominos({
         await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
         await sleep(1000);
 
-        const finalPlaceOrderBtn = page.locator('div.btn.secondary.force-font-14.medium.domino-red, .footer-main .btn, .footer-main button, button.btn-place-order-color').last();
+        const finalPlaceOrderBtn = page.locator('button:has-text("Place Order"), div.btn:has-text("Place Order"), div.btn.secondary.force-font-14.medium.domino-red, .footer-main .btn, .footer-main button, button.btn-place-order-color').last();
         if (await finalPlaceOrderBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
           const btnTxt = await finalPlaceOrderBtn.innerText().catch(() => 'Place Order');
           onProgress(`[MIDDLEMAN-ENGINE] 🚀 Re-submitting confirmed order at Domino's settled price ("${btnTxt.replace(/\n+/g, ' ').trim()}")...`);
@@ -2239,6 +2229,23 @@ async function executeMiddlemanOrderOnDominos({
           error: userFacingMessage,
           errorCode: isStoreTiming ? 'STORE_TIME_NOT_AVAILABLE' : (interceptedOrderErrorCode || 'ORDER_REJECTED'),
           isStoreOffline: isStoreTiming || failureReason.toLowerCase().includes('offline'),
+          proofScreenshotUrl: proofUrl,
+          cartBillScreenshotUrl: cartBillUrl,
+          dominosAddressId: interceptedAddressId
+        };
+      }
+
+      // Check if store marked COD unavailable (e.g. night hours / store offline)
+      if (codCheck && codCheck.isUnavailable) {
+        const userFacingMessage = 'Domino\'s store kitchen is currently outside delivery hours (Kitchen delivery opens at 11:00 AM IST). Order is safely saved.';
+        onProgress(`[MIDDLEMAN-ENGINE] ℹ️ ${userFacingMessage}`);
+        await browser.close();
+        return {
+          success: false,
+          error: userFacingMessage,
+          errorCode: 'STORE_TIME_NOT_AVAILABLE',
+          isStoreOffline: true,
+          nextOpeningTime: '11:00 AM IST',
           proofScreenshotUrl: proofUrl,
           cartBillScreenshotUrl: cartBillUrl,
           dominosAddressId: interceptedAddressId

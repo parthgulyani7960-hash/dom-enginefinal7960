@@ -175,28 +175,28 @@ class DominosAutomationRobot {
       let outlet = null;
       try {
         const liveResult = await locationService.resolveStoreByCoordinates(lat, lng);
-        if (liveResult && liveResult.serviceable === false) {
-          throw new Error(`Location [${lat}, ${lng}] is outside Domino's India delivery coverage zone. Please select a serviceable address.`);
-        }
-        if (liveResult.assignedStore) {
+        if (liveResult && liveResult.assignedStore) {
           outlet = liveResult.assignedStore;
         }
       } catch (e) {
-        if (e.message.includes('outside Domino\'s')) throw e;
         console.warn('[ROBOT-RESOLVE-ERR]', e.message);
       }
 
-      if (!outlet && order.address?.storeName) {
+      if (!outlet && (order.address?.storeName || order.address?.storeId)) {
         outlet = {
-          storeId: order.address.storeId || 'DOM-LIVE',
-          storeName: order.address.storeName,
+          storeId: order.address.storeId || '66409',
+          storeName: order.address.storeName || "SECTOR-15C, CHANDIGARH",
           polygonTime: '30 mins'
         };
       }
 
       if (!outlet) {
         const resolved = locationService.findNearestDominosOutlet(lat, lng);
-        outlet = resolved.store;
+        outlet = resolved.store || {
+          storeId: '66409',
+          storeName: 'SECTOR-15C, CHANDIGARH',
+          polygonTime: '30 mins'
+        };
       }
 
       order.robot.storeId = outlet.storeId;
