@@ -608,13 +608,18 @@
 
             <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--gray-300); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <span style="font-size: 11px; color: var(--gray-600);">Need help with an order, refund, or phone update?</span>
-              <button type="button" onclick="closeModal('userProfileModal'); openHelpSupportModal(null);" style="background: #0284c7; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+              <button type="button" onclick="closeModal('userProfileModal'); openHelpSupportModal(null);" style="background: #0284c7; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
                 💬 Live Support Chat &amp; Help Desk
               </button>
             </div>
           </div>
         </div>
 
+      </div>
+      <div class="modal-footer" id="userProfileFooter" style="padding: 12px 16px;">
+        <button type="button" class="btn-secondary" onclick="closeModal('userProfileModal')" style="width: 100%; min-height: 48px; background: #f8fafc; border: 1.5px solid #cbd5e1; font-size: 13px; font-weight: 800; color: #334155; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0;">
+          ✕ Close Profile
+        </button>
       </div>
     </div>
   </div>
@@ -1433,10 +1438,19 @@
         </div>
 
         <!-- Help with this Order Button -->
-        <button type="button" onclick="openOrderHelpChat(currentOrder ? currentOrder.id : null)" style="width: 100%; margin-top: 14px; background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1d4ed8; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <button type="button" onclick="openOrderHelpChat(currentTrackingOrderId || (currentOrder ? currentOrder.id : null))" style="width: 100%; margin-top: 14px; background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1d4ed8; padding: 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
           <span>🎧 Problem with this Domino's Order? Chat with Support &rarr;</span>
         </button>
 
+      </div>
+      <!-- Pinned & Protected Sticky Tracking Footer -->
+      <div class="modal-footer" id="trackingModalFooter" style="display: flex; flex-direction: row; gap: 10px; padding: 12px 16px;">
+        <button type="button" class="btn-secondary" onclick="closeModal('trackingModal')" style="flex: 1; min-height: 48px; background: #f8fafc; border: 1.5px solid #cbd5e1; font-size: 13px; font-weight: 800; color: #334155; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0;">
+          <span>✕</span> <span>Close &amp; Track in Background</span>
+        </button>
+        <button type="button" class="btn-primary" onclick="openOrderHelpChat(currentTrackingOrderId || (currentOrder ? currentOrder.id : null))" style="flex: 1; min-height: 48px; background: #eff6ff; border: 1.5px solid #93c5fd; color: #0066a3; font-size: 13px; font-weight: 800; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: none; margin: 0;">
+          <span>🎧</span> <span>Help &amp; Support</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1549,17 +1563,17 @@
             <!-- Injected by JS -->
           </div>
         </div>
+      </div>
 
-        <!-- Footer Add Button with Live Price -->
-        <div style="border-top: 1px solid var(--gray-200); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <div style="font-size: 11px; color: var(--gray-500); text-transform: uppercase; font-weight: 700;">Total Price</div>
-            <div id="customTotalPrice" style="font-size: 22px; font-weight: 900; color: #16a34a;">₹0</div>
-          </div>
-          <button class="btn-primary" style="width: auto; padding: 10px 24px; font-size: 14px; font-weight: 800; cursor: pointer;" onclick="confirmAddCustomizedPizzaToCart()">
-            + Add to Cart &rarr;
-          </button>
+      <!-- Pinned & Protected Customization Footer -->
+      <div class="modal-footer" id="customPizzaFooter" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 18px; gap: 12px;">
+        <div>
+          <div style="font-size: 11px; color: var(--gray-500); text-transform: uppercase; font-weight: 700;">Total Price</div>
+          <div id="customTotalPrice" style="font-size: 22px; font-weight: 900; color: #16a34a;">₹0</div>
         </div>
+        <button class="btn-primary" id="btnConfirmCustomPizza" style="width: auto; min-width: 160px; min-height: 48px; padding: 10px 24px; font-size: 14px; font-weight: 800; cursor: pointer; margin: 0;" onclick="confirmAddCustomizedPizzaToCart()">
+          + Add to Cart &rarr;
+        </button>
       </div>
     </div>
   </div>
@@ -1628,6 +1642,11 @@
           </div>
         </div>
       </div>
+      <div class="modal-footer" id="myOrdersModalFooter" style="padding: 12px 16px;">
+        <button type="button" class="btn-secondary" onclick="closeModal('myOrdersModal')" style="width: 100%; min-height: 48px; background: #f8fafc; border: 1.5px solid #cbd5e1; font-size: 13px; font-weight: 800; color: #334155; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0;">
+          ✕ Close Past Orders
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1649,6 +1668,11 @@
             ⏳ Domino's settlement proof photo is generating. Please refresh in a moment.
           </div>
         </div>
+      </div>
+      <div class="modal-footer" id="screenshotProofFooter" style="padding: 12px 16px;">
+        <button type="button" class="btn-secondary" onclick="closeModal('screenshotProofModal')" style="width: 100%; min-height: 48px; background: #f8fafc; border: 1.5px solid #cbd5e1; font-size: 13px; font-weight: 800; color: #334155; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0;">
+          ✕ Close Receipt
+        </button>
       </div>
     </div>
   </div>
@@ -1961,7 +1985,7 @@
   </div>
 
   <!-- Floating Bottom Cart Bar (Allows seamless browsing without forcing modal open) -->
-  <div id="floatingCartBar" style="display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #0066a3; color: white; padding: 10px 20px; border-radius: 50px; box-shadow: 0 8px 24px rgba(0, 102, 163, 0.45); align-items: center; justify-content: space-between; gap: 18px; min-width: 300px; max-width: 92vw; border: 1.5px solid rgba(255,255,255,0.25);">
+  <div id="floatingCartBar" onclick="openCartModal()" style="display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #0066a3; color: white; padding: 10px 20px; border-radius: 50px; box-shadow: 0 8px 24px rgba(0, 102, 163, 0.45); align-items: center; justify-content: space-between; gap: 18px; min-width: 300px; max-width: 92vw; border: 1.5px solid rgba(255,255,255,0.25); cursor: pointer;">
     <div style="display: flex; align-items: center; gap: 10px;">
       <span style="font-size: 22px;">🛒</span>
       <div>
