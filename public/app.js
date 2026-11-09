@@ -166,6 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFloatingCartBar();
   checkMaintenanceStatus();
   setInterval(checkMaintenanceStatus, 20000);
+  syncStorePaymentSettings();
+  setInterval(syncStorePaymentSettings, 15000);
   // Check if coordinates were already stored in this browser session
   const storedCoords = sessionStorage.getItem('dominos_user_coords');
   if (storedCoords) {
@@ -3308,6 +3310,12 @@ async function inlineDetectGpsAddress() {
 
 // Proceed to Dynamic UPI QR or COD
 async function proceedToPaymentQR() {
+  try {
+    await checkMaintenanceStatus();
+    await syncStorePaymentSettings();
+    applyPaymentSettingsUI();
+  } catch (_) {}
+
   if (isMaintenanceActive) {
     alert(`⚠️ System Maintenance Active:\n\n${maintenanceInfo?.message || "Domino's Order Engine is currently under scheduled maintenance. Ordering is temporarily paused. We will be back shortly!"}`);
     return;
@@ -3558,6 +3566,11 @@ let pendingOrderPayload = null;
  * Triggered when customer clicks [ ✓ Confirm & Place Domino's Order ] in confirmation modal
  */
 async function executeFinalConfirmedOrder() {
+  if (isMaintenanceActive) {
+    alert(`⚠️ Store Maintenance Notice:\n\n${maintenanceInfo?.message || "Domino's Order Engine is currently undergoing scheduled maintenance. New order placement is temporarily paused."}`);
+    return;
+  }
+
   if (!pendingOrderPayload) {
     alert('No pending order details found. Please open cart and checkout.');
     return;
@@ -3628,6 +3641,10 @@ async function executeFinalConfirmedOrder() {
         openCartModal();
         renderCartDrawer(false);
         alert('🚫 Domino\'s Kitchen Inventory Notice:\n\n' + data.error);
+        return;
+      }
+      if (res.status === 503 || data.friendlyError) {
+        alert('⏳ Domino\'s Kitchen Busy:\n\n' + (data.error || 'All automated dispatch lanes are currently busy. Please wait a moment and tap Place Order again.'));
         return;
       }
       alert('🚫 Domino\'s Store Verification Notice:\n\n' + (data.error || 'Failed to verify cart at Domino\'s site.'));

@@ -1035,8 +1035,9 @@ const server = http.createServer(async (req, res) => {
       const pool = idleAccounts.length > 0 ? idleAccounts : (nonExpiredAccounts.length > 0 ? nonExpiredAccounts : activeAccounts);
 
       if (pool.length === 0) {
-        return sendJson(res, 400, {
-          error: 'No active Domino\'s accounts available in the pool. All accounts are either disabled, expired, or in-use. Please enable or add an active session in Admin Console.'
+        return sendJson(res, 503, {
+          error: 'All Domino\'s autonomous dispatch lanes are currently processing orders. Please retry your order in 1-2 minutes.',
+          friendlyError: true
         });
       }
 
@@ -1078,8 +1079,9 @@ const server = http.createServer(async (req, res) => {
       }
 
       if (!activeSession) {
-        return sendJson(res, 400, {
-          error: 'No valid Domino\'s session available in the pool. Please verify or refresh sessions in Admin Console.'
+        return sendJson(res, 503, {
+          error: 'Domino\'s automated ordering lanes are currently busy. Please retry in 1-2 minutes.',
+          friendlyError: true
         });
       }
 
@@ -1227,9 +1229,9 @@ const server = http.createServer(async (req, res) => {
           rider: {
             name: null,
             phone: null,
-            status: (isCod || isUpi) ? 'AWAITING_PAYMENT_APPROVAL' : 'AWAITING_KITCHEN_DISPATCH'
+            status: isUpi ? 'AWAITING_PAYMENT_APPROVAL' : 'AWAITING_KITCHEN_DISPATCH'
           },
-          logs: [`[${new Date().toLocaleTimeString('en-IN')}] Order placed (${isCod ? 'Cash on Delivery' : (isWallet ? 'Domino\'s Wallet' : 'Instant UPI')}). Engine Ref: ${orderId}. ${(isCod || isUpi) ? 'Awaiting admin payment approval before robot dispatch.' : 'Dispatched to autonomous Domino\'s Robot Worker.'}`]
+          logs: [`[${new Date().toLocaleTimeString('en-IN')}] Order placed (${isCod ? 'Cash on Delivery' : (isWallet ? 'Domino\'s Wallet' : 'Instant UPI')}). Engine Ref: ${orderId}. ${isUpi ? 'Awaiting admin payment approval before robot dispatch.' : 'Dispatched to autonomous Domino\'s Robot Worker.'}`]
         },
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -1238,16 +1240,24 @@ const server = http.createServer(async (req, res) => {
       db.createOrder(newOrder);
       try { db.upsertUserFromOrder(newOrder); } catch (_) {}
 
-      // Lock session to this order in the live fleet
-      if (activeSession) {
-        db.markSessionInUse(activeSession.id, newOrder.id);
-      }
-
-      // Wallet orders are pre-funded so they dispatch immediately; UPI & COD orders await admin approval!
-      if (isWallet) {
-        console.log(`[API] 🚀 Wallet Order ${newOrder.id} pre-funded and enqueued for Domino's Robot Worker.`);
+      // Wallet orders and Cash on Delivery (COD) orders dispatch directly to Domino's autonomous robot!
+      // Only Instant UPI orders await customer payment verification and admin approval.
+      if (isWallet || isCod) {
+        newOrder.payment.status = isCod ? 'COD_PENDING_DELIVERY' : 'WALLET_PAID';
+        newOrder.robot.status = 'QUEUED_FOR_ROBOT';
+        if (activeSession) {
+          db.markSessionInUse(activeSession.id, newOrder.id);
+        }
+        console.log(`[API] 🚀 Order ${newOrder.id} (${isCod ? 'Cash on Delivery' : 'Domino\'s Wallet'}) enqueued directly for Domino's Robot Worker.`);
         queue.enqueue(newOrder.id);
       } else {
+        // UPI Order: Awaiting payment verification and admin confirmation
+        // CRITICAL: DO NOT hold a Domino's fleet account locked in IN_USE while waiting for admin approval!
+        newOrder.payment.status = 'PENDING_APPROVAL';
+        newOrder.robot.status = 'AWAITING_PAYMENT_APPROVAL';
+        if (activeSession) {
+          db.forceReleaseAccount(activeSession.id);
+        }
         console.log(`[API] ⏳ Order ${newOrder.id} placed (${newOrder.payment.method}). Awaiting admin payment approval before robot dispatch.`);
       }
       return sendJson(res, 201, {

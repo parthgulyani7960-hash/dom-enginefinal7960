@@ -135,6 +135,7 @@ let adminRefreshIntervals = [];
 
 function startAdminAutoRefresh() {
   adminRefreshIntervals.forEach(clearInterval);
+  if (!isAdminAuthenticated) return;
   adminRefreshIntervals = [
     setInterval(loadOrders, 4000),
     setInterval(loadAdminTickets, 5000),
@@ -1047,6 +1048,7 @@ async function adminVerifyLiveOtp() {
 
 // Load Accounts Pool
 async function loadAccounts() {
+  if (!isAdminAuthenticated) return;
   try {
     loadSessionFleetFeed();
     const res = await adminFetch('/api/admin/accounts');
@@ -1784,6 +1786,7 @@ function renderLiveRobotRingFeed() {
 window.renderLiveRobotRingFeed = renderLiveRobotRingFeed;
 
 async function loadOrders() {
+  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/admin/orders');
     if (!res.ok) return;
@@ -2983,6 +2986,7 @@ let cachedAppUsers = [];
 let activeManagingUser = null;
 
 async function loadAppUsers() {
+  if (!isAdminAuthenticated) return;
   try {
     loadWalletDeposits();
     const res = await adminFetch('/api/admin/users');
@@ -3580,8 +3584,10 @@ window.adminDeleteAddr = adminDeleteAddr;
 window.adminSetDefaultAddr = adminSetDefaultAddr;
 window.openUserHistoryModal = openUserHistoryModal;
 window.switchHistoryTab = switchHistoryTab;
-const renderUserTxns = renderUserTransactions;
-window.renderUserTxns = renderUserTransactions;
+function renderUserTxns(userId) {
+  return renderUserTransactions(userId);
+}
+window.renderUserTxns = renderUserTxns;
 window.renderUserTransactions = renderUserTransactions;
 window.renderUserOrders = renderUserOrders;
 
@@ -4109,6 +4115,7 @@ let adminSelectedTicketId = null;
 let adminTicketFilter = 'OPEN';
 
 async function loadAdminTickets() {
+  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/support/tickets');
     if (!res.ok) return;
@@ -4342,6 +4349,7 @@ async function toggleAdminResolveTicket() {
 // 8. Active Domino's Sessions Fleet Real-Time Feed
 // =========================================================================
 async function loadSessionFleetFeed() {
+  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/admin/sessions/feed');
     if (!res.ok) return;
@@ -4427,6 +4435,7 @@ async function loadSessionFleetFeed() {
 let cachedWalletDeposits = [];
 
 async function loadWalletDeposits() {
+  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/admin/wallet/deposits');
     if (!res.ok) return;

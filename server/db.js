@@ -244,6 +244,15 @@ class Database {
   constructor() {
     this.data = INITIAL_DATA;
     this.load();
+    this.reapStaleInUseAccounts();
+    // Periodic session auto-reaper every 30 seconds
+    if (typeof setInterval !== 'undefined') {
+      setInterval(() => {
+        try {
+          this.reapStaleInUseAccounts();
+        } catch (_) {}
+      }, 30000);
+    }
   }
 
   load() {
@@ -536,8 +545,48 @@ class Database {
     console.log(`[DB] ✅ Full cloud data merged: ${this.data.accounts.length} accounts, ${this.data.users.length} users, ${this.data.orders.length} orders, ${this.data.vouchers.length} vouchers, ${this.data.menu.length} menu items in pool.`);
   }
 
+  // Auto-Reaper for Stuck Domino's Sessions
+  // Releases sessions stuck in IN_USE > 3 mins or with finished/non-active orders
+  reapStaleInUseAccounts() {
+    if (!this.data || !Array.isArray(this.data.accounts)) return;
+    const now = Date.now();
+    let changed = false;
+
+    for (const acc of this.data.accounts) {
+      if (acc.status === 'IN_USE') {
+        const lastActivity = acc.lastActive ? new Date(acc.lastActive).getTime() : (acc.lastAssignedAt ? new Date(acc.lastAssignedAt).getTime() : 0);
+        const isStale = (now - lastActivity) > (3 * 60 * 1000); // Stale after 3 mins without update
+
+        let orderFinished = false;
+        if (acc.activeOrderId && Array.isArray(this.data.orders)) {
+          const ord = this.data.orders.find(o => o.id === acc.activeOrderId);
+          if (!ord || ['DELIVERED', 'COMPLETED', 'CANCELLED', 'ERROR', 'FAILED'].includes((ord.robot?.status || ord.status || '').toUpperCase())) {
+            orderFinished = true;
+          }
+          if (ord && ord.payment?.method === 'UPI' && (ord.robot?.status === 'AWAITING_PAYMENT_APPROVAL' || ord.payment?.status === 'PENDING_APPROVAL')) {
+            orderFinished = true;
+          }
+        }
+
+        if (isStale || orderFinished || !acc.activeOrderId) {
+          acc.status = 'IDLE';
+          acc.activeOrderId = null;
+          delete acc.inUseByOrderId;
+          delete acc.validationError;
+          changed = true;
+          console.log(`[DB-REAPER] 🔄 Auto-reaped stale Domino's session ${acc.phone || acc.id} -> Reset to IDLE`);
+        }
+      }
+    }
+
+    if (changed) {
+      this.save();
+    }
+  }
+
   // Account Management
   getAccounts() {
+    this.reapStaleInUseAccounts();
     return this.data.accounts;
   }
 
@@ -797,6 +846,7 @@ class Database {
   }
 
   claimAvailableAccount(preferredCategory = null, orderId = null, paymentMethod = null, cartSubtotal = 0) {
+    this.reapStaleInUseAccounts();
     const now = Date.now();
 
     // Priority 0: Check if an explicit account was assigned by admin for this order
