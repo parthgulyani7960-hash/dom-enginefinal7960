@@ -2353,7 +2353,7 @@ async function verifyCartWithKitchen() {
   const selectedAddr = (currentUser.savedAddresses || []).find(a => a.id === selectedAddrId);
   const lat = selectedAddr?.latitude || currentCoordinates?.latitude;
   const lng = selectedAddr?.longitude || currentCoordinates?.longitude;
-  const targetStoreId = currentResolvedStore?.storeId || selectedAddr?.storeId || '63859';
+  const targetStoreId = currentResolvedStore?.storeId || selectedAddr?.storeId || '70258';
 
   try {
     const res = await fetch('/api/catalog/verify-cart', {
@@ -3110,7 +3110,7 @@ async function inlineDetectGpsAddress() {
       const pinEl = document.getElementById('cartInlinePincode');
       if (flatEl && !flatEl.value) flatEl.value = g.house_number || 'Flat 101';
       if (streetEl) streetEl.value = [g.road, g.neighbourhood || g.suburb].filter(Boolean).join(', ') || g.formatted;
-      if (cityEl) cityEl.value = g.city || 'Chandigarh';
+      if (cityEl) cityEl.value = g.city || currentDetectedCity || 'Delhi';
       if (pinEl) pinEl.value = g.postcode || '160015';
       showToastNotice('Address auto-filled from device GPS!', '⚡');
     }
@@ -3214,7 +3214,7 @@ async function proceedToPaymentQR() {
     localStorage.setItem('dominos_recent_receivers', JSON.stringify(recHistory.slice(0, 5)));
   } catch (e) {}
 
-  const resolvedStoreId = currentResolvedStore ? String(currentResolvedStore.storeId) : (selectedAddr.storeId || '63859');
+  const resolvedStoreId = currentResolvedStore ? String(currentResolvedStore.storeId) : (selectedAddr.storeId || '70258');
   const resolvedStoreName = currentResolvedStore ? currentResolvedStore.storeName : (selectedAddr.storeName || "Domino's Pizza");
 
   let flatDisplay = selectedAddr.flat || document.getElementById('cartQuickFlatInput')?.value?.trim() || document.getElementById('topBarFlatInput')?.value?.trim() || '';

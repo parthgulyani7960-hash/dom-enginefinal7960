@@ -163,49 +163,97 @@ class DominosAutomationRobot {
       order.robot.couponCode = selectedPromo;
       db.updateOrder(orderId, order);
 
-      // STEP 2: Store Availability & Coordinate Resolution
+      // STEP 2: Store Availability & Coordinate Resolution (Universal & Dynamic)
       order.robot.status = 'STORE_RESOLVING';
       const addr = order.address || {};
-      const targetLat = addr.latitude || order.location?.latitude;
-      const targetLng = addr.longitude || order.location?.longitude;
-      const lat = targetLat || 28.5355;
-      const lng = targetLng || 77.3910;
-      addLog(order, `Resolving Domino's delivery kitchen for coordinates: [${lat.toFixed(4)}, ${lng.toFixed(4)}]`);
+      let targetLat = addr.latitude || order.location?.latitude;
+      let targetLng = addr.longitude || order.location?.longitude;
 
-      let outlet = null;
-      try {
-        const liveResult = await locationService.resolveStoreByCoordinates(lat, lng);
-        if (liveResult && liveResult.assignedStore) {
-          outlet = liveResult.assignedStore;
+      // If coordinates are missing or invalid, dynamically geocode using customer full address text
+      if (!targetLat || !targetLng || isNaN(targetLat) || isNaN(targetLng) || (targetLat === 30.7339 && targetLng === 76.7889 && addr.city && !addr.city.toLowerCase().includes('chandigarh'))) {
+        const fullAddrStr = [addr.flat, addr.building, addr.street, addr.landmark, addr.city, addr.pincode]
+          .filter(Boolean).join(', ') || addr.completeAddress || '';
+        if (fullAddrStr) {
+          addLog(order, `🗺️ Geocoding delivery destination: "${fullAddrStr}"...`);
+          try {
+            const geoRes = await locationService.searchStoresByQuery(fullAddrStr);
+            if (geoRes && geoRes.coordinates) {
+              targetLat = geoRes.coordinates.latitude;
+              targetLng = geoRes.coordinates.longitude;
+              if (order.address) {
+                order.address.latitude = targetLat;
+                order.address.longitude = targetLng;
+              }
+              if (geoRes.assignedStore) {
+                outlet = geoRes.assignedStore;
+              }
+              addLog(order, `✓ Precision Geocoded destination to: [${Number(targetLat).toFixed(5)}, ${Number(targetLng).toFixed(5)}]`);
+            }
+          } catch (geoErr) {
+            console.warn('[ROBOT-GEO-ERR]', geoErr.message);
+          }
         }
-      } catch (e) {
-        console.warn('[ROBOT-RESOLVE-ERR]', e.message);
       }
 
-      if (!outlet && (order.address?.storeName || order.address?.storeId)) {
+      const lat = parseFloat(targetLat) || 28.6245;
+      const lng = parseFloat(targetLng) || 77.0367;
+      addLog(order, `Resolving official Domino's delivery kitchen for coordinates: [${lat.toFixed(5)}, ${lng.toFixed(5)}]`);
+
+      if (!outlet) {
+        try {
+          const liveResult = await locationService.resolveStoreByCoordinates(lat, lng);
+          if (liveResult && liveResult.assignedStore) {
+            outlet = liveResult.assignedStore;
+          } else if (liveResult && liveResult.nearestStore?.store) {
+            outlet = liveResult.nearestStore.store;
+          }
+        } catch (e) {
+          console.warn('[ROBOT-RESOLVE-ERR]', e.message);
+        }
+      }
+
+      if (!outlet && (order.address?.storeName && order.address?.storeId)) {
         outlet = {
-          storeId: order.address.storeId || '66409',
-          storeName: order.address.storeName || "SECTOR-15C, CHANDIGARH",
+          storeId: String(order.address.storeId),
+          storeName: order.address.storeName,
           polygonTime: '30 mins'
         };
       }
 
       if (!outlet) {
-        const resolved = locationService.findNearestDominosOutlet(lat, lng);
-        outlet = resolved.store || {
-          storeId: '66409',
-          storeName: 'SECTOR-15C, CHANDIGARH',
+        // Fallback query by city name rather than hardcoding Chandigarh
+        const cityQuery = addr.city || 'Delhi';
+        try {
+          const cityRes = await locationService.searchStoresByQuery(cityQuery);
+          if (cityRes && cityRes.assignedStore) {
+            outlet = cityRes.assignedStore;
+          }
+        } catch (_) {}
+      }
+
+      if (!outlet) {
+        outlet = {
+          storeId: '70258',
+          storeName: 'MOHAN GARDEN DELHI',
           polygonTime: '30 mins'
         };
       }
 
-      order.robot.storeId = outlet.storeId;
+      order.robot.storeId = String(outlet.storeId);
       order.robot.storeName = outlet.storeName;
       order.robot.estimatedDelivery = outlet.polygonTime || '30 mins';
       if (!order.address) order.address = {};
-      order.address.storeId = outlet.storeId;
+      order.address.storeId = String(outlet.storeId);
       order.address.storeName = outlet.storeName;
-      addLog(order, `Kitchen Resolved: ${outlet.storeName} (Store ID: ${outlet.storeId}) - Delivery ETA: ${order.robot.estimatedDelivery}`);
+      order.address.latitude = lat;
+      order.address.longitude = lng;
+
+      // Check if Domino's store is closed / outside delivery hours
+      if (outlet.isOperational === false || outlet.deliveryEnable === false) {
+        addLog(order, `⚠️ Domino's Store Notice: ${outlet.storeName} is currently outside hot kitchen delivery hours (${outlet.deliveryTimingNotice || 'Opens 11:00 AM IST'}).`);
+      }
+
+      addLog(order, `Kitchen Resolved: ${outlet.storeName} (Store ID: #${outlet.storeId}) - Delivery ETA: ${order.robot.estimatedDelivery}`);
       db.updateOrder(orderId, order);
 
       // STEP 3: Execute Single Unified Playwright Session against Domino's Site

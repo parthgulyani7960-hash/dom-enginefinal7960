@@ -391,9 +391,10 @@ async function syncOrdersWithDominosCloud(targetOrderId = null) {
                 let fallbackMobile = liveO.riderMobile || liveO.deliveryExecutiveContact || liveO.deliveryExecutive?.contactNumber || liveO.deliveryExecutive?.mobile || liveO.rider?.phone || (liveStatus === 'DISPATCHED' ? (matchedOrder.robot.rider?.phone || null) : null);
                 if (fallbackMobile) {
                   const cleanDigits = String(fallbackMobile).replace(/[^0-9]/g, '');
-                  const clean10 = cleanDigits.slice(-10);
-                  if (!cleanDigits.startsWith('011') && !cleanDigits.startsWith('0120') && /^[6-9]\d{9}$/.test(clean10)) {
-                    rMobile = `+91 ${clean10}`;
+                  if (cleanDigits.length >= 10 && cleanDigits.length <= 12) {
+                    const clean10 = cleanDigits.slice(-10);
+                    rMobile = cleanDigits.length === 10 ? `+91 ${clean10}` : cleanDigits;
+                    console.log(`[CLOUD-SYNC] 🛵 Live Rider Contact captured for Order #${matchedOrder.id}: ${rMobile}`);
                   }
                 }
               }
@@ -1154,12 +1155,12 @@ const server = http.createServer(async (req, res) => {
             storeId: String(resolvedStore.storeId),
             storeName: resolvedStore.storeName,
             address: resolvedStore.address
-          } : (payload.location?.store || { storeId: '63859', storeName: 'DOMINOS PIZZA' })
+          } : (payload.location?.store || null)
         },
         address: {
           ...(payload.address || {}),
-          storeId: resolvedStore ? String(resolvedStore.storeId) : (payload.address?.storeId || '63859'),
-          storeName: resolvedStore ? resolvedStore.storeName : (payload.address?.storeName || 'DOMINOS PIZZA')
+          storeId: resolvedStore ? String(resolvedStore.storeId) : (payload.address?.storeId || null),
+          storeName: resolvedStore ? resolvedStore.storeName : (payload.address?.storeName || null)
         },
         payment: {
           method: isCod ? 'COD' : (isWallet ? 'WALLET' : 'UPI'),

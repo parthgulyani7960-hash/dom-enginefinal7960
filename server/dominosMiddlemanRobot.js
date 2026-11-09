@@ -163,15 +163,39 @@ async function executeMiddlemanOrderOnDominos({
 
   const browser = await chromium.launch(launchOptions);
 
-  const targetLat = customerOrder.address?.latitude || customerOrder.location?.latitude || 30.7339;
-  const targetLng = customerOrder.address?.longitude || customerOrder.location?.longitude || 76.7889;
+  let targetLat = customerOrder.address?.latitude || customerOrder.location?.latitude;
+  let targetLng = customerOrder.address?.longitude || customerOrder.location?.longitude;
+
+  // If coordinates are missing or default, dynamically geocode from customer street address
+  if (!targetLat || !targetLng || isNaN(targetLat) || isNaN(targetLng) || (targetLat === 30.7339 && targetLng === 76.7889 && customerOrder.address?.city && !customerOrder.address.city.toLowerCase().includes('chandigarh'))) {
+    const fullAddr = [customerOrder.address?.flat, customerOrder.address?.building, customerOrder.address?.street, customerOrder.address?.city, customerOrder.address?.pincode]
+      .filter(Boolean).join(', ') || customerOrder.address?.completeAddress || '';
+    if (fullAddr) {
+      try {
+        const { searchStoresByQuery } = require('./locationService');
+        const gRes = await searchStoresByQuery(fullAddr);
+        if (gRes?.coordinates) {
+          targetLat = gRes.coordinates.latitude;
+          targetLng = gRes.coordinates.longitude;
+          if (customerOrder.address) {
+            customerOrder.address.latitude = targetLat;
+            customerOrder.address.longitude = targetLng;
+          }
+          onProgress(`[MIDDLEMAN-ENGINE] 🗺️ Dynamically Geocoded delivery location to [${Number(targetLat).toFixed(5)}, ${Number(targetLng).toFixed(5)}]`);
+        }
+      } catch (e) {}
+    }
+  }
+
+  targetLat = parseFloat(targetLat) || 28.6245;
+  targetLng = parseFloat(targetLng) || 77.0367;
 
   const context = await browser.newContext({
     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15',
     viewport: { width: 390, height: 844 },
     geolocation: {
-      latitude: parseFloat(targetLat) || 30.7339,
-      longitude: parseFloat(targetLng) || 76.7889
+      latitude: targetLat,
+      longitude: targetLng
     },
     permissions: ['geolocation']
   });
@@ -247,7 +271,7 @@ async function executeMiddlemanOrderOnDominos({
   }
 
   if (!targetStoreId) {
-    targetStoreId = String(customerOrder.address?.storeId || customerOrder.location?.store?.storeId || '63859');
+    targetStoreId = String(customerOrder.address?.storeId || customerOrder.location?.store?.storeId || '70258');
   }
 
   // Explicitly sync resolved store across customerOrder
@@ -767,15 +791,10 @@ async function executeMiddlemanOrderOnDominos({
 
             for (const query of searchCandidates) {
               if (added) break;
-              // Clean search input field
-              const clearIcon = page.locator('.search-clear-icon, .jfi-close, .close-icon').first();
-              if (await clearIcon.isVisible({ timeout: 400 }).catch(() => false)) {
-                await clearIcon.click().catch(() => {});
-                await sleep(150);
-              }
+              // Clean search input field without clicking modal close icons
               await searchInput.fill('');
               await searchInput.fill(query);
-              await sleep(450);
+              await sleep(250);
 
               // Strictly match and click target card directly in the DOM without index mismatch
               const clickResult = await page.evaluate(({ rName, cName, expPrice }) => {
