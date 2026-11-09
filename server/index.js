@@ -100,22 +100,21 @@ function decodeGoogleJwt(token) {
 }
 
 function checkAdminAuth(req) {
-  const validKeys = [ADMIN_SECRET_KEY, 'dom-admin-sec-2026', 'admin', 'admin123', 'parth7960', 'dominos'];
-  // 1. Direct admin secret key header
+  // 1. Direct admin secret key header (only genuine env secret key if set)
   const key = req.headers['x-admin-key'] || req.headers['authorization'];
-  if (key && (validKeys.includes(key) || validKeys.some(k => key === `Bearer ${k}`))) return true;
+  if (ADMIN_SECRET_KEY && (key === ADMIN_SECRET_KEY || key === `Bearer ${ADMIN_SECRET_KEY}`)) return true;
 
-  // 2. Admin session token header (issued to parthgulyani7960@gmail.com)
+  // 2. Cryptographic HMAC token issued strictly to parthgulyani7960@gmail.com
   const tokenHeader = req.headers['x-admin-token'];
   if (tokenHeader && verifyAdminToken(tokenHeader)) return true;
 
   // 3. Admin cookie checks
   const cookie = req.headers['cookie'] || '';
-  const matchKey = cookie.match(/admin_key=([^;]+)/);
-  if (matchKey && validKeys.includes(matchKey[1])) return true;
-
   const matchToken = cookie.match(/admin_token=([^;]+)/);
   if (matchToken && verifyAdminToken(matchToken[1])) return true;
+
+  const matchKey = cookie.match(/admin_key=([^;]+)/);
+  if (matchKey && matchKey[1] === ADMIN_SECRET_KEY) return true;
 
   return false;
 }
@@ -502,18 +501,27 @@ const server = http.createServer(async (req, res) => {
       let authorized = false;
       let authedEmail = 'parthgulyani7960@gmail.com';
 
-      const validKeys = [ADMIN_SECRET_KEY, 'dom-admin-sec-2026', 'admin', 'admin123', 'parth7960', 'dominos'];
-      if (passkey && validKeys.includes(passkey)) {
-        authorized = true;
-      } else if (email && (email === 'parthgulyani7960@gmail.com' || ADMIN_EMAILS.has(email))) {
-        authorized = true;
-        authedEmail = email;
-      } else if (credential) {
+      // 1. Direct Google OAuth Credential verification
+      if (credential) {
         const payload = decodeGoogleJwt(credential);
         if (payload && payload.email && ADMIN_EMAILS.has(payload.email.toLowerCase())) {
           authorized = true;
           authedEmail = payload.email.toLowerCase();
         }
+      } 
+      // 2. Direct Account Access for registered administrator
+      else if (body.userAuth && email && ADMIN_EMAILS.has(email)) {
+        const users = db.getUsers();
+        const userMatch = users.find(u => u.email && u.email.toLowerCase() === email && (u.isAdmin || u.role === 'ADMIN'));
+        if (userMatch) {
+          authorized = true;
+          authedEmail = email;
+        }
+      }
+      // 3. Strict Admin Secret Key (Internal bypass only)
+      else if (passkey && ADMIN_SECRET_KEY && passkey === ADMIN_SECRET_KEY) {
+        authorized = true;
+        authedEmail = 'parthgulyani7960@gmail.com';
       }
 
       if (!authorized) {

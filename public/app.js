@@ -6625,6 +6625,7 @@ async function handleGoogleCredentialResponse(response) {
       currentUser.isAdmin = true;
       currentUser.role = 'ADMIN';
       if (data.adminToken) {
+        localStorage.setItem('dom_admin_token', data.adminToken);
         sessionStorage.setItem('dom_admin_token', data.adminToken);
       }
     }
@@ -6654,6 +6655,7 @@ async function signInWithDeviceGoogleAccount(email, name, picture) {
       currentUser.isAdmin = true;
       currentUser.role = 'ADMIN';
       if (data.adminToken) {
+        localStorage.setItem('dom_admin_token', data.adminToken);
         sessionStorage.setItem('dom_admin_token', data.adminToken);
       }
     }

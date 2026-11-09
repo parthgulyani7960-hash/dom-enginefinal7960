@@ -69,11 +69,11 @@ let isAdminAuthenticated = false;
 // Helper for authenticated admin API requests (Uses dynamic session token or entered passkey)
 function getAdminAuthHeaders() {
   const headers = {};
-  const token = sessionStorage.getItem('dom_admin_token') || localStorage.getItem('dom_admin_token');
+  const token = localStorage.getItem('dom_admin_token') || sessionStorage.getItem('dom_admin_token');
   if (token) {
     headers['x-admin-token'] = token;
   }
-  const passkey = sessionStorage.getItem('dom_admin_passkey') || localStorage.getItem('dom_admin_passkey') || 'dom-admin-sec-2026';
+  const passkey = localStorage.getItem('dom_admin_passkey') || sessionStorage.getItem('dom_admin_passkey');
   if (passkey) {
     headers['x-admin-key'] = passkey;
   }
@@ -145,17 +145,7 @@ function startAdminAutoRefresh() {
 }
 
 async function checkAdminAuthStatus() {
-  // Check URL query parameters (?key=... or ?passkey=...)
-  try {
-    const urlParams = new URLSearchParams(window.location.search);
-    const qKey = urlParams.get('key') || urlParams.get('passkey');
-    if (qKey) {
-      sessionStorage.setItem('dom_admin_passkey', qKey);
-      localStorage.setItem('dom_admin_passkey', qKey);
-    }
-  } catch (_) {}
-
-  // 1. Direct auth status check with current headers
+  // 1. Direct auth status check with current token / cookie
   try {
     const res = await adminFetch('/api/admin/auth/status');
     const data = await res.json();
@@ -166,10 +156,10 @@ async function checkAdminAuthStatus() {
     }
   } catch (e) {}
 
-  // 2. Check if user is logged into the storefront as parthgulyani7960@gmail.com
+  // 2. Direct Account Access: Check if user is logged in as parthgulyani7960@gmail.com
   try {
     const storedUser = JSON.parse(localStorage.getItem('dominos_user') || '{}');
-    if (storedUser && (storedUser.email === 'parthgulyani7960@gmail.com' || storedUser.isAdmin)) {
+    if (storedUser && storedUser.email && storedUser.email.toLowerCase() === 'parthgulyani7960@gmail.com') {
       const userRes = await fetch('/api/admin/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -177,33 +167,27 @@ async function checkAdminAuthStatus() {
       });
       const userData = await userRes.json();
       if (userRes.ok && userData.success && userData.token) {
-        sessionStorage.setItem('dom_admin_token', userData.token);
         localStorage.setItem('dom_admin_token', userData.token);
+        sessionStorage.setItem('dom_admin_token', userData.token);
+        isAdminAuthenticated = true;
         onAdminUnlocked(userData.email || 'parthgulyani7960@gmail.com');
         return true;
       }
     }
   } catch (_) {}
 
-  // 3. Auto-authenticate via saved passkey or default administrative passkey
-  const savedPasskey = localStorage.getItem('dom_admin_passkey') || sessionStorage.getItem('dom_admin_passkey') || 'dom-admin-sec-2026';
-  if (savedPasskey) {
+  // 3. Check saved token from storage
+  const storedToken = localStorage.getItem('dom_admin_token') || sessionStorage.getItem('dom_admin_token');
+  if (storedToken) {
     try {
-      const loginRes = await fetch('/api/admin/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ passkey: savedPasskey })
-      });
-      const loginData = await loginRes.json();
-      if (loginRes.ok && loginData.success && loginData.token) {
-        sessionStorage.setItem('dom_admin_token', loginData.token);
-        localStorage.setItem('dom_admin_token', loginData.token);
-        sessionStorage.setItem('dom_admin_passkey', savedPasskey);
-        localStorage.setItem('dom_admin_passkey', savedPasskey);
-        onAdminUnlocked(loginData.email || 'parthgulyani7960@gmail.com');
+      const res = await adminFetch('/api/admin/auth/status');
+      const data = await res.json();
+      if (data.authenticated) {
+        isAdminAuthenticated = true;
+        onAdminUnlocked(data.adminEmail || 'parthgulyani7960@gmail.com');
         return true;
       }
-    } catch (e) {}
+    } catch (_) {}
   }
 
   showAdminAuthGate();
