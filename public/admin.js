@@ -1471,6 +1471,7 @@ async function loadVouchers() {
   try {
     const res = await adminFetch('/api/admin/vouchers');
     const vouchers = await res.json();
+    window.cachedVouchers = vouchers;
     const countEl = document.getElementById('vouchersCount');
     if (countEl) countEl.innerText = `${vouchers.length} Vouchers`;
     const qv = document.getElementById('quickStatVouchers');
@@ -1485,7 +1486,8 @@ async function loadVouchers() {
     tbody.innerHTML = vouchers.map(v => {
       const masked = `${v.code.slice(0, 4)} **** **** ${v.code.slice(12)}`;
       let statusBadge = '<span class="status-idle" style="background:#ecfdf5; color:#047857;">UNUSED</span>';
-      if (v.status === 'PARTIALLY_USED') statusBadge = '<span class="status-inuse" style="background:#fef3c7; color:#b45309;">PARTIALLY USED</span>';
+      if (v.status === 'USED') statusBadge = '<span class="status-error" style="background:#fee2e2; color:#b91c1c; font-weight:800;">USED (Single-Use Locked)</span>';
+      else if (v.status === 'PARTIALLY_USED') statusBadge = '<span class="status-inuse" style="background:#fef3c7; color:#b45309;">PARTIALLY USED</span>';
       else if (v.status === 'EXHAUSTED' || v.balance === 0) statusBadge = '<span class="status-error">EXHAUSTED</span>';
 
       return `
@@ -1735,12 +1737,24 @@ function renderAdminOrders(orders) {
     const uid12 = order.userId12 || order.user?.userId12 || '948271035824';
     const sessionPhone = r.sessionPhone || r.accountPhone || '';
     const sessionPhoneClean = sessionPhone.replace(/[^0-9]/g, '').slice(-10);
-    const sessionHtml = sessionPhone 
-      ? `<button type="button" class="btn-action-copy" onclick="jumpToSession('${escapeHtml(sessionPhoneClean)}')" title="View this session in Pool" style="font-size: 11px; padding: 2px 6px; font-family: monospace; font-weight: 700; color: #0284c7; border-color: #bae6fd; background: #f0f9ff; cursor: pointer;">📱 ${sessionPhone}</button>`
-      : '<span style="color: #94a3b8; font-size: 11px;">Auto Assigned</span>';
+    const matchedAcc = (window.cachedAccounts || []).find(a => (a.id && a.id === r.assignedAccountId) || ((a.phone || '').replace(/[^0-9]/g, '').slice(-10) === sessionPhoneClean));
+    const isZeroPast = matchedAcc && Number(matchedAcc.pastOrdersCount || 0) === 0;
+
+    let sessionHtml = '<span style="color: #94a3b8; font-size: 11px;">Auto Assigned</span>';
+    if (sessionPhone) {
+      sessionHtml = `
+        <button type="button" class="btn-action-copy" onclick="jumpToSession('${escapeHtml(sessionPhoneClean)}')" title="View this session in Pool" style="font-size: 11px; padding: 2px 6px; font-family: monospace; font-weight: 700; color: #0284c7; border-color: #bae6fd; background: #f0f9ff; cursor: pointer;">📱 ${sessionPhone}</button>
+        ${isZeroPast ? '<div style="margin-top:2px;"><span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; font-size:9px; font-weight:800; padding:1px 4px; border-radius:3px;">⚡ 0 Past Orders</span></div>' : ''}
+      `;
+    }
 
     const promoCode = r.couponCode || 'DOMNEW50';
-    const giftCardUsed = r.assignedVoucherMasked || r.assignedVoucherId || '—';
+    const isGiftCardUsed = r.voucherStatus === 'USED' || r.giftCardUsed;
+    const giftCardUsed = r.assignedVoucherMasked 
+      ? `<div style="font-family:monospace; font-weight:800; font-size:11px; color:#1e40af;">${r.assignedVoucherMasked}</div>
+         <div style="margin-top:2px;"><span style="background:${isGiftCardUsed ? '#fee2e2' : '#dcfce7'}; color:${isGiftCardUsed ? '#b91c1c' : '#15803d'}; font-size:9px; font-weight:800; padding:1px 5px; border-radius:3px;">${isGiftCardUsed ? 'USED' : 'UNUSED'}</span></div>`
+      : '<span style="color:#94a3b8; font-size:11px;">—</span>';
+
     const grandTotal = order.payment?.amount || r.billAmount || 0;
     
     const riderText = r.rider && (r.rider.name || r.rider.phone)
@@ -1844,9 +1858,7 @@ function renderAdminOrders(orders) {
             <button class="btn-action-copy" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #15803d; border-color: #86efac;" onclick="openAdminOrderTracker('${order.id}')" title="Track Live Order & Rider Telemetry">
               🔍 Track Live
             </button>
-            <button class="btn-action-copy" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #475569; border-color: #cbd5e1;" onclick="openOrderDossier('${order.id}')" title="View Full Order Dossier">
-              📋 Dossier
-            </button>
+            <button class="btn-action-launch" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: white; background: #0066a3; border: none; font-weight: 800; border-radius: 4px;" onclick="openOrderDossier('${order.id}')" title="Open Live Robot Execution Cockpit & Dossier">⚡ Live Cockpit</button>
           </div>
         </td>
       </tr>
@@ -1951,10 +1963,118 @@ function jumpToTicket(ticketId) {
 }
 window.jumpToTicket = jumpToTicket;
 
+// =========================================================================
+// 3. COMPLETE LIVE ROBOT EXECUTION COCKPIT & ORDER DOSSIER
+// =========================================================================
+let dossierLivePollTimer = null;
+let currentDossierOrderId = null;
+
+function stopDossierLivePolling() {
+  if (dossierLivePollTimer) {
+    clearInterval(dossierLivePollTimer);
+    dossierLivePollTimer = null;
+  }
+}
+window.stopDossierLivePolling = stopDossierLivePolling;
+
+async function adminAssignSessionToOrder(orderId) {
+  const select = document.getElementById(`dossierSessionSelect_${orderId}`);
+  if (!select) return;
+  const accountId = select.value;
+  if (!accountId) {
+    alert('Please select a session account from the fleet.');
+    return;
+  }
+  try {
+    const res = await adminFetch(`/api/admin/orders/${orderId}/assign-session`, {
+      method: 'POST',
+      body: JSON.stringify({ accountId })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to assign session');
+    showToast(data.message || 'Session assigned successfully!', '📱');
+    await loadOrders();
+    openOrderDossier(orderId);
+  } catch (err) {
+    alert('Session assignment error: ' + err.message);
+  }
+}
+window.adminAssignSessionToOrder = adminAssignSessionToOrder;
+
+async function adminAssignVoucherToOrder(orderId) {
+  const select = document.getElementById(`dossierVoucherSelect_${orderId}`);
+  if (!select) return;
+  const voucherId = select.value;
+  if (!voucherId) {
+    alert('Please select a gift card / voucher to assign.');
+    return;
+  }
+  try {
+    const res = await adminFetch(`/api/admin/orders/${orderId}/assign-voucher`, {
+      method: 'POST',
+      body: JSON.stringify({ voucherId })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to assign gift card');
+    showToast(data.message || 'Gift card assigned successfully!', '🎟️');
+    await loadOrders();
+    openOrderDossier(orderId);
+  } catch (err) {
+    alert('Gift card assignment error: ' + err.message);
+  }
+}
+window.adminAssignVoucherToOrder = adminAssignVoucherToOrder;
+
+async function adminTriggerLiveRobot(orderId) {
+  try {
+    const res = await adminFetch(`/api/admin/orders/${orderId}/dispatch-live`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to trigger robot');
+    showToast(`Order #${orderId} robot execution launched live!`, '🚀');
+    await loadOrders();
+    openOrderDossier(orderId);
+  } catch (err) {
+    alert('Robot dispatch error: ' + err.message);
+  }
+}
+window.adminTriggerLiveRobot = adminTriggerLiveRobot;
+
+async function refreshDossierData(orderId) {
+  if (currentDossierOrderId !== orderId) return;
+  try {
+    const res = await fetch(`/api/orders/${orderId}`);
+    if (res.ok) {
+      const freshOrder = await res.json();
+      // Update local cache
+      const idx = cachedAdminOrders.findIndex(o => o.id === orderId);
+      if (idx !== -1) cachedAdminOrders[idx] = freshOrder;
+      renderOrderDossierContent(freshOrder);
+    }
+  } catch (e) {}
+}
+
 function openOrderDossier(orderId) {
+  currentDossierOrderId = orderId;
+  stopDossierLivePolling();
+
   const order = cachedAdminOrders.find(o => o.id === orderId);
   if (!order) return;
 
+  renderOrderDossierContent(order);
+  openModal('orderDossierModal');
+
+  // If order is actively executing or queued, poll every 2.5s for live telemetry
+  const rSt = (order.robot?.status || order.status || '').toUpperCase();
+  const isActivelyRunning = ['SESSION_ASSIGNING', 'BUILDING_CART', 'APPLYING_COUPON', 'STORE_CONFIRMATION', 'PROCESSING', 'QUEUED_FOR_ROBOT'].includes(rSt);
+  if (isActivelyRunning) {
+    dossierLivePollTimer = setInterval(() => {
+      refreshDossierData(orderId);
+    }, 2500);
+  }
+}
+window.openOrderDossier = openOrderDossier;
+
+function renderOrderDossierContent(order) {
   const r = order.robot || {};
   const engRef = order.engineOrderRef || order.id;
   const realDom = order.dominosOrderRef || r.dominosOrderRef;
@@ -1962,129 +2082,328 @@ function openOrderDossier(orderId) {
   const domDisplay = kitchenToken ? `Token #${kitchenToken}${realDom ? ` (POS: ${realDom})` : ''}` : (realDom ? `#${realDom}` : 'Awaiting Kitchen Token');
   const uid12 = order.userId12 || order.user?.userId12 || '948271035824';
 
-  document.getElementById('dossierOrderRefLabel').innerText = `Engine: ${engRef} • Domino's: ${domDisplay}`;
+  const labelEl = document.getElementById('dossierOrderRefLabel');
+  if (labelEl) labelEl.innerText = `Engine: ${engRef} • Domino's: ${domDisplay}`;
 
   const dominosEncryptedId = r.dominosEncryptedId || order.dominosEncryptedId;
   const dominosTrackerUrl = dominosEncryptedId 
     ? `https://pizzaonline.dominos.co.in/tracker?orderId=${encodeURIComponent(dominosEncryptedId)}`
     : 'https://pizzaonline.dominos.co.in';
 
-  const bodyEl = document.getElementById('orderDossierBody');
-  bodyEl.innerHTML = `
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
-      <div style="background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-        <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Customer Information</div>
-        <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 2px;">${order.user?.name || 'Customer'}</div>
-        <div style="font-size: 12px; color: #0284c7; font-family: monospace;">UID (12-Digit): ${uid12}</div>
-        <div style="font-size: 12px; color: #475569;">📞 Phone: ${order.address?.phone || order.user?.phone || 'N/A'}</div>
+  // Address & GPS Resolution
+  const addr = order.address || {};
+  const lat = addr.latitude || order.location?.latitude || 28.5355;
+  const lng = addr.longitude || order.location?.longitude || 77.3910;
+  const mapLink = `https://www.google.com/maps?q=${lat},${lng}`;
+  const fullAddressStr = [addr.flat, addr.building, addr.street, addr.landmark, addr.city, addr.pincode].filter(Boolean).join(', ') || addr.completeAddress || 'Delivery Address';
+
+  // Session Fleet options (prioritizing 0 past orders)
+  const allAccounts = window.cachedAccounts || [];
+  const activeAccounts = allAccounts.filter(a => !a.disabled && a.status !== 'DISABLED');
+  // Sort accounts: 0 past orders first
+  activeAccounts.sort((a, b) => {
+    const pA = Number(a.pastOrdersCount || 0);
+    const pB = Number(b.pastOrdersCount || 0);
+    return pA - pB;
+  });
+
+  const currentAccId = r.assignedAccountId || order.assignedAccountId;
+  const sessionOptionsHtml = activeAccounts.map(a => {
+    const isSelected = a.id === currentAccId || a.phone === r.sessionPhone || a.phone === r.accountPhone;
+    const isZeroPast = Number(a.pastOrdersCount || 0) === 0;
+    const badge = isZeroPast ? '⚡ 0 PAST ORDERS (TOP PRIORITY)' : `${a.pastOrdersCount || 0} Past Orders`;
+    return `<option value="${a.id}" ${isSelected ? 'selected' : ''}>${a.phone} — ${badge} [${a.id}]</option>`;
+  }).join('');
+
+  // Voucher Vault options (unused first)
+  const allVouchers = window.cachedVouchers || [];
+  const currentVouchId = r.assignedVoucherId || order.assignedVoucherId;
+  const voucherOptionsHtml = allVouchers.map(v => {
+    const isSelected = v.id === currentVouchId;
+    const isUsed = v.status === 'USED' || v.balance <= 0;
+    const badge = isUsed ? '⛔ USED' : `✅ ₹${v.balance} Available`;
+    const masked = `${v.code.slice(0, 4)} **** ${v.code.slice(-4)}`;
+    return `<option value="${v.id}" ${isSelected ? 'selected' : ''} ${isUsed ? 'disabled' : ''}>${masked} (PIN: ${v.pin}) — ${badge} [${v.id}]</option>`;
+  }).join('');
+
+  // Items List
+  const items = order.items || [];
+  const itemsHtml = items.length > 0 ? items.map((item, idx) => {
+    const isVeg = item.isVeg !== false && item.veg !== false;
+    const vegIcon = isVeg ? '<span style="color:#16a34a; font-size:12px;">🟢</span>' : '<span style="color:#dc2626; font-size:12px;">🔴</span>';
+    const size = item.customSize || item.size || 'Regular';
+    const crust = item.customCrust || item.crust || 'New Hand Tossed';
+    const toppings = (item.customToppings && item.customToppings.length > 0) ? item.customToppings.join(', ') : null;
+    const unitPrice = Number(item.price) || 0;
+    const qty = Number(item.quantity) || 1;
+    const lineTotal = unitPrice * qty;
+
+    return `
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-weight: 800; font-size: 13px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+            ${vegIcon} <span>${escapeHtml(item.name)}</span>
+          </div>
+          <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+            Size: <strong>${escapeHtml(size)}</strong> • Crust: <strong>${escapeHtml(crust)}</strong>
+            ${toppings ? `<br><span style="color:#0284c7;">Toppings: ${escapeHtml(toppings)}</span>` : ''}
+          </div>
+        </div>
+        <div style="text-align: right; margin-left: 12px; white-space: nowrap;">
+          <div style="font-size: 11px; color: #64748b;">${qty} × ₹${unitPrice}</div>
+          <div style="font-weight: 800; font-size: 13px; color: #0f172a;">₹${lineTotal}</div>
+        </div>
       </div>
-      <div style="background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-        <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Domino's Session & Kitchen</div>
-        <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 2px;">Store: ${r.storeName || 'Domino\'s Outlet'} (#${r.storeId || '65979'})</div>
-        <div style="font-size: 12px; color: #166534; font-weight: 700;">Ordered via Session: ${r.sessionPhone || r.accountPhone || 'Pool'}</div>
-        <div style="font-size: 12px; color: #0284c7; font-family: monospace; font-weight: 800; background: #f0f9ff; border: 1px solid #bae6fd; padding: 2px 6px; border-radius: 4px; margin-top: 3px; display: inline-block;">🛒 Domino's #cartId: ${order.cartId || r.cartId || order.session?.cartId || 'Active'}</div>
-        <div style="font-size: 12px; color: #0369a1; margin-top: 2px;">Promo Voucher: <strong>${r.couponCode || 'DOMNEW50'}</strong></div>
-        <div style="margin-top: 8px;">
-          <a href="${dominosTrackerUrl}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #0066a3; color: white; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">
-            🌐 Open on Domino's Site &rarr;
+    `;
+  }).join('') : '<div style="color: #94a3b8; font-size: 12px; padding: 6px 0;">No items found.</div>';
+
+  // Status Styling
+  const rSt = (r.status || order.status || 'ORDER_PLACED').toUpperCase();
+  let statusBadgeBg = '#eff6ff';
+  let statusBadgeColor = '#1d4ed8';
+  if (['DELIVERED', 'COMPLETED', 'ORDER_PLACED'].includes(rSt)) {
+    statusBadgeBg = '#f0fdf4';
+    statusBadgeColor = '#15803d';
+  } else if (['ERROR', 'FAILED', 'CANCELLED'].includes(rSt)) {
+    statusBadgeBg = '#fef2f2';
+    statusBadgeColor = '#dc2626';
+  } else if (['SESSION_ASSIGNING', 'BUILDING_CART', 'APPLYING_COUPON', 'STORE_CONFIRMATION', 'PROCESSING'].includes(rSt)) {
+    statusBadgeBg = '#fef3c7';
+    statusBadgeColor = '#b45309';
+  }
+
+  // Logs Html
+  const logs = r.logs || [];
+  const logsHtml = logs.length > 0 
+    ? logs.map(l => `<div style="margin-bottom: 3px;">${escapeHtml(l)}</div>`).join('')
+    : '<div style="color: #64748b; font-style: italic;">Awaiting robot execution trigger...</div>';
+
+  const bodyEl = document.getElementById('orderDossierBody');
+  if (!bodyEl) return;
+
+  bodyEl.innerHTML = `
+    <!-- HERO STATUS & TELEMETRY HEADER -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">Autonomous Order Dispatch Cockpit</div>
+        <div style="font-size: 20px; font-weight: 900; letter-spacing: 0.5px; margin-top: 2px;">
+          ${engRef}
+        </div>
+        <div style="font-size: 12px; color: #94a3b8; margin-top: 3px;">
+          Domino's: <strong style="color: #38bdf8;">${domDisplay}</strong> • #cartId: <code style="color: #fde047; font-size: 11px;">${order.cartId || r.cartId || 'Active'}</code>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <span style="background: ${statusBadgeBg}; color: ${statusBadgeColor}; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 900; display: inline-block;">
+          ${rSt}
+        </span>
+        <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">ETA: ${r.estimatedDelivery || '30 mins'}</div>
+      </div>
+    </div>
+
+    <!-- 1. CUSTOMER IDENTITY & DELIVERY LOCATION (2-COLUMN GRID) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 14px;">
+      <!-- Customer Card -->
+      <div style="background: #f8fafc; padding: 12px 14px; border-radius: 8px; border: 1.5px solid #e2e8f0;">
+        <div style="font-size: 11px; font-weight: 800; color: #0284c7; text-transform: uppercase; margin-bottom: 6px;">👤 Customer Identity</div>
+        <div style="font-size: 15px; font-weight: 900; color: #0f172a;">${escapeHtml(order.user?.name || order.customer?.name || 'Customer')}</div>
+        <div style="font-size: 12px; color: #0284c7; font-family: monospace; font-weight: 800; margin-top: 2px;">
+          12-Digit UID: ${uid12}
+        </div>
+        <div style="font-size: 12px; color: #475569; margin-top: 4px;">
+          📞 <strong>${escapeHtml(order.address?.phone || order.user?.phone || 'N/A')}</strong>
+        </div>
+        <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+          ✉️ ${escapeHtml(order.user?.email || 'N/A')}
+        </div>
+      </div>
+
+      <!-- Delivery Location & GPS -->
+      <div style="background: #f8fafc; padding: 12px 14px; border-radius: 8px; border: 1.5px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 11px; font-weight: 800; color: #16a34a; text-transform: uppercase;">📍 Delivery Location &amp; GPS</span>
+          <a href="${mapLink}" target="_blank" style="background: #0284c7; color: white; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+            🗺️ Google Maps ↗
           </a>
         </div>
-      </div>
-    </div>
-
-    <!-- Domino's Promo Coupon Audit & Verification Card -->
-    <div style="background: ${order.robot?.couponResult?.applied ? '#f0fdf4' : (order.robot?.couponResult?.error ? '#fef2f2' : '#f8fafc')}; border: 1.5px solid ${order.robot?.couponResult?.applied ? '#86efac' : (order.robot?.couponResult?.error ? '#fca5a5' : '#e2e8f0')}; border-radius: 6px; padding: 12px; margin-bottom: 14px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <span style="font-size: 11px; font-weight: 800; color: #1e293b; text-transform: uppercase;">🎟️ Domino's Promo Coupon Audit</span>
-        <span style="font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 4px; background: ${order.robot?.couponResult?.applied ? '#dcfce7' : (order.robot?.couponResult?.error ? '#fee2e2' : '#f1f5f9')}; color: ${order.robot?.couponResult?.applied ? '#15803d' : (order.robot?.couponResult?.error ? '#b91c1c' : '#475569')};">
-          ${order.robot?.couponResult?.applied ? '✓ VALID & APPLIED' : (order.robot?.couponResult?.error ? '✗ REJECTED / INVALID' : 'STANDARD PRICING')}
-        </span>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; font-size: 12px; margin-top: 6px;">
-        <div><strong>Code:</strong> <code>${order.robot?.couponCode || order.robot?.couponResult?.code || 'None'}</code></div>
-        <div><strong>Saved:</strong> <span style="color: #16a34a; font-weight: 800;">₹${order.robot?.couponResult?.discount || 0}</span></div>
-        <div><strong>Before Coupon:</strong> ₹${order.robot?.couponResult?.subtotalBefore || order.payment?.subtotal || order.itemsTotal || 0}</div>
-        <div><strong>After Coupon:</strong> <span style="font-weight: 800; color: #0284c7;">₹${order.robot?.couponResult?.billAfter || order.payment?.amount || 0}</span></div>
-      </div>
-      ${order.robot?.couponResult?.error ? `
-        <div style="background: rgba(239, 68, 68, 0.1); border-left: 3px solid #dc2626; padding: 6px 10px; margin-top: 8px; font-size: 11px; color: #991b1b; font-weight: 700;">
-          ⚠️ Domino's Rejection Reason: ${escapeHtml(order.robot.couponResult.error)}
+        <div style="font-size: 12px; font-weight: 700; color: #0f172a; line-height: 1.4;">
+          ${escapeHtml(fullAddressStr)}
         </div>
-      ` : ''}
+        <div style="font-size: 11px; color: #0284c7; font-family: monospace; margin-top: 4px;">
+          GPS: [${Number(lat).toFixed(5)}, ${Number(lng).toFixed(5)}]
+        </div>
+        <div style="font-size: 11px; color: #166534; font-weight: 700; margin-top: 4px; border-top: 1px dashed #cbd5e1; padding-top: 4px;">
+          🏪 Domino's Outlet: ${escapeHtml(r.storeName || addr.storeName || "Domino's Kitchen")} (#${r.storeId || addr.storeId || '66409'})
+        </div>
+      </div>
     </div>
 
-    <!-- Domino's Delivery Rider Telemetry -->
-    <div style="background: ${r.rider?.name ? '#ecfdf5' : '#f8fafc'}; border: 1.5px solid ${r.rider?.name ? '#a7f3d0' : '#e2e8f0'}; border-radius: 6px; padding: 12px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+    <!-- 2. WHAT THEY ORDERED (ORDERED ITEMS BREAKDOWN) -->
+    <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 8px;">
+        <div style="font-size: 12px; font-weight: 900; color: #0f172a; text-transform: uppercase;">
+          🍕 Ordered Items (${items.length} item${items.length !== 1 ? 's' : ''})
+        </div>
+        <div style="font-size: 11px; color: #64748b; font-weight: 700;">Domino's Menu Dispatched</div>
+      </div>
       <div>
-        <div style="font-size: 11px; font-weight: 800; color: ${r.rider?.name ? '#065f46' : '#64748b'}; text-transform: uppercase;">🛵 Domino's Delivery Rider Telemetry</div>
-        <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 2px;">
-          ${r.rider?.name ? `Rider: ${r.rider.name}` : "Domino's Delivery Executive: Kitchen baking in oven"}
+        ${itemsHtml}
+      </div>
+    </div>
+
+    <!-- 3. FINANCIAL MATRIX: CUSTOMER UPI PAID VS DOMINO'S GIFT CARD SETTLEMENT -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 14px;">
+      <!-- Customer Paid to Engine via UPI -->
+      <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 14px;">
+        <div style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase; margin-bottom: 4px;">
+          💳 Customer Paid to Order Engine
         </div>
-        <div style="font-size: 12px; color: #475569;">
-          ${r.rider?.phone ? `📞 Contact: ${formatAdminRiderContact(r.rider.phone)}` : "Contact details appear upon store packing & dispatch"} • Status: <strong>${r.rider?.status || (r.status === 'DELIVERED' ? 'DELIVERED' : 'BAKING_IN_OVEN')}</strong>
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <div style="font-size: 22px; font-weight: 900; color: #15803d;">₹${order.payment?.amount || 0}</div>
+          <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 10px; font-weight: 900; padding: 2px 7px; border-radius: 10px;">
+            ✓ ${(order.payment?.status || 'PAID').toUpperCase()}
+          </span>
+        </div>
+        <div style="font-size: 11px; color: #166534; margin-top: 6px;">
+          Method: <strong>${(order.payment?.method || 'UPI').toUpperCase()}</strong> • Ref: <code>${order.payment?.transactionId || order.payment?.upiRef || 'Direct UPI'}</code>
+        </div>
+        <div style="font-size: 11px; color: #4b5563; margin-top: 3px;">
+          Subtotal: ₹${order.payment?.subtotal || order.itemsTotal || 0} | GST: ₹${order.payment?.gst || 0} | Fee: ₹${(Number(order.payment?.deliveryFee) || 35) + (Number(order.payment?.packagingFee) || 15)}
         </div>
       </div>
-      ${r.rider?.phone ? `
-        <a href="${getAdminRiderTelUri(r.rider.phone)}" style="background: #16a34a; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 800; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
-          📞 Call Rider
+
+      <!-- Domino's Robot Settlement via Admin Gift Card -->
+      <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 12px 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 11px; font-weight: 800; color: #1e40af; text-transform: uppercase;">🎟️ Robot Gift Card Settlement</span>
+          <span style="background: ${r.voucherStatus === 'USED' ? '#fee2e2' : '#dbeafe'}; color: ${r.voucherStatus === 'USED' ? '#b91c1c' : '#1d4ed8'}; border: 1px solid ${r.voucherStatus === 'USED' ? '#fca5a5' : '#bfdbfe'}; font-size: 10px; font-weight: 900; padding: 2px 7px; border-radius: 10px;">
+            ${r.voucherStatus === 'USED' ? 'USED (Single-Use Locked)' : 'UNUSED'}
+          </span>
+        </div>
+        <div style="font-size: 13px; font-weight: 800; color: #1e3a8a;">
+          Card: <code>${r.assignedVoucherMasked || 'Assigned via Vault'}</code>
+        </div>
+        <div style="font-size: 11px; color: #1e40af; margin-top: 2px;">
+          PIN: <code>${r.voucherPin || '******'}</code> • Settled: <strong>₹${r.giftCardAppliedAmount || r.voucherBalance || order.payment?.amount || 0}</strong>
+        </div>
+        <div style="font-size: 11px; color: #4b5563; margin-top: 4px; border-top: 1px dashed #cbd5e1; padding-top: 4px;">
+          Domino's Promo: <strong>${r.couponCode || 'DOMNEW50'}</strong> | Rider COD Due: <strong>₹${r.dueAmount || 0}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ADMIN DECISION & OVERRIDE CONTROLS -->
+    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+      <div style="font-size: 11px; font-weight: 900; color: #334155; text-transform: uppercase; margin-bottom: 10px;">
+        ⚙️ Admin Platform Session &amp; Gift Card Decision Controls
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-bottom: 12px;">
+        <!-- Assign Session Selector -->
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">
+            Assign Fleet Session (0 Orders First Priority):
+          </label>
+          <div style="display: flex; gap: 6px;">
+            <select id="dossierSessionSelect_${order.id}" class="form-input" style="font-size: 11px; padding: 6px 8px; flex: 1;">
+              ${sessionOptionsHtml}
+            </select>
+            <button type="button" onclick="adminAssignSessionToOrder('${order.id}')" style="background: #0284c7; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap;">
+              Set Session
+            </button>
+          </div>
+        </div>
+
+        <!-- Assign Gift Card Selector -->
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">
+            Assign Vault Gift Card / E-Voucher:
+          </label>
+          <div style="display: flex; gap: 6px;">
+            <select id="dossierVoucherSelect_${order.id}" class="form-input" style="font-size: 11px; padding: 6px 8px; flex: 1;">
+              ${voucherOptionsHtml}
+            </select>
+            <button type="button" onclick="adminAssignVoucherToOrder('${order.id}')" style="background: #16a34a; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap;">
+              Set Card
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons Strip -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+        <button type="button" onclick="adminTriggerLiveRobot('${order.id}')" style="background: #0066a3; color: white; border: none; padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          🚀 Trigger Live Robot Dispatch
+        </button>
+        <button type="button" onclick="retryAdminOrder('${order.id}')" style="background: #f0fdf4; border: 1.5px solid #86efac; color: #15803d; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+          🔄 Retry Placement
+        </button>
+        <button type="button" onclick="cancelAdminOrder('${order.id}')" style="background: #fef2f2; border: 1.5px solid #fca5a5; color: #dc2626; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+          🛑 Cancel Order
+        </button>
+        <a href="${dominosTrackerUrl}" target="_blank" style="background: white; border: 1.5px solid #cbd5e1; color: #334155; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
+          🌐 Domino's Live Tracker ↗
         </a>
-      ` : ''}
-    </div>
-
-    <!-- Verified Kitchen Bill Breakdown -->
-    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px; margin-bottom: 14px;">
-      <div style="font-size: 12px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Domino's Verified Kitchen Bill Breakdown</div>
-      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #475569; margin-bottom: 4px;">
-        <span>Items Subtotal:</span>
-        <span style="font-weight: 700;">₹${order.payment?.subtotal || r.billAmount || 0}</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #475569; margin-bottom: 4px;">
-        <span>Domino's 5% GST (2.5% CGST + 2.5% SGST):</span>
-        <span style="font-weight: 700;">₹${order.payment?.gst || 0}</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #475569; margin-bottom: 4px;">
-        <span>Standard Delivery Fee:</span>
-        <span style="font-weight: 700;">₹${order.payment?.deliveryFee || 35}</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #475569; margin-bottom: 6px;">
-        <span>Restaurant Packaging & Handling:</span>
-        <span style="font-weight: 700;">₹${order.payment?.packagingFee || 15}</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; color: #16a34a; border-top: 1px solid #cbd5e1; padding-top: 6px;">
-        <span>Verified Grand Total:</span>
-        <span>₹${order.payment?.amount || 0}</span>
-      </div>
-      <div style="margin-top: 6px; font-size: 11px; color: #64748b;">
-        Settled on Domino's via Gift Card: <strong>${r.assignedVoucherMasked || '16-Digit Voucher Vault'}</strong>
       </div>
     </div>
 
-    <!-- Dual Screenshots: Cart Bill Review + Confirmation Proof -->
-    ${(r.cartBillScreenshotUrl || r.proofScreenshotUrl) ? `
-      <div style="margin-top: 14px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
-        <div style="font-size: 12px; font-weight: 800; color: #1e293b; margin-bottom: 8px;">📸 Verified Domino's Order Capture Evidence (2 Screenshots)</div>
-        <div style="display: grid; grid-template-columns: ${(r.cartBillScreenshotUrl && r.proofScreenshotUrl) ? '1fr 1fr' : '1fr'}; gap: 10px;">
+    <!-- 5. LIVE ROBOT STEP-BY-STEP EXECUTION LOGS CONSOLE -->
+    <div style="background: #0f172a; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; border: 1.5px solid #1e293b;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
+        <div style="font-size: 11px; font-weight: 900; color: #38bdf8; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e; animation: pulse 1.5s infinite;"></span>
+          Live Robot Execution Stream &amp; Step Logs
+        </div>
+        <button type="button" onclick="refreshDossierData('${order.id}')" style="background: rgba(255,255,255,0.1); color: #94a3b8; border: none; border-radius: 4px; padding: 3px 8px; font-size: 10px; font-weight: 700; cursor: pointer;">
+          🔄 Refresh Stream
+        </button>
+      </div>
+      <div id="dossierLogsContainer" style="max-height: 160px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #cbd5e1; line-height: 1.5;">
+        ${logsHtml}
+      </div>
+    </div>
+
+    <!-- 6. DUAL VERIFIED ORDER EVIDENCE PROOFS -->
+    <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 14px;">
+      <div style="font-size: 12px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">
+        📸 Verified Domino's Order Capture Evidence (Dual Screenshots)
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
+        <!-- Cart & Bill Screenshot -->
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 10px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 800; color: #0284c7; margin-bottom: 6px;">
+            🛒 1. Cart &amp; Itemized Bill Review
+          </div>
           ${r.cartBillScreenshotUrl ? `
-            <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #0284c7; margin-bottom: 4px;">🛒 Cart &amp; Itemized Bill Review</div>
-              <img src="${r.cartBillScreenshotUrl}" alt="Cart Bill" style="max-width: 100%; max-height: 200px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
-              <div style="margin-top: 4px;"><a href="${r.cartBillScreenshotUrl}" target="_blank" style="font-size: 10px; color: #0284c7; font-weight: 700; text-decoration: underline;">🔍 Open Full Resolution</a></div>
+            <img src="${r.cartBillScreenshotUrl}" alt="Cart Bill" style="max-width: 100%; max-height: 220px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
+            <div style="margin-top: 6px;">
+              <a href="${r.cartBillScreenshotUrl}" target="_blank" style="font-size: 11px; color: #0284c7; font-weight: 800; text-decoration: underline;">🔍 Open Full Resolution</a>
             </div>
-          ` : ''}
+          ` : '<div style="font-size: 11px; color: #94a3b8; padding: 40px 0;">Cart snapshot captures automatically upon itemized bill audit.</div>'}
+        </div>
+
+        <!-- Confirmation Receipt Proof -->
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 10px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 800; color: #16a34a; margin-bottom: 6px;">
+            🧾 2. Domino's Confirmation Receipt Proof
+          </div>
           ${r.proofScreenshotUrl ? `
-            <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px; text-align: center;">
-              <div style="font-size: 11px; font-weight: 800; color: #16a34a; margin-bottom: 4px;">🧾 Confirmation Receipt Proof</div>
-              <img src="${r.proofScreenshotUrl}" alt="Confirmation Proof" style="max-width: 100%; max-height: 200px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
-              <div style="margin-top: 4px;"><a href="${r.proofScreenshotUrl}" target="_blank" style="font-size: 10px; color: #16a34a; font-weight: 700; text-decoration: underline;">🔍 Open Full Resolution</a></div>
+            <img src="${r.proofScreenshotUrl}" alt="Confirmation Proof" style="max-width: 100%; max-height: 220px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
+            <div style="margin-top: 6px;">
+              <a href="${r.proofScreenshotUrl}" target="_blank" style="font-size: 11px; color: #16a34a; font-weight: 800; text-decoration: underline;">🔍 Open Full Resolution</a>
             </div>
-          ` : ''}
+          ` : '<div style="font-size: 11px; color: #94a3b8; padding: 40px 0;">Confirmation proof captures upon Domino\'s token confirmation.</div>'}
         </div>
       </div>
-    ` : '<div style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 10px;">Cart & Bill screenshots will appear once autonomous robot settles the order on Domino\'s site.</div>'}
+    </div>
   `;
 
-  openModal('orderDossierModal');
+  // Auto-scroll logs to bottom
+  const logsCont = document.getElementById('dossierLogsContainer');
+  if (logsCont) logsCont.scrollTop = logsCont.scrollHeight;
 }
+window.renderOrderDossierContent = renderOrderDossierContent;
+
 
 // =========================================================================
 // 3A. View Verified Domino's Bill Photo (1-Click Admin Access - Dual Screenshots)

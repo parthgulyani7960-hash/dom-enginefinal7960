@@ -1330,6 +1330,84 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, { success: true, message: `Order #${order.id} cancelled.`, order });
   }
 
+  // 3c-1. Admin: Manually Assign Domino's Session Account to Order
+  if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/assign-session')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const orderId = pathname.split('/')[4];
+      const order = db.getOrderById(orderId);
+      if (!order) return sendJson(res, 404, { error: 'Order not found' });
+      const body = await parseBody(req);
+      const accountId = body.accountId;
+      const account = db.getAccounts().find(a => a.id === accountId);
+      if (!account) return sendJson(res, 400, { error: 'Session account not found in fleet' });
+      
+      if (!order.robot) order.robot = {};
+      order.assignedAccountId = account.id;
+      order.robot.assignedAccountId = account.id;
+      order.robot.accountPhone = account.phone;
+      order.robot.sessionPhone = account.phone;
+      order.robot.accountCategory = account.category;
+      order.robot.categoryName = account.categoryName;
+      if (account.cartId) {
+        order.cartId = account.cartId;
+        order.robot.cartId = account.cartId;
+      }
+      db.updateOrder(order.id, order);
+      return sendJson(res, 200, { success: true, message: `Session ${account.phone} successfully assigned to Order #${order.id}`, order });
+    } catch (err) {
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
+  // 3c-2. Admin: Manually Assign Gift Card / Voucher to Order
+  if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/assign-voucher')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const orderId = pathname.split('/')[4];
+      const order = db.getOrderById(orderId);
+      if (!order) return sendJson(res, 404, { error: 'Order not found' });
+      const body = await parseBody(req);
+      const voucherId = body.voucherId;
+      const voucher = (db.getVouchers() || []).find(v => v.id === voucherId);
+      if (!voucher) return sendJson(res, 400, { error: 'Gift Card / Voucher not found in vault' });
+      if (voucher.status === 'USED') return sendJson(res, 400, { error: 'This Gift Card is already USED and cannot be assigned again.' });
+      
+      if (!order.robot) order.robot = {};
+      order.assignedVoucherId = voucher.id;
+      order.robot.assignedVoucherId = voucher.id;
+      order.robot.assignedVoucherMasked = voucher.code.slice(0, 4) + ' **** **** ' + voucher.code.slice(-4);
+      order.robot.voucherCode = voucher.code;
+      order.robot.voucherPin = voucher.pin;
+      order.robot.voucherBalance = voucher.balance;
+      db.updateOrder(order.id, order);
+      return sendJson(res, 200, { success: true, message: `Gift Card ${voucher.code.slice(0, 4)}**** successfully assigned to Order #${order.id}`, order });
+    } catch (err) {
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
+  // 3c-3. Admin: Live Trigger Robot Dispatch Now
+  if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/dispatch-live')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const orderId = pathname.split('/')[4];
+      const order = db.getOrderById(orderId);
+      if (!order) return sendJson(res, 404, { error: 'Order not found' });
+      if (order.robot?.status === 'DELIVERED') {
+        return sendJson(res, 400, { error: 'Order is already delivered.' });
+      }
+      if (!order.robot) order.robot = {};
+      order.robot.status = 'QUEUED_FOR_ROBOT';
+      order.robot.error = null;
+      db.updateOrder(order.id, order);
+      queue.enqueue(order.id);
+      return sendJson(res, 200, { success: true, message: `Live robot dispatch started for Order #${order.id}`, order });
+    } catch (err) {
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
   // 3d. Robot Automation Status & Mode Toggle
   if (method === 'GET' && pathname === '/api/admin/robot/status') {
     return sendJson(res, 200, {

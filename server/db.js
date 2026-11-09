@@ -799,18 +799,18 @@ class Database {
   claimAvailableAccount(preferredCategory = null, orderId = null, paymentMethod = null, cartSubtotal = 0) {
     const now = Date.now();
 
-    // Priority 0: If orderId is provided, check if an account is ALREADY bound to this order!
+    // Priority 0: Check if an explicit account was assigned by admin for this order
     if (orderId) {
-      const alreadyAssigned = this.data.accounts.find(a => 
-        (!a.disabled && a.status !== 'DISABLED') && 
-        (a.activeOrderId === orderId || a.lastOrderId === orderId)
-      );
-      if (alreadyAssigned) {
-        alreadyAssigned.status = 'IN_USE';
-        alreadyAssigned.activeOrderId = orderId;
-        alreadyAssigned.lastActive = new Date().toISOString();
-        this.save();
-        return alreadyAssigned;
+      const order = this.data.orders ? this.data.orders.find(o => o.id === orderId) : null;
+      if (order && order.assignedAccountId) {
+        const explicitAcc = this.data.accounts.find(a => a.id === order.assignedAccountId && !a.disabled && a.status !== 'DISABLED');
+        if (explicitAcc) {
+          explicitAcc.status = 'IN_USE';
+          explicitAcc.activeOrderId = orderId;
+          explicitAcc.lastActive = new Date().toISOString();
+          this.save();
+          return explicitAcc;
+        }
       }
     }
 
@@ -868,8 +868,8 @@ class Database {
       const pastB = parseInt(b.pastOrdersCount || 0);
 
       // Top priority for zero-order accounts (NEW_ACCOUNT) to unlock highest savings
-      if (pastA === 0 || a.accountType === 'NEW_ACCOUNT' || a.category === 'CATEGORY_50_OFF') scoreA += 10000;
-      if (pastB === 0 || b.accountType === 'NEW_ACCOUNT' || b.category === 'CATEGORY_50_OFF') scoreB += 10000;
+      if (pastA === 0 || a.accountType === 'NEW_ACCOUNT' || a.category === 'CATEGORY_50_OFF') scoreA += 1000000;
+      if (pastB === 0 || b.accountType === 'NEW_ACCOUNT' || b.category === 'CATEGORY_50_OFF') scoreB += 1000000;
 
       // Priority 2 for 1-past-order accounts (CHEESY 2nd order discount)
       if (pastA === 1 || a.accountType === 'SECOND_ORDER_ACCOUNT') scoreA += 500;

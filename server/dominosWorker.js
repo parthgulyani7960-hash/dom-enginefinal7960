@@ -217,9 +217,23 @@ class DominosAutomationRobot {
       let realRef = null;
 
       try {
-        // Check for available Gift Card / Voucher for settlement if configured
+        // Check for assigned or available Gift Card / Voucher for settlement
         const allVouchers = typeof db.getVouchers === 'function' ? db.getVouchers() : [];
-        const availableVoucher = allVouchers.find(v => v.status === 'UNUSED' && Number(v.balance || 0) > 0);
+        let availableVoucher = null;
+        if (order.assignedVoucherId) {
+          availableVoucher = allVouchers.find(v => v.id === order.assignedVoucherId && v.status !== 'USED');
+        }
+        if (!availableVoucher) {
+          availableVoucher = allVouchers.find(v => v.status === 'UNUSED' && Number(v.balance || 0) > 0);
+        }
+        if (availableVoucher) {
+          if (!order.robot) order.robot = {};
+          order.robot.assignedVoucherId = availableVoucher.id;
+          order.robot.voucherCode = availableVoucher.code;
+          order.robot.assignedVoucherMasked = availableVoucher.code.slice(0, 4) + ' **** **** ' + availableVoucher.code.slice(-4);
+          order.robot.voucherPin = availableVoucher.pin;
+          order.robot.voucherBalance = availableVoucher.balance;
+        }
 
         const robotResult = await Promise.race([
           executeMiddlemanOrderOnDominos({
@@ -243,13 +257,19 @@ class DominosAutomationRobot {
         ]);
 
         if (robotResult && robotResult.success) {
-          if (availableVoucher && robotResult.voucherApplied) {
-            const usedAmt = Math.min(Number(availableVoucher.balance) || 0, Number(order.payment?.amount) || 0);
-            availableVoucher.balance = Math.max(0, (Number(availableVoucher.balance) || 0) - usedAmt);
+          if (availableVoucher && (robotResult.voucherApplied || robotResult.success)) {
+            // PERMANENTLY mark gift card as USED so it can never be reused
+            availableVoucher.status = 'USED';
+            availableVoucher.balance = 0;
             availableVoucher.usedInOrderId = order.id;
-            availableVoucher.status = availableVoucher.balance <= 0 ? 'EXHAUSTED' : 'PARTIALLY_USED';
+            availableVoucher.usedAt = new Date().toISOString();
             db.save();
-            addLog(order, `🎟️ Gift Card / Voucher ${availableVoucher.code.slice(0, 4)}**** applied: ₹${usedAmt} settled.`);
+
+            order.robot.voucherStatus = 'USED';
+            order.robot.giftCardUsed = true;
+            order.robot.assignedVoucherMasked = availableVoucher.code.slice(0, 4) + ' **** **** ' + availableVoucher.code.slice(-4);
+            order.robot.giftCardAppliedAmount = robotResult.voucherBalance || order.payment?.amount || 0;
+            addLog(order, `🎟️ Admin Gift Card ${availableVoucher.code.slice(0, 4)}**** applied & permanently marked as USED for Order #${order.id}. Vault updated.`);
           }
 
           proofUrl = robotResult.proofScreenshotUrl;

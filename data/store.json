@@ -12,7 +12,7 @@
       "categoryName": "🔵 Party Repeat Order Tier",
       "couponCode": "PARTY",
       "status": "IDLE",
-      "disabled": true,
+      "disabled": false,
       "totalOrdersPlaced": 3,
       "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
       "credentials": {
@@ -60,7 +60,7 @@
       "cleanPhone": "7888422429",
       "customerName": "Parth Gulyani",
       "userId": "346377415",
-      "cartId": "5630236398093124098",
+      "cartId": "4867916644332718194",
       "accountType": "EXISTING_ACCOUNT",
       "category": "CATEGORY_FLAT_100",
       "categoryName": "Party Repeat Order Tier",
@@ -70,7 +70,7 @@
           "domain": ".dominos.co.in",
           "name": "token",
           "path": "/",
-          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc"
+          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ"
         },
         {
           "domain": ".dominos.co.in",
@@ -239,9 +239,9 @@
         "analytics_device_id": "dev_a7m8hussz971793566686731",
         "analytics_sdk_config:https://api.dominos.co.in/ambit-web/ingest:proj_a280da1c8a61bb96:__anonymous__": "{\"trackingFlags\":{\"emergencyDisableEventIngest\":false,\"emergencyDisableReplayIngest\":false,\"enableEventTracking\":true,\"trackPageViews\":true,\"trackClicks\":true,\"trackForms\":true,\"networkCaptureEnabled\":true,\"networkCaptureFetch\":true,\"networkCaptureXhr\":true,\"networkCaptureImages\":false,\"networkCaptureStylesheets\":false,\"networkCaptureScripts\":false,\"networkSampleRate\":1,\"networkQueueLimit\":1000,\"enableReplay\":true,\"enableMouseTracking\":true,\"enableScrollTracking\":true,\"replaySampleRate\":0.02,\"mousemoveSamplingMs\":100,\"scrollSamplingMs\":200,\"checkoutEveryNth\":50,\"maxReplayDurationMinutes\":0,\"replayWorkerEnabled\":true,\"replayMaxQueueBytes\":10485760,\"replayMaxQueueEvents\":2000,\"replayUploadConcurrency\":2,\"webFlushIntervalMs\":1000,\"webBatchSize\":500,\"webMaxQueueEvents\":2000,\"webMaxQueueBytes\":5242880,\"webGzipThresholdBytes\":60000,\"webReplayChunkSizeChars\":256000,\"webUploadConcurrency\":2,\"collectFonts\":true,\"recordCanvas\":true,\"configCacheTtlSeconds\":900,\"sessionTimeoutMs\":1800000,\"maskAllInputs\":true,\"maskTextSelectors\":\"\",\"blockSelectors\":\"\",\"ignoreSelectors\":\"\",\"mobileReplayMaskLevel\":\"medium\",\"mobileReplayQuality\":\"high\",\"androidBatchIntervalMs\":1000,\"androidMaxQueueEvents\":10000,\"androidMaxQueueBytes\":10485760,\"androidReplayMaxQueueEvents\":2000,\"androidReplayMaxQueueBytes\":10485760,\"androidReplayBatchSize\":200,\"androidReplayChunkSizeBytes\":50000,\"androidUploadConcurrency\":1,\"androidCaptureImages\":true,\"androidInteractionEvents\":true,\"nodeBatchSize\":100,\"nodeFlushIntervalMs\":1000,\"nodeMaxQueueEvents\":10000,\"nodeGzipThresholdBytes\":60000,\"nodeMaxRetries\":3,\"nodeRetryBaseDelayMs\":250,\"nodeRequestTimeoutMs\":10000,\"nodeAutoFlush\":true,\"timezone\":\"Asia/Kolkata\"},\"userPolicy\":{\"user_id\":null,\"enableReplay\":false,\"forceReplaySample\":false},\"expiresAt\":1793567594837}",
         "analytics_session_state": "{\"id\":\"sess_5oeldter0xb1793566686731\",\"lastActivity\":1793566693835}",
-        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc",
-        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc",
-        "cartId": "5630236398093124098",
+        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ",
+        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ",
+        "cartId": "4867916644332718194",
         "confrimView": "false",
         "currentSelToppObj": "{}",
         "debug": "undefined",
@@ -266,34 +266,34 @@
         "paymentMode": "{}",
         "reorderHistoryId": "",
         "storeId": "6585R",
-        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc",
+        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ",
         "totalWalletBalance": "",
         "userAddresses": "[]",
-        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc\"},\"cartId\":\"5630236398093124098\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
+        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ\"},\"cartId\":\"4867916644332718194\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
         "utm_attributes": "{\"utm_source\":\"direct\",\"utm_medium\":\"direct\",\"utm_campaign\":\"direct\",\"utm_source_medium\":\"direct-direct\"}"
       },
-      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc",
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ",
       "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
       "credentials": {
-        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc",
-        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc",
-        "cartId": "5630236398093124098",
+        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ",
+        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ",
+        "cartId": "4867916644332718194",
         "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
-        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..d-pyW69yJ89eNCEIDqUp9w.OPFU15_7JJbSNxWv_873GvkAFDf8JpzlATSF_3V9TNKAEasDWFIA2pDF0UbwY6fD0qqW_VOBATVd_b8jUS0LyuqrNuykNFzqkj9kGKIe2AZgkUJhuxLK-S1td_QztF4z0L050d9OgJmzYeSQ5ubTdXyzBVHXG0YKbudX1-Tpxp2bRU6KibUnQFhdpy2y7Vu7.zXTbEUIwiWLfXjK62IT8QDmXIX8-mgqzV_Xd2a2GuXc",
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..2ePPQwrKwE6moZn0_4ZCqg.7q2mBH6Z8yci0Gudm8GBDjCNkav9nziTU3JtO5s3771A0evyKVoLkVKHZz50fjoMrWxFg2zjumLl_FNXc71VsBA0rDOEZQ_Re5lX55j865GEP8lOhNTlH7uTIoJLH2q0E84I3Lx811G365kl32DGceBfyCd23hlKiWmlBJRB7KqCS-08n0EViW-eyV1secW4.JT79SiMA7kFR7h8N88H_Sv9ulI_WU2QaKewuqHLNShQ",
         "userId": "346377415"
       },
-      "pastOrdersCount": 11,
+      "pastOrdersCount": 12,
       "reorderItems": [],
       "status": "IDLE",
-      "totalOrdersPlaced": 15,
+      "totalOrdersPlaced": 16,
       "storedAt": "2026-11-01T13:35:39.834Z",
-      "lastRefreshedAt": "2026-11-08T23:17:09.056Z",
-      "accessTokenExpiresAt": "2026-11-09T00:17:09.056Z",
-      "refreshTokenExpiresAt": "2026-12-08T23:17:09.056Z",
-      "expiresAt": "2026-12-08T23:17:09.056Z",
+      "lastRefreshedAt": "2026-11-09T04:55:17.936Z",
+      "accessTokenExpiresAt": "2026-11-09T05:55:17.936Z",
+      "refreshTokenExpiresAt": "2026-12-09T04:55:17.936Z",
+      "expiresAt": "2026-12-09T04:55:17.936Z",
       "source": "LIVE_SMS_OTP",
-      "lastActive": "2026-11-08T23:17:08.533Z",
-      "lastValidated": "2026-11-08T23:17:09.056Z",
+      "lastActive": "2026-11-09T04:55:16.000Z",
+      "lastValidated": "2026-11-09T04:55:17.936Z",
       "isCheesyRewards": true,
       "loyaltyProgram": "POTP2",
       "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)",
@@ -9427,8 +9427,8 @@
         "storeName": "SECTOR-15C, CHANDIGARH",
         "street": "Ground Floor and First Floor of Plot No. SCO-29Sector-15C,Chandigarh-160015.Ph. no-1724960900"
       },
-      "assignedAccountId": "ACC-DOM-3155",
-      "cartId": "5630236398093124098",
+      "assignedAccountId": "ACC-DOM-0325",
+      "cartId": "7011004257346197868",
       "createdAt": "2026-11-08T22:09:29.509Z",
       "engineOrderRef": "DOM-ENG-769508",
       "id": "DOM-ENG-769508",
@@ -9474,10 +9474,10 @@
       },
       "robot": {
         "accountCategory": "CATEGORY_FLAT_100",
-        "accountPhone": "+91 7888422429",
-        "assignedAccountId": "ACC-DOM-3155",
+        "accountPhone": "+91 7893618933",
+        "assignedAccountId": "ACC-DOM-0325",
         "billAmount": 119,
-        "cartId": "5630236398093124098",
+        "cartId": "7011004257346197868",
         "categoryName": "🔵 Party Repeat Order Tier",
         "discountAmount": 0,
         "error": "Domino's store kitchen is currently outside delivery hours (Kitchen delivery opens at 11:00 AM IST). Order is safely saved.",
@@ -9912,7 +9912,7 @@
         "rider": {
           "status": "AWAITING_KITCHEN_DISPATCH"
         },
-        "sessionPhone": "+91 7888422429",
+        "sessionPhone": "+91 7893618933",
         "status": "STORE_OFFLINE",
         "storeId": "66409",
         "storeName": "SECTOR-15C, CHANDIGARH",
@@ -9920,16 +9920,22 @@
         "cartBillScreenshotUrl": "/screenshots/cart-bill-DOMENG769508.png",
         "proofScreenshotUrl": "/screenshots/proof-DOM-ENG-769508.png",
         "storeOffline": true,
-        "nextOpeningTime": "11:00 AM IST"
+        "nextOpeningTime": "11:00 AM IST",
+        "assignedVoucherId": "VOUCH-502",
+        "assignedVoucherMasked": "6014 **** **** 1239",
+        "voucherCode": "6014992100481239",
+        "voucherPin": "517290",
+        "voucherBalance": 1500
       },
-      "updatedAt": "2026-11-08T23:17:44.911Z",
+      "updatedAt": "2026-11-09T05:00:32.941Z",
       "user": {
         "email": "parthgulyani7960@gmail.com",
         "name": "Parth Gulyani",
         "phone": "+91 7888422429",
         "userId12": "591501648476"
       },
-      "userId12": "591501648476"
+      "userId12": "591501648476",
+      "assignedVoucherId": "VOUCH-502"
     }
   ],
   "walletDeposits": [
@@ -10398,6 +10404,34 @@
       "updatedAt": "2026-11-08T21:55:00.110Z",
       "userName": "Customer",
       "userPhone": ""
+    },
+    {
+      "category": "OTHER",
+      "categoryLabel": "💬 General Domino's Help",
+      "createdAt": "2026-11-09T04:58:35.600Z",
+      "description": "[AUTOMATED EXCEPTION REPORT] Robot execution crashed on order #DOM-ENG-769508: Middleman Robot timed out after 180 seconds while interacting with Domino's site.",
+      "id": "TCK-315502",
+      "messages": [
+        {
+          "id": "msg-1794200315515-1",
+          "sender": "BOT",
+          "senderName": "Domino's Order Engine Bot",
+          "text": "Hello! How can we assist you with your Domino's order today? An admin support specialist will respond shortly.",
+          "timestamp": "2026-11-09T04:58:35.590Z"
+        },
+        {
+          "id": "msg-1794200315600-2",
+          "sender": "USER",
+          "senderName": "Customer",
+          "text": "[AUTOMATED EXCEPTION REPORT] Robot execution crashed on order #DOM-ENG-769508: Middleman Robot timed out after 180 seconds while interacting with Domino's site.",
+          "timestamp": "2026-11-09T04:58:35.600Z"
+        }
+      ],
+      "orderId": "DOM-ENG-769508",
+      "status": "OPEN",
+      "updatedAt": "2026-11-09T04:58:35.600Z",
+      "userName": "Customer",
+      "userPhone": ""
     }
   ],
   "userProfile": {
@@ -10447,6 +10481,7 @@
       "id": "USR-1042",
       "lastActive": "2026-11-01T17:32:31.042Z",
       "name": "Verification Bot",
+      "ordersCount": 0,
       "phone": "9464956705",
       "phoneLocked": false,
       "picture": "https://lh3.googleusercontent.com/a/test-pic=s96-c",
@@ -10479,6 +10514,7 @@
         }
       ],
       "status": "ACTIVE",
+      "totalSpent": 0,
       "userId12": "191878130976",
       "wallet": {
         "balance": 0,
@@ -10492,10 +10528,12 @@
       "email": "test@example.com",
       "id": "test_usr_1",
       "name": "test",
+      "ordersCount": 0,
       "phone": "",
       "phoneLocked": false,
       "registeredAt": "2026-11-08T20:54:17.885Z",
       "status": "ACTIVE",
+      "totalSpent": 0,
       "userId12": "303036732898",
       "wallet": {
         "balance": 0,
@@ -10512,7 +10550,10 @@
       "id": "USR-0426",
       "isAdmin": true,
       "lastActive": "2026-11-01T20:36:14.542Z",
+      "lastEngineOrderRef": "DOM-ENG-769508",
+      "lastOrderAt": "2026-11-08T22:09:29.509Z",
       "name": "Parth Gulyani",
+      "ordersCount": 20,
       "phone": "+91 9876543210",
       "phoneLocked": false,
       "picture": "https://lh3.googleusercontent.com/a/admin-avatar",
@@ -10560,6 +10601,7 @@
         }
       ],
       "status": "ACTIVE",
+      "totalSpent": 3707,
       "userId12": "591501648476",
       "wallet": {
         "balance": 0,
@@ -10575,11 +10617,13 @@
       "id": "USR-0459",
       "lastActive": "2026-11-01T20:36:14.636Z",
       "name": "Regular Customer",
+      "ordersCount": 0,
       "phone": "",
       "phoneLocked": false,
       "picture": "https://lh3.googleusercontent.com/a/cust-avatar",
       "registeredAt": "2026-11-01T19:46:40.459Z",
       "status": "ACTIVE",
+      "totalSpent": 0,
       "userId12": "819292137534",
       "wallet": {
         "balance": 0,
@@ -10596,11 +10640,13 @@
       "id": "USR-5181",
       "lastActive": "2026-11-01T20:17:55.181Z",
       "name": "Verification Bot",
+      "ordersCount": 0,
       "phone": "",
       "phoneLocked": false,
       "picture": "https://lh3.googleusercontent.com/a/test-pic=s96-c",
       "registeredAt": "2026-11-01T20:17:55.181Z",
       "status": "ACTIVE",
+      "totalSpent": 0,
       "userId12": "546683990483",
       "wallet": {
         "balance": 0,
@@ -10617,11 +10663,13 @@
       "id": "USR-9885",
       "lastActive": "2026-11-04T08:33:49.885Z",
       "name": "Anshu mishra Mishra",
+      "ordersCount": 0,
       "phone": "",
       "phoneLocked": false,
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocI61ZHrRJDYMY3B9RGMDcoA1_Hu9Yh1mS0lLmU6k1ZFizONZg=s96-c",
       "registeredAt": "2026-11-04T08:33:49.885Z",
       "status": "ACTIVE",
+      "totalSpent": 0,
       "userId12": "142184445448",
       "wallet": {
         "balance": 0,
@@ -10630,6 +10678,27 @@
       "walletBalance": 0,
       "transactions": [],
       "savedAddresses": []
+    },
+    {
+      "addressCount": 0,
+      "email": "parth.google@gmail.com",
+      "id": "USR-877157",
+      "lastActive": "2026-11-01T13:37:31.191Z",
+      "lastEngineOrderRef": "DOM-ENG-250275",
+      "lastOrderAt": "2026-11-01T13:37:31.191Z",
+      "name": "Parth Sharma",
+      "ordersCount": 1,
+      "phone": "+91 7888402429",
+      "phoneLocked": false,
+      "registeredAt": "2026-11-01T13:37:31.191Z",
+      "status": "ACTIVE",
+      "totalSpent": 700,
+      "userId12": "948271035824",
+      "wallet": {
+        "balance": 0,
+        "currency": "INR"
+      },
+      "walletBalance": 0
     }
   ],
   "notifications": [
