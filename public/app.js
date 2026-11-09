@@ -440,9 +440,9 @@ function renderMenu(items) {
       servesLabel = '<span class="serves-pill">Regular/Med/Large</span>';
     }
 
-    // Check if this item is currently in user's cart
-    const cartItem = cart.find(c => c.id === item.id || (c.dominosCode && c.dominosCode === item.dominosCode));
-    const cartQty = cartItem ? (cartItem.quantity || 0) : 0;
+    // Check if this item is currently in user's cart (including customized variants)
+    const matchingCartItems = cart.filter(c => c.id === item.id || c.baseId === item.id || (c.dominosCode && c.dominosCode === item.dominosCode));
+    const cartQty = matchingCartItems.reduce((sum, c) => sum + (c.quantity || 1), 0);
 
     let actionBtnHtml = '';
     if (!isAvail) {
@@ -496,9 +496,10 @@ function renderMenu(items) {
 }
 
 function changeCardItemQty(itemId, delta) {
-  const itemInCart = cart.find(c => c.id === itemId || (c.dominosCode && c.dominosCode === itemId));
-  if (itemInCart) {
-    changeQty(itemInCart.id, delta);
+  const matchingCartItems = cart.filter(c => c.id === itemId || c.baseId === itemId || (c.dominosCode && c.dominosCode === itemId));
+  if (matchingCartItems.length > 0) {
+    const target = matchingCartItems[matchingCartItems.length - 1];
+    changeQty(target.id, delta);
   } else if (delta > 0) {
     addItemToCart(itemId);
   }
@@ -531,6 +532,14 @@ function applyCurrentFilters() {
     if (combosSec) combosSec.style.display = currentSearchQuery ? 'none' : 'block';
     if (menuSec) menuSec.style.display = 'block';
     renderCombos(filteredCombos);
+  } else if (currentCategoryFilter === 'MENU_129') {
+    if (combosSec) combosSec.style.display = 'none';
+    if (menuSec) menuSec.style.display = 'block';
+    items = items.filter(i => (i.price && i.price <= 129) || (i.category && i.category.toLowerCase().includes('129')));
+  } else if (currentCategoryFilter === 'MENU_179') {
+    if (combosSec) combosSec.style.display = 'none';
+    if (menuSec) menuSec.style.display = 'block';
+    items = items.filter(i => (i.price && i.price <= 179) || (i.category && i.category.toLowerCase().includes('179')));
   } else {
     if (combosSec) combosSec.style.display = 'none';
     if (menuSec) menuSec.style.display = 'block';

@@ -1473,7 +1473,10 @@ async function executeMiddlemanOrderOnDominos({
     }
 
     if (finalAudit.missingCount > 0) {
-      throw new Error(`Cart verification failed: Ordered item(s) missing from Domino's cart: [${finalAudit.missing.join(', ')}]. Order blocked to prevent placing incomplete order.`);
+      const err = new Error(`Cart verification failed: Ordered item(s) missing from Domino's cart: [${finalAudit.missing.join(', ')}]. Item(s) out of stock or unavailable at local Domino's store.`);
+      err.isItemUnavailableAtStore = true;
+      err.unavailableItems = finalAudit.missing;
+      throw err;
     }
 
     onProgress(`[MIDDLEMAN-ENGINE] 🛡️ Pre-Checkout Gate: 100% verified! (${finalAudit.totalCards} customer item(s) locked)`);

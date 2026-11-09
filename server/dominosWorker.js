@@ -465,10 +465,27 @@ class DominosAutomationRobot {
 
     } catch (err) {
       console.error(`[ROBOT - ${orderId}] Execution failure:`, err.message);
-      order.robot.status = 'ERROR';
-      order.robot.error = err.message;
-      addLog(order, `❌ Execution Error: ${err.message}`);
-      db.updateOrder(orderId, order);
+      if (err.isItemUnavailableAtStore) {
+        order.robot.status = 'WAITING_ADMIN_DECISION';
+        order.robot.isPaused = true;
+        order.robot.pauseReason = `Items unavailable at local Domino's kitchen: ${(err.unavailableItems || []).join(', ')}`;
+        order.robot.unavailableItems = err.unavailableItems || [];
+        addLog(order, `⏸️ Robot Paused: Item(s) [${(err.unavailableItems || []).join(', ')}] unavailable at local Domino's store. Awaiting Admin decision (Refund to Wallet or Proceed with available items).`);
+        db.updateOrder(orderId, order);
+        try {
+          db.broadcastNotification({
+            title: `⚠️ Store Out of Stock: #${orderId}`,
+            message: `Items unavailable at store: ${(err.unavailableItems || []).join(', ')}. Action required in Admin Cockpit.`,
+            type: 'WARNING',
+            badge: 'ACTION_REQUIRED'
+          });
+        } catch (_) {}
+      } else {
+        order.robot.status = 'ERROR';
+        order.robot.error = err.message;
+        addLog(order, `❌ Execution Error: ${err.message}`);
+        db.updateOrder(orderId, order);
+      }
 
       try {
         db.broadcastNotification({
