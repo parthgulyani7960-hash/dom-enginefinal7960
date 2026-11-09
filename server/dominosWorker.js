@@ -166,6 +166,7 @@ class DominosAutomationRobot {
       // STEP 2: Store Availability & Coordinate Resolution (Universal & Dynamic)
       order.robot.status = 'STORE_RESOLVING';
       const addr = order.address || {};
+      let outlet = null;
       let targetLat = addr.latitude || order.location?.latitude;
       let targetLng = addr.longitude || order.location?.longitude;
 
