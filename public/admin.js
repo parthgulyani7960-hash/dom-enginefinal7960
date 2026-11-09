@@ -1046,6 +1046,7 @@ async function loadAccounts() {
   try {
     loadSessionFleetFeed();
     const res = await adminFetch('/api/admin/accounts');
+    if (!res.ok) return;
     const data = await res.json();
     const accounts = Array.isArray(data) ? data : [];
     window.cachedAccounts = accounts;
@@ -1781,6 +1782,7 @@ window.renderLiveRobotRingFeed = renderLiveRobotRingFeed;
 async function loadOrders() {
   try {
     const res = await adminFetch('/api/admin/orders');
+    if (!res.ok) return;
     const data = await res.json();
     const orders = Array.isArray(data) ? data : [];
     cachedAdminOrders = orders;
@@ -2980,6 +2982,7 @@ async function loadAppUsers() {
   try {
     loadWalletDeposits();
     const res = await adminFetch('/api/admin/users');
+    if (!res.ok) return;
     const data = await res.json();
     const users = Array.isArray(data) ? data : [];
     cachedAppUsers = users;
@@ -3573,7 +3576,9 @@ window.adminDeleteAddr = adminDeleteAddr;
 window.adminSetDefaultAddr = adminSetDefaultAddr;
 window.openUserHistoryModal = openUserHistoryModal;
 window.switchHistoryTab = switchHistoryTab;
-window.renderUserTxns = renderUserTxns;
+const renderUserTxns = renderUserTransactions;
+window.renderUserTxns = renderUserTransactions;
+window.renderUserTransactions = renderUserTransactions;
 window.renderUserOrders = renderUserOrders;
 
 // =========================================================================
@@ -4335,6 +4340,7 @@ async function toggleAdminResolveTicket() {
 async function loadSessionFleetFeed() {
   try {
     const res = await adminFetch('/api/admin/sessions/feed');
+    if (!res.ok) return;
     const data = await res.json();
     if (!data.success) return;
 
@@ -4419,6 +4425,7 @@ let cachedWalletDeposits = [];
 async function loadWalletDeposits() {
   try {
     const res = await adminFetch('/api/admin/wallet/deposits');
+    if (!res.ok) return;
     const deposits = await res.json();
     cachedWalletDeposits = Array.isArray(deposits) ? deposits : [];
 
