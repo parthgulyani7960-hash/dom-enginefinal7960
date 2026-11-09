@@ -429,7 +429,8 @@ function renderMenu(items) {
     const imgUrl = getItemDefaultImage(item);
     const isVegFood = item.isVeg !== false && item.type !== 'NON-VEG';
     const typeLabel = isVegFood ? 'VEG' : 'NON-VEG';
-    const canCustomize = (item.sizes && Object.keys(item.sizes).length > 1) || (item.allowedSizes && item.allowedSizes.length > 1);
+    const isCorePizza = (item.category === 'Veg Pizza' || item.category === 'Non-Veg Pizza') && !item.name.toLowerCase().includes('pizza mania');
+    const canCustomize = item.isCustomizable === true && isCorePizza;
 
     // Serves badge
     let servesLabel = '';
@@ -759,7 +760,7 @@ function requestPhoneChangeSupport() {
     if (cat) cat.value = 'OTHER';
     const desc = document.getElementById('ticketDescInput');
     if (desc) {
-      desc.value = `Request to update my registered mobile number from ${currentUser.phone || '+91 7893618933'} to a new number: `;
+      desc.value = `Request to update my registered mobile number from ${currentUser.phone || currentUser.phone || ''} to a new number: `;
       desc.focus();
     }
   }, 200);
@@ -815,7 +816,7 @@ function renderProfileAddresses(addresses) {
           </div>
         </div>
         <div style="font-size: 12px; color: #475569; margin-bottom: 4px;">
-          <strong>${recipientName}</strong> • ${addr.phone || currentUser.phone || '+91 7893618933'}
+          <strong>${recipientName}</strong> • ${addr.phone || currentUser.phone || currentUser.phone || ''}
         </div>
         <div style="font-size: 13px; font-weight: 700; color: var(--dark);">${addr.flat}</div>
         <div style="font-size: 12px; color: #475569; margin-top: 2px;">${completeAddr}${landmarkText}</div>
@@ -886,7 +887,7 @@ function toggleAddAddressForm(show = null, forEdit = false) {
     const phoneEl = document.getElementById('formPhone');
     if (fNameInput) { fNameInput.value = nameParts[0] || 'Parth'; fNameInput.disabled = false; fNameInput.readOnly = false; }
     if (lNameInput) { lNameInput.value = nameParts.slice(1).join(' ') || 'Sharma'; lNameInput.disabled = false; lNameInput.readOnly = false; }
-    const userPhoneClean = (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || '7893618933';
+    const userPhoneClean = (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || currentUser.phone || '';
     if (phoneEl) { phoneEl.value = userPhoneClean; phoneEl.disabled = false; phoneEl.readOnly = false; }
     
     // Always enable Order For Someone Else checkbox so receiver name/mobile can be typed freely
@@ -903,7 +904,7 @@ function toggleAddAddressForm(show = null, forEdit = false) {
     document.getElementById('formCompleteAddress').value = '';
     document.getElementById('formLandmark').value = '';
     document.getElementById('formCity').value = currentDetectedCity || 'Chandigarh';
-    document.getElementById('formPincode').value = '160015';
+    document.getElementById('formPincode').value = '';
     document.getElementById('formLat').value = fallbackLat.toFixed(6);
     document.getElementById('formLng').value = fallbackLng.toFixed(6);
     
@@ -1012,7 +1013,7 @@ function editAddress(addressId) {
   document.getElementById('formCompleteAddress').value = addr.completeAddress || addr.building || addr.street || '';
   document.getElementById('formLandmark').value = addr.landmark || '';
   document.getElementById('formCity').value = addr.city || currentDetectedCity || 'Chandigarh';
-  document.getElementById('formPincode').value = addr.pincode || '160015';
+  document.getElementById('formPincode').value = addr.pincode || '';
   document.getElementById('formLat').value = Number(addr.latitude || fallbackLat).toFixed(6);
   document.getElementById('formLng').value = Number(addr.longitude || fallbackLng).toFixed(6);
   
@@ -1138,7 +1139,7 @@ async function submitAddressForm() {
   const completeAddress = getVal('formCompleteAddress');
   const landmark = getVal('formLandmark');
   const city = getVal('formCity') || currentDetectedCity || 'Chandigarh';
-  const pincode = getVal('formPincode') || '160015';
+  const pincode = getVal('formPincode') || '';
   const fallbackLat = (currentCoordinates && currentCoordinates.latitude) ? currentCoordinates.latitude : 28.5355;
   const fallbackLng = (currentCoordinates && currentCoordinates.longitude) ? currentCoordinates.longitude : 77.3910;
   const lat = parseFloat(getVal('formLat')) || fallbackLat;
@@ -1151,7 +1152,7 @@ async function submitAddressForm() {
     return;
   }
 
-  const cleanPhone = phoneRaw.replace(/[^0-9]/g, '').slice(-10) || (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || '7893618933';
+  const cleanPhone = phoneRaw.replace(/[^0-9]/g, '').slice(-10) || (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || currentUser.phone || '';
   if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
     alert('Please enter a valid 10-digit Indian mobile number for the receiver (starting with 6, 7, 8, or 9). Domino\'s rider requires this to coordinate delivery.');
     document.getElementById('formPhone')?.focus();
@@ -2150,14 +2151,11 @@ function addItemToCart(itemId) {
     return;
   }
 
-  // Customization rules: Pizzas allow size (Regular/Medium/Large), crust & topping customizations!
-  const isPizzaCategory = (item.category && item.category.toLowerCase().includes('pizza')) || (item.name && item.name.toLowerCase().includes('pizza'));
-  const hasMultipleSizes = (item.allowedSizes && item.allowedSizes.length > 1) || isPizzaCategory;
-  const hasMultipleCrusts = (item.allowedCrusts && item.allowedCrusts.length > 1) || isPizzaCategory;
-  const isCustomizablePizza = item.isCustomizable !== false && hasMultipleSizes && !item.isPizzaMania;
-  const isManiaWithCrusts = item.isPizzaMania && hasMultipleCrusts;
+  // Customization rules: ONLY Core Veg/Non-Veg Pizzas allow size and crust customizations!
+  const isCorePizza = (item.category === 'Veg Pizza' || item.category === 'Non-Veg Pizza') && !item.name.toLowerCase().includes('pizza mania');
+  const isCustomizablePizza = item.isCustomizable === true && isCorePizza;
 
-  if (isCustomizablePizza || isManiaWithCrusts) {
+  if (isCustomizablePizza) {
     openPizzaCustomizationModal(item);
     return;
   }
@@ -2414,6 +2412,7 @@ async function verifyCartWithKitchen() {
 function openCartModal() {
   syncCartAddressOptions();
   syncTopBarAddressOptions();
+  syncPaymentGatewaysUI();
   renderCartDrawer(true);
   verifyCartWithKitchen();
   openModal('cartModal');
@@ -2679,7 +2678,7 @@ function toggleCartInlineAddAddress(show = null) {
     const s = document.getElementById('cartInlineStreet');
     if (s) s.value = '';
     const rNameInput = document.getElementById('cartInlineReceiverName');
-    if (rNameInput) rNameInput.value = document.getElementById('cartReceiverNameInput')?.value || currentUser.name || 'Parth Sharma';
+    if (rNameInput) rNameInput.value = document.getElementById('cartReceiverNameInput')?.value || currentUser.name || currentUser.name || '';
     const rPhoneInput = document.getElementById('cartInlineReceiverPhone');
     if (rPhoneInput) rPhoneInput.value = (document.getElementById('cartReceiverPhoneInput')?.value || currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10);
   }
@@ -2697,12 +2696,12 @@ async function submitCartInlineAddress() {
   const fallbackLng = (currentCoordinates && currentCoordinates.longitude) ? currentCoordinates.longitude : 77.3910;
 
   const city = (document.getElementById('cartInlineCity')?.value || '').trim() || currentDetectedCity || 'Chandigarh';
-  const pincode = (document.getElementById('cartInlinePincode')?.value || '').trim() || '160015';
+  const pincode = (document.getElementById('cartInlinePincode')?.value || '').trim() || '';
 
   const customReceiverName = (document.getElementById('cartInlineReceiverName')?.value || document.getElementById('cartReceiverNameInput')?.value || '').trim();
   const customReceiverPhone = (document.getElementById('cartInlineReceiverPhone')?.value || document.getElementById('cartReceiverPhoneInput')?.value || '').trim();
-  const rName = customReceiverName || currentUser.name || 'Parth Sharma';
-  const cleanPhone = customReceiverPhone.replace(/[^0-9]/g, '').slice(-10) || (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || '7893618933';
+  const rName = customReceiverName || currentUser.name || currentUser.name || '';
+  const cleanPhone = customReceiverPhone.replace(/[^0-9]/g, '').slice(-10) || (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || currentUser.phone || '';
   const rPhone = `+91 ${cleanPhone}`;
 
   const payload = {
@@ -2764,7 +2763,7 @@ function getActiveSelectedAddress() {
     return {
       id: 'CURRENT_GPS',
       name: currentUser.name || 'Parth',
-      phone: currentUser.phone || '+91 7893618933',
+      phone: currentUser.phone || currentUser.phone || '',
       flat: document.getElementById('cartQuickFlatInput')?.value || document.getElementById('topBarFlatInput')?.value || 'Current Location',
       completeAddress: currentResolvedStore ? `Near ${currentResolvedStore.storeName}` : 'GPS Verified Area',
       latitude: currentCoordinates ? currentCoordinates.latitude : 30.7410,
@@ -2956,8 +2955,8 @@ function displayCartAddress(addr, forceSync = false) {
   const rPhoneInput = document.getElementById('cartReceiverPhoneInput');
   if (!addr) return;
 
-  const recipientName = addr.name || (addr.firstName ? `${addr.firstName} ${addr.lastName || ''}`.trim() : (currentUser.name || 'Parth Sharma'));
-  const recipientPhone = addr.phone || currentUser.phone || '+91 7893618933';
+  const recipientName = addr.name || (addr.firstName ? `${addr.firstName} ${addr.lastName || ''}`.trim() : (currentUser.name || currentUser.name || ''));
+  const recipientPhone = addr.phone || currentUser.phone || currentUser.phone || '';
   const completeAddr = addr.completeAddress || addr.building || addr.street || '';
   const landmark = addr.landmark ? ` (Landmark: ${addr.landmark})` : '';
 
@@ -3056,7 +3055,7 @@ function renderReceiverHistoryPills() {
 
   if (history.length === 0) {
     // Add default user receiver pill
-    history.push({ name: currentUser.name || 'Parth', phone: (currentUser.phone || '7893618933').replace(/[^0-9]/g, '').slice(-10) });
+    history.push({ name: currentUser.name || 'Parth', phone: (currentUser.phone || currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) });
   }
 
   container.innerHTML = history.slice(0, 3).map(rec => `
@@ -3111,7 +3110,7 @@ async function inlineDetectGpsAddress() {
       if (flatEl && !flatEl.value) flatEl.value = g.house_number || 'Flat 101';
       if (streetEl) streetEl.value = [g.road, g.neighbourhood || g.suburb].filter(Boolean).join(', ') || g.formatted;
       if (cityEl) cityEl.value = g.city || currentDetectedCity || 'Delhi';
-      if (pinEl) pinEl.value = g.postcode || '160015';
+      if (pinEl) pinEl.value = g.postcode || '';
       showToastNotice('Address auto-filled from device GPS!', '⚡');
     }
   } catch (e) {
@@ -3217,11 +3216,18 @@ async function proceedToPaymentQR() {
   const resolvedStoreId = currentResolvedStore ? String(currentResolvedStore.storeId) : (selectedAddr.storeId || '70258');
   const resolvedStoreName = currentResolvedStore ? currentResolvedStore.storeName : (selectedAddr.storeName || "Domino's Pizza");
 
-  let flatDisplay = selectedAddr.flat || document.getElementById('cartQuickFlatInput')?.value?.trim() || document.getElementById('topBarFlatInput')?.value?.trim() || '';
+  let flatDisplay = selectedAddr.flat || document.getElementById('cartQuickFlatInput')?.value?.trim() || document.getElementById('topBarFlatInput')?.value?.trim() || document.getElementById('cartInlineFlat')?.value?.trim() || '';
   if (!flatDisplay) {
-    flatDisplay = 'Flat 101'; // Default fallback so user is never blocked
-    const fi = document.getElementById('cartQuickFlatInput');
-    if (fi) fi.value = flatDisplay;
+    const flatInput = document.getElementById('cartQuickFlatInput') || document.getElementById('cartInlineFlat') || document.getElementById('topBarFlatInput');
+    if (flatInput) {
+      flatInput.classList.add('input-error-highlight');
+      flatInput.focus();
+      flatInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      flatInput.addEventListener('input', () => flatInput.classList.remove('input-error-highlight'), { once: true });
+    }
+    showToastNotice('⚠️ Please enter your House / Flat / Floor Number to proceed with Domino\'s delivery.', '🏠');
+    alert('Please enter your House / Flat / Floor / Door Number in the delivery address to proceed.');
+    return;
   }
   selectedAddr.flat = flatDisplay;
 
@@ -3372,24 +3378,28 @@ async function executeFinalConfirmedOrder() {
   const rName = (document.getElementById('confirmModalReceiverName')?.value || '').trim();
   let flat = (document.getElementById('confirmModalFlat')?.value || '').trim();
   if (!flat) {
-    flat = pendingOrderPayload.address?.flat || pendingOrderPayload.address?.building || pendingOrderPayload.address?.street || 'Doorstep Delivery';
     const flatInput = document.getElementById('confirmModalFlat');
-    if (flatInput) flatInput.value = flat;
+    if (flatInput) {
+      flatInput.classList.add('input-error-highlight');
+      flatInput.focus();
+      flatInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      flatInput.addEventListener('input', () => flatInput.classList.remove('input-error-highlight'), { once: true });
+    }
+    alert('Please enter your House / Flat / Floor Number to proceed.');
+    return;
   }
 
   let rPhone = (document.getElementById('confirmModalReceiverPhone')?.value || '').replace(/[^0-9]/g, '').slice(-10);
   if (!rPhone || rPhone.length !== 10 || !/^[6-9]\d{9}$/.test(rPhone)) {
-    const fallbackPhone = (pendingOrderPayload.user?.phone || pendingOrderPayload.address?.phone || '').replace(/[^0-9]/g, '').slice(-10);
-    if (fallbackPhone && fallbackPhone.length === 10 && /^[6-9]\d{9}$/.test(fallbackPhone)) {
-      rPhone = fallbackPhone;
-      const pInput = document.getElementById('confirmModalReceiverPhone');
-      if (pInput) pInput.value = rPhone;
-    } else {
-      alert('Please enter a valid 10-digit Indian mobile number for the rider delivery contact (starting with 6, 7, 8, or 9). Domino\'s rider will call this number.');
-      const pInput = document.getElementById('confirmModalReceiverPhone');
-      if (pInput) { pInput.focus(); pInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-      return;
+    const pInput = document.getElementById('confirmModalReceiverPhone');
+    if (pInput) {
+      pInput.classList.add('input-error-highlight');
+      pInput.focus();
+      pInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      pInput.addEventListener('input', () => pInput.classList.remove('input-error-highlight'), { once: true });
     }
+    alert('Please enter a valid 10-digit Indian mobile number for the rider delivery contact (starting with 6, 7, 8, or 9). Domino\'s rider will call this number.');
+    return;
   }
 
   // Commit verified receiver details into payload
@@ -3870,7 +3880,43 @@ function updateTrackingUI(order) {
 
   const liveStateLabel = document.getElementById('trackerLiveStateLabel');
   if (liveStateLabel) {
-    const friendlyStatusMap = {
+    // Render Dedicated Status Notice Banners
+  const noticeBanner = document.getElementById('trackerStatusNoticeBanner');
+  if (noticeBanner) {
+    if (status === 'AWAITING_PAYMENT_APPROVAL' || p.status === 'PENDING_APPROVAL') {
+      noticeBanner.style.display = 'block';
+      noticeBanner.innerHTML = `
+        <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 12px 14px; text-align: left;">
+          <div style="font-weight: 800; color: #b45309; font-size: 13px; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+            <span>⏳</span> <span>Awaiting Store Admin Approval</span>
+          </div>
+          <div style="font-size: 11px; color: #92400e; line-height: 1.4;">
+            Your order has been recorded. Our store team is verifying your ${p.method === 'COD' ? 'Cash on Delivery request' : 'UPI payment'}. Once confirmed by the administrator, the autonomous Domino's robot will immediately place the order.
+          </div>
+        </div>
+      `;
+    } else if (status === 'WAITING_ADMIN_DECISION') {
+      noticeBanner.style.display = 'block';
+      noticeBanner.innerHTML = `
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 10px; padding: 12px 14px; text-align: left;">
+          <div style="font-weight: 800; color: #b91c1c; font-size: 13px; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+            <span>⚠️</span> <span>Local Store Availability Notice</span>
+          </div>
+          <div style="font-size: 11px; color: #991b1b; line-height: 1.4;">
+            One or more items in your order are out of stock at your local Domino's kitchen. Autonomous execution is paused while our support team reviews your order to issue a refund or proceed with available items.
+          </div>
+        </div>
+      `;
+    } else {
+      noticeBanner.style.display = 'none';
+      noticeBanner.innerHTML = '';
+    }
+  }
+
+  const friendlyStatusMap = {
+      'AWAITING_PAYMENT_APPROVAL': 'Awaiting Approval',
+      'WAITING_ADMIN_DECISION': 'Paused (Stock Issue)',
+      'REFUNDED': 'Refunded',
       'STORE_RESOLVING': 'Connecting Kitchen',
       'SESSION_ASSIGNING': 'Session Assigned',
       'QUEUED_FOR_ROBOT': 'Robot Queued',
@@ -5364,7 +5410,7 @@ async function submitDepositPaidConfirmation() {
       body: JSON.stringify({
         reference: activeDepositRequest.reference,
         amount: activeDepositRequest.amount,
-        phone: currentUser.phone || '7893618933',
+        phone: currentUser.phone || currentUser.phone || '',
         upiUri: activeDepositRequest.upiUri
       })
     });
@@ -5581,7 +5627,7 @@ async function submitWalletWithdrawalRequest() {
       body: JSON.stringify({
         userId: currentUser.userId12 || '948271035824',
         userName: currentUser.name || 'Parth',
-        phone: currentUser.phone || '7893618933',
+        phone: currentUser.phone || currentUser.phone || '',
         amount: amount,
         upiId: upiId,
         remarks: remarks
@@ -5753,7 +5799,7 @@ async function openHelpSupportModal(preselectedOrderId = null) {
 
     // Fetch user order history to populate additional past orders
     try {
-      const phoneParam = encodeURIComponent(currentUser.phone || '+91 7893618933');
+      const phoneParam = encodeURIComponent(currentUser.phone || currentUser.phone || '');
       const res = await fetch(`/api/orders?phone=${phoneParam}`);
       if (res.ok) {
         const orders = await res.json();
@@ -5902,8 +5948,8 @@ async function submitSupportTicket() {
     const payload = {
       orderId: orderId,
       userId: currentUser.userId12 || '948271035824',
-      userPhone: currentUser.phone || '+91 7893618933',
-      userName: currentUser.name || 'Parth Sharma',
+      userPhone: currentUser.phone || currentUser.phone || '',
+      userName: currentUser.name || currentUser.name || '',
       category: activeTicketCategory,
       description: desc,
       imageUrl: attachedProofBase64
@@ -5942,7 +5988,7 @@ async function submitSupportTicket() {
 
 async function loadUserTickets(silent = false) {
   try {
-    const phoneParam = encodeURIComponent(currentUser.phone || '+91 7893618933');
+    const phoneParam = encodeURIComponent(currentUser.phone || currentUser.phone || '');
     const res = await fetch(`/api/support/tickets?phone=${phoneParam}`);
     if (!res.ok) return;
     const tickets = await res.json();
@@ -6069,7 +6115,7 @@ async function sendChatMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sender: 'USER',
-        senderName: currentUser.name || 'Parth Sharma',
+        senderName: currentUser.name || currentUser.name || '',
         text: text
       })
     });

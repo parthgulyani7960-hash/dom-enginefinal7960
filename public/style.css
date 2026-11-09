@@ -1565,3 +1565,18 @@ body.modal-open {
     min-width: 650px !important;
   }
 }
+
+
+/* Form Field Error Highlighting & Shake Animation */
+.input-error-highlight {
+  border: 2px solid #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+  background-color: #fff1f2 !important;
+  animation: shakeInput 0.35s ease-in-out !important;
+}
+
+@keyframes shakeInput {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}

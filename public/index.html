@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Domino's Order Engine | Official Domino's Store Ordering &amp; Kitchen Dispatch</title>
-  <link rel="stylesheet" href="/style.css?v=20261102.2">
+  <link rel="stylesheet" href="/style.css?v=20261109.final">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -454,8 +454,8 @@
           <div id="addressFormSection" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px;">
             <h4 id="addressFormTitle" style="font-size: 13px; font-weight: 800; margin-bottom: 12px; color: var(--dark);">+ Add New Delivery Address</h4>
             <input type="hidden" id="formAddressId" value="">
-            <input type="hidden" id="formCity" value="Chandigarh">
-            <input type="hidden" id="formPincode" value="160015">
+            <input type="hidden" id="formCity" value="">
+            <input type="hidden" id="formPincode" value="">
 
             <!-- 1. Current Location GPS Quick-Sync Button inside Address Form -->
             <button type="button" class="btn-location" id="formUseGpsBtn" onclick="useCurrentLocationForAddressForm()" style="width: 100%; margin-bottom: 12px;">
@@ -775,8 +775,8 @@
               <input type="text" id="cartInlineStreet" class="form-input" placeholder="Complete Street / Building / Society *" style="font-size: 12px; padding: 6px 10px;">
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="cartInlineCity" class="form-input" placeholder="City (e.g. Chandigarh)" style="font-size: 12px; padding: 6px 10px;">
-              <input type="text" id="cartInlinePincode" class="form-input" placeholder="Pincode (e.g. 160015)" style="font-size: 12px; padding: 6px 10px;">
+              <input type="text" id="cartInlineCity" class="form-input" placeholder="City" style="font-size: 12px; padding: 6px 10px;">
+              <input type="text" id="cartInlinePincode" class="form-input" placeholder="6-digit Pincode" style="font-size: 12px; padding: 6px 10px;">
             </div>
             <div style="display: flex; gap: 6px;">
               <button type="button" class="btn-primary" style="font-size: 11px; padding: 6px 12px; flex: 1;" onclick="submitCartInlineAddress()">💾 Save &amp; Select</button>
@@ -869,7 +869,7 @@
               <label style="font-size: 11px; font-weight: 700; color: var(--gray-600); display: block; margin-bottom: 4px;">Rider Contact Mobile (10-digits)</label>
               <div style="display: flex; align-items: center; gap: 4px;">
                 <span style="font-size: 13px; font-weight: 700; color: var(--gray-500); background: #f1f5f9; padding: 8px 6px; border: 1px solid #cbd5e1; border-radius: 6px;">+91</span>
-                <input type="tel" id="confirmModalReceiverPhone" class="form-input" maxlength="10" style="font-size: 13px; font-weight: 800; font-family: monospace; letter-spacing: 0.5px; padding: 8px 10px; background: white;" placeholder="9876543210">
+                <input type="tel" id="confirmModalReceiverPhone" class="form-input" maxlength="10" style="font-size: 13px; font-weight: 800; font-family: monospace; letter-spacing: 0.5px; padding: 8px 10px; background: white;" placeholder="10-digit Mobile">
               </div>
             </div>
           </div>
@@ -1072,6 +1072,7 @@
           </div>
         </div>
 
+        <div id="trackerStatusNoticeBanner" style="display: none; margin-bottom: 12px;"></div>
         <!-- Domino's Official Kitchen Store Token Card (Primary Authentic Reference) -->
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
@@ -1079,7 +1080,7 @@
               <span>🍕</span> <span>DOMINO'S STORE KITCHEN TOKEN</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
-              <span id="trackerKitchenTokenBadge" style="font-size: 22px; font-weight: 900; color: #15803d; font-family: monospace; letter-spacing: 1px;">#790007</span>
+              <span id="trackerKitchenTokenBadge" style="font-size: 22px; font-weight: 900; color: #15803d; font-family: monospace; letter-spacing: 1px;">Awaiting Kitchen Token...</span>
               <button type="button" onclick="copyDominosToken()" style="background: #16a34a; color: white; border: none; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; cursor: pointer;">📋 Copy</button>
             </div>
             <div style="font-size: 11px; color: #14532d; margin-top: 2px;">
@@ -1088,8 +1089,8 @@
           </div>
           <div style="text-align: right; background: white; padding: 6px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
             <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Domino's Order Ref</div>
-            <div id="trackerDominosRefHeader" style="font-size: 13px; font-weight: 800; color: #0066a3; font-family: monospace;">#790007</div>
-            <div style="font-size: 10px; color: #0284c7; font-weight: 600; margin-top: 2px;">Status: <span id="trackerLiveStateLabel" style="font-weight: 800;">BAKING</span></div>
+            <div id="trackerDominosRefHeader" style="font-size: 13px; font-weight: 800; color: #0066a3; font-family: monospace;">Awaiting Placement</div>
+            <div style="font-size: 10px; color: #0284c7; font-weight: 600; margin-top: 2px;">Status: <span id="trackerLiveStateLabel" style="font-weight: 800;">Connecting...</span></div>
           </div>
         </div>
 
@@ -2112,6 +2113,6 @@
     </button>
   </nav>
 
-  <script src="/app.js?v=20261102.2"></script>
+  <script src="/app.js?v=20261109.final"></script>
 </body>
 </html>

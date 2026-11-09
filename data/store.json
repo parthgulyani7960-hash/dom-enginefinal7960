@@ -11,7 +11,7 @@
       "category": "CATEGORY_FLAT_100",
       "categoryName": "🔵 Party Repeat Order Tier",
       "couponCode": "PARTY",
-      "status": "IDLE",
+      "status": "IN_USE",
       "disabled": false,
       "totalOrdersPlaced": 3,
       "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
@@ -22,8 +22,8 @@
       "storedAt": "2026-11-01T13:35:39.833Z",
       "expiresAt": "2026-12-01T18:42:45.942Z",
       "lastActive": "2026-11-01T13:37:31.196Z",
-      "activeOrderId": null,
-      "lastAssignedAt": "2026-11-01T13:37:31.192Z",
+      "activeOrderId": "DOM-ENG-658145",
+      "lastAssignedAt": "2026-11-09T05:37:39.863Z",
       "pastOrdersCount": 0,
       "lastValidated": "2026-11-01T18:42:45.942Z"
     },
@@ -60,17 +60,17 @@
       "cleanPhone": "7888422429",
       "customerName": "Parth Gulyani",
       "userId": "346377415",
-      "cartId": "2278199393449290801",
+      "cartId": "2004258357364509325",
       "accountType": "EXISTING_ACCOUNT",
       "category": "CATEGORY_FLAT_100",
-      "categoryName": "🔵 Party Repeat Order Tier",
+      "categoryName": "Party Repeat Order Tier",
       "couponCode": "PARTY",
       "cookies": [
         {
           "domain": ".dominos.co.in",
           "name": "token",
           "path": "/",
-          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc"
+          "value": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI"
         },
         {
           "domain": ".dominos.co.in",
@@ -239,9 +239,9 @@
         "analytics_device_id": "dev_a7m8hussz971793566686731",
         "analytics_sdk_config:https://api.dominos.co.in/ambit-web/ingest:proj_a280da1c8a61bb96:__anonymous__": "{\"trackingFlags\":{\"emergencyDisableEventIngest\":false,\"emergencyDisableReplayIngest\":false,\"enableEventTracking\":true,\"trackPageViews\":true,\"trackClicks\":true,\"trackForms\":true,\"networkCaptureEnabled\":true,\"networkCaptureFetch\":true,\"networkCaptureXhr\":true,\"networkCaptureImages\":false,\"networkCaptureStylesheets\":false,\"networkCaptureScripts\":false,\"networkSampleRate\":1,\"networkQueueLimit\":1000,\"enableReplay\":true,\"enableMouseTracking\":true,\"enableScrollTracking\":true,\"replaySampleRate\":0.02,\"mousemoveSamplingMs\":100,\"scrollSamplingMs\":200,\"checkoutEveryNth\":50,\"maxReplayDurationMinutes\":0,\"replayWorkerEnabled\":true,\"replayMaxQueueBytes\":10485760,\"replayMaxQueueEvents\":2000,\"replayUploadConcurrency\":2,\"webFlushIntervalMs\":1000,\"webBatchSize\":500,\"webMaxQueueEvents\":2000,\"webMaxQueueBytes\":5242880,\"webGzipThresholdBytes\":60000,\"webReplayChunkSizeChars\":256000,\"webUploadConcurrency\":2,\"collectFonts\":true,\"recordCanvas\":true,\"configCacheTtlSeconds\":900,\"sessionTimeoutMs\":1800000,\"maskAllInputs\":true,\"maskTextSelectors\":\"\",\"blockSelectors\":\"\",\"ignoreSelectors\":\"\",\"mobileReplayMaskLevel\":\"medium\",\"mobileReplayQuality\":\"high\",\"androidBatchIntervalMs\":1000,\"androidMaxQueueEvents\":10000,\"androidMaxQueueBytes\":10485760,\"androidReplayMaxQueueEvents\":2000,\"androidReplayMaxQueueBytes\":10485760,\"androidReplayBatchSize\":200,\"androidReplayChunkSizeBytes\":50000,\"androidUploadConcurrency\":1,\"androidCaptureImages\":true,\"androidInteractionEvents\":true,\"nodeBatchSize\":100,\"nodeFlushIntervalMs\":1000,\"nodeMaxQueueEvents\":10000,\"nodeGzipThresholdBytes\":60000,\"nodeMaxRetries\":3,\"nodeRetryBaseDelayMs\":250,\"nodeRequestTimeoutMs\":10000,\"nodeAutoFlush\":true,\"timezone\":\"Asia/Kolkata\"},\"userPolicy\":{\"user_id\":null,\"enableReplay\":false,\"forceReplaySample\":false},\"expiresAt\":1793567594837}",
         "analytics_session_state": "{\"id\":\"sess_5oeldter0xb1793566686731\",\"lastActivity\":1793566693835}",
-        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc",
-        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc",
-        "cartId": "2278199393449290801",
+        "authToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI",
+        "auth_token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI",
+        "cartId": "2004258357364509325",
         "confrimView": "false",
         "currentSelToppObj": "{}",
         "debug": "undefined",
@@ -266,39 +266,39 @@
         "paymentMode": "{}",
         "reorderHistoryId": "",
         "storeId": "6585R",
-        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc",
+        "token": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI",
         "totalWalletBalance": "",
         "userAddresses": "[]",
-        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc\"},\"cartId\":\"2278199393449290801\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
+        "userInfo": "{\"headers\":{\"isLoggedIn\":true,\"credentials\":{\"accessKeyId\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI\",\"refreshToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk\",\"accessToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI\",\"sessionToken\":\"Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI\"},\"cartId\":\"2004258357364509325\",\"userId\":\"346377415\",\"status\":\"SUCCESS\"},\"userData\":\"U2FsdGVkX1+LvmWl1On1FLeyf3A+IscLJXfA0zD0xVtQcgUfJgJ56Yqh2ByHiRYkzGXxqvuBXcr1HYr4OCoO5mQOgJi5eA81HPgkVV9YYvRrMR0Nh8YodoHM45xY4GIFF72kZGFB1xTl74CYWF6DLsW951srXjAyWL4Zl1Z8bepd2Z/P2Qjo3+oz9T6+LOY/ATDvNSpVy/r65m27nl/8hNpUDuRxuLhzPKnhzbvXveY+NsxepMk3Psm+ev+ziFW6gDLuhsAyOpNno/g9cm2YoVeSO3aSNHEzoBY3fkYfiSdWezaM3oliDVVAAJrsDArW\"}",
         "utm_attributes": "{\"utm_source\":\"direct\",\"utm_medium\":\"direct\",\"utm_campaign\":\"direct\",\"utm_source_medium\":\"direct-direct\"}"
       },
-      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc",
+      "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI",
       "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
       "credentials": {
-        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc",
-        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc",
-        "cartId": "2278199393449290801",
+        "accessKeyId": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI",
+        "accessToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI",
+        "cartId": "2004258357364509325",
         "refreshToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..eO-OkY8wh1eVetaTPwGeMg.Ccf9znBhrV7fFlOaJ8oAESEMfBy7MAFg8jebxjB0pktvv5rgOctb_fI8Y-nzJ9dohtW_P6xyOog-OsSa3zSP0BjPtRZ6dxrdZtSrEb5wz0iIF825kh33c29fk4ysHRwBjF9HcWYAw1nIwyuF7IDCppzKCkH30xpaMsjboz2b7N1XNRjVq3y4egUjoYAEYHMK.jJ8jjowZUpiEkk_c1qfA9_fD3BpT_K15q2F_KC1BNLk",
-        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..kzohKT5QYDZPVrwOCAc93Q.47alJkunrh4JHAsQQU5UIbCQso3mkQxmOzlQz8taReazELksgBqgVeh1EsglmJoHf9Uk6dfeS2dbagOJNktPEA9yJf-Ue1uNqskYZhxgnTA9uNDhPjjp4pB0aplkMkNfMw3mtUf-CLm6FJIk9FLveVhUwyakrhM1X_rts8yYlG6qpSgJbNgg-xANUgKhyFyz.jvGcke-rcmF8sCkDeavcemItI0DTP_QfBU3aN6m0WNc",
+        "sessionToken": "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..V_rCFA6hLA-AqEdg0_uggg.jtkYKaMW3VjhehnD9h5vk6SxVEGv98sXPwNXmb49cxODNOe8YKhEQRwOSgaTKDxdzKkwc_4813fZdkDSR4bHQtBG8fcOj7RAWuumo0zsL-KImzVRINOZbk19UjfuObibru5_UdW7aeGIkkAskpPS0H7Y6QC4am3UmHzXVrbrgxhZYgXBTBg1M3-Z7chgWa60.w8IkP8QrRgVKTZ5IP1QSxOjBMhs-Fj-MeLi1ZCpf6lI",
         "userId": "346377415"
       },
-      "pastOrdersCount": 12,
+      "pastOrdersCount": 13,
       "reorderItems": [],
       "status": "IDLE",
-      "totalOrdersPlaced": 16,
+      "totalOrdersPlaced": 17,
       "storedAt": "2026-11-01T13:35:39.834Z",
-      "lastRefreshedAt": "2026-11-09T05:02:57.073Z",
-      "accessTokenExpiresAt": "2026-11-09T06:02:57.073Z",
-      "refreshTokenExpiresAt": "2026-12-09T05:02:57.073Z",
-      "expiresAt": "2026-12-09T05:02:57.073Z",
+      "lastRefreshedAt": "2026-11-09T05:38:02.971Z",
+      "accessTokenExpiresAt": "2026-11-09T06:38:02.971Z",
+      "refreshTokenExpiresAt": "2026-12-09T05:38:02.971Z",
+      "expiresAt": "2026-12-09T05:38:02.971Z",
       "source": "LIVE_SMS_OTP",
-      "lastActive": "2026-11-09T05:02:51.976Z",
-      "lastValidated": "2026-11-09T05:02:57.073Z",
+      "lastActive": "2026-11-09T05:38:02.211Z",
+      "lastValidated": "2026-11-09T05:38:02.972Z",
       "isCheesyRewards": true,
       "loyaltyProgram": "POTP2",
       "loyaltyTitle": "🌟 Cheesy Rewards (POTP2)",
-      "activeOrderId": "DOM-ENG-771523",
-      "lastAssignedAt": "2026-11-08T22:09:29.956Z",
+      "activeOrderId": null,
+      "lastAssignedAt": "2026-11-09T05:38:01.941Z",
       "disabled": false
     },
     {
@@ -810,7 +810,9 @@
     "merchantCode": "DOM-5819",
     "note": "Domino's Order Payment",
     "receiverUpiId": "Pranjalottery@fam",
-    "updatedAt": "2026-11-04T16:04:06.735Z"
+    "updatedAt": "2026-11-04T16:04:06.735Z",
+    "codEnabled": true,
+    "upiEnabled": true
   },
   "vouchers": [
     {
@@ -6961,6 +6963,202 @@
   ],
   "orders": [
     {
+      "id": "DOM-ENG-681823",
+      "engineOrderRef": "DOM-ENG-681823",
+      "dominosOrderRef": null,
+      "cartId": "2004258357364509325",
+      "assignedAccountId": "ACC-DOM-3155",
+      "userId12": "591501648476",
+      "user": {
+        "name": "Verified Customer",
+        "email": "customer@gmail.com",
+        "phone": "+91 9872212345",
+        "userId12": "591501648476"
+      },
+      "items": [
+        {
+          "id": "DOM-PIZ0117",
+          "name": "Margherita",
+          "price": 109,
+          "quantity": 1,
+          "customSize": "Regular",
+          "customCrust": "New Hand Tossed"
+        }
+      ],
+      "location": {
+        "latitude": 28.618,
+        "longitude": 77.032,
+        "store": {
+          "storeId": "66473",
+          "storeName": "DWARKA MOR (NEW DELHI)",
+          "address": "Ground Floor Property No A 1 2 A Plot No 2 out of Khasra No 755 Nawada now colony known as Mohan Garden"
+        }
+      },
+      "address": {
+        "name": "Verified Customer",
+        "phone": "+91 9872212345",
+        "flat": "House 45",
+        "street": "Rama Park Road, Mohan Garden",
+        "city": "Delhi",
+        "latitude": 28.618,
+        "longitude": 77.032,
+        "storeId": "66473",
+        "storeName": "DWARKA MOR (NEW DELHI)"
+      },
+      "payment": {
+        "method": "COD",
+        "subtotal": 89,
+        "gst": 4.45,
+        "deliveryFee": 35,
+        "packagingFee": 0,
+        "discountAmount": 0,
+        "couponCode": null,
+        "amount": 128,
+        "originalEstimatedAmount": 144,
+        "priceDifference": -16,
+        "priceNotice": "Domino's live store price verified at DWARKA MOR (NEW DELHI): Total reduced by ₹16.",
+        "receiverUpiId": "Pranjalottery@fam",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Domino's%20Official%20Kitchen%20Outlet&am=128&tr=DOM-ENG-681823&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-681823",
+        "status": "PAYMENT_APPROVED",
+        "transactionId": "COD-02681823",
+        "verifiedAt": "2026-11-09T05:38:02.011Z"
+      },
+      "robot": {
+        "status": "ERROR",
+        "assignedAccountId": "ACC-DOM-3155",
+        "accountPhone": "+91 7888422429",
+        "sessionPhone": "+91 7888422429",
+        "accountCategory": "CATEGORY_FLAT_100",
+        "categoryName": "🔵 Party Repeat Order Tier",
+        "couponCode": null,
+        "cartId": "2004258357364509325",
+        "dominosOrderRef": null,
+        "dominosAddressId": null,
+        "dominosFormattedAddress": null,
+        "storeId": "66473",
+        "storeName": "DWARKA MOR (NEW DELHI)",
+        "billAmount": 89,
+        "discountAmount": 0,
+        "dueAmount": null,
+        "proofScreenshotUrl": null,
+        "cartBillScreenshotUrl": null,
+        "rider": {
+          "name": null,
+          "phone": null,
+          "status": "AWAITING_PAYMENT_APPROVAL"
+        },
+        "logs": [
+          "[11:08:01 am] Order placed (Cash on Delivery). Engine Ref: DOM-ENG-681823. Awaiting admin payment approval before robot dispatch.",
+          "[11:08:02 am] ✅ Payment approved by Admin. Domino's autonomous robot dispatched!",
+          "[11:08:02] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[11:08:02] Resuming pre-assigned Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🔵 Party Repeat Order Tier",
+          "[11:08:02] Claimed Domino's Session: +91 7888422429 (ACC-DOM-3155) - Category: 🔵 Party Repeat Order Tier",
+          "[11:08:02] Rejuvenating session token with Domino's India live auth API...",
+          "[11:08:03] ✓ Token refreshed! 30-day session extended. Cart ID: 2004258357364509325",
+          "[11:08:03] 💵 Cash on Delivery (COD) selected: Standard Domino's menu billing maintained (prepaid discount codes omitted to prevent gateway rejection).",
+          "[11:08:03] Resolving official Domino's delivery kitchen for coordinates: [28.61800, 77.03200]",
+          "[11:08:03] ❌ Execution Error: outlet is not defined"
+        ],
+        "error": "outlet is not defined"
+      },
+      "createdAt": "2026-11-09T05:38:01.823Z",
+      "updatedAt": "2026-11-09T05:38:03.362Z"
+    },
+    {
+      "id": "DOM-ENG-658145",
+      "engineOrderRef": "DOM-ENG-658145",
+      "dominosOrderRef": null,
+      "cartId": "7011004257346197868",
+      "assignedAccountId": "ACC-DOM-0325",
+      "userId12": "591501648476",
+      "user": {
+        "name": "Verified Customer",
+        "email": "customer@gmail.com",
+        "phone": "+91 9872212345",
+        "userId12": "591501648476"
+      },
+      "items": [
+        {
+          "id": "DOM-PIZ0117",
+          "name": "Margherita",
+          "price": 109,
+          "quantity": 1,
+          "customSize": "Regular",
+          "customCrust": "New Hand Tossed"
+        }
+      ],
+      "location": {
+        "latitude": 28.618,
+        "longitude": 77.032,
+        "store": {
+          "storeId": "66473",
+          "storeName": "DWARKA MOR (NEW DELHI)",
+          "address": "Ground Floor Property No A 1 2 A Plot No 2 out of Khasra No 755 Nawada now colony known as Mohan Garden"
+        }
+      },
+      "address": {
+        "name": "Verified Customer",
+        "phone": "+91 9872212345",
+        "flat": "House 45",
+        "street": "Rama Park Road, Mohan Garden",
+        "city": "Delhi",
+        "latitude": 28.618,
+        "longitude": 77.032,
+        "storeId": "66473",
+        "storeName": "DWARKA MOR (NEW DELHI)"
+      },
+      "payment": {
+        "method": "COD",
+        "subtotal": 89,
+        "gst": 4.45,
+        "deliveryFee": 35,
+        "packagingFee": 0,
+        "discountAmount": 0,
+        "couponCode": null,
+        "amount": 128,
+        "originalEstimatedAmount": 144,
+        "priceDifference": -16,
+        "priceNotice": "Domino's live store price verified at DWARKA MOR (NEW DELHI): Total reduced by ₹16.",
+        "receiverUpiId": "Pranjalottery@fam",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Domino's%20Official%20Kitchen%20Outlet&am=128&tr=DOM-ENG-658145&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-658145",
+        "status": "PENDING_APPROVAL",
+        "transactionId": "COD-02659729",
+        "verifiedAt": null
+      },
+      "robot": {
+        "status": "AWAITING_PAYMENT_APPROVAL",
+        "assignedAccountId": "ACC-DOM-0325",
+        "accountPhone": "+91 7893618933",
+        "sessionPhone": "+91 7893618933",
+        "accountCategory": "CATEGORY_FLAT_100",
+        "categoryName": "🔵 Party Repeat Order Tier",
+        "couponCode": null,
+        "cartId": "7011004257346197868",
+        "dominosOrderRef": null,
+        "dominosAddressId": null,
+        "dominosFormattedAddress": null,
+        "storeId": "66473",
+        "storeName": "DWARKA MOR (NEW DELHI)",
+        "billAmount": 89,
+        "discountAmount": 0,
+        "dueAmount": null,
+        "proofScreenshotUrl": null,
+        "cartBillScreenshotUrl": null,
+        "rider": {
+          "name": null,
+          "phone": null,
+          "status": "AWAITING_PAYMENT_APPROVAL"
+        },
+        "logs": [
+          "[11:07:39 am] Order placed (Cash on Delivery). Engine Ref: DOM-ENG-658145. Awaiting admin payment approval before robot dispatch."
+        ]
+      },
+      "createdAt": "2026-11-09T05:37:39.729Z",
+      "updatedAt": "2026-11-09T05:37:39.729Z"
+    },
+    {
       "id": "DOM-ENG-501040",
       "engineOrderRef": "DOM-ENG-501040",
       "dominosOrderRef": null,
@@ -9936,6 +10134,114 @@
       },
       "userId12": "591501648476",
       "assignedVoucherId": "VOUCH-502"
+    },
+    {
+      "address": {
+        "building": "CHANDIGARH SEC 8B",
+        "city": "CHANDIGARH",
+        "flat": "Flat 402",
+        "landmark": "GPS Verified Location",
+        "latitude": 30.77112072199806,
+        "longitude": 76.79035224774161,
+        "name": "Parth Gulyani",
+        "phone": "+91 9876543210",
+        "pincode": "110001",
+        "storeId": "66409",
+        "storeName": "SECTOR-15C, CHANDIGARH",
+        "street": "SCF-3,SECTOR 8/B,,CHANDIGARH - 160008 PH.NO. 0172-2720091/ 92/ 93/ 94/ 95/ 96/ 97/ 98"
+      },
+      "assignedAccountId": "ACC-DOM-0325",
+      "cartId": "7011004257346197868",
+      "createdAt": "2026-11-09T05:17:55.637Z",
+      "engineOrderRef": "DOM-ENG-475154",
+      "id": "DOM-ENG-475154",
+      "items": [
+        {
+          "baseId": "DOM-PIZ0125",
+          "customCrust": "New Hand Tossed",
+          "customSize": "Regular",
+          "dominosCode": "PIZ0125",
+          "id": "DOM-PIZ0125-Regular-New_Hand_Tossed-none",
+          "image": "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=600&q=80",
+          "imageUrl": "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=600&q=80",
+          "isAvailable": true,
+          "isCombo": false,
+          "isCustomizedPizza": true,
+          "name": "Veggie Paradise",
+          "price": 259,
+          "quantity": 1,
+          "skuId": "1#6#1"
+        }
+      ],
+      "location": {
+        "latitude": 30.77112072199806,
+        "longitude": 76.79035224774161,
+        "store": {
+          "address": "Ground Floor and First Floor of Plot No. SCO-29Sector-15C,Chandigarh-160015.Ph. no-1724960900",
+          "storeId": "66409",
+          "storeName": "SECTOR-15C, CHANDIGARH"
+        }
+      },
+      "payment": {
+        "amount": 207,
+        "couponCode": "NEWBIE100",
+        "deliveryFee": 35,
+        "discountAmount": 100,
+        "gst": 12.95,
+        "method": "UPI",
+        "originalEstimatedAmount": 294,
+        "packagingFee": 0,
+        "priceDifference": -87,
+        "priceNotice": "Domino's live store price verified at SECTOR-15C, CHANDIGARH: Total reduced by ₹87.",
+        "receiverPayeeName": "Domino's Official Kitchen Outlet",
+        "receiverUpiId": "Pranjalottery@fam",
+        "status": "VERIFIED",
+        "subtotal": 259,
+        "transactionId": "DOM-ENG-475154",
+        "upiString": "upi://pay?pa=Pranjalottery%40fam&pn=Domino's%20Official%20Kitchen%20Outlet&am=207&tr=DOM-ENG-475154&cu=INR&tn=Domino's%20Order%20Payment%20DOM-ENG-475154",
+        "verifiedAt": "2026-11-09T05:17:59.130Z"
+      },
+      "robot": {
+        "accountCategory": "CATEGORY_SECOND_ORDER",
+        "accountPhone": "+91 7893618933",
+        "assignedAccountId": "ACC-DOM-0325",
+        "billAmount": 259,
+        "cartId": "7011004257346197868",
+        "categoryName": "Cheesy 2nd Order Tier",
+        "couponCode": "CHEESY",
+        "discountAmount": 100,
+        "error": "outlet is not defined",
+        "logs": [
+          "[5:17:55 am] Order created (Instant UPI). Engine Ref: DOM-ENG-475154 | Domino's Live Ref: Awaiting Placement | Cart ID: #7011004257346197868. Store: SECTOR-15C, CHANDIGARH. Verified Total: ₹207. Session Phone: +91 7893618933. Promo: NEWBIE100.",
+          "[05:17:59] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[05:18:00] Resuming pre-assigned Domino's Session: +91 7893618933 (ACC-DOM-0325) - Category: 🔵 Party Repeat Order Tier",
+          "[05:18:00] Claimed Domino's Session: +91 7893618933 (ACC-DOM-0325) - Category: 🔵 Party Repeat Order Tier",
+          "[05:18:00] 🎟️ Selected Domino's Promo Code: NEWBIE100 (Order #1 for session +91 7893618933, Cart Total: ₹259)",
+          "[05:18:01] Resolving official Domino's delivery kitchen for coordinates: [30.77112, 76.79035]",
+          "[05:18:02] ❌ Execution Error: outlet is not defined",
+          "[05:18:14] Payment verified. Initiating Domino's autonomous checkout pipeline...",
+          "[05:18:15] Resuming pre-assigned Domino's Session: +91 7893618933 (ACC-DOM-0325) - Category: Cheesy 2nd Order Tier",
+          "[05:18:15] Claimed Domino's Session: +91 7893618933 (ACC-DOM-0325) - Category: Cheesy 2nd Order Tier",
+          "[05:18:16] 🎟️ Selected Domino's Promo Code: CHEESY (Order #2 for session +91 7893618933, Cart Total: ₹259)",
+          "[05:18:16] Resolving official Domino's delivery kitchen for coordinates: [30.77112, 76.79035]",
+          "[05:18:17] ❌ Execution Error: outlet is not defined"
+        ],
+        "rider": {
+          "status": "AWAITING_PAYMENT"
+        },
+        "sessionPhone": "+91 7893618933",
+        "status": "ERROR",
+        "storeId": "66409",
+        "storeName": "SECTOR-15C, CHANDIGARH"
+      },
+      "updatedAt": "2026-11-09T05:18:17.236Z",
+      "user": {
+        "email": "parthgulyani7960@gmail.com",
+        "name": "Parth Gulyani",
+        "phone": "+91 9876543210",
+        "userId12": "591501648476"
+      },
+      "userId12": "591501648476"
     }
   ],
   "walletDeposits": [
@@ -10521,7 +10827,9 @@
         "currency": "INR"
       },
       "walletBalance": 0,
-      "transactions": []
+      "transactions": [],
+      "lastOrderAt": null,
+      "lastEngineOrderRef": null
     },
     {
       "addressCount": 0,
@@ -10541,7 +10849,9 @@
       },
       "walletBalance": 0,
       "transactions": [],
-      "savedAddresses": []
+      "savedAddresses": [],
+      "lastOrderAt": null,
+      "lastEngineOrderRef": null
     },
     {
       "addressCount": 3,
@@ -10549,12 +10859,12 @@
       "googleId": "g-1793565374541",
       "id": "USR-0426",
       "isAdmin": true,
-      "lastActive": "2026-11-01T20:36:14.542Z",
-      "lastEngineOrderRef": "DOM-ENG-769508",
-      "lastOrderAt": "2026-11-08T22:09:29.509Z",
+      "lastActive": "2026-11-09T05:38:01.892Z",
+      "lastEngineOrderRef": "DOM-ENG-681823",
+      "lastOrderAt": "2026-11-09T05:38:01.823Z",
       "name": "Parth Gulyani",
-      "ordersCount": 20,
-      "phone": "+91 9876543210",
+      "ordersCount": 23,
+      "phone": "+91 9872212345",
       "phoneLocked": false,
       "picture": "https://lh3.googleusercontent.com/a/admin-avatar",
       "registeredAt": "2026-11-01T19:46:40.426Z",
@@ -10601,7 +10911,7 @@
         }
       ],
       "status": "ACTIVE",
-      "totalSpent": 3707,
+      "totalSpent": 4170,
       "userId12": "591501648476",
       "wallet": {
         "balance": 0,
@@ -10631,7 +10941,9 @@
       },
       "walletBalance": 0,
       "savedAddresses": [],
-      "transactions": []
+      "transactions": [],
+      "lastOrderAt": null,
+      "lastEngineOrderRef": null
     },
     {
       "addressCount": 0,
@@ -10654,7 +10966,9 @@
       },
       "walletBalance": 0,
       "transactions": [],
-      "savedAddresses": []
+      "savedAddresses": [],
+      "lastOrderAt": null,
+      "lastEngineOrderRef": null
     },
     {
       "addressCount": 0,
@@ -10677,7 +10991,9 @@
       },
       "walletBalance": 0,
       "transactions": [],
-      "savedAddresses": []
+      "savedAddresses": [],
+      "lastOrderAt": null,
+      "lastEngineOrderRef": null
     },
     {
       "addressCount": 0,
@@ -10704,6 +11020,15 @@
     }
   ],
   "notifications": [
+    {
+      "id": "NOTIF-683413",
+      "title": "🚨 Uncaught Robot Error: #DOM-ENG-681823",
+      "message": "Uncaught error for Order #DOM-ENG-681823: outlet is not defined",
+      "type": "ALERT",
+      "badge": "ERROR",
+      "active": true,
+      "createdAt": "2026-11-09T05:38:03.413Z"
+    },
     {
       "id": "NOTIF-864795",
       "title": "🚨 Robot Placement Offline Notice: #DOM-ENG-769508",

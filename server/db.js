@@ -1019,34 +1019,55 @@ class Database {
     return v;
   }
 
-  // Payment Settings (Configured by Admin for Dynamic UPI QR)
+  // Payment Settings (Configured by Admin for Dynamic UPI QR & Gateways)
   getPaymentSettings() {
     if (!this.data.paymentSettings) {
       this.data.paymentSettings = {
         upiId: 'dominos.pay@okhdfcbank',
         payeeName: "Domino's Official Kitchen Outlet",
         merchantCode: 'DOM-5819',
-        note: "Domino's Order Payment"
+        note: "Domino's Order Payment",
+        codEnabled: true,
+        upiEnabled: true
       };
       this.save();
+    }
+    // Ensure flags exist
+    if (this.data.paymentSettings.codEnabled === undefined) {
+      this.data.paymentSettings.codEnabled = true;
+    }
+    if (this.data.paymentSettings.upiEnabled === undefined) {
+      this.data.paymentSettings.upiEnabled = Boolean(this.data.paymentSettings.upiId && this.data.paymentSettings.upiId.trim());
+    }
+    // Auto-disable UPI if no UPI ID is configured to prevent misuse
+    if (!this.data.paymentSettings.upiId || !this.data.paymentSettings.upiId.trim()) {
+      this.data.paymentSettings.upiEnabled = false;
     }
     return this.data.paymentSettings;
   }
 
   updatePaymentSettings(settings) {
     const current = this.getPaymentSettings();
-    const upi = String(settings.upiId || settings.receiverUpiId || '').trim();
+    const upi = settings.upiId !== undefined ? String(settings.upiId).trim() : (settings.receiverUpiId !== undefined ? String(settings.receiverUpiId).trim() : null);
     const UPI_REGEX = /^[a-zA-Z0-9.\-_]{2,64}@[a-zA-Z]{2,32}$/;
-    if (upi) {
-      if (!UPI_REGEX.test(upi)) {
+    if (upi !== null) {
+      if (upi.length > 0 && !UPI_REGEX.test(upi)) {
         throw new Error('Invalid UPI ID format. Must follow standard UPI format (e.g. dominos.pay@okhdfcbank).');
       }
       current.upiId = upi;
       current.receiverUpiId = upi;
     }
-    if (settings.payeeName) current.payeeName = String(settings.payeeName).slice(0, 60).trim();
-    if (settings.merchantCode) current.merchantCode = String(settings.merchantCode).slice(0, 20).trim();
-    if (settings.note) current.note = String(settings.note).slice(0, 80).trim();
+    if (settings.payeeName !== undefined) current.payeeName = String(settings.payeeName).slice(0, 60).trim();
+    if (settings.merchantCode !== undefined) current.merchantCode = String(settings.merchantCode).slice(0, 20).trim();
+    if (settings.note !== undefined) current.note = String(settings.note).slice(0, 80).trim();
+    if (settings.codEnabled !== undefined) current.codEnabled = Boolean(settings.codEnabled);
+    if (settings.upiEnabled !== undefined) current.upiEnabled = Boolean(settings.upiEnabled);
+
+    // Auto-disable UPI if UPI ID is cleared or empty
+    if (!current.upiId || !current.upiId.trim()) {
+      current.upiEnabled = false;
+    }
+
     current.updatedAt = new Date().toISOString();
     this.save();
     return current;

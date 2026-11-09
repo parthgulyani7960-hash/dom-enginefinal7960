@@ -1115,6 +1115,19 @@ const server = http.createServer(async (req, res) => {
       const isWallet = payload.paymentMethod === 'WALLET';
       const isUpi = payload.paymentMethod === 'UPI';
 
+      // Verify payment methods against admin payment settings
+      const paySettings = db.getPaymentSettings();
+      if (isCod && paySettings.codEnabled === false) {
+        return sendJson(res, 400, {
+          error: 'Cash on Delivery (COD) is currently disabled by store management. Please choose UPI or Domino\'s Wallet.'
+        });
+      }
+      if (isUpi && (!paySettings.upiEnabled || !paySettings.upiId || !paySettings.upiId.trim())) {
+        return sendJson(res, 400, {
+          error: 'UPI payment is currently unavailable (no valid UPI receiver configured). Please choose Cash on Delivery or Domino\'s Wallet.'
+        });
+      }
+
       // If paying via digital wallet, check and debit balance
       if (isWallet) {
         const currentWalletBal = Number(userProf.wallet?.balance || 0);
@@ -1131,7 +1144,6 @@ const server = http.createServer(async (req, res) => {
       }
 
       // Admin-Configured Dynamic UPI payment receiver settings
-      const paySettings = db.getPaymentSettings();
       const upiString = `upi://pay?pa=${encodeURIComponent(paySettings.upiId)}&pn=${encodeURIComponent(paySettings.payeeName)}&am=${grandTotal}&tr=${orderId}&cu=INR&tn=${encodeURIComponent(paySettings.note + ' ' + orderId)}`;
 
       const newOrder = {
@@ -1177,12 +1189,12 @@ const server = http.createServer(async (req, res) => {
           receiverUpiId: paySettings.upiId,
           receiverPayeeName: paySettings.payeeName,
           upiString: upiString,
-          status: isCod ? 'CONFIRMED_COD' : (isWallet ? 'CONFIRMED_WALLET' : 'PENDING_PAYMENT'),
+          status: (isCod || isUpi) ? 'PENDING_APPROVAL' : 'CONFIRMED_WALLET',
           transactionId: isCod ? `COD-${Date.now().toString().slice(-8)}` : (isWallet ? `WAL-${Date.now().toString().slice(-8)}` : null),
-          verifiedAt: (isCod || isWallet) ? new Date().toISOString() : null
+          verifiedAt: isWallet ? new Date().toISOString() : null
         },
         robot: {
-          status: (isCod || isWallet) ? 'QUEUED_FOR_ROBOT' : 'AWAITING_PAYMENT',
+          status: (isCod || isUpi) ? 'AWAITING_PAYMENT_APPROVAL' : 'QUEUED_FOR_ROBOT',
           assignedAccountId: activeSession ? activeSession.id : null,
           accountPhone: assignedPhone,
           sessionPhone: assignedPhone,
@@ -1203,9 +1215,9 @@ const server = http.createServer(async (req, res) => {
           rider: {
             name: null,
             phone: null,
-            status: (isCod || isWallet) ? 'AWAITING_KITCHEN_DISPATCH' : 'AWAITING_PAYMENT'
+            status: (isCod || isUpi) ? 'AWAITING_PAYMENT_APPROVAL' : 'AWAITING_KITCHEN_DISPATCH'
           },
-          logs: [`[${new Date().toLocaleTimeString('en-IN')}] Order created (${isCod ? 'Cash on Delivery' : (isWallet ? 'Domino\'s Wallet' : 'Instant UPI')}). Engine Ref: ${orderId} | Domino's Live Ref: Awaiting Placement | Cart ID: #${assignedCartId}. Store: ${resolvedStore?.storeName || 'Kitchen'}. Verified Total: ₹${grandTotal}. Session Phone: ${assignedPhone || 'Pending Pool'}. Promo: ${couponCode || 'DOMNEW50'}.`]
+          logs: [`[${new Date().toLocaleTimeString('en-IN')}] Order placed (${isCod ? 'Cash on Delivery' : (isWallet ? 'Domino\'s Wallet' : 'Instant UPI')}). Engine Ref: ${orderId}. ${(isCod || isUpi) ? 'Awaiting admin payment approval before robot dispatch.' : 'Dispatched to autonomous Domino\'s Robot Worker.'}`]
         },
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -1219,10 +1231,12 @@ const server = http.createServer(async (req, res) => {
         db.markSessionInUse(activeSession.id, newOrder.id);
       }
 
-      // If customer chose Cash on Delivery (COD) or Domino's Wallet, instantly dispatch to Domino's Robot Worker!
-      if (isCod || isWallet) {
-        console.log(`[API] 🚀 ${isWallet ? 'Wallet' : 'COD'} Order ${newOrder.id} confirmed and enqueued for Domino's Robot Worker.`);
+      // Wallet orders are pre-funded so they dispatch immediately; UPI & COD orders await admin approval!
+      if (isWallet) {
+        console.log(`[API] 🚀 Wallet Order ${newOrder.id} pre-funded and enqueued for Domino's Robot Worker.`);
         queue.enqueue(newOrder.id);
+      } else {
+        console.log(`[API] ⏳ Order ${newOrder.id} placed (${newOrder.payment.method}). Awaiting admin payment approval before robot dispatch.`);
       }
       return sendJson(res, 201, {
         success: true,
@@ -1243,7 +1257,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 3. Confirm Payment & Release Order to Domino's Robot Worker
+  // 3. Customer Submits Payment UTR - Held for Admin Approval Before Robot Dispatch
   if (method === 'POST' && pathname === '/api/orders/verify-payment') {
     try {
       const payload = await parseBody(req);
@@ -1252,20 +1266,23 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 404, { error: 'Order not found' });
       }
 
-      const txId = payload.transactionId || `TXN-UPI-${Math.floor(100000000000 + Math.random() * 900000000000)}`;
+      const txId = (payload.transactionId || '').trim() || `UPI-${Date.now().toString().slice(-8)}`;
 
-      order.payment.status = 'VERIFIED';
+      if (!order.payment) order.payment = {};
+      if (!order.robot) order.robot = {};
+
+      order.payment.status = 'PENDING_APPROVAL';
       order.payment.transactionId = txId;
-      order.payment.verifiedAt = new Date().toISOString();
-      order.robot.status = 'QUEUED_FOR_ROBOT';
+      order.payment.submittedAt = new Date().toISOString();
+      order.robot.status = 'AWAITING_PAYMENT_APPROVAL';
+      if (!order.robot.logs) order.robot.logs = [];
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 📱 Customer submitted payment UTR: ${txId}. Waiting for store admin approval before robot dispatch.`);
       db.updateOrder(order.id, order);
-
-      // Release order directly to the Domino's Automation Queue
-      queue.enqueue(order.id);
 
       return sendJson(res, 200, {
         success: true,
-        message: 'Payment confirmed! Order released to Domino\'s Automation Robot.',
+        awaitingApproval: true,
+        message: 'Payment reference submitted. Your order is pending admin approval before robot dispatch.',
         order: order
       });
     } catch (err) {
@@ -1383,6 +1400,177 @@ const server = http.createServer(async (req, res) => {
       order.robot.voucherBalance = voucher.balance;
       db.updateOrder(order.id, order);
       return sendJson(res, 200, { success: true, message: `Gift Card ${voucher.code.slice(0, 4)}**** successfully assigned to Order #${order.id}`, order });
+    } catch (err) {
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
+  // Public Payment Settings for Customer Checkout
+  if (method === 'GET' && (pathname === '/api/payment/settings' || pathname === '/api/settings/payment')) {
+    const s = db.getPaymentSettings();
+    return sendJson(res, 200, {
+      success: true,
+      upiId: s.upiId || '',
+      payeeName: s.payeeName || "Domino's Official Kitchen Outlet",
+      merchantCode: s.merchantCode || 'DOM-5819',
+      note: s.note || "Domino's Order Payment",
+      codEnabled: s.codEnabled !== false,
+      upiEnabled: Boolean(s.upiEnabled && s.upiId && s.upiId.trim())
+    });
+  }
+
+  // Admin: Approve Payment & Dispatch Robot Worker
+  if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/approve-payment')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const orderId = pathname.split('/')[4];
+      const order = db.getOrderById(orderId);
+      if (!order) return sendJson(res, 404, { error: 'Order not found' });
+      
+      if (!order.robot) order.robot = {};
+      if (!order.payment) order.payment = {};
+      order.payment.status = 'PAYMENT_APPROVED';
+      order.payment.verifiedAt = new Date().toISOString();
+      order.robot.status = 'QUEUED_FOR_ROBOT';
+      order.robot.error = null;
+      if (!order.robot.logs) order.robot.logs = [];
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] ✅ Payment approved by Admin. Domino's autonomous robot dispatched!`);
+      db.updateOrder(order.id, order);
+
+      // Auto-dispatch robot!
+      queue.enqueue(order.id);
+      console.log(`[API] 🚀 Order ${order.id} payment approved by admin. Dispatched to Domino's Robot Worker!`);
+      return sendJson(res, 200, {
+        success: true,
+        message: `Order #${order.id} approved successfully. Robot worker dispatched!`,
+        order
+      });
+    } catch (err) {
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
+  // Admin: Refund Customer Order to Digital Wallet
+  if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/refund')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const orderId = pathname.split('/')[4];
+      const order = db.getOrderById(orderId);
+      if (!order) return sendJson(res, 404, { error: 'Order not found' });
+      
+      const refundAmount = order.payment?.amount || 0;
+      const targetUserId = order.userId12 || order.user?.userId12 || 'CURRENT_USER';
+
+      if (refundAmount > 0) {
+        db.adjustUserWallet(targetUserId, {
+          type: 'ADD',
+          amount: refundAmount,
+          reason: `Admin refund for Domino's Order #${order.id}`
+        });
+      }
+
+      if (!order.robot) order.robot = {};
+      if (!order.payment) order.payment = {};
+      order.payment.status = 'REFUNDED';
+      order.robot.status = 'REFUNDED';
+      order.robot.error = 'Refunded by admin';
+      if (!order.robot.logs) order.robot.logs = [];
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 💳 Order refunded by Admin. ₹${refundAmount} credited back to customer wallet.`);
+
+      // Release any locked account
+      if (order.robot.assignedAccountId) {
+        db.releaseAccount(order.robot.assignedAccountId);
+      }
+
+      db.updateOrder(order.id, order);
+      return sendJson(res, 200, {
+        success: true,
+        message: `Order #${order.id} refunded successfully (₹${refundAmount} credited to customer wallet).`,
+        order
+      });
+    } catch (err) {
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
+  // Admin: Action Decision on Paused / Out-of-Stock Order
+  if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/action-decision')) {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const orderId = pathname.split('/')[4];
+      const order = db.getOrderById(orderId);
+      if (!order) return sendJson(res, 404, { error: 'Order not found' });
+      const body = await parseBody(req);
+      const decision = body.decision; // 'refund' | 'proceed'
+
+      if (decision === 'refund') {
+        const refundAmount = order.payment?.amount || 0;
+        const targetUserId = order.userId12 || order.user?.userId12 || 'CURRENT_USER';
+        if (refundAmount > 0) {
+          db.adjustUserWallet(targetUserId, {
+            type: 'ADD',
+            amount: refundAmount,
+            reason: `Admin refund due to out-of-stock items in Order #${order.id}`
+          });
+        }
+        if (!order.payment) order.payment = {};
+        if (!order.robot) order.robot = {};
+        order.payment.status = 'REFUNDED';
+        order.robot.status = 'REFUNDED';
+        order.robot.error = 'Items unavailable at local store - refunded by admin';
+        if (!order.robot.logs) order.robot.logs = [];
+        order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 💳 Admin decided: Refund customer (₹${refundAmount} returned to digital wallet).`);
+        if (order.robot.assignedAccountId) db.releaseAccount(order.robot.assignedAccountId);
+        db.updateOrder(order.id, order);
+        return sendJson(res, 200, { success: true, message: 'Order refunded to customer wallet.', order });
+      } else if (decision === 'proceed') {
+        order.items = (order.items || []).filter(item => !item.isUnavailableAtArea && !item.outOfStock);
+        if (!order.robot) order.robot = {};
+        order.robot.status = 'QUEUED_FOR_ROBOT';
+        order.robot.error = null;
+        if (!order.robot.logs) order.robot.logs = [];
+        order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 🚀 Admin decided: Proceed with in-stock items. Robot re-enqueued.`);
+        db.updateOrder(order.id, order);
+        queue.enqueue(order.id);
+        return sendJson(res, 200, { success: true, message: 'Robot resumed with available items.', order });
+      } else {
+        return sendJson(res, 400, { error: 'Invalid decision. Use "refund" or "proceed".' });
+      }
+    } catch (err) {
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
+  // Admin: Update Menu Item (Price, Name, Image, Availability)
+  if (method === 'POST' && pathname === '/api/admin/menu/item/update') {
+    try {
+      if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
+      const body = await parseBody(req);
+      const itemId = body.id || body.itemId;
+      if (!itemId) return sendJson(res, 400, { error: 'Missing item id' });
+
+      const catalogPath = path.join(__dirname, '..', 'data', 'dominos_catalog.json');
+      let catalog = [];
+      if (fs.existsSync(catalogPath)) {
+        catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+      }
+      const itemIdx = catalog.findIndex(i => i.id === itemId);
+      if (itemIdx === -1) return sendJson(res, 404, { error: 'Item not found in catalog' });
+
+      if (body.price !== undefined) catalog[itemIdx].price = Number(body.price);
+      if (body.originalPrice !== undefined) catalog[itemIdx].originalPrice = Number(body.originalPrice);
+      if (body.name !== undefined) catalog[itemIdx].name = String(body.name).trim();
+      if (body.description !== undefined) catalog[itemIdx].description = String(body.description).trim();
+      if (body.imageUrl !== undefined) {
+        catalog[itemIdx].imageUrl = String(body.imageUrl).trim();
+        catalog[itemIdx].image = String(body.imageUrl).trim();
+        catalog[itemIdx].customImageUrl = String(body.imageUrl).trim();
+      }
+      if (body.isAvailable !== undefined) catalog[itemIdx].isAvailable = Boolean(body.isAvailable);
+
+      fs.writeFileSync(catalogPath, JSON.stringify(catalog, null, 2), 'utf8');
+      dominosMenuService.loadCatalog();
+      return sendJson(res, 200, { success: true, message: 'Item updated successfully', item: catalog[itemIdx] });
     } catch (err) {
       return sendJson(res, 500, { error: err.message });
     }
@@ -2795,25 +2983,29 @@ const server = http.createServer(async (req, res) => {
   if (method === 'POST' && pathname === '/api/admin/payment-settings') {
     try {
       const body = await parseBody(req);
-      const rawUpi = String(body.upiId || body.receiverUpiId || '').trim();
+      const rawUpi = (body.upiId !== undefined) ? String(body.upiId).trim() : ((body.receiverUpiId !== undefined) ? String(body.receiverUpiId).trim() : null);
       const UPI_REGEX = /^[a-zA-Z0-9.\-_]{2,64}@[a-zA-Z]{2,32}$/;
-      if (!rawUpi || !UPI_REGEX.test(rawUpi)) {
+      if (rawUpi !== null && rawUpi.length > 0 && !UPI_REGEX.test(rawUpi)) {
         return sendJson(res, 400, {
           error: 'Invalid UPI ID format. Must follow standard UPI pattern (e.g. dominos.pay@okhdfcbank).'
         });
       }
-      const payeeName = String(body.payeeName || body.receiverName || "Domino's Official Kitchen Outlet").slice(0, 60).trim();
-      const merchantCode = String(body.merchantCode || 'DOM-5819').slice(0, 20).trim();
-      const note = String(body.note || body.transactionNote || "Domino's Order Payment").slice(0, 80).trim();
+      const payeeName = body.payeeName !== undefined ? String(body.payeeName).slice(0, 60).trim() : undefined;
+      const merchantCode = body.merchantCode !== undefined ? String(body.merchantCode).slice(0, 20).trim() : undefined;
+      const note = body.note !== undefined ? String(body.note).slice(0, 80).trim() : undefined;
+      const codEnabled = body.codEnabled !== undefined ? Boolean(body.codEnabled) : undefined;
+      const upiEnabled = body.upiEnabled !== undefined ? Boolean(body.upiEnabled) : undefined;
 
       const updated = db.updatePaymentSettings({
         upiId: rawUpi,
         receiverUpiId: rawUpi,
         payeeName: payeeName,
         merchantCode: merchantCode,
-        note: note
+        note: note,
+        codEnabled: codEnabled,
+        upiEnabled: upiEnabled
       });
-      console.log(`[PAYMENT-SECURITY] Payment settings updated: UPI=${rawUpi}, Payee=${payeeName}`);
+      console.log(`[PAYMENT-SECURITY] Payment settings updated: UPI=${updated.upiId}, COD_Enabled=${updated.codEnabled}, UPI_Enabled=${updated.upiEnabled}`);
       return sendJson(res, 200, { success: true, settings: updated });
     } catch (err) {
       return sendJson(res, 400, { error: err.message });

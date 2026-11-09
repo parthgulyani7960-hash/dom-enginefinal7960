@@ -1264,6 +1264,16 @@
                 <input type="text" id="payReceiverNote" class="form-input" placeholder="Domino's Order Payment">
               </div>
             </div>
+            <div style="display: flex; gap: 18px; align-items: center; margin-bottom: 14px; background: white; padding: 10px 14px; border-radius: 6px; border: 1px solid #cbd5e1;">
+              <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; color: #1e3a8a; cursor: pointer;">
+                <input type="checkbox" id="payReceiverCodEnabled" checked style="width: 16px; height: 16px;">
+                <span>💵 Enable Cash on Delivery (COD)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; color: #1e3a8a; cursor: pointer;">
+                <input type="checkbox" id="payReceiverUpiEnabled" checked style="width: 16px; height: 16px;">
+                <span>📱 Enable Instant UPI Payments</span>
+              </label>
+            </div>
             <button class="btn-primary" style="background: #0284c7; width: auto; padding: 10px 22px; font-weight: 800; cursor: pointer;" onclick="savePaymentReceiverSettings()">
               💾 Save Payment Receiver Settings
             </button>

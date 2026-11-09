@@ -312,8 +312,10 @@ class DominosMenuService {
       let liveOriginalPrice = item.originalPrice;
       let itemVariants = item.variants || [];
       let itemSizeCrustMap = item.sizeCrustPricingMap || {};
-      let itemAllowedSizes = item.allowedSizes || (item.category?.toLowerCase().includes('pizza') ? ['Regular', 'Medium', 'Large'] : ['Regular']);
-      let itemAllowedCrusts = item.allowedCrusts || (item.category?.toLowerCase().includes('pizza') ? ['New Hand Tossed', 'Cheese Burst', 'Fresh Pan Pizza'] : ['New Hand Tossed']);
+      const isCorePizza = (item.category === 'Veg Pizza' || item.category === 'Non-Veg Pizza') && !item.name.toLowerCase().includes('pizza mania');
+      const isCustomizable = item.isCustomizable !== false && isCorePizza;
+      let itemAllowedSizes = isCustomizable ? (item.allowedSizes || ['Regular', 'Medium', 'Large']) : (item.allowedSizes || ['Regular']);
+      let itemAllowedCrusts = isCustomizable ? (item.allowedCrusts || ['New Hand Tossed', 'Cheese Burst', 'Fresh Pan Pizza']) : (item.allowedCrusts || ['New Hand Tossed']);
 
       if (hasCoordinates && !isServiceable) {
         isAvailable = false;
@@ -336,7 +338,7 @@ class DominosMenuService {
           isAvailable = false;
           unavailableReason = `Out of stock at ${resolvedStore?.storeName || 'your area'}`;
         } else if (match) {
-          if (match.variants && match.variants.length > 0) {
+          if (match.variants && match.variants.length > 0 && isCustomizable) {
             itemVariants = match.variants;
             const sizeCrustPricingMap = {};
             const sizesSet = new Set();
@@ -366,6 +368,8 @@ class DominosMenuService {
                 liveOriginalPrice = regVariant.regularPrice;
               }
             }
+          } else if (match && match.price) {
+            livePrice = match.price;
           }
         }
       }
@@ -374,6 +378,7 @@ class DominosMenuService {
 
       return {
         ...item,
+        isCustomizable,
         image: verifiedImage,
         imageUrl: verifiedImage,
         price: livePrice,
@@ -383,7 +388,9 @@ class DominosMenuService {
         variants: itemVariants,
         sizeCrustPricingMap: itemSizeCrustMap,
         allowedSizes: itemAllowedSizes,
-        allowedCrusts: itemAllowedCrusts
+        allowedCrusts: itemAllowedCrusts,
+        isMenu129: livePrice <= 129,
+        isMenu179: livePrice <= 179
       };
     });
 

@@ -1842,11 +1842,35 @@ function renderAdminOrders(orders) {
         <td><small style="font-family: monospace; color: #475569;">${giftCardUsed}</small></td>
         <td style="font-weight: 900; color: #16a34a; font-size: 13px;">₹${grandTotal}</td>
         <td>
-          <span class="status-idle" style="background:${isFailed ? '#fef2f2' : (r.status === 'DELIVERED' ? '#f0fdf4' : '#eff6ff')}; color:${isFailed ? '#dc2626' : (r.status === 'DELIVERED' ? '#15803d' : '#0284c7')}; font-size: 10px; font-weight: 800;">${r.status || 'ORDER_PLACED'}</span>
-          <div style="margin-top: 4px;">${riderText}</div>
+          ${(r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
+            <span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⏳ Awaiting Approval</span>
+            <div style="font-size: 10px; color: #64748b; margin-top: 3px;">${order.payment?.method || 'UPI'} ${order.payment?.transactionId ? `<span style="font-family:monospace; color:#0284c7;">(${order.payment.transactionId})</span>` : ''}</div>
+          ` : (r.status === 'WAITING_ADMIN_DECISION') ? `
+            <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⚠️ Unavailable Item</span>
+            <div style="font-size: 10px; color: #b91c1c; margin-top: 3px;">Robot Paused</div>
+          ` : `
+            <span class="status-idle" style="background:${isFailed ? '#fef2f2' : (r.status === 'DELIVERED' ? '#f0fdf4' : '#eff6ff')}; color:${isFailed ? '#dc2626' : (r.status === 'DELIVERED' ? '#15803d' : '#0284c7')}; font-size: 10px; font-weight: 800;">${r.status || 'ORDER_PLACED'}</span>
+            <div style="margin-top: 4px;">${riderText}</div>
+          `}
         </td>
         <td>
           <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+            ${(r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
+              <button class="btn-action-launch" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: white; background: #16a34a; border: none; font-weight: 800; border-radius: 4px;" onclick="approveOrderPayment('${order.id}')" title="Approve payment & immediately dispatch autonomous Domino's robot">
+                ⚡ Approve &amp; Dispatch
+              </button>
+              <button class="btn-action-del" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #dc2626; border-color: #fca5a5; background: #fef2f2; font-weight: 700; border-radius: 4px;" onclick="refundOrder('${order.id}')" title="Refund order to customer digital wallet">
+                💳 Refund
+              </button>
+            ` : ''}
+            ${(r.status === 'WAITING_ADMIN_DECISION') ? `
+              <button class="btn-action-launch" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: white; background: #0284c7; border: none; font-weight: 800; border-radius: 4px;" onclick="resolveOrderDecision('${order.id}', 'proceed')" title="Proceed with in-stock items">
+                🚀 Proceed In-Stock
+              </button>
+              <button class="btn-action-del" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #dc2626; border-color: #fca5a5; background: #fef2f2; font-weight: 700; border-radius: 4px;" onclick="resolveOrderDecision('${order.id}', 'refund')" title="Full refund to customer wallet">
+                💳 Full Refund
+              </button>
+            ` : ''}
             ${retryBtnHtml}
             ${cancelBtnHtml}
             <button class="btn-action-copy" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: #0066a3; border-color: #93c5fd; background: #f0f9ff; font-weight: 700;" onclick="window.open('${dominosTrackerUrl}', '_blank')" title="Open official Domino's website / live tracker">
@@ -4900,3 +4924,57 @@ async function deleteAdminMenuItem(id) {
   }
 }
 window.deleteAdminMenuItem = deleteAdminMenuItem;
+
+
+// =========================================================================
+// ADMIN ORDER ACTION DISPATCHERS
+// =========================================================================
+
+async function approveOrderPayment(orderId) {
+  if (!confirm(`Approve payment and immediately dispatch autonomous Domino's robot for Order #${orderId}?`)) return;
+  try {
+    const res = await adminFetch(`/api/admin/orders/${orderId}/approve-payment`, { method: 'POST' });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+    showToast(`Order #${orderId} payment approved! Domino's Robot Worker dispatched.`, '🚀');
+    loadOrders();
+  } catch (e) {
+    alert('Failed to approve payment: ' + e.message);
+  }
+}
+window.approveOrderPayment = approveOrderPayment;
+
+async function refundOrder(orderId) {
+  if (!confirm(`Are you sure you want to refund Order #${orderId}? The full verified amount will be credited back to the customer's digital wallet.`)) return;
+  try {
+    const res = await adminFetch(`/api/admin/orders/${orderId}/refund`, { method: 'POST' });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+    showToast(`Order #${orderId} refunded successfully to customer digital wallet.`, '💳');
+    loadOrders();
+  } catch (e) {
+    alert('Failed to refund order: ' + e.message);
+  }
+}
+window.refundOrder = refundOrder;
+
+async function resolveOrderDecision(orderId, decision) {
+  const confirmMsg = decision === 'refund'
+    ? `Refund Order #${orderId} to customer's digital wallet due to unavailable store items?`
+    : `Remove unavailable items and proceed placing Order #${orderId} with Domino's in-stock items?`;
+  if (!confirm(confirmMsg)) return;
+  try {
+    const res = await adminFetch(`/api/admin/orders/${orderId}/action-decision`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ decision })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+    showToast(`Decision (${decision}) processed successfully for Order #${orderId}.`, '✅');
+    loadOrders();
+  } catch (e) {
+    alert('Failed to process decision: ' + e.message);
+  }
+}
+window.resolveOrderDecision = resolveOrderDecision;
