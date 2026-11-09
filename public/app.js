@@ -891,13 +891,13 @@ function toggleAddAddressForm(show = null, forEdit = false) {
     document.getElementById('formAddressId').value = '';
     document.getElementById('formAddrLabel').value = 'Home';
 
-    const nameParts = (currentUser.name || 'Parth').split(' ');
+    const nameParts = (currentUser.name || '').trim().split(' ').filter(Boolean);
     const fNameInput = document.getElementById('formFirstName');
     const lNameInput = document.getElementById('formLastName');
     const phoneEl = document.getElementById('formPhone');
-    if (fNameInput) { fNameInput.value = nameParts[0] || 'Parth'; fNameInput.disabled = false; fNameInput.readOnly = false; }
-    if (lNameInput) { lNameInput.value = nameParts.slice(1).join(' ') || 'Sharma'; lNameInput.disabled = false; lNameInput.readOnly = false; }
-    const userPhoneClean = (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || currentUser.phone || '';
+    if (fNameInput) { fNameInput.value = nameParts[0] || ''; fNameInput.disabled = false; fNameInput.readOnly = false; }
+    if (lNameInput) { lNameInput.value = nameParts.slice(1).join(' ') || ''; lNameInput.disabled = false; lNameInput.readOnly = false; }
+    const userPhoneClean = (currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) || '';
     if (phoneEl) { phoneEl.value = userPhoneClean; phoneEl.disabled = false; phoneEl.readOnly = false; }
     
     // Always enable Order For Someone Else checkbox so receiver name/mobile can be typed freely
@@ -907,13 +907,13 @@ function toggleAddAddressForm(show = null, forEdit = false) {
       toggleOrderForSomeoneElseUI(true);
     }
 
-    const fallbackLat = (currentCoordinates && currentCoordinates.latitude) ? currentCoordinates.latitude : 30.7339;
-    const fallbackLng = (currentCoordinates && currentCoordinates.longitude) ? currentCoordinates.longitude : 76.7889;
+    const fallbackLat = (currentCoordinates && currentCoordinates.latitude) ? currentCoordinates.latitude : (currentResolvedStore?.latitude || 28.6245);
+    const fallbackLng = (currentCoordinates && currentCoordinates.longitude) ? currentCoordinates.longitude : (currentResolvedStore?.longitude || 77.0367);
 
     document.getElementById('formFlat').value = '';
     document.getElementById('formCompleteAddress').value = '';
     document.getElementById('formLandmark').value = '';
-    document.getElementById('formCity').value = currentDetectedCity || 'Chandigarh';
+    document.getElementById('formCity').value = currentDetectedCity || (currentResolvedStore?.city || 'Delhi');
     document.getElementById('formPincode').value = '';
     document.getElementById('formLat').value = fallbackLat.toFixed(6);
     document.getElementById('formLng').value = fallbackLng.toFixed(6);
@@ -5294,6 +5294,13 @@ function openWalletDepositModal() {
 function selectDepositPreset(amount) {
   const input = document.getElementById('depositAmountInput');
   if (input) input.value = amount;
+  document.querySelectorAll('.btn-preset-amt').forEach(btn => {
+    if (btn.innerText.includes(String(amount))) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
 }
 
 function backToDepositAmount() {
@@ -5303,6 +5310,8 @@ function backToDepositAmount() {
   if (stepA) stepA.style.display = 'block';
   if (stepB) stepB.style.display = 'none';
   if (stepC) stepC.style.display = 'none';
+  const utrEl = document.getElementById('depositUtrInput');
+  if (utrEl) utrEl.value = '';
 }
 
 function copyDepositRef() {
@@ -5525,13 +5534,17 @@ async function submitDepositPaidConfirmation() {
       depositCountdownInterval = null;
     }
 
+    const utrVal = document.getElementById('depositUtrInput') ? document.getElementById('depositUtrInput').value.trim() : '';
+
     const res = await fetch('/api/user/wallet/deposit/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         reference: activeDepositRequest.reference,
         amount: activeDepositRequest.amount,
-        phone: currentUser.phone || currentUser.phone || '',
+        utr: utrVal,
+        transactionId: utrVal,
+        phone: currentUser.phone || '',
         upiUri: activeDepositRequest.upiUri
       })
     });
@@ -5542,6 +5555,8 @@ async function submitDepositPaidConfirmation() {
     if (subRef) subRef.innerText = activeDepositRequest.reference;
     const subAmt = document.getElementById('submittedAmtDisplay');
     if (subAmt) subAmt.innerText = `₹${activeDepositRequest.amount}`;
+    const subUtr = document.getElementById('submittedUtrDisplay');
+    if (subUtr) subUtr.innerText = utrVal ? `UTR: ${utrVal}` : '';
 
     document.getElementById('depositStepPayment').style.display = 'none';
     document.getElementById('depositStepSubmitted').style.display = 'block';

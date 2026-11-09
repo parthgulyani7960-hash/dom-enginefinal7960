@@ -1580,3 +1580,16 @@ body.modal-open {
   20%, 60% { transform: translateX(-5px); }
   40%, 80% { transform: translateX(5px); }
 }
+
+/* Deposit Preset Highlight Active */
+.btn-preset-amt {
+  transition: all 0.15s ease !important;
+}
+.btn-preset-amt:active,
+.btn-preset-amt.active {
+  border-color: #0066a3 !important;
+  background: #f0f9ff !important;
+  color: #0066a3 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 0 2px rgba(0, 102, 163, 0.25) !important;
+}
