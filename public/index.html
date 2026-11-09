@@ -632,9 +632,7 @@
       <div class="modal-header">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-right: 12px;">
           <div class="modal-title">Your Order Cart</div>
-          <span id="cartNumericIdBadge" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-family: monospace; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px;">
-            🛒 Cart: #6708931605657220669
-          </span>
+          <span id="cartNumericIdBadge" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-family: monospace; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px;">🛒 Cart Items</span>
         </div>
         <button class="modal-close" onclick="closeModal('cartModal')">&times;</button>
       </div>
@@ -795,13 +793,11 @@
             <strong id="cartServiceabilityHeader" style="color: #1e40af; font-size: 13px;">
               🟢 Domino's Kitchen Verified &amp; Delivering:
             </strong>
-            <a id="cartKitchenGmapsLink" href="https://www.google.com/maps/search/?api=1&query=CHANDIGARH%20SEC%208B%20SCF-3%2CSECTOR%208%2FB%2CCHANDIGARH" target="_blank" class="kitchen-gmaps-link" style="font-size: 11px;">
+            <a id="cartKitchenGmapsLink" href="#" target="_blank" class="kitchen-gmaps-link" style="font-size: 11px;">
               🗺️ Google Maps
             </a>
           </div>
-          <div id="cartStoreInfoText" style="color: #334155; font-weight: 600;">
-            Domino's Pizza - CHANDIGARH SEC 8B (SCF-3, Sector 8-B) • 1.0 km away (Est. 30 mins)
-          </div>
+          <div id="cartStoreInfoText" style="color: #334155; font-weight: 600;">Checking kitchen serviceability...</div>
           <div id="cartUnserviceableWarning" style="display: none; color: #b91c1c; font-weight: 700; margin-top: 6px; font-size: 11px;">
             <!-- Rendered if unserviceable -->
           </div>
@@ -2133,6 +2129,6 @@
     </button>
   </nav>
 
-  <script src="/app.js?v=20261109.gps1"></script>
+  <script src="/app.js?v=20261109.cartfix"></script>
 </body>
 </html>

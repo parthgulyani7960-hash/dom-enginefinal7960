@@ -482,8 +482,9 @@ class DominosMenuService {
         hasUnavailableItems = true;
       } else if (storeInventory && storeInventory.storeItems) {
         // 1. Combo Constituent Items Availability Audit
-        if (cartItem.isCombo && Array.isArray(cartItem.includedItems) && cartItem.includedItems.length > 0) {
-          for (const sub of cartItem.includedItems) {
+        if (cartItem.isCombo) {
+          const comboItems = cartItem.includedItems || this.getDefaultCombos().find(c => c.id === cartItem.id || c.name === cartItem.name)?.includedItems || [];
+          for (const sub of comboItems) {
             const subCleanName = (sub.name || '').toLowerCase().trim();
             const subBaseName = subCleanName.replace(/pizza|mania/gi, '').trim();
             const subMatch = storeInventory.storeItems.get(sub.dominosCode) ||
@@ -499,20 +500,22 @@ class DominosMenuService {
         } else {
           // 2. Direct Item & Variant Availability Audit
           const strippedId = (cartItem.id || '').replace(/^DOM-/, '');
+          const baseId = (cartItem.baseId || '').replace(/^DOM-/, '');
           const cleanName = (cartItem.name || '').toLowerCase().trim();
           const baseName = cleanName.replace(/pizza|mania/gi, '').trim();
 
           const match = storeInventory.storeItems.get(cartItem.dominosCode) ||
                         storeInventory.storeItems.get(strippedId) ||
+                        (baseId && storeInventory.storeItems.get(baseId)) ||
                         storeInventory.storeItems.get(cartItem.id) ||
                         storeInventory.storeItems.get(cleanName) ||
                         storeInventory.storeItems.get(baseName);
 
-          if (!match || match.isAvailable === false) {
+          if (match && match.isAvailable === false) {
             isAvailable = false;
             unavailableReason = `Out of stock at Domino's ${resolvedStore?.storeName || 'kitchen'}`;
             hasUnavailableItems = true;
-          } else if (match.variants && match.variants.length > 0) {
+          } else if (match && match.variants && match.variants.length > 0) {
             const reqSize = (cartItem.customSize || cartItem.size || 'Regular').toLowerCase();
             const reqCrust = (cartItem.customCrust || cartItem.crust || '').toLowerCase();
 
@@ -533,7 +536,7 @@ class DominosMenuService {
                 isAvailable = false;
                 unavailableReason = `${cartItem.name} (${vMatch.size || 'Size'} / ${vMatch.crust || 'Crust'}) is out of stock at Domino's ${resolvedStore?.storeName || 'kitchen'}`;
                 hasUnavailableItems = true;
-              } else if (vMatch.price > 0) {
+              } else if (!cartItem.isCustomizedPizza && vMatch.price > 0) {
                 currentPrice = vMatch.price;
               }
             }

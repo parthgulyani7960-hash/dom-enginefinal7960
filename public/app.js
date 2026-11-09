@@ -62,6 +62,24 @@ if (typeof window !== 'undefined') {
 let catalog = { combos: [], menu: [] };
 let cart = [];
 
+function saveCartToStorage() {
+  try {
+    localStorage.setItem('dominos_user_cart', JSON.stringify(cart));
+  } catch (e) {}
+}
+
+function loadCartFromStorage() {
+  try {
+    const saved = localStorage.getItem('dominos_user_cart');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        cart = parsed;
+      }
+    }
+  } catch (e) {}
+}
+
 // Safe default guest user state
 const GUEST_USER = {
   isGuest: true,
@@ -143,6 +161,9 @@ window.checkMaintenanceStatus = checkMaintenanceStatus;
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
+  loadCartFromStorage();
+  updateCartBadge();
+  renderFloatingCartBar();
   checkMaintenanceStatus();
   setInterval(checkMaintenanceStatus, 20000);
   // Check if coordinates were already stored in this browser session
@@ -1483,16 +1504,13 @@ function updateCartServiceabilityCard(gmapsLink, avail = {}) {
       header.style.color = '#1e40af';
     }
     if (infoText) {
-      infoText.innerHTML = `Domino's Pizza - <strong>${currentResolvedStore.storeName}</strong> (${currentResolvedStore.address || ''}) • ${currentResolvedStore.driveDistanceKm || '1.0'} km away (Est. ${currentResolvedStore.polygonTime || '30 mins'})`;
+      infoText.innerHTML = currentResolvedStore 
+        ? `Domino's Pizza - <strong>${currentResolvedStore.storeName || "Domino's Kitchen"}</strong> (${currentResolvedStore.address || ''}) • ${currentResolvedStore.driveDistanceKm || '1.0'} km away (Est. ${currentResolvedStore.polygonTime || '30 mins'})`
+        : `Domino's Kitchen Verified & Delivering`;
     }
     if (warn) warn.style.display = 'none';
 
-    if (proceedBtn) {
-      proceedBtn.disabled = false;
-      proceedBtn.style.background = 'var(--primary)';
-      proceedBtn.style.cursor = 'pointer';
-      proceedBtn.innerText = 'Proceed to Online QR Payment →';
-    }
+    renderCartDrawer(false);
   } else {
     // Unserviceable Feedback in Cart
     card.style.background = '#fef2f2';
@@ -1810,6 +1828,7 @@ function addComboToCart(comboId) {
   updateCartBadge();
   renderFloatingCartBar();
   applyCurrentFilters();
+  saveCartToStorage();
   showToastNotice(`Added ${combo.name} to cart!`, '🍕');
 }
 
@@ -2142,6 +2161,7 @@ function confirmAddCustomizedPizzaToCart() {
   updateCartBadge();
   renderFloatingCartBar();
   applyCurrentFilters();
+  saveCartToStorage();
   showToastNotice(`Added ${currentCustomizingItem.name} (${selectedPizzaSize}) to cart!`, '🍕');
 }
 
@@ -2191,6 +2211,7 @@ function addItemToCart(itemId) {
   updateCartBadge();
   renderFloatingCartBar();
   applyCurrentFilters();
+  saveCartToStorage();
   showToastNotice(`Added ${item.name} to cart!`, '🍕');
 }
 
@@ -2203,8 +2224,10 @@ function changeQty(itemId, delta) {
     cart = cart.filter(i => i.id !== itemId);
   }
 
+  saveCartToStorage();
   updateCartBadge();
-  renderCartDrawer();
+  renderFloatingCartBar();
+  renderCartDrawer(false);
   applyCurrentFilters();
 }
 
@@ -2212,8 +2235,10 @@ function removeFromCart(itemId) {
   const item = cart.find(i => i.id === itemId);
   const name = item ? item.name : 'Item';
   cart = cart.filter(i => i.id !== itemId);
+  saveCartToStorage();
   updateCartBadge();
-  renderCartDrawer();
+  renderFloatingCartBar();
+  renderCartDrawer(false);
   applyCurrentFilters();
   showToastNotice(`Removed ${name} from cart.`, '🗑️');
 }
@@ -2223,7 +2248,9 @@ function clearEntireCart() {
   if (confirm('Are you sure you want to clear all items from your cart?')) {
     cart = [];
     appliedCartPromo = null;
+    saveCartToStorage();
     updateCartBadge();
+    renderFloatingCartBar();
     renderCartDrawer(false);
     applyCurrentFilters();
     showToastNotice('Cart has been cleared.', '🗑️');
@@ -2438,11 +2465,15 @@ function syncPaymentGatewaysUI() {
 window.syncPaymentGatewaysUI = syncPaymentGatewaysUI;
 
 function openCartModal() {
+  const cartBadge = document.getElementById('cartNumericIdBadge');
+  if (cartBadge) {
+    const totalItems = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
+    cartBadge.innerText = totalItems > 0 ? `🛒 ${totalItems} Item${totalItems > 1 ? 's' : ''}` : '🛒 Cart Empty';
+  }
   try { syncCartAddressOptions(); } catch (e) { console.warn('syncCartAddressOptions note:', e); }
   try { syncTopBarAddressOptions(); } catch (e) { console.warn('syncTopBarAddressOptions note:', e); }
   try { syncPaymentGatewaysUI(); } catch (e) { console.warn('syncPaymentGatewaysUI note:', e); }
   try { renderCartDrawer(true); } catch (e) { console.warn('renderCartDrawer note:', e); }
-  try { verifyCartWithKitchen(); } catch (e) { console.warn('verifyCartWithKitchen note:', e); }
   openModal('cartModal');
 }
 
@@ -2480,8 +2511,14 @@ function renderCartDrawer(triggerRemoteVerify = true) {
     // Check store availability
     let isItemOutOfStock = item.isAvailable === false;
     if (!isItemOutOfStock && catalog.menu && catalog.menu.length > 0) {
-      const match = catalog.menu.find(m => m.id === item.id || m.dominosCode === item.dominosCode || (item.skuId && m.skuId === item.skuId));
+      const match = catalog.menu.find(m => m.id === item.id || (item.baseId && m.id === item.baseId) || m.dominosCode === item.dominosCode || (item.skuId && m.skuId === item.skuId));
       if (match && match.isAvailable === false) {
+        isItemOutOfStock = true;
+      }
+    }
+    if (!isItemOutOfStock && item.isCombo && catalog.combos && catalog.combos.length > 0) {
+      const cMatch = catalog.combos.find(c => c.id === item.id);
+      if (cMatch && cMatch.isAvailable === false) {
         isItemOutOfStock = true;
       }
     }
@@ -3614,6 +3651,7 @@ async function executeFinalConfirmedOrder() {
 
     if (currentPaymentMethod === 'COD') {
       cart = [];
+      saveCartToStorage();
       updateCartBadge();
       renderCartDrawer(false);
       showToastNotice('Cash on Delivery Order Placed! Dispatched to Domino\'s kitchen...', '🍕');
@@ -3764,6 +3802,7 @@ async function confirmPaymentAndRelease() {
     clearInterval(countdownTimer);
     closeModal('paymentModal');
     cart = [];
+    saveCartToStorage();
     updateCartBadge();
 
     // Open Live Order Tracker
