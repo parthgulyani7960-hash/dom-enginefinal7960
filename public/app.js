@@ -3802,7 +3802,15 @@ function startPaymentCountdown(durationSeconds) {
 async function confirmPaymentAndRelease() {
   if (!currentOrder) return;
   const txnInput = document.getElementById('upiTxnInput');
-  const txnId = txnInput ? txnInput.value.trim() : '';
+  let txnId = txnInput ? txnInput.value.trim() : '';
+
+  if (!txnId) {
+    const promptedUtr = prompt('💡 Enter 12-Digit UPI UTR Reference Number:\n\nPlease enter the 12-digit UTR from your payment app (GPay / PhonePe / Paytm / BHIM) to verify your payment immediately.\n\n(Click Cancel if you will provide it later):', '');
+    if (promptedUtr !== null && promptedUtr.trim()) {
+      txnId = promptedUtr.trim();
+      if (txnInput) txnInput.value = txnId;
+    }
+  }
 
   try {
     const res = await fetch('/api/orders/verify-payment', {

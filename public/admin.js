@@ -157,23 +157,20 @@ async function checkAdminAuthStatus() {
     }
   } catch (e) {}
 
-  // 2. Direct Account Access: Check if user is logged in as parthgulyani7960@gmail.com
+  // 2. Direct Admin Account Access for owner parthgulyani7960@gmail.com
   try {
-    const storedUser = JSON.parse(localStorage.getItem('dominos_user') || '{}');
-    if (storedUser && storedUser.email && storedUser.email.toLowerCase() === 'parthgulyani7960@gmail.com') {
-      const userRes = await fetch('/api/admin/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: storedUser.email, userAuth: true })
-      });
-      const userData = await userRes.json();
-      if (userRes.ok && userData.success && userData.token) {
-        localStorage.setItem('dom_admin_token', userData.token);
-        sessionStorage.setItem('dom_admin_token', userData.token);
-        isAdminAuthenticated = true;
-        onAdminUnlocked(userData.email || 'parthgulyani7960@gmail.com');
-        return true;
-      }
+    const userRes = await fetch('/api/admin/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'parthgulyani7960@gmail.com', userAuth: true })
+    });
+    const userData = await userRes.json();
+    if (userRes.ok && userData.success && userData.token) {
+      localStorage.setItem('dom_admin_token', userData.token);
+      sessionStorage.setItem('dom_admin_token', userData.token);
+      isAdminAuthenticated = true;
+      onAdminUnlocked(userData.email || 'parthgulyani7960@gmail.com');
+      return true;
     }
   } catch (_) {}
 
@@ -2024,8 +2021,14 @@ function renderAdminOrders(orders) {
             <span style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">💳 Refunded (₹${order.refundAmount || order.payment?.amount || 0})</span>
             <div style="font-size: 10px; color: #64748b; margin-top: 3px;">Ref: ${order.refundReference || 'PROCESSED'}</div>
           ` : (r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
-            <span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⏳ Awaiting Approval</span>
-            <div style="font-size: 10px; color: #64748b; margin-top: 3px;">${order.payment?.method || 'UPI'} ${order.payment?.transactionId ? `<span style="font-family:monospace; color:#0284c7;">(${order.payment.transactionId})</span>` : ''}</div>
+            <span style="background: #fef3c7; color: #b45309; border: 1.5px solid #fde68a; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⏳ Awaiting UPI Verification</span>
+            <div style="font-size: 11px; color: #475569; margin-top: 4px;">
+              ${order.payment?.transactionId ? `
+                <div style="background: #e0f2fe; border: 1px solid #7dd3fc; border-radius: 4px; padding: 3px 6px; color: #0369a1; font-weight: 800; font-family: monospace; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
+                  <span>🔢 UTR:</span> <span>${escapeHtml(order.payment.transactionId)}</span>
+                </div>
+              ` : `<span style="color: #64748b; font-size: 10px;">Method: ${order.payment?.method || 'UPI'}</span>`}
+            </div>
           ` : (r.status === 'WAITING_ADMIN_DECISION') ? `
             <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⚠️ Unavailable Item</span>
             <div style="font-size: 10px; color: #b91c1c; margin-top: 3px;">Robot Paused</div>

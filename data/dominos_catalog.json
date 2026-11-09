@@ -718,15 +718,15 @@
   },
   {
     "id": "DOM-PM0002",
-    "name": "Cheesy Pizza Mania",
+    "name": "Classic Pizza Mania",
     "category": "Pizza Mania",
     "type": "VEG",
-    "price": 99,
+    "price": 49,
     "isVeg": true,
     "isAvailable": true,
-    "dominosCode": "PM0002",
+    "dominosCode": "PIZ0396",
     "skuId": "3#2#1",
-    "description": "Delicious orange cheddar cheese dressing topped on classic crust.",
+    "description": "Authentic Domino's Classic Pizza with signature herb sauce & creamy mozzarella cheese.",
     "imageUrl": "/images/menu/cheesy-pizza-mania.webp",
     "image": "/images/menu/cheesy-pizza-mania.webp",
     "sizes": {
@@ -745,14 +745,16 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 51,
+    "isDiscounted": true
   },
   {
     "id": "DOM-PM0003",
     "name": "Paneer & Onion Pizza Mania",
     "category": "Pizza Mania",
     "type": "VEG",
-    "price": 119,
+    "price": 129,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "PM0003",
@@ -761,7 +763,7 @@
     "imageUrl": "/images/menu/paneer-onion-pizza-mania.webp",
     "image": "/images/menu/paneer-onion-pizza-mania.webp",
     "sizes": {
-      "Regular (Serves 1)": 119
+      "Regular (Serves 1)": 129
     },
     "allowedSizes": [
       "Regular"
@@ -776,7 +778,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 129
   },
   {
     "id": "DOM-PM0004",
@@ -928,7 +931,7 @@
     "name": "Zingy Parcel Veg",
     "category": "Garlic Breads & Sides",
     "type": "VEG",
-    "price": 49,
+    "price": 50,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "SID0049",
@@ -947,14 +950,15 @@
       }
     },
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 50
   },
   {
     "id": "DOM-SID0050",
-    "name": "Zingy Parcel Non-Veg",
+    "name": "Zingy Parcel Non-Veg (Chicken)",
     "category": "Garlic Breads & Sides",
     "type": "NON-VEG",
-    "price": 59,
+    "price": 60,
     "isVeg": false,
     "isAvailable": true,
     "dominosCode": "SID0050",
@@ -973,7 +977,8 @@
       }
     },
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 60
   },
   {
     "id": "DOM-DIP0001",
@@ -1029,10 +1034,10 @@
   },
   {
     "id": "DOM-CAKE03",
-    "name": "Butterscotch Mousse Cake",
+    "name": "Butterscotch Mousse Cup",
     "category": "Desserts",
     "type": "VEG",
-    "price": 109,
+    "price": 59,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "CAKE03",
@@ -1051,7 +1056,10 @@
       }
     },
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 79,
+    "isDiscounted": true,
+    "discountBadge": "25% OFF"
   },
   {
     "id": "DOM-CAKE04",
@@ -1133,10 +1141,10 @@
   },
   {
     "id": "DOM-BEV0003",
-    "name": "7Up / Sprite 475ml",
+    "name": "Sprite 475ml PET Bottle",
     "category": "Beverages",
     "type": "VEG",
-    "price": 60,
+    "price": 70,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0003",
@@ -1155,7 +1163,8 @@
       }
     },
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 70
   },
   {
     "id": "DOM-SID0046",
@@ -1244,7 +1253,7 @@
   },
   {
     "id": "DOM-SID0306",
-    "name": "Loaded Saucy Veg Taco - Tandoori",
+    "name": "Loaded Saucy Veg Taco - Tandoori (Double)",
     "category": "Garlic Breads & Sides",
     "type": "VEG",
     "price": 175,
@@ -1267,7 +1276,9 @@
     },
     "isCustomizable": false,
     "isMenu129": false,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 350,
+    "isDiscounted": true
   },
   {
     "id": "DOM-PIZ5106",
@@ -1323,7 +1334,7 @@
     "name": "Loaded Saucy Veg Taco - Tandoori (Single)",
     "category": "Garlic Breads & Sides",
     "type": "VEG",
-    "price": 89,
+    "price": 90,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "SID0302",
@@ -1343,7 +1354,9 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 180,
+    "isDiscounted": true
   },
   {
     "id": "DOM-PIZ0126",
@@ -1618,37 +1631,6 @@
     "isMenu179": true
   },
   {
-    "id": "DOM-PIZ0396",
-    "name": "Classic Tomato Pizza Mania",
-    "category": "Pizza Mania",
-    "type": "VEG",
-    "price": 59,
-    "isVeg": true,
-    "isAvailable": true,
-    "dominosCode": "PIZ0396",
-    "skuId": "6#391#6596",
-    "description": "A classic pizza topped with sprinkle of basil and parsley herbs",
-    "imageUrl": "/images/menu/classic-tomato-pizza-mania.webp",
-    "image": "/images/menu/classic-tomato-pizza-mania.webp",
-    "sizes": {
-      "Regular (Serves 1)": 59
-    },
-    "allowedSizes": [
-      "Regular"
-    ],
-    "allowedCrusts": [
-      "New Hand Tossed"
-    ],
-    "sizeCrustPricingMap": {
-      "Regular": {
-        "New Hand Tossed": 59
-      }
-    },
-    "isCustomizable": false,
-    "isMenu129": true,
-    "isMenu179": true
-  },
-  {
     "id": "DOM-SID0242",
     "name": "Grilled Wings Lemon Pepper",
     "category": "Garlic Breads & Sides",
@@ -1677,7 +1659,7 @@
   },
   {
     "id": "DOM-DST0118",
-    "name": "Blueberry Mousse",
+    "name": "Blueberry Mousse Cup",
     "category": "Desserts",
     "type": "VEG",
     "price": 59,
@@ -1700,7 +1682,10 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 79,
+    "isDiscounted": true,
+    "discountBadge": "25% OFF"
   },
   {
     "id": "DOM-PIZ0355",
@@ -2302,10 +2287,10 @@
   },
   {
     "id": "DOM-BEV0847",
-    "name": "Classic Cold Coffee 300 ml",
+    "name": "Classic Cold Coffee (300ml)",
     "category": "Beverages",
     "type": "VEG",
-    "price": 89,
+    "price": 119,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0847",
@@ -2325,7 +2310,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 119
   },
   {
     "id": "DOM-PIZ0625",
@@ -2378,7 +2364,7 @@
   },
   {
     "id": "DOM-SID0305",
-    "name": "Tandoori Loaded Chicken Taco",
+    "name": "Loaded Saucy Chicken Taco - Tandoori",
     "category": "Garlic Breads & Sides",
     "type": "NON-VEG",
     "price": 205,
@@ -2401,7 +2387,9 @@
     },
     "isCustomizable": false,
     "isMenu129": false,
-    "isMenu179": false
+    "isMenu179": false,
+    "originalPrice": 410,
+    "isDiscounted": true
   },
   {
     "id": "DOM-PIZ0171",
@@ -2503,7 +2491,7 @@
   },
   {
     "id": "DOM-NVPARCEL",
-    "name": "Chicken Parcel",
+    "name": "Zingy Parcel Non-Veg (Chicken)",
     "category": "Garlic Breads & Sides",
     "type": "NON-VEG",
     "price": 60,
@@ -2526,7 +2514,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 60
   },
   {
     "id": "DOM-TACVG04",
@@ -2633,7 +2622,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 129
   },
   {
     "id": "DOM-PIZ0404",
@@ -2668,10 +2658,10 @@
   },
   {
     "id": "DOM-BEV0832",
-    "name": "Mini Coke Zero Can",
+    "name": "Coke Zero Can (330ml)",
     "category": "Beverages",
     "type": "VEG",
-    "price": 19,
+    "price": 60,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0832",
@@ -2691,7 +2681,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 60
   },
   {
     "id": "DOM-SID003",
@@ -2771,10 +2762,10 @@
   },
   {
     "id": "DOM-BEV0824",
-    "name": "Sprite 475ml",
+    "name": "Sprite 475ml PET Bottle",
     "category": "Beverages",
     "type": "VEG",
-    "price": 67,
+    "price": 70,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0824",
@@ -2794,7 +2785,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 70
   },
   {
     "id": "DOM-BRD0052",
@@ -3606,10 +3598,10 @@
   },
   {
     "id": "DOM-BEV0842",
-    "name": "Coke Zero 255ml LXT",
+    "name": "Coke Zero Can (330ml)",
     "category": "Beverages",
     "type": "VEG",
-    "price": 47,
+    "price": 60,
     "isVeg": true,
     "isAvailable": true,
     "dominosCode": "BEV0842",
@@ -3629,7 +3621,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 60
   },
   {
     "id": "DOM-PIZ5386",
@@ -4151,7 +4144,9 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 150,
+    "isDiscounted": true
   },
   {
     "id": "DOM-PIZ0579",
@@ -4405,7 +4400,7 @@
   },
   {
     "id": "DOM-VGPARCEL",
-    "name": "Veg Parcel",
+    "name": "Zingy Parcel Veg",
     "category": "Garlic Breads & Sides",
     "type": "VEG",
     "price": 50,
@@ -4428,7 +4423,8 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 50
   },
   {
     "id": "DOM-PIZ5306",
@@ -4664,7 +4660,7 @@
   },
   {
     "id": "DOM-DST0117",
-    "name": "Butterscotch Mousse",
+    "name": "Butterscotch Mousse Cup",
     "category": "Desserts",
     "type": "VEG",
     "price": 59,
@@ -4687,7 +4683,10 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 79,
+    "isDiscounted": true,
+    "discountBadge": "25% OFF"
   },
   {
     "id": "DOM-SID0397",
@@ -4879,7 +4878,9 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 140,
+    "isDiscounted": true
   },
   {
     "id": "DOM-BEV0825",
@@ -5294,7 +5295,7 @@
   },
   {
     "id": "DOM-DST0116",
-    "name": "Choco Mousse",
+    "name": "Choco Mousse Cup",
     "category": "Desserts",
     "type": "VEG",
     "price": 59,
@@ -5317,7 +5318,10 @@
     },
     "isCustomizable": false,
     "isMenu129": true,
-    "isMenu179": true
+    "isMenu179": true,
+    "originalPrice": 79,
+    "isDiscounted": true,
+    "discountBadge": "25% OFF"
   },
   {
     "id": "DOM-SID0398",
