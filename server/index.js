@@ -580,8 +580,8 @@ const server = http.createServer(async (req, res) => {
 
   // --- API ROUTES ---
 
-  // Public Maintenance Status Endpoint
-  if (method === 'GET' && pathname === '/api/maintenance') {
+  // Public / Admin Maintenance Status Endpoint
+  if (method === 'GET' && (pathname === '/api/maintenance' || pathname === '/api/admin/maintenance')) {
     return sendJson(res, 200, db.getMaintenanceMode());
   }
 
@@ -3076,11 +3076,11 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 9a. Admin: Dynamic UPI Payment Receiver Configuration (Strictly Protected)
-  if (method === 'GET' && pathname === '/api/admin/payment-settings') {
+  if (method === 'GET' && (pathname === '/api/admin/payment-settings' || pathname === '/api/admin/payment-receiver')) {
     return sendJson(res, 200, db.getPaymentSettings());
   }
 
-  if (method === 'POST' && pathname === '/api/admin/payment-settings') {
+  if (method === 'POST' && (pathname === '/api/admin/payment-settings' || pathname === '/api/admin/payment-receiver')) {
     try {
       const body = await parseBody(req);
       const rawUpi = (body.upiId !== undefined) ? String(body.upiId).trim() : ((body.receiverUpiId !== undefined) ? String(body.receiverUpiId).trim() : null);

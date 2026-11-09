@@ -1538,8 +1538,18 @@ async function loadVouchers() {
 
       return `
         <tr>
-          <td><code style="font-weight: 700; color: #0066a3;" title="${v.code}">${masked}</code></td>
-          <td><code style="color: #64748b;">${v.pin}</code></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <code style="font-weight: 700; color: #0066a3;" id="vouch-code-${v.id}" data-full="${escapeHtml(v.code)}">${masked}</code>
+              <button type="button" class="btn-action-copy" onclick="copyVoucherToClipboard('${v.id}')" title="Copy 16-digit Voucher & PIN" style="font-size: 11px; padding: 2px 6px; cursor: pointer;">📋</button>
+            </div>
+          </td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <code style="color: #334155; font-family: monospace; font-weight: 700;" id="vouch-pin-${v.id}" data-full="${escapeHtml(v.pin)}">••••••</code>
+              <button type="button" class="btn-action-copy" onclick="toggleVoucherPin('${v.id}')" id="vouch-pin-btn-${v.id}" title="Reveal / Hide 6-digit PIN" style="font-size: 11px; padding: 2px 6px; cursor: pointer; border-radius: 4px;">👁️ View</button>
+            </div>
+          </td>
           <td style="font-weight: 800; color: #16a34a;">₹${v.balance} <small style="color:#64748b;">/ ₹${v.initialBalance || v.balance}</small></td>
           <td>${statusBadge}</td>
           <td><small style="font-family: monospace; color: #475569;">${v.usedInOrderId || '—'}</small></td>
@@ -1553,6 +1563,35 @@ async function loadVouchers() {
     console.error('Error loading vouchers:', err);
   }
 }
+
+function toggleVoucherPin(id) {
+  const pinEl = document.getElementById(`vouch-pin-${id}`);
+  const codeEl = document.getElementById(`vouch-code-${id}`);
+  const btn = document.getElementById(`vouch-pin-btn-${id}`);
+  if (!pinEl) return;
+  const fullPin = pinEl.dataset.full;
+  const fullCode = codeEl?.dataset?.full;
+  if (pinEl.innerText.includes('•')) {
+    pinEl.innerText = fullPin;
+    pinEl.style.color = '#0284c7';
+    if (codeEl && fullCode) codeEl.innerText = fullCode;
+    if (btn) btn.innerText = '🙈 Hide';
+  } else {
+    pinEl.innerText = '••••••';
+    pinEl.style.color = '#334155';
+    if (codeEl && fullCode) codeEl.innerText = `${fullCode.slice(0, 4)} **** **** ${fullCode.slice(12)}`;
+    if (btn) btn.innerText = '👁️ View';
+  }
+}
+window.toggleVoucherPin = toggleVoucherPin;
+
+function copyVoucherToClipboard(id) {
+  const v = (window.cachedVouchers || []).find(x => x.id === id);
+  if (!v) return;
+  navigator.clipboard.writeText(`VOUCHER: ${v.code} | PIN: ${v.pin}`);
+  showToast(`Voucher (${v.code.slice(-4)}) & PIN copied to clipboard!`, '📋');
+}
+window.copyVoucherToClipboard = copyVoucherToClipboard;
 
 async function addVoucherCard() {
   const code = document.getElementById('vouchCode').value.replace(/\s+/g, '');
@@ -3805,6 +3844,7 @@ async function toggleMaintenanceModeAction() {
   try {
     const res = await adminFetch('/api/admin/maintenance', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ active: targetActive, message, until })
     });
     const data = await res.json();
@@ -3832,6 +3872,7 @@ async function saveMaintenanceSettingsSubmit() {
   try {
     const res = await adminFetch('/api/admin/maintenance', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ active: currentMaintenanceState.active, message, until })
     });
     const data = await res.json();
@@ -5198,3 +5239,92 @@ async function resolveOrderDecision(orderId, decision) {
   }
 }
 window.resolveOrderDecision = resolveOrderDecision;
+
+// =========================================================================
+// GLOBAL BINDINGS: Ensure all inline HTML handlers and modal actions are
+// attached to `window` to prevent ReferenceError in browser contexts.
+// =========================================================================
+if (typeof window !== 'undefined') {
+  // Navigation & Sessions
+  window.switchAdminView = typeof switchAdminView !== 'undefined' ? switchAdminView : window.switchAdminView;
+  window.switchSessionMethod = typeof switchSessionMethod !== 'undefined' ? switchSessionMethod : window.switchSessionMethod;
+  window.switchToMethod2WithPhone = typeof switchToMethod2WithPhone !== 'undefined' ? switchToMethod2WithPhone : window.switchToMethod2WithPhone;
+  window.loadSessionFleetFeed = typeof loadSessionFleetFeed !== 'undefined' ? loadSessionFleetFeed : window.loadSessionFleetFeed;
+  window.loadAccounts = typeof loadAccounts !== 'undefined' ? loadAccounts : window.loadAccounts;
+  window.adminToggleAccountDisabled = typeof adminToggleAccountDisabled !== 'undefined' ? adminToggleAccountDisabled : window.adminToggleAccountDisabled;
+
+  // Live Domino's OTP Authentication
+  window.adminSendLiveOtp = typeof adminSendLiveOtp !== 'undefined' ? adminSendLiveOtp : window.adminSendLiveOtp;
+  window.manuallyOpenOtpSection = typeof manuallyOpenOtpSection !== 'undefined' ? manuallyOpenOtpSection : window.manuallyOpenOtpSection;
+  window.cancelOtpAndChangePhone = typeof cancelOtpAndChangePhone !== 'undefined' ? cancelOtpAndChangePhone : window.cancelOtpAndChangePhone;
+  window.syncUnifiedOtpToBoxes = typeof syncUnifiedOtpToBoxes !== 'undefined' ? syncUnifiedOtpToBoxes : window.syncUnifiedOtpToBoxes;
+  window.handleOtpPaste = typeof handleOtpPaste !== 'undefined' ? handleOtpPaste : window.handleOtpPaste;
+  window.handleOtpInput = typeof handleOtpInput !== 'undefined' ? handleOtpInput : window.handleOtpInput;
+  window.handleOtpKey = typeof handleOtpKey !== 'undefined' ? handleOtpKey : window.handleOtpKey;
+  window.adminVerifyLiveOtp = typeof adminVerifyLiveOtp !== 'undefined' ? adminVerifyLiveOtp : window.adminVerifyLiveOtp;
+
+  // Session JSON Import & Tools
+  window.pasteFromClipboard = typeof pasteFromClipboard !== 'undefined' ? pasteFromClipboard : window.pasteFromClipboard;
+  window.copyExtractionScriptToClipboard = typeof copyExtractionScriptToClipboard !== 'undefined' ? copyExtractionScriptToClipboard : window.copyExtractionScriptToClipboard;
+  window.clearJsonInput = typeof clearJsonInput !== 'undefined' ? clearJsonInput : window.clearJsonInput;
+  window.adminImportJsonSession = typeof adminImportJsonSession !== 'undefined' ? adminImportJsonSession : window.adminImportJsonSession;
+  window.copyJsonToClipboard = typeof copyJsonToClipboard !== 'undefined' ? copyJsonToClipboard : window.copyJsonToClipboard;
+  window.copyLaunchConsoleScript = typeof copyLaunchConsoleScript !== 'undefined' ? copyLaunchConsoleScript : window.copyLaunchConsoleScript;
+  window.launchOnServerHost = typeof launchOnServerHost !== 'undefined' ? launchOnServerHost : window.launchOnServerHost;
+
+  // Coupon Rules & Settings
+  window.saveCouponRules = typeof saveCouponRules !== 'undefined' ? saveCouponRules : window.saveCouponRules;
+
+  // Orders & Telemetry Tracker
+  window.loadOrders = typeof loadOrders !== 'undefined' ? loadOrders : window.loadOrders;
+  window.filterAdminOrders = typeof filterAdminOrders !== 'undefined' ? filterAdminOrders : window.filterAdminOrders;
+  window.openAdminOrderTracker = typeof openAdminOrderTracker !== 'undefined' ? openAdminOrderTracker : window.openAdminOrderTracker;
+  window.refreshAdminLiveTrack = typeof refreshAdminLiveTrack !== 'undefined' ? refreshAdminLiveTrack : window.refreshAdminLiveTrack;
+  window.renderAdminTrackUI = typeof renderAdminTrackUI !== 'undefined' ? renderAdminTrackUI : window.renderAdminTrackUI;
+  window.promptAdminUpdateRider = typeof promptAdminUpdateRider !== 'undefined' ? promptAdminUpdateRider : window.promptAdminUpdateRider;
+  window.openAdminBillPhoto = typeof openAdminBillPhoto !== 'undefined' ? openAdminBillPhoto : window.openAdminBillPhoto;
+  window.switchBillPhotoTab = typeof switchBillPhotoTab !== 'undefined' ? switchBillPhotoTab : window.switchBillPhotoTab;
+  window.openOrderDossier = typeof openOrderDossier !== 'undefined' ? openOrderDossier : window.openOrderDossier;
+  window.closeOrderDossier = typeof closeOrderDossier !== 'undefined' ? closeOrderDossier : window.closeOrderDossier;
+  window.refreshDossierData = typeof refreshDossierData !== 'undefined' ? refreshDossierData : window.refreshDossierData;
+
+  // Users & Wallet Directory
+  window.loadAppUsers = typeof loadAppUsers !== 'undefined' ? loadAppUsers : window.loadAppUsers;
+  window.loadWalletDeposits = typeof loadWalletDeposits !== 'undefined' ? loadWalletDeposits : window.loadWalletDeposits;
+  window.adminApproveDeposit = typeof adminApproveDeposit !== 'undefined' ? adminApproveDeposit : window.adminApproveDeposit;
+  window.adminRejectDeposit = typeof adminRejectDeposit !== 'undefined' ? adminRejectDeposit : window.adminRejectDeposit;
+
+  // Support Desk & Chat
+  window.loadAdminTickets = typeof loadAdminTickets !== 'undefined' ? loadAdminTickets : window.loadAdminTickets;
+  window.filterAdminTickets = typeof filterAdminTickets !== 'undefined' ? filterAdminTickets : window.filterAdminTickets;
+  window.openAdminTicketChat = typeof openAdminTicketChat !== 'undefined' ? openAdminTicketChat : window.openAdminTicketChat;
+  window.adminSendReply = typeof adminSendReply !== 'undefined' ? adminSendReply : window.adminSendReply;
+  window.toggleAdminResolveTicket = typeof toggleAdminResolveTicket !== 'undefined' ? toggleAdminResolveTicket : window.toggleAdminResolveTicket;
+
+  // Vouchers Vault & UPI Payment Receiver Settings
+  window.loadVouchers = typeof loadVouchers !== 'undefined' ? loadVouchers : window.loadVouchers;
+  window.addVoucherCard = typeof addVoucherCard !== 'undefined' ? addVoucherCard : window.addVoucherCard;
+  window.deleteVoucherCard = typeof deleteVoucherCard !== 'undefined' ? deleteVoucherCard : window.deleteVoucherCard;
+  window.toggleVoucherPin = typeof toggleVoucherPin !== 'undefined' ? toggleVoucherPin : window.toggleVoucherPin;
+  window.copyVoucherToClipboard = typeof copyVoucherToClipboard !== 'undefined' ? copyVoucherToClipboard : window.copyVoucherToClipboard;
+  window.loadPaymentReceiverSettings = typeof loadPaymentReceiverSettings !== 'undefined' ? loadPaymentReceiverSettings : window.loadPaymentReceiverSettings;
+  window.savePaymentReceiverSettings = typeof savePaymentReceiverSettings !== 'undefined' ? savePaymentReceiverSettings : window.savePaymentReceiverSettings;
+
+  // Announcement Alerts & Maintenance
+  window.loadNotifications = typeof loadNotifications !== 'undefined' ? loadNotifications : window.loadNotifications;
+  window.broadcastNotificationSubmit = typeof broadcastNotificationSubmit !== 'undefined' ? broadcastNotificationSubmit : window.broadcastNotificationSubmit;
+  window.deleteNotificationAction = typeof deleteNotificationAction !== 'undefined' ? deleteNotificationAction : window.deleteNotificationAction;
+  window.loadMaintenanceStatus = typeof loadMaintenanceStatus !== 'undefined' ? loadMaintenanceStatus : window.loadMaintenanceStatus;
+  window.toggleMaintenanceModeAction = typeof toggleMaintenanceModeAction !== 'undefined' ? toggleMaintenanceModeAction : window.toggleMaintenanceModeAction;
+  window.saveMaintenanceSettingsSubmit = typeof saveMaintenanceSettingsSubmit !== 'undefined' ? saveMaintenanceSettingsSubmit : window.saveMaintenanceSettingsSubmit;
+
+  // System Config & Menu
+  window.loadAdminMenu = typeof loadAdminMenu !== 'undefined' ? loadAdminMenu : window.loadAdminMenu;
+  window.saveAdminMenuItem = typeof saveAdminMenuItem !== 'undefined' ? saveAdminMenuItem : window.saveAdminMenuItem;
+  window.deleteAdminMenuItem = typeof deleteAdminMenuItem !== 'undefined' ? deleteAdminMenuItem : window.deleteAdminMenuItem;
+  window.loadProxySettings = typeof loadProxySettings !== 'undefined' ? loadProxySettings : window.loadProxySettings;
+  window.saveProxySettings = typeof saveProxySettings !== 'undefined' ? saveProxySettings : window.saveProxySettings;
+  window.loadFirebaseSettings = typeof loadFirebaseSettings !== 'undefined' ? loadFirebaseSettings : window.loadFirebaseSettings;
+  window.saveFirebaseSettings = typeof saveFirebaseSettings !== 'undefined' ? saveFirebaseSettings : window.saveFirebaseSettings;
+  window.checkDatabaseConnectionStatus = typeof checkDatabaseConnectionStatus !== 'undefined' ? checkDatabaseConnectionStatus : window.checkDatabaseConnectionStatus;
+}
