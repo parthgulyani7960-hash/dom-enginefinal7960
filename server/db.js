@@ -70,7 +70,7 @@ const INITIAL_DATA = {
       badge: 'Save ₹160',
       price: 549,
       originalPrice: 709,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+      image: '/images/menu/veg-extravaganza.webp',
       description: '1 Medium Farmhouse Pizza + 1 Regular Peppy Paneer + 1 Stuffed Garlic Bread + 2x 250ml Coke',
       includedItems: [
         { name: 'Farmhouse Pizza (Medium)', dominosCode: 'PIZ0119', qty: 1 },
@@ -86,7 +86,7 @@ const INITIAL_DATA = {
       badge: 'Save ₹220',
       price: 699,
       originalPrice: 919,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp',
+      image: '/images/menu/chicken-golden-delight.webp',
       description: '1 Medium Chicken Golden Delight + 1 Regular Barbeque Chicken + 1 Cheesy Dip + 2x 250ml Coke',
       includedItems: [
         { name: 'Chicken Golden Delight (Medium)', dominosCode: 'PIZ0125', qty: 1 },
@@ -102,7 +102,7 @@ const INITIAL_DATA = {
       badge: 'Save ₹90',
       price: 389,
       originalPrice: 479,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp',
+      image: '/images/menu/choco-lava-cake.webp',
       description: '1 Regular Margherita with Cheese Burst Crust + 1 Choco Lava Cake + 1 Thums Up',
       includedItems: [
         { name: 'Margherita (Regular, Cheese Burst)', dominosCode: 'PIZ0117', qty: 1 },
@@ -117,7 +117,7 @@ const INITIAL_DATA = {
       badge: 'Save ₹250',
       price: 599,
       originalPrice: 849,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp',
+      image: '/images/menu/veg-loaded-pizza-mania.webp',
       description: '4x Regular Pizzas (Capsicum, Golden Corn, Onion, Veg Loaded) + 1 Garlic Breadsticks + 1.25L Cold Drink',
       includedItems: [
         { name: 'Capsicum Mania Pizza', dominosCode: 'PIZ0232', qty: 1 },
@@ -136,7 +136,7 @@ const INITIAL_DATA = {
       category: 'Veg Pizza',
       type: 'VEG',
       price: 269,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+      image: '/images/menu/veg-extravaganza.webp',
       description: 'Delightful combination of onion, capsicum, tomato & grilled mushroom.',
       dominosCode: 'PIZ0119'
     },
@@ -146,7 +146,7 @@ const INITIAL_DATA = {
       category: 'Veg Pizza',
       type: 'VEG',
       price: 279,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/0b41b2cb-958c-4c17-b0b2-397308538684_volcanoHomePeppyPaneer.webp',
+      image: '/images/menu/peppy-paneer.webp',
       description: 'Chunky paneer with crisp capsicum and spicy red pepper.',
       dominosCode: 'PIZ0120'
     },
@@ -156,7 +156,7 @@ const INITIAL_DATA = {
       category: 'Veg Pizza',
       type: 'VEG',
       price: 259,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/391142c2-055c-4214-b06a-c2005c5f9768_new_veggie_paradise.webp',
+      image: '/images/menu/veggie-paradise.webp',
       description: 'Golden Corn, Black Olives, Capsicum & Red Paprika.',
       dominosCode: 'PIZ0121'
     },
@@ -166,7 +166,7 @@ const INITIAL_DATA = {
       category: 'Non-Veg Pizza',
       type: 'NON-VEG',
       price: 369,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b8c12238-5779-496e-a233-dc1af1d14b81_new_chicken_dominator.webp',
+      image: '/images/menu/chicken-dominator.webp',
       description: 'Loaded with double pepper barbecue chicken, peri-peri chicken, chicken tikka.',
       dominosCode: 'PIZ0126'
     },
@@ -176,7 +176,7 @@ const INITIAL_DATA = {
       category: 'Non-Veg Pizza',
       type: 'NON-VEG',
       price: 329,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp',
+      image: '/images/menu/chicken-golden-delight.webp',
       description: 'Barbeque chicken with a topping of golden corn loaded with extra cheese.',
       dominosCode: 'PIZ0125'
     },
@@ -186,7 +186,7 @@ const INITIAL_DATA = {
       category: 'Garlic Breads & Sides',
       type: 'VEG',
       price: 149,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp',
+      image: '/images/menu/classic-stuffed-garlic-bread.webp',
       description: 'Freshly baked garlic bread stuffed with mozzarella cheese, sweet corn and tangy jalapenos.',
       dominosCode: 'SID0046'
     },
@@ -196,7 +196,7 @@ const INITIAL_DATA = {
       category: 'Desserts',
       type: 'VEG',
       price: 109,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp',
+      image: '/images/menu/choco-lava-cake.webp',
       description: 'Chocolate lovers delight! Indulgent, gooey molten lava inside chocolate cake.',
       dominosCode: 'DES0001'
     },
@@ -206,7 +206,7 @@ const INITIAL_DATA = {
       category: 'Beverages',
       type: 'VEG',
       price: 60,
-      image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c75f77f0-987b-45df-b976-12be349df9dc_CokeHomeProductV1.webp',
+      image: '/images/menu/coca-cola-475ml.webp',
       description: 'Sparkling refreshing beverage bottle 475ml.',
       dominosCode: 'BEV-COKE-475'
     }
@@ -1160,7 +1160,7 @@ class Database {
     const isVeg = itemData.isVeg !== false;
     const cat = itemData.category || (isVeg ? 'Veg Pizza' : 'Non-Veg Pizza');
     const type = isVeg ? 'VEG' : 'NON-VEG';
-    const imageUrl = itemData.imageUrl || itemData.image || 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp';
+    const imageUrl = itemData.imageUrl || itemData.image || '/images/menu/margherita.webp';
 
     const newItem = {
       id,

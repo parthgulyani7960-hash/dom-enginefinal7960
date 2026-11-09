@@ -380,14 +380,14 @@ function renderCombos(combos) {
 }
 
 const FALLBACK_CATEGORY_IMAGES = {
-  'Veg Pizza': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
-  'Non-Veg Pizza': 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80',
-  'Pizza Mania': 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80',
-  'Garlic Breads & Sides': 'https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?auto=format&fit=crop&w=600&q=80',
-  'Pastas': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80',
-  'Desserts': 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
-  'Beverages': 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=600&q=80',
-  'Default': 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80'
+  'Veg Pizza': '/images/menu/margherita.webp',
+  'Non-Veg Pizza': '/images/menu/chicken-golden-delight.webp',
+  'Pizza Mania': '/images/menu/veg-loaded-pizza-mania.webp',
+  'Garlic Breads & Sides': '/images/menu/garlic-breadsticks.webp',
+  'Pastas': '/images/menu/paneer-tandoori-meltz-lxt.webp',
+  'Desserts': '/images/menu/choco-lava-cake.webp',
+  'Beverages': '/images/menu/pepsi-475ml.webp',
+  'Default': '/images/menu/margherita.webp'
 };
 
 function getItemDefaultImage(item) {
@@ -420,7 +420,8 @@ function renderMenu(items) {
   container.innerHTML = items.map(item => {
     const isAvail = item.isAvailable !== false;
     const availClass = isAvail ? '' : 'unavailable';
-    const hasDiscount = item.originalPrice && item.originalPrice > item.price;
+    const isComboOrDeal = Boolean(item.isCombo || item.isPromotional || item.hasDiscount || (item.category && item.category.toLowerCase().includes('combo')));
+    const hasDiscount = isComboOrDeal && Boolean(item.originalPrice) && (Number(item.originalPrice) > Number(item.price));
     const discountPct = hasDiscount ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) : 0;
     const originalPriceHtml = hasDiscount
       ? `<span class="price-original">₹${item.originalPrice}</span><span class="discount-pill">${item.discount || discountPct + '% OFF'}</span>`
@@ -2418,12 +2419,30 @@ async function verifyCartWithKitchen() {
   }
 }
 
+function syncPaymentGatewaysUI() {
+  try {
+    if (typeof syncStorePaymentSettings === 'function') {
+      syncStorePaymentSettings();
+    }
+  } catch (e) {
+    console.warn('syncStorePaymentSettings note:', e);
+  }
+  try {
+    if (typeof applyPaymentSettingsUI === 'function') {
+      applyPaymentSettingsUI();
+    }
+  } catch (e) {
+    console.warn('applyPaymentSettingsUI note:', e);
+  }
+}
+window.syncPaymentGatewaysUI = syncPaymentGatewaysUI;
+
 function openCartModal() {
-  syncCartAddressOptions();
-  syncTopBarAddressOptions();
-  syncPaymentGatewaysUI();
-  renderCartDrawer(true);
-  verifyCartWithKitchen();
+  try { syncCartAddressOptions(); } catch (e) { console.warn('syncCartAddressOptions note:', e); }
+  try { syncTopBarAddressOptions(); } catch (e) { console.warn('syncTopBarAddressOptions note:', e); }
+  try { syncPaymentGatewaysUI(); } catch (e) { console.warn('syncPaymentGatewaysUI note:', e); }
+  try { renderCartDrawer(true); } catch (e) { console.warn('renderCartDrawer note:', e); }
+  try { verifyCartWithKitchen(); } catch (e) { console.warn('verifyCartWithKitchen note:', e); }
   openModal('cartModal');
 }
 
@@ -5211,7 +5230,11 @@ async function reorderOrderItems(orderId) {
           customCrust: it.customCrust || null,
           customToppings: it.customToppings || [],
           dominosCode: it.dominosCode || null,
-          skuId: it.skuId || null
+          skuId: it.skuId || null,
+          image: it.image || it.imageUrl || null,
+          imageUrl: it.imageUrl || it.image || null,
+          isCombo: it.isCombo || false,
+          includedItems: it.includedItems || null
         });
       }
     });

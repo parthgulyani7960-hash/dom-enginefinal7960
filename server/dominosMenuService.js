@@ -309,7 +309,7 @@ class DominosMenuService {
       let isAvailable = true;
       let unavailableReason = null;
       let livePrice = item.price;
-      let liveOriginalPrice = item.originalPrice;
+      let liveOriginalPrice = (item.isPromotional || item.isCombo || item.category === 'Deals & Combos') ? item.originalPrice : undefined;
       let itemVariants = item.variants || [];
       let itemSizeCrustMap = item.sizeCrustPricingMap || {};
       const isCorePizza = (item.category === 'Veg Pizza' || item.category === 'Non-Veg Pizza') && !item.name.toLowerCase().includes('pizza mania');
@@ -364,7 +364,7 @@ class DominosMenuService {
             const regVariant = match.variants.find(v => (v.size || '').toLowerCase() === 'regular') || match.variants[0];
             if (regVariant && regVariant.price) {
               livePrice = regVariant.price;
-              if (regVariant.regularPrice && regVariant.regularPrice > livePrice) {
+              if ((item.isPromotional || item.isCombo || item.category === 'Deals & Combos') && regVariant.regularPrice && regVariant.regularPrice > livePrice) {
                 liveOriginalPrice = regVariant.regularPrice;
               }
             }
@@ -589,7 +589,7 @@ class DominosMenuService {
         badge: 'Save ₹160',
         price: 549,
         originalPrice: 709,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+        image: '/images/menu/veg-extravaganza.webp',
         description: '1 Medium Farmhouse Pizza + 1 Regular Peppy Paneer + 1 Stuffed Garlic Bread + 2x 250ml Coke',
         includedItems: [
           { name: 'Farmhouse Pizza (Medium)', dominosCode: 'PIZ0119', qty: 1 },
@@ -605,7 +605,7 @@ class DominosMenuService {
         badge: 'Save ₹220',
         price: 699,
         originalPrice: 919,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4465ab77-1c41-4d24-b96b-cd26bd92df0f_homep.webp',
+        image: '/images/menu/chicken-golden-delight.webp',
         description: '1 Medium Chicken Golden Delight + 1 Regular Barbeque Chicken + 1 Cheesy Dip + 2x 250ml Coke',
         includedItems: [
           { name: 'Chicken Golden Delight (Medium)', dominosCode: 'PIZ0125', qty: 1 },
@@ -621,7 +621,7 @@ class DominosMenuService {
         badge: 'Save ₹90',
         price: 389,
         originalPrice: 479,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp',
+        image: '/images/menu/choco-lava-cake.webp',
         description: '1 Regular Margherita with Cheese Burst Crust + 1 Choco Lava Cake + 1 Thums Up',
         includedItems: [
           { name: 'Margherita (Regular, Cheese Burst)', dominosCode: 'PIZ0117', qty: 1 },
@@ -636,7 +636,7 @@ class DominosMenuService {
         badge: 'Save ₹250',
         price: 599,
         originalPrice: 849,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/40676ebf-2627-49f4-a221-aa83838213cb_PMClassicMenu.webp',
+        image: '/images/menu/veg-loaded-pizza-mania.webp',
         description: '4x Regular Pizzas (Capsicum, Golden Corn, Onion, Veg Loaded) + 1 Garlic Breadsticks + 1.25L Cold Drink',
         includedItems: [
           { name: 'Capsicum Mania Pizza', dominosCode: 'PIZ0232', qty: 1 },
@@ -654,7 +654,7 @@ class DominosMenuService {
         badge: 'Save ₹80',
         price: 249,
         originalPrice: 329,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp',
+        image: '/images/menu/margherita.webp',
         description: '1 Regular Classic Margherita + 1 Gooey Choco Lava Cake + 1 Coke 250ml',
         includedItems: [
           { name: 'Margherita (Regular)', dominosCode: 'PIZ0117', qty: 1 },
@@ -669,7 +669,7 @@ class DominosMenuService {
         badge: 'Save ₹150',
         price: 499,
         originalPrice: 649,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/0b41b2cb-958c-4c17-b0b2-397308538684_volcanoHomePeppyPaneer.webp',
+        image: '/images/menu/cheese-volcano-peppy-paneer.webp',
         description: '1 Cheese Volcano Peppy Paneer + 1 Classic Stuffed Garlic Bread + 2x Coke',
         includedItems: [
           { name: 'Cheese Volcano Peppy Paneer', dominosCode: 'PIZ0120', qty: 1 },
@@ -684,7 +684,7 @@ class DominosMenuService {
         badge: 'Save ₹300',
         price: 899,
         originalPrice: 1199,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+        image: '/images/menu/double-cheese-margherita.webp',
         description: '2 Medium Pizzas (Farmhouse & Peppy Paneer) + 1 Stuffed Garlic Bread + 2 Choco Lava Cakes + 1.25L Coke',
         includedItems: [
           { name: 'Farmhouse (Medium)', dominosCode: 'PIZ0119', qty: 1 },
@@ -701,7 +701,7 @@ class DominosMenuService {
         badge: 'Save ₹100',
         price: 329,
         originalPrice: 429,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp',
+        image: '/images/menu/garlic-breadsticks.webp',
         description: '1 Stuffed Garlic Bread + 1 Paneer Zingy Parcel + 1 Cheesy Jalapeno Dip + 2x Coke 250ml',
         includedItems: [
           { name: 'Stuffed Garlic Bread', dominosCode: 'SID0046', qty: 1 },
@@ -721,7 +721,7 @@ class DominosMenuService {
         category: 'Veg Pizza',
         type: 'VEG',
         price: 269,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be33bb82-d74d-4a37-b742-9292562bea08_farmhouse.webp',
+        image: '/images/menu/farmhouse.webp',
         description: 'Delightful combination of onion, capsicum, tomato & grilled mushroom.',
         dominosCode: 'PIZ0119',
         isAvailable: true
@@ -732,7 +732,7 @@ class DominosMenuService {
         category: 'Veg Pizza',
         type: 'VEG',
         price: 109,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp',
+        image: '/images/menu/margherita.webp',
         description: 'Classic delight with 100% real mozzarella cheese.',
         dominosCode: 'PIZ0117',
         isAvailable: true
@@ -743,7 +743,7 @@ class DominosMenuService {
         category: 'Veg Pizza',
         type: 'VEG',
         price: 279,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/0b41b2cb-958c-4c17-b0b2-397308538684_volcanoHomePeppyPaneer.webp',
+        image: '/images/menu/peppy-paneer.webp',
         description: 'Chunky paneer with crisp capsicum and spicy red pepper.',
         dominosCode: 'PIZ0120',
         isAvailable: true
@@ -754,7 +754,7 @@ class DominosMenuService {
         category: 'Non-Veg Pizza',
         type: 'NON-VEG',
         price: 329,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/893ad735-bc90-40b9-83c9-5cebfc876508_new_chicken_golden_delight.webp',
+        image: '/images/menu/chicken-golden-delight.webp',
         description: 'Barbeque chicken with a topping of golden corn loaded with extra cheese.',
         dominosCode: 'PIZ0125',
         isAvailable: true
@@ -765,7 +765,7 @@ class DominosMenuService {
         category: 'Garlic Breads & Sides',
         type: 'VEG',
         price: 149,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp',
+        image: '/images/menu/classic-stuffed-garlic-bread.webp',
         description: 'Freshly baked garlic bread stuffed with mozzarella cheese, sweet corn and tangy jalapenos.',
         dominosCode: 'SID0046',
         isAvailable: true
@@ -776,7 +776,7 @@ class DominosMenuService {
         category: 'Desserts',
         type: 'VEG',
         price: 109,
-        image: 'https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp',
+        image: '/images/menu/choco-lava-cake.webp',
         description: 'Chocolate lovers delight! Indulgent, gooey molten lava inside chocolate cake.',
         dominosCode: 'DES0001',
         isAvailable: true

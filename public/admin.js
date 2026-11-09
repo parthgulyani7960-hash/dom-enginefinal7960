@@ -4786,8 +4786,9 @@ function renderAdminMenuTable(items = []) {
   tbody.innerHTML = items.map(item => {
     const isAvail = item.isAvailable !== false;
     const isVeg = item.isVeg !== false && item.type !== 'NON-VEG';
-    const originalPrice = item.originalPrice || Math.round((item.price * 1.25) / 10) * 10 - 1;
-    const discount = originalPrice > item.price
+    const isCombo = Boolean(item.isCombo || (item.category && item.category.toLowerCase().includes("combo")));
+    const originalPrice = item.originalPrice || item.price;
+    const discount = (isCombo && originalPrice > item.price)
       ? `${Math.round(((originalPrice - item.price) / originalPrice) * 100)}%`
       : '0%';
 
@@ -4954,7 +4955,7 @@ function openEditMenuItemModal(id) {
   document.getElementById('itemEditCategory').value = item.category || 'Veg Pizza';
   document.getElementById('itemEditIsVeg').value = item.isVeg !== false ? 'true' : 'false';
   document.getElementById('itemEditPrice').value = item.price || 259;
-  document.getElementById('itemEditOriginalPrice').value = item.originalPrice || Math.round((item.price * 1.25) / 10) * 10 - 1;
+  document.getElementById('itemEditOriginalPrice').value = item.originalPrice || item.price;
   document.getElementById('itemEditCode').value = item.dominosCode || item.skuId || '';
   document.getElementById('itemEditImage').value = item.imageUrl || item.image || '';
   document.getElementById('itemEditDesc').value = item.description || '';
@@ -4990,7 +4991,7 @@ async function submitMenuItemForm() {
     isVeg,
     type: isVeg ? 'VEG' : 'NON-VEG',
     price,
-    originalPrice: originalPrice > price ? originalPrice : Math.round((price * 1.25) / 10) * 10 - 1,
+    originalPrice: (originalPrice && originalPrice > price) ? originalPrice : price,
     dominosCode,
     imageUrl,
     description,
