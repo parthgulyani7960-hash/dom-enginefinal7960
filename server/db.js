@@ -1576,6 +1576,8 @@ class Database {
                   landmark: o.address.landmark || '',
                   city: o.address.city || 'Chandigarh',
                   pincode: o.address.pincode || '',
+                  latitude: o.address.latitude || null,
+                  longitude: o.address.longitude || null,
                   isDefault: u.savedAddresses.length === 0
                 });
               }
@@ -1665,6 +1667,8 @@ class Database {
           landmark: order.address.landmark || '',
           city: order.address.city || 'Chandigarh',
           pincode: order.address.pincode || '',
+          latitude: order.address.latitude || null,
+          longitude: order.address.longitude || null,
           isDefault: user.savedAddresses.length === 0
         });
       }

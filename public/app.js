@@ -2853,14 +2853,15 @@ function getActiveSelectedAddress() {
     currentActiveDeliveryId = def ? def.id : 'CURRENT_GPS';
   }
   if (currentActiveDeliveryId === 'CURRENT_GPS') {
+    const cleanUserPhone = (currentUser.phone || '').includes('9876543210') ? '' : (currentUser.phone || '');
     return {
       id: 'CURRENT_GPS',
-      name: currentUser.name || 'Parth',
-      phone: currentUser.phone || currentUser.phone || '',
+      name: currentUser.name || 'Customer',
+      phone: cleanUserPhone,
       flat: document.getElementById('cartQuickFlatInput')?.value || document.getElementById('topBarFlatInput')?.value || 'Current Location',
       completeAddress: currentResolvedStore ? `Near ${currentResolvedStore.storeName}` : 'GPS Verified Area',
-      latitude: currentCoordinates ? currentCoordinates.latitude : 30.7410,
-      longitude: currentCoordinates ? currentCoordinates.longitude : 76.7735
+      latitude: currentCoordinates ? currentCoordinates.latitude : (currentResolvedStore?.latitude || 30.7410),
+      longitude: currentCoordinates ? currentCoordinates.longitude : (currentResolvedStore?.longitude || 76.7735)
     };
   }
   return addresses.find(a => a.id === currentActiveDeliveryId) || addresses[0] || null;
@@ -3038,7 +3039,48 @@ async function onCartAddressDropdownChange(selectedId) {
   // Re-verify store serviceability with this address's coordinates
   if (addr.latitude && addr.longitude) {
     await applyResolvedLocation(addr.latitude, addr.longitude, LOCATION_PRIORITY.USER_MANUAL, 'Cart Address Dropdown');
+  } else {
+    await autoResolveAddressCoordinates(addr);
   }
+}
+
+async function autoResolveAddressCoordinates(addr) {
+  if (!addr) return null;
+  const coordEl = document.getElementById('cartCoordinatesPreview');
+  const query = `${addr.building || ''} ${addr.street || ''} ${addr.city || ''} ${addr.pincode || ''}`.trim() || addr.completeAddress;
+  if (!query) return null;
+
+  try {
+    if (coordEl) coordEl.innerText = '📡 Resolving GPS...';
+    const res = await fetch(`/api/location/resolve?q=${encodeURIComponent(query)}`);
+    if (!res.ok) throw new Error('Geocoding request failed');
+    const data = await res.json();
+    let lat = null;
+    let lng = null;
+    if (data.geocodedAddress && data.geocodedAddress.latitude && data.geocodedAddress.longitude) {
+      lat = parseFloat(data.geocodedAddress.latitude);
+      lng = parseFloat(data.geocodedAddress.longitude);
+    } else if (data.availability?.coordinates?.latitude && data.availability?.coordinates?.longitude) {
+      lat = parseFloat(data.availability.coordinates.latitude);
+      lng = parseFloat(data.availability.coordinates.longitude);
+    } else if (data.availability?.store?.latitude && data.availability?.store?.longitude) {
+      lat = parseFloat(data.availability.store.latitude);
+      lng = parseFloat(data.availability.store.longitude);
+    }
+
+    if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+      addr.latitude = lat;
+      addr.longitude = lng;
+      if (coordEl) {
+        coordEl.innerText = `📡 Locked GPS: [${lat.toFixed(6)}, ${lng.toFixed(6)}]`;
+      }
+      await applyResolvedLocation(lat, lng, LOCATION_PRIORITY.USER_MANUAL, 'Auto Geocode Address');
+      return { latitude: lat, longitude: lng };
+    }
+  } catch (err) {
+    console.warn('[GEOCODE-AUTO-ERR]', err);
+  }
+  return null;
 }
 
 function displayCartAddress(addr, forceSync = false) {
@@ -3048,8 +3090,13 @@ function displayCartAddress(addr, forceSync = false) {
   const rPhoneInput = document.getElementById('cartReceiverPhoneInput');
   if (!addr) return;
 
-  const recipientName = addr.name || (addr.firstName ? `${addr.firstName} ${addr.lastName || ''}`.trim() : (currentUser.name || currentUser.name || ''));
-  const recipientPhone = addr.phone || currentUser.phone || currentUser.phone || '';
+  const recipientName = addr.name || (addr.firstName ? `${addr.firstName} ${addr.lastName || ''}`.trim() : (currentUser.name || 'User'));
+  let recipientPhone = addr.phone || currentUser.phone || '';
+  if (recipientPhone.includes('9876543210')) {
+    recipientPhone = currentUser.phone && !currentUser.phone.includes('9876543210') ? currentUser.phone : '';
+  }
+  const cleanPhone = recipientPhone.replace(/[^0-9]/g, '').slice(-10);
+
   const completeAddr = addr.completeAddress || addr.building || addr.street || '';
   const landmark = addr.landmark ? ` (Landmark: ${addr.landmark})` : '';
 
@@ -3061,23 +3108,23 @@ function displayCartAddress(addr, forceSync = false) {
   if (rNameInput && (forceSync || !rNameInput.value.trim()) && !isTypingName) {
     rNameInput.value = recipientName;
   }
-  if (rPhoneInput && (forceSync || !rPhoneInput.value.trim()) && !isTypingPhone) {
-    rPhoneInput.value = recipientPhone.replace(/[^0-9]/g, '').slice(-10);
+  if (rPhoneInput && (forceSync || !rPhoneInput.value.trim() || rPhoneInput.value.includes('9876543210')) && !isTypingPhone) {
+    rPhoneInput.value = cleanPhone;
   }
 
-  // Register address contact in recent receivers
+  // Register address contact in recent receivers (never add dummy 9876543210)
   try {
-    const cleanNum = (rPhoneInput?.value || recipientPhone).replace(/[^0-9]/g, '').slice(-10);
-    if (cleanNum.length === 10) {
+    const curNum = (rPhoneInput?.value || cleanPhone).replace(/[^0-9]/g, '').slice(-10);
+    if (curNum.length === 10 && !curNum.includes('9876543210') && /^[6-9]\d{9}$/.test(curNum)) {
       let recHistory = JSON.parse(localStorage.getItem('dominos_recent_receivers') || '[]');
-      recHistory = recHistory.filter(r => r.phone !== cleanNum);
-      recHistory.unshift({ name: rNameInput?.value || recipientName, phone: cleanNum });
+      recHistory = recHistory.filter(r => r.phone !== curNum && !r.phone.includes('9876543210'));
+      recHistory.unshift({ name: rNameInput?.value || recipientName, phone: curNum });
       localStorage.setItem('dominos_recent_receivers', JSON.stringify(recHistory.slice(0, 5)));
     }
   } catch (e) {}
 
   const curName = rNameInput?.value || recipientName;
-  const curPhone = rPhoneInput?.value || recipientPhone;
+  const curPhoneDisplay = (rPhoneInput?.value || cleanPhone);
   const activeFlat = addr.flat || document.getElementById('topBarFlatInput')?.value || document.getElementById('cartQuickFlatInput')?.value || 'Flat';
 
   if (preview) {
@@ -3088,15 +3135,20 @@ function displayCartAddress(addr, forceSync = false) {
       <div style="font-size: 11px; color: #475569; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
         <span>👤 <strong>${curName}</strong></span>
         <span>•</span>
-        <span>📞 <strong>+91 ${curPhone.replace(/[^0-9]/g, '').slice(-10)}</strong></span>
+        <span>📞 <strong>${curPhoneDisplay ? `+91 ${curPhoneDisplay}` : 'No phone set'}</strong></span>
       </div>
       <div style="margin-top: 4px; font-size: 11px; color: #0284c7; font-weight: 700; display: flex; align-items: center; gap: 4px;">
         <span>🛵</span> <span>Domino's delivery rider will call this number upon doorstep arrival.</span>
       </div>
     `;
   }
-  if (coordEl && addr.latitude && addr.longitude) {
-    coordEl.innerText = `📡 Locked GPS: [${Number(addr.latitude).toFixed(6)}, ${Number(addr.longitude).toFixed(6)}]`;
+  if (coordEl) {
+    if (addr.latitude && addr.longitude) {
+      coordEl.innerText = `📡 Locked GPS: [${Number(addr.latitude).toFixed(6)}, ${Number(addr.longitude).toFixed(6)}]`;
+    } else {
+      coordEl.innerText = '📡 Resolving GPS...';
+      autoResolveAddressCoordinates(addr);
+    }
   }
   renderReceiverHistoryPills();
 }
@@ -3112,14 +3164,15 @@ function onReceiverDetailsChange() {
 
   if (preview) {
     const cleanPhone = rPhone.replace(/[^0-9]/g, '').slice(-10);
+    const displayPhone = cleanPhone || (curAddr.phone || currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10);
     preview.innerHTML = `
       <div style="margin-bottom: 4px;">
         <span style="font-weight: 800; color: #0f172a; font-size: 13px;">📍 ${activeFlat}</span>, <span style="color: #334155;">${completeAddr}${landmark}</span>
       </div>
       <div style="font-size: 11px; color: #475569; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-        <span>👤 <strong>${rName || curAddr.name || 'Receiver'}</strong></span>
+        <span>👤 <strong>${rName || curAddr.name || currentUser.name || 'Receiver'}</strong></span>
         <span>•</span>
-        <span>📞 <strong>+91 ${cleanPhone || (curAddr.phone || '').replace(/[^0-9]/g, '').slice(-10)}</strong></span>
+        <span>📞 <strong>${displayPhone ? `+91 ${displayPhone}` : 'No phone set'}</strong></span>
       </div>
       <div style="margin-top: 4px; font-size: 11px; color: #0284c7; font-weight: 700; display: flex; align-items: center; gap: 4px;">
         <span>🛵</span> <span>Domino's delivery rider will call this number upon doorstep arrival.</span>
@@ -3146,9 +3199,14 @@ function renderReceiverHistoryPills() {
     history = JSON.parse(localStorage.getItem('dominos_recent_receivers') || '[]');
   } catch (e) {}
 
-  if (history.length === 0) {
-    // Add default user receiver pill
-    history.push({ name: currentUser.name || 'Parth', phone: (currentUser.phone || currentUser.phone || '').replace(/[^0-9]/g, '').slice(-10) });
+  // Filter out any mock dummy numbers like 9876543210 and invalid phones
+  history = history.filter(h => h && h.phone && !h.phone.includes('9876543210') && /^[6-9]\d{9}$/.test(h.phone.replace(/[^0-9]/g, '').slice(-10)));
+
+  if (history.length === 0 && currentUser.phone && !currentUser.phone.includes('9876543210')) {
+    const cleanP = currentUser.phone.replace(/[^0-9]/g, '').slice(-10);
+    if (cleanP.length === 10) {
+      history.push({ name: currentUser.name || 'User', phone: cleanP });
+    }
   }
 
   container.innerHTML = history.slice(0, 3).map(rec => `
