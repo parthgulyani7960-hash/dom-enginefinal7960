@@ -288,8 +288,9 @@ async function executeMiddlemanOrderOnDominos({
   const receiverPhone = (addr.phone || customerOrder.user?.phone || cleanMobile).replace(/[^0-9]/g, '').slice(-10);
   const receiverName = addr.name || customerOrder.user?.name || 'Customer';
   const fullStreet = [addr.flat, addr.building, addr.street].filter(Boolean).join(', ') || addr.completeAddress || 'Delivery Address';
-  const cityStr = addr.city || 'Chandigarh';
-  const pincodeStr = addr.pincode || '160015';
+  const detectedPincode = (fullStreet.match(/\\b([1-9][0-9]{5})\\b/) || [])[1];
+  const pincodeStr = addr.pincode || detectedPincode || '110059';
+  const cityStr = addr.city || (customerOrder.location?.nearestCity && !customerOrder.location.nearestCity.toLowerCase().includes('outside') ? customerOrder.location.nearestCity : null) || 'Delhi';
   const formattedAddress = `${fullStreet}, ${cityStr} ${pincodeStr}`.trim();
   const addressIdNum = Math.floor(1000000000 + Math.random() * 900000000);
 
@@ -678,11 +679,16 @@ async function executeMiddlemanOrderOnDominos({
             const wraps = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
             const real = wraps.find(w => {
               if (w.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="suggestion" i]')) return false;
-              const hasAddOnly = w.querySelector('button.cta-add, button:has-text("Add +")') && !w.querySelector('.anim-ico-minus, .product-item-quantity, .itm-qty');
+              const btns = Array.from(w.querySelectorAll('button, .cta-add, .btn-add, div.main-cta'));
+              const hasAddOnly = btns.some(b => (b.innerText || '').toLowerCase().includes('add')) && !w.querySelector('.anim-ico-minus, .product-item-quantity, .itm-qty');
               return !hasAddOnly;
             });
             if (real) {
-              const minus = real.querySelector('.anim-ico-minus, [class*="minus"], span:has-text("-"), button:has-text("-")');
+              let minus = real.querySelector('.anim-ico-minus, [class*="minus"]');
+              if (!minus) {
+                const els = Array.from(real.querySelectorAll('button, span, div'));
+                minus = els.find(e => e.innerText && e.innerText.trim() === '-' && e.children.length === 0) || null;
+              }
               if (minus) {
                 minus.click();
                 return true;
@@ -794,7 +800,8 @@ async function executeMiddlemanOrderOnDominos({
               // Clean search input field without clicking modal close icons
               await searchInput.fill('');
               await searchInput.fill(query);
-              await sleep(250);
+              await searchInput.press('Enter').catch(() => {});
+              await sleep(650);
 
               // Strictly match and click target card directly in the DOM without index mismatch
               const clickResult = await page.evaluate(({ rName, cName, expPrice }) => {
@@ -811,8 +818,8 @@ async function executeMiddlemanOrderOnDominos({
                   .trim();
 
                 const normTarget = norm(cName || rName);
-                // Target strictly top-level search cards (never nested .card-content to prevent duplicate or parent/child misclicks)
-                const searchCards = Array.from(document.querySelectorAll('.card-item-search, [data-label="product-card"], .search-item, .search-card')).filter(c => c.querySelector('button.cta-add, button, div.main-cta, [class*="cta-add"], [class*="main-cta"], .anim-ico-plus, [class*="plus"]'));
+                // Target all product cards across search results and menu
+                const searchCards = Array.from(document.querySelectorAll('.card-item-search, [data-label="product-card"], .search-item, .search-card, .card-content, .product-card, div[class*="card"]')).filter(c => c.querySelector('button, .cta-add, .btn-add, div.main-cta, .anim-ico-plus, [class*="plus"]'));
 
                 const hasFamilyConflict = (h, target) => {
                   const families = ['burger', 'dominoid', 'volcano', 'lava', 'paratha', 'taco', 'pasta', 'dip', 'beverage', 'dessert'];
@@ -824,12 +831,16 @@ async function executeMiddlemanOrderOnDominos({
 
                 const clickCardBtn = (card) => {
                   // If card is already added to cart and showing stepper (+ / -), click the plus button!
-                  const plusBtn = card.querySelector('.anim-ico-plus, [class*="plus"], button:has-text("+"), span:has-text("+")');
+                  let plusBtn = card.querySelector('.anim-ico-plus, [class*="plus"]');
+                  if (!plusBtn) {
+                    const els = Array.from(card.querySelectorAll('button, span, div'));
+                    plusBtn = els.find(e => e.innerText && e.innerText.trim() === '+' && e.children.length === 0) || null;
+                  }
                   if (plusBtn) {
                     plusBtn.click();
                     return true;
                   }
-                  const btn = card.querySelector('.main-cta button, button.cta-add, [class*="cta-add"], button, div.main-cta');
+                  const btn = card.querySelector('.main-cta button, button.cta-add, [class*="cta-add"], button, div.main-cta, .btn-add');
                   if (btn) {
                     btn.click();
                     return true;
@@ -906,7 +917,7 @@ async function executeMiddlemanOrderOnDominos({
               // Check if bottom drawer confirmation button popped up (strictly scoped inside dialog/bottom-sheet)
               const drawerModal = page.locator('div[class*="drawer"], div[class*="bottom-sheet"], [role="dialog"], .customization-drawer').first();
               if (await drawerModal.isVisible({ timeout: 1200 }).catch(() => false)) {
-                const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart")').first();
+                const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart"), button:has-text("Add"), button:has-text("ADD"), button:has-text("I CHOOSE"), button:has-text("Continue"), [class*="add-to-cart" i]').first();
                 if (await drawerBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
                   onProgress(`[MIDDLEMAN-ENGINE] 📝 Confirming product drawer Add button...`);
                   await drawerBtn.click({ force: true }).catch(() => {});
@@ -919,6 +930,19 @@ async function executeMiddlemanOrderOnDominos({
             }
           }
         } catch (sErr) {}
+
+        // If not added via search, ensure search modal is dismissed so background menu tabs/items are unblocked
+        if (!added) {
+          try {
+            await page.evaluate(() => {
+              const closeBtns = document.querySelectorAll('.jfi-back-v2, .search-clear-icon, button.search-back, .jfi-close, .close-search, [aria-label*="close" i], [aria-label*="back" i]');
+              for (const b of closeBtns) {
+                if (b.offsetParent !== null) { b.click(); break; }
+              }
+            });
+            await sleep(400);
+          } catch (_) {}
+        }
 
         // Strategy 2: Direct on-page item card matching & category tab cycling
         if (!added) {
@@ -1003,7 +1027,7 @@ async function executeMiddlemanOrderOnDominos({
         if (added && !addedViaSearch) {
           const drawerModal = page.locator('div[class*="drawer"], div[class*="bottom-sheet"], [role="dialog"], .customization-drawer').first();
           if (await drawerModal.isVisible({ timeout: 1200 }).catch(() => false)) {
-            const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart")').first();
+            const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart"), button:has-text("Add"), button:has-text("ADD"), button:has-text("I CHOOSE"), button:has-text("Continue"), [class*="add-to-cart" i]').first();
             if (await drawerBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
               await drawerBtn.click({ force: true }).catch(() => {});
               await sleep(1000);
@@ -1037,7 +1061,11 @@ async function executeMiddlemanOrderOnDominos({
                 if (normH === normTarget || normH.includes(normTarget) || normTarget.includes(normH)) {
                   let clicks = 0;
                   for (let k = 0; k < count; k++) {
-                    const plus = card.querySelector('.anim-ico-plus, [class*="plus"]');
+                    let plus = card.querySelector('.anim-ico-plus, [class*="plus"]');
+                    if (!plus) {
+                      const els = Array.from(card.querySelectorAll('button, span, div'));
+                      plus = els.find(e => e.innerText && e.innerText.trim() === '+' && e.children.length === 0) || null;
+                    }
                     if (plus) {
                       plus.click();
                       clicks++;
@@ -1246,7 +1274,8 @@ async function executeMiddlemanOrderOnDominos({
         // Ensure card is an actual cart item and not a recommendation/upsell carousel item
         const isCartItem = await card.evaluate(c => {
           if (c.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="recommend" i], [class*="suggestion" i], [class*="cross-sell" i]')) return false;
-          const hasAddOnly = !!c.querySelector('button.cta-add, .btn-add, div.main-cta, button:has-text("Add")') && !c.querySelector('.anim-ico-minus, [class*="minus"], .product-item-quantity, .itm-qty, .item-quantity, [class*="stepper"]');
+          const btns = Array.from(c.querySelectorAll('button, .cta-add, .btn-add, div.main-cta'));
+          const hasAddOnly = btns.some(b => (b.innerText || '').toLowerCase().includes('add')) && !c.querySelector('.anim-ico-minus, [class*="minus"], .product-item-quantity, .itm-qty, .item-quantity, [class*="stepper"]');
           return !hasAddOnly;
         }).catch(() => false);
         if (!isCartItem) continue;
@@ -1761,7 +1790,11 @@ async function executeMiddlemanOrderOnDominos({
 
             // Verify reflected balance on Domino's page (e.g. ₹100 or ₹200)
             const balanceInfo = await page.evaluate(() => {
-              const balEl = document.querySelector('.voucher-balance, [class*="balance" i], .evoucher-amt, span:has-text("₹")');
+              let balEl = document.querySelector('.voucher-balance, [class*="balance" i], .evoucher-amt');
+              if (!balEl) {
+                const spans = Array.from(document.querySelectorAll('span, div, p'));
+                balEl = spans.find(s => s.innerText && s.innerText.includes('₹') && s.children.length === 0) || null;
+              }
               const txt = balEl ? balEl.innerText.replace(/[^0-9.]/g, '') : null;
               return txt ? parseFloat(txt) : null;
             });
