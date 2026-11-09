@@ -2738,6 +2738,7 @@ function onPaymentMethodChange(method) {
 
 function removeOutOfStockCartItems() {
   const initialCount = cart.length;
+  const storeName = currentResolvedStore?.storeName || 'nearest Domino\'s kitchen';
   cart = cart.filter(item => {
     if (item.isAvailable === false) return false;
     if (catalog.menu && catalog.menu.length > 0) {
@@ -2748,9 +2749,13 @@ function removeOutOfStockCartItems() {
   });
   const removed = initialCount - cart.length;
   updateCartBadge();
-  renderCartDrawer(false);
-  showToastNotice(`Removed ${removed} out-of-stock item(s) from cart.`, '🗑️');
+  renderFloatingCartBar();
+  renderCartDrawer(true);
+  verifyCartWithKitchen();
+  showToastNotice(`Removed ${removed} unavailable item(s). Cart rebuilt with live ${storeName} inventory!`, '✅');
 }
+window.removeOutOfStockCartItems = removeOutOfStockCartItems;
+window.rebuildCartWithAvailableItems = removeOutOfStockCartItems;
 
 // Inline Address Quick Add within Cart Drawer
 function toggleCartInlineAddAddress(show = null) {

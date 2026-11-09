@@ -9,6 +9,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Domino's Order Engine Admin | Live Session Manager &amp; Voucher Vault</title>
   <link rel="stylesheet" href="/style.css?v=20261102.2">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <style>
     /* System Info Tooltip Dot */
     .info-dot {
@@ -1267,8 +1270,14 @@
             </div>
             <div style="display: flex; gap: 12px;">
               <div class="form-group" style="flex: 1; margin-bottom: 12px;">
-                <label class="form-label">Merchant Code (MCC)</label>
+                <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+                  <span>Merchant Code (MCC)</span>
+                  <span class="info-dot" onclick="showAdminSystemInfo('upiInfo')" title="What is Merchant Code?">i</span>
+                </label>
                 <input type="text" id="payReceiverMerchantCode" class="form-input" placeholder="DOM-5819">
+                <span style="font-size: 11px; color: #64748b; display: block; margin-top: 4px; line-height: 1.3;">
+                  NPCI Merchant Category Code (e.g. <code>DOM-5819</code> or <code>5812</code> for Fast Food). Ensures GPay &amp; PhonePe treat UPI transfers as verified business payments.
+                </span>
               </div>
               <div class="form-group" style="flex: 2; margin-bottom: 12px;">
                 <label class="form-label">Transaction Note Template</label>

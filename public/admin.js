@@ -68,17 +68,22 @@ let isAdminAuthenticated = false;
 
 // Helper for authenticated admin API requests (Uses dynamic session token or entered passkey)
 function getAdminAuthHeaders() {
+
   const headers = {};
   const token = sessionStorage.getItem('dom_admin_token') || localStorage.getItem('dom_admin_token');
   if (token) {
     headers['x-admin-token'] = token;
   }
-  const passkey = sessionStorage.getItem('dom_admin_passkey') || localStorage.getItem('dom_admin_passkey') || 'dom-admin-sec-2026';
+  const passkey = sessionStorage.getItem('dom_admin_passkey') || localStorage.getItem('dom_admin_passkey');
   if (passkey) {
     headers['x-admin-key'] = passkey;
   }
   return headers;
 }
+
+const getAdminHeaders = getAdminAuthHeaders;
+window.getAdminHeaders = getAdminHeaders;
+window.getAdminAuthHeaders = getAdminAuthHeaders;
 
 function adminFetch(url, options = {}) {
   const headers = { ...options.headers, ...getAdminAuthHeaders() };
@@ -163,7 +168,7 @@ async function checkAdminAuthStatus() {
   } catch (e) {}
 
   // 2. Auto-authenticate via saved passkey or default administrative passkey
-  const savedPasskey = localStorage.getItem('dom_admin_passkey') || sessionStorage.getItem('dom_admin_passkey') || 'dom-admin-sec-2026';
+  const savedPasskey = localStorage.getItem('dom_admin_passkey') || sessionStorage.getItem('dom_admin_passkey');
   if (savedPasskey) {
     try {
       const loginRes = await fetch('/api/admin/auth/login', {
@@ -183,27 +188,7 @@ async function checkAdminAuthStatus() {
     } catch (e) {}
   }
 
-  // 3. Auto-authenticate designated admin (parthgulyani7960@gmail.com) if logged in on customer storefront
-  try {
-    const stored = localStorage.getItem('dominos_user');
-    if (stored) {
-      const u = JSON.parse(stored);
-      if (u && u.email && u.email.toLowerCase() === 'parthgulyani7960@gmail.com') {
-        const loginRes = await fetch('/api/admin/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: u.email, adminSessionConfirmed: true })
-        });
-        const loginData = await loginRes.json();
-        if (loginRes.ok && loginData.success && loginData.token) {
-          sessionStorage.setItem('dom_admin_token', loginData.token);
-          localStorage.setItem('dom_admin_token', loginData.token);
-          onAdminUnlocked(loginData.email || u.email);
-          return true;
-        }
-      }
-    }
-  } catch (e) {}
+  // Auto-login backdoor removed for strict admin security.
 
   showAdminAuthGate();
   return false;
@@ -289,18 +274,38 @@ window.adminUnlockWithPasskey = adminUnlockWithPasskey;
 
 async function adminUnlockWithGoogle() {
   const errEl = document.getElementById('adminGateErrorMsg');
-  if (errEl) errEl.innerText = 'Authenticating with Google Identity...';
+  if (errEl) errEl.innerText = 'Connecting to Google Authentication...';
 
-  // Check if active user in localStorage is already parthgulyani7960@gmail.com
+  // 1. Authenticate via Firebase Google Popup
   try {
-    const stored = localStorage.getItem('dominos_user');
-    if (stored) {
-      const u = JSON.parse(stored);
-      if (u && u.email && u.email.toLowerCase() === 'parthgulyani7960@gmail.com') {
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      if (!firebase.apps.length) {
+        try {
+          const cfgRes = await fetch('/api/firebase/config');
+          if (cfgRes.ok) {
+            const cfg = await cfgRes.json();
+            if (cfg && cfg.apiKey) {
+              firebase.initializeApp(cfg);
+            }
+          }
+        } catch (_) {}
+      }
+
+      if (firebase.apps.length) {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        const cred = await firebase.auth().signInWithPopup(provider);
+        const user = cred.user;
+        if (!user || !user.email) throw new Error('No Google account was selected.');
+        if (user.email.toLowerCase() !== 'parthgulyani7960@gmail.com') {
+          await firebase.auth().signOut();
+          throw new Error('Access Denied: ' + user.email + ' is not authorized. Administrative access is strictly limited to parthgulyani7960@gmail.com.');
+        }
+        const idToken = await user.getIdToken();
         const res = await fetch('/api/admin/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: u.email, adminSessionConfirmed: true })
+          body: JSON.stringify({ credential: idToken })
         });
         const data = await res.json();
         if (res.ok && data.success) {
@@ -308,13 +313,50 @@ async function adminUnlockWithGoogle() {
           showToast('Welcome, Administrator Parth Gulyani!', '🛡️');
           onAdminUnlocked(data.email);
           return;
+        } else {
+          throw new Error(data.error || 'Server rejected administrative token.');
         }
       }
     }
-  } catch (e) {}
+  } catch (fbErr) {
+    if (fbErr.code === 'auth/popup-closed-by-user') {
+      if (errEl) errEl.innerText = 'Google Sign-In popup was closed.';
+      return;
+    }
+    if (errEl) errEl.innerText = fbErr.message || 'Google authentication failed.';
+    return;
+  }
 
-  // Fallback to prompting user to sign in on storefront or enter master key
-  if (errEl) errEl.innerHTML = 'Please enter your Admin Master Key below, or <a href="/" style="color: #38bdf8; text-decoration: underline;">Sign In with Google (parthgulyani7960@gmail.com)</a> on the customer storefront first.';
+  // 2. Google Identity Services (GSI)
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    google.accounts.id.initialize({
+      client_id: '80843429271-9u3u5l2q4m5o6v7a8.apps.googleusercontent.com',
+      callback: async (resp) => {
+        if (!resp.credential) return;
+        try {
+          const res = await fetch('/api/admin/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ credential: resp.credential })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            sessionStorage.setItem('dom_admin_token', data.token);
+            showToast('Welcome, Administrator Parth Gulyani!', '🛡️');
+            onAdminUnlocked(data.email);
+          } else {
+            if (errEl) errEl.innerText = data.error || 'Access denied.';
+          }
+        } catch (e) {
+          if (errEl) errEl.innerText = 'Login error: ' + e.message;
+        }
+      }
+    });
+    google.accounts.id.prompt();
+    return;
+  }
+
+  if (errEl) errEl.innerHTML = 'Please enter your Admin Master Passkey above, or sign in via Google Identity.';
 }
 window.adminUnlockWithGoogle = adminUnlockWithGoogle;
 
@@ -4589,18 +4631,20 @@ function openAdminInfoModal(topic) {
       <button type="button" class="btn-primary" onclick="closeModal('adminInfoModal')" style="width: 100%; padding: 10px; margin-top: 14px; background: #0066a3; cursor: pointer;">Got It</button>
     `;
   } else if (topic === 'upiInfo') {
-    title.innerHTML = 'ℹ️ How Dynamic UPI Payment Receiver Works';
+    title.innerHTML = 'ℹ️ How Dynamic UPI Payment Receiver &amp; Merchant Code Work';
     body.innerHTML = `
       <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
-        <strong style="color: #1e40af; font-size: 13px;">⚡ Dynamic Real-Time Payee Routing</strong>
+        <strong style="color: #1e40af; font-size: 13px;">⚡ Dynamic Real-Time Payee Routing &amp; Merchant Code (MCC)</strong>
         <p style="margin: 4px 0 0; font-size: 12px; color: #1e3a8a;">
-          Configure your merchant UPI VPA (e.g. <code>dominos.pay@okhdfcbank</code>) and Payee name. Changes take effect instantly for all customers.
+          Configure your receiving UPI VPA (e.g. <code>dominos.pay@okhdfcbank</code>), Payee Name, and Merchant Code (MCC). Changes take effect instantly for all dynamic QR codes and mobile UPI intent links.
         </p>
       </div>
-      <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
-        <li><strong>Dynamic QR Generation:</strong> Every customer deposit or order generates a standard NPCI UPI URI string (<code>upi://pay?pa=...&amp;pn=...&amp;am=...&amp;tr=...&amp;tn=...</code>).</li>
-        <li><strong>Embedded Transaction Reference:</strong> Each transaction embeds a unique reference (e.g. <code>DEP-XXXXXX</code> or <code>ORD-XXXXXX</code>) so incoming bank alerts can be matched effortlessly without needing the customer to enter a manual UTR.</li>
-        <li><strong>Instant App Deep-Linking:</strong> Mobile customers can tap <em>Pay via UPI App</em> to launch Google Pay, PhonePe, or Paytm with the payee and amount prefilled.</li>
+      <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+        <li><strong>What is Merchant Code (MCC)?</strong> A Merchant Category Code (e.g. <code>DOM-5819</code> or NPCI standard <code>5812</code> for Eating Places / Restaurants). In UPI strings (<code>&amp;mc=DOM-5819</code>), it informs Google Pay, PhonePe, and Paytm that the recipient is a verified commercial merchant outlet rather than an individual person.</li>
+        <li><strong>Why Merchant Code is Important:</strong> Banking apps give verified merchant transactions higher transaction limits, display the verified green business badge, and apply instant merchant settlement instead of triggering personal transfer warnings.</li>
+        <li><strong>Dynamic QR Generation:</strong> Every customer deposit or order generates an authentic NPCI UPI URI string (<code>upi://pay?pa=...&amp;pn=...&amp;mc=...&amp;am=...&amp;tr=...&amp;tn=...</code>).</li>
+        <li><strong>Embedded Transaction Reference:</strong> Each transaction embeds a unique reference (e.g. <code>DEP-XXXXXX</code> or <code>ORD-XXXXXX</code>) so incoming payments are matched automatically without requiring customers to type a manual UTR.</li>
+        <li><strong>Instant App Deep-Linking:</strong> Mobile customers can tap <em>Pay via UPI App</em> to launch Google Pay, PhonePe, or Paytm with the payee, merchant code, and amount prefilled.</li>
       </ol>
       <button type="button" class="btn-primary" onclick="closeModal('adminInfoModal')" style="width: 100%; padding: 10px; margin-top: 14px; background: #0066a3; cursor: pointer;">Got It</button>
     `;

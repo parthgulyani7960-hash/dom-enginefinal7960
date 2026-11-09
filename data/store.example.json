@@ -1,0 +1,52 @@
+{
+  "accounts": [],
+  "couponRules": {
+    "NEWBIE100": {
+      "discount": 100,
+      "minCart": 200,
+      "tier": "NEW_ACCOUNT"
+    },
+    "CHEESY": {
+      "discount": 80,
+      "minCart": 150,
+      "tier": "CHEESY"
+    },
+    "DOMNEW50": {
+      "discount": 50,
+      "minCart": 100,
+      "tier": "NEW_ACCOUNT"
+    }
+  },
+  "paymentSettings": {
+    "upiId": "merchant@upi",
+    "payeeName": "Domino's Kitchen Outlet",
+    "merchantCode": "DOM-5819",
+    "note": "Domino's Order Payment",
+    "codEnabled": true,
+    "upiEnabled": true
+  },
+  "vouchers": [],
+  "combos": [],
+  "menu": [],
+  "dominosRegisteredPhones": [],
+  "orders": [],
+  "walletDeposits": [],
+  "walletWithdrawals": [],
+  "announcements": [],
+  "tickets": [],
+  "userProfile": {
+    "name": "Customer",
+    "phone": "",
+    "email": "",
+    "savedAddresses": []
+  },
+  "users": [],
+  "notifications": [],
+  "maintenanceMode": {
+    "active": false,
+    "message": "",
+    "until": null
+  },
+  "deletedUserIds": [],
+  "deletedAccountIds": []
+}

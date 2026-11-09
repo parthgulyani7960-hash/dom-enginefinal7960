@@ -640,11 +640,14 @@
       </div>
       <div class="modal-body">
         <!-- Out of Stock Warning Banner -->
-        <div id="cartOutOfStockWarning" style="display: none; background: #fef2f2; border: 1.5px solid #f87171; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: #991b1b; font-weight: 700;">
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <div>⚠️ Some items are currently out of stock at your local Domino's kitchen.</div>
-            <button type="button" onclick="removeOutOfStockCartItems()" style="background: #dc2626; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; cursor: pointer;">
-              🗑️ Remove Out-of-Stock Items
+        <div id="cartOutOfStockWarning" style="display: none; background: #fef2f2; border: 1.5px solid #f87171; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; font-size: 12px; color: #991b1b; font-weight: 700;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: #991b1b; margin-bottom: 2px;">⚠️ Items Unavailable at Delivering Kitchen</div>
+              <div style="font-size: 11px; color: #b91c1c; font-weight: 500;">Some items in your cart cannot be prepared by the kitchen servicing your location. Rebuild your cart to keep in-stock items and proceed.</div>
+            </div>
+            <button type="button" onclick="removeOutOfStockCartItems()" style="background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(220,38,38,0.25);">
+              <span>🔄</span> <span>Rebuild Cart (Keep In-Stock)</span>
             </button>
           </div>
         </div>

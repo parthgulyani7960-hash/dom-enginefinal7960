@@ -4,8 +4,14 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Sensitive credentials (never commit private keys to GitHub)
+# Sensitive credentials and live runtime database (never commit user data or private keys to GitHub)
 data/firebase-service-account.json
+data/store.json
+data/store.json.backup
+data/firebase_config.json
+data/proxy_config.json
+*.secret
+*.key
 
 # OS and Temp Files
 .DS_Store

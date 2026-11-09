@@ -509,9 +509,6 @@ const server = http.createServer(async (req, res) => {
           authorized = true;
           authedEmail = payload.email.toLowerCase();
         }
-      } else if (email && ADMIN_EMAILS.has(email) && body.adminSessionConfirmed) {
-        authorized = true;
-        authedEmail = email;
       }
 
       if (!authorized) {
