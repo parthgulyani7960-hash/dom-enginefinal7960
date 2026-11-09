@@ -1573,6 +1573,11 @@ async function loadPaymentReceiverSettings() {
       if (mccInput) mccInput.value = settings.merchantCode || 'DOM-5819';
       if (noteInput) noteInput.value = settings.note || "Domino's Order Payment";
 
+      const codBox = document.getElementById('payReceiverCodEnabled');
+      if (codBox) codBox.checked = settings.codEnabled !== false;
+      const upiBox = document.getElementById('payReceiverUpiEnabled');
+      if (upiBox) upiBox.checked = settings.upiEnabled !== false;
+
       updateQrPreviewString(settings);
     }
   } catch (err) {
@@ -1599,11 +1604,14 @@ async function savePaymentReceiverSettings() {
     return;
   }
 
+  const codEnabled = document.getElementById('payReceiverCodEnabled')?.checked !== false;
+  const upiEnabled = document.getElementById('payReceiverUpiEnabled')?.checked !== false;
+
   try {
     const res = await adminFetch('/api/admin/payment-settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ upiId, payeeName, merchantCode, note })
+      body: JSON.stringify({ upiId, payeeName, merchantCode, note, codEnabled, upiEnabled })
     });
     const data = await res.json();
     if (!data.success) throw new Error(data.error);
@@ -1620,6 +1628,113 @@ async function savePaymentReceiverSettings() {
 // =========================================================================
 
 let cachedAdminOrders = [];
+let currentAdminOrderFilter = 'ALL'; // 'ALL' | 'ACTIVE' | 'DELIVERED' | 'FAILED'
+
+const ROBOT_ACTIVE_STATUSES = [
+  'QUEUED_FOR_ROBOT', 'SESSION_ASSIGNING', 'STORE_RESOLVING', 
+  'BUILDING_CART', 'APPLYING_COUPON', 'STORE_CONFIRMATION', 
+  'BAKING', 'PACKED', 'DISPATCHED', 'OUT_FOR_DELIVERY', 
+  'WAITING_ADMIN_DECISION', 'PROCESSING', 'ASSIGNED', 'IN_KITCHEN', 'ROBOT_DISPATCHING'
+];
+
+function filterByRobotCategory(cat) {
+  currentAdminOrderFilter = cat;
+  
+  const cards = {
+    'ACTIVE': document.getElementById('statCardActive'),
+    'DELIVERED': document.getElementById('statCardDelivered'),
+    'FAILED': document.getElementById('statCardFailed'),
+    'ALL': document.getElementById('statCardAll')
+  };
+  Object.keys(cards).forEach(k => {
+    if (cards[k]) {
+      cards[k].style.boxShadow = (k === cat) ? '0 0 0 3px #0284c7' : 'none';
+    }
+  });
+
+  const liveRing = document.getElementById('adminLiveRobotRingFeed');
+  if (liveRing) {
+    liveRing.style.display = (cat === 'ACTIVE') ? 'block' : 'none';
+    if (cat === 'ACTIVE') renderLiveRobotRingFeed();
+  }
+
+  const searchInput = document.getElementById('adminOrderSearchInput');
+  filterAdminOrders(searchInput ? searchInput.value.trim() : '');
+}
+window.filterByRobotCategory = filterByRobotCategory;
+
+function renderLiveRobotRingFeed() {
+  const container = document.getElementById('adminLiveRobotRingFeed');
+  if (!container) return;
+
+  const activeOrders = cachedAdminOrders.filter(o => ROBOT_ACTIVE_STATUSES.includes((o.robot?.status || o.status || '').toUpperCase()));
+
+  if (activeOrders.length === 0) {
+    container.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #22c55e;"></span>
+          <strong style="font-size: 14px; letter-spacing: 0.3px;">🤖 Live Robot Execution Cockpit Ring (0 Active Workers)</strong>
+        </div>
+        <span style="font-size: 11px; color: #94a3b8;">All orders completed or waiting payment approval</span>
+      </div>
+      <div style="margin-top: 10px; font-size: 12px; color: #64748b; background: rgba(255,255,255,0.04); padding: 12px; border-radius: 8px;">
+        No robots currently executing tasks on Domino's website. Approve an incoming order above to dispatch worker immediately.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 10px #22c55e;"></span>
+        <strong style="font-size: 14px; letter-spacing: 0.3px;">🤖 Live Robot Execution Cockpit Ring (${activeOrders.length} Active Workers)</strong>
+      </div>
+      <span style="font-size: 11px; color: #38bdf8;">Real-Time Playwright Function Stream • Auto-Updating Every 3s</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px;">
+      ${activeOrders.map(o => {
+        const r = o.robot || {};
+        const st = (r.status || o.status || 'ACTIVE').toUpperCase();
+        const logs = r.logs || [];
+        const latestLog = logs[logs.length - 1] || 'Executing Domino\'s site automation...';
+        const sessionPhone = r.accountPhone || r.sessionPhone || 'Session #001';
+        const store = r.storeName || o.address?.storeName || 'Domino\'s Kitchen';
+
+        return `
+          <div style="background: #1e293b; border: 1.5px solid #334155; border-radius: 10px; padding: 12px 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+              <div>
+                <strong style="color: #38bdf8; font-size: 13px;">#${o.id}</strong>
+                <div style="font-size: 11px; color: #cbd5e1;">${escapeHtml(o.user?.name || 'Customer')}</div>
+              </div>
+              <span style="background: #0284c7; color: white; font-weight: 800; font-size: 10px; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">
+                ⚡ ${st}
+              </span>
+            </div>
+            <div style="font-size: 11px; color: #94a3b8; margin-bottom: 6px; display: flex; flex-direction: column; gap: 2px;">
+              <div>📱 <strong>Session:</strong> ${sessionPhone}</div>
+              <div>🏪 <strong>Kitchen:</strong> ${escapeHtml(store)}</div>
+            </div>
+            <div style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 6px 8px; font-family: monospace; font-size: 10.5px; color: #a5f3fc; line-height: 1.4; margin-bottom: 8px; max-height: 48px; overflow: hidden; text-overflow: ellipsis;">
+              &gt; ${escapeHtml(latestLog)}
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" onclick="openOrderDossier('${o.id}')" style="flex: 1; background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer;">
+                ⚡ Live Cockpit Stream
+              </button>
+              <button type="button" onclick="openAdminOrderTracker('${o.id}')" style="background: #334155; color: #f1f5f9; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                🔍 Track
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+window.renderLiveRobotRingFeed = renderLiveRobotRingFeed;
 
 async function loadOrders() {
   try {
@@ -1635,18 +1750,15 @@ async function loadOrders() {
     if (no) no.innerText = orders.length;
 
     // Calculate Live Robot Dispatches Telemetry
-    const activeCount = orders.filter(o => {
-      const st = (o.robot?.status || o.status || '').toUpperCase();
-      return ['PROCESSING', 'ASSIGNED', 'BAKING', 'IN_KITCHEN', 'OUT_FOR_DELIVERY', 'ROBOT_DISPATCHING'].includes(st);
-    }).length;
-    const deliveredCount = orders.filter(o => {
-      const st = (o.robot?.status || o.status || '').toUpperCase();
-      return ['DELIVERED', 'COMPLETED', 'ORDER_PLACED'].includes(st);
-    }).length;
-    const failedCount = orders.filter(o => {
-      const st = (o.robot?.status || o.status || '').toUpperCase();
-      return ['ERROR', 'FAILED', 'CANCELLED'].includes(st);
-    }).length;
+    const activeOrders = orders.filter(o => ROBOT_ACTIVE_STATUSES.includes((o.robot?.status || o.status || '').toUpperCase()));
+    const deliveredOrders = orders.filter(o => ['DELIVERED', 'COMPLETED'].includes((o.robot?.status || o.status || '').toUpperCase()));
+    const failedOrders = orders.filter(o => ['ERROR', 'FAILED', 'CANCELLED'].includes((o.robot?.status || o.status || '').toUpperCase()));
+
+    const activeCount = activeOrders.length;
+    const deliveredCount = deliveredOrders.length;
+    const failedCount = failedOrders.length;
+    const totalProcessed = deliveredCount + failedCount + activeCount;
+    const errorRate = totalProcessed > 0 ? ((failedCount / totalProcessed) * 100).toFixed(1) : '0.0';
     const totalVolume = orders.reduce((sum, o) => sum + (Number(o.payment?.amount) || Number(o.robot?.billAmount) || 0), 0);
 
     const elActive = document.getElementById('statActiveRobotOrders');
@@ -1655,8 +1767,14 @@ async function loadOrders() {
     if (elDelivered) elDelivered.innerText = `${deliveredCount} Delivered`;
     const elFailed = document.getElementById('statFailedOrders');
     if (elFailed) elFailed.innerText = `${failedCount} Failed`;
+    const elRate = document.getElementById('statErrorRateBadge');
+    if (elRate) elRate.innerText = `${errorRate}% Error Rate`;
     const elVol = document.getElementById('statDispatchedVolume');
     if (elVol) elVol.innerText = `₹${totalVolume}`;
+
+    if (currentAdminOrderFilter === 'ACTIVE') {
+      renderLiveRobotRingFeed();
+    }
 
     const searchInput = document.getElementById('adminOrderSearchInput');
     const q = searchInput ? searchInput.value.trim() : '';
@@ -1667,12 +1785,21 @@ async function loadOrders() {
 }
 
 function filterAdminOrders(query = '') {
+  let baseOrders = cachedAdminOrders;
+  if (currentAdminOrderFilter === 'ACTIVE') {
+    baseOrders = baseOrders.filter(o => ROBOT_ACTIVE_STATUSES.includes((o.robot?.status || o.status || '').toUpperCase()));
+  } else if (currentAdminOrderFilter === 'DELIVERED') {
+    baseOrders = baseOrders.filter(o => ['DELIVERED', 'COMPLETED'].includes((o.robot?.status || o.status || '').toUpperCase()));
+  } else if (currentAdminOrderFilter === 'FAILED') {
+    baseOrders = baseOrders.filter(o => ['ERROR', 'FAILED', 'CANCELLED'].includes((o.robot?.status || o.status || '').toUpperCase()));
+  }
+
   if (!query) {
-    renderAdminOrders(cachedAdminOrders);
+    renderAdminOrders(baseOrders);
     return;
   }
   const q = query.toLowerCase().trim();
-  const filtered = cachedAdminOrders.filter(o => {
+  const filtered = baseOrders.filter(o => {
     const engRef = String(o.id || o.engineOrderRef || '').toLowerCase();
     const domRef = String(o.dominosOrderRef || o.robot?.dominosOrderRef || '').toLowerCase();
     const uid12 = String(o.userId12 || o.user?.userId12 || '').toLowerCase();
@@ -4664,14 +4791,12 @@ function renderAdminMenuTable(items = []) {
       ? `${Math.round(((originalPrice - item.price) / originalPrice) * 100)}%`
       : '0%';
 
-    const imgUrl = (item.imageUrl && !item.imageUrl.includes('images.dominos.co.in')) 
-      ? item.imageUrl 
-      : ((item.image && !item.image.includes('images.dominos.co.in')) ? item.image : 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80');
+    const imgUrl = item.imageUrl || item.image || '/images/menu/margherita.webp';
 
     return `
       <tr id="admin-row-${item.id}" style="${!isAvail ? 'background: #fef2f2; opacity: 0.85;' : ''}">
         <td>
-          <img src="${imgUrl}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80'">
+          <img src="${imgUrl}" alt="${item.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" onerror="this.src='/images/menu/margherita.webp'">
         </td>
         <td>
           <div style="font-weight: 800; font-size: 13px; color: #0f172a;">${item.name}</div>

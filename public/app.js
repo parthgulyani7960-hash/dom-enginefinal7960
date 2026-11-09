@@ -2607,6 +2607,66 @@ function renderCartDrawer(triggerRemoteVerify = true) {
   }
 }
 
+// Payment Settings & Remote Toggle State
+let storePaymentSettings = { codEnabled: true, upiEnabled: true };
+
+async function syncStorePaymentSettings() {
+  try {
+    const res = await fetch('/api/payment/settings');
+    if (res.ok) {
+      const data = await res.json();
+      storePaymentSettings = data;
+      applyPaymentSettingsUI();
+    }
+  } catch (e) {}
+}
+
+function applyPaymentSettingsUI() {
+  const lblCOD = document.getElementById('lblPayCOD');
+  const lblUPI = document.getElementById('lblPayUPI');
+  const rdoCOD = document.getElementById('payMethodCOD');
+  const rdoUPI = document.getElementById('payMethodUPI');
+
+  const codAvailable = storePaymentSettings.codEnabled !== false;
+  const upiAvailable = storePaymentSettings.upiEnabled !== false;
+
+  if (lblCOD) {
+    if (!codAvailable) {
+      lblCOD.style.opacity = '0.45';
+      lblCOD.style.cursor = 'not-allowed';
+      lblCOD.title = 'Cash on Delivery is currently paused by store manager';
+      if (rdoCOD) rdoCOD.disabled = true;
+      if (currentPaymentMethod === 'COD' && upiAvailable) {
+        onPaymentMethodChange('UPI');
+        if (rdoUPI) rdoUPI.checked = true;
+      }
+    } else {
+      lblCOD.style.opacity = '1';
+      lblCOD.style.cursor = 'pointer';
+      lblCOD.title = '';
+      if (rdoCOD) rdoCOD.disabled = false;
+    }
+  }
+
+  if (lblUPI) {
+    if (!upiAvailable) {
+      lblUPI.style.opacity = '0.45';
+      lblUPI.style.cursor = 'not-allowed';
+      lblUPI.title = 'Instant UPI is currently paused by store manager';
+      if (rdoUPI) rdoUPI.disabled = true;
+      if (currentPaymentMethod === 'UPI' && codAvailable) {
+        onPaymentMethodChange('COD');
+        if (rdoCOD) rdoCOD.checked = true;
+      }
+    } else {
+      lblUPI.style.opacity = '1';
+      lblUPI.style.cursor = 'pointer';
+      lblUPI.title = '';
+      if (rdoUPI) rdoUPI.disabled = false;
+    }
+  }
+}
+
 // Payment Method State & Handler
 let currentPaymentMethod = 'COD';
 
@@ -3892,7 +3952,29 @@ function updateTrackingUI(order) {
     // Render Dedicated Status Notice Banners
   const noticeBanner = document.getElementById('trackerStatusNoticeBanner');
   if (noticeBanner) {
-    if (status === 'AWAITING_PAYMENT_APPROVAL' || p.status === 'PENDING_APPROVAL') {
+    if (order.isRefunded || p.status === 'REFUNDED' || status === 'REFUNDED') {
+      noticeBanner.style.display = 'block';
+      noticeBanner.innerHTML = `
+        <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 14px 16px; text-align: left; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.1);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <div style="font-weight: 900; color: #15803d; font-size: 13.5px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">💳</span> <span>100% Refund Credited to Your Wallet</span>
+            </div>
+            <span style="background: #dcfce7; color: #166534; font-weight: 800; font-size: 11px; padding: 2px 8px; border-radius: 6px; border: 1px solid #bbf7d0;">PROCESSED</span>
+          </div>
+          <div style="font-size: 12px; color: #166534; line-height: 1.5; margin-bottom: 12px;">
+            ₹${order.refundAmount || p.amount || 0} has been credited back to your Domino's digital wallet as verified refund proof.
+            <div style="margin-top: 4px; font-size: 11px; font-family: monospace; color: #15803d;">
+              <strong>Refund Ref:</strong> ${order.refundReference || 'RFND-SETTLED'} &bull; <strong>Date:</strong> ${order.refundedAt ? new Date(order.refundedAt).toLocaleString('en-IN') : 'Settled'}
+            </div>
+          </div>
+          <button type="button" onclick="closeModal('trackingModal'); openUserProfileModal(); switchProfileTab('wallet');" style="width: 100%; background: #16a34a; color: white; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);">
+            <span>👛</span>
+            <span>View Wallet Balance &amp; Transactions &rarr;</span>
+          </button>
+        </div>
+      `;
+    } else if (status === 'AWAITING_PAYMENT_APPROVAL' || p.status === 'PENDING_APPROVAL') {
       noticeBanner.style.display = 'block';
       noticeBanner.innerHTML = `
         <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 12px 14px; text-align: left;">
@@ -4924,7 +5006,9 @@ function renderMyOrders(orders) {
     }
     
     let statusBadge = '<span style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">PENDING</span>';
-    if (statusText === 'DELIVERED') {
+    if (o.isRefunded || o.payment?.status === 'REFUNDED' || statusText === 'REFUNDED') {
+      statusBadge = `<span style="background: #f0fdf4; color: #166534; border: 1.5px solid #86efac; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">💳 REFUNDED (₹${o.refundAmount || o.payment?.amount || 0})</span>`;
+    } else if (statusText === 'DELIVERED') {
       statusBadge = '<span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">🟢 DELIVERED</span>';
     } else if (statusText === 'DISPATCHED') {
       statusBadge = '<span style="background: #eff6ff; color: #0284c7; border: 1px solid #7dd3fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">🛵 ON THE WAY</span>';

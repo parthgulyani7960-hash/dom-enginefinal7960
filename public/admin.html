@@ -946,28 +946,39 @@
           </div>
         </div>
 
-        <!-- Live Robot Dispatches Telemetry Stats Banner -->
+        <!-- Live Robot Dispatches Telemetry Stats Banner (Interactive Filters & Live Ring) -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
-          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 12px 16px;">
-            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #166534;">🤖 Active Robot Orders</div>
+          <div id="statCardActive" onclick="filterByRobotCategory('ACTIVE')" style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s; position: relative;" title="Click to view Live Robot Execution Cockpit Ring">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #166534;">🤖 Active Robot Orders</span>
+              <span style="font-size: 9px; font-weight: 800; background: #16a34a; color: white; padding: 2px 6px; border-radius: 8px;">LIVE RING</span>
+            </div>
             <div id="statActiveRobotOrders" style="font-size: 22px; font-weight: 900; color: #15803d; margin-top: 4px;">0 Active</div>
-            <div style="font-size: 11px; color: #166534;">In-kitchen baking &amp; dispatch</div>
+            <div style="font-size: 11px; color: #166534;">Click to monitor live robot actions &rarr;</div>
           </div>
-          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 12px 16px;">
+          <div id="statCardDelivered" onclick="filterByRobotCategory('DELIVERED')" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s;" title="Click to view Delivered orders">
             <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #1e40af;">✅ Dispatched &amp; Delivered</div>
             <div id="statDeliveredOrders" style="font-size: 22px; font-weight: 900; color: #1d4ed8; margin-top: 4px;">0 Delivered</div>
             <div style="font-size: 11px; color: #1e40af;">Completed successfully</div>
           </div>
-          <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 8px; padding: 12px 16px;">
-            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #991b1b;">⚠️ Failed / Needs Review</div>
+          <div id="statCardFailed" onclick="filterByRobotCategory('FAILED')" style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s;" title="Click to review failed orders & error causes">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #991b1b;">⚠️ Failed / Error</span>
+              <span id="statErrorRateBadge" style="font-size: 10px; font-weight: 800; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; padding: 1px 6px; border-radius: 6px;">0.0% Error Rate</span>
+            </div>
             <div id="statFailedOrders" style="font-size: 22px; font-weight: 900; color: #b91c1c; margin-top: 4px;">0 Failed</div>
-            <div style="font-size: 11px; color: #991b1b;">Timeout or session retry</div>
+            <div style="font-size: 11px; color: #991b1b;">Click to view failure reasons</div>
           </div>
-          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 16px;">
+          <div id="statCardAll" onclick="filterByRobotCategory('ALL')" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s;" title="Show all orders">
             <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #475569;">💳 Total Dispatched Volume</div>
             <div id="statDispatchedVolume" style="font-size: 22px; font-weight: 900; color: #0f172a; margin-top: 4px;">₹0</div>
-            <div style="font-size: 11px; color: #64748b;">Autonomous engine orders</div>
+            <div style="font-size: 11px; color: #64748b;">Click to view all orders</div>
           </div>
+        </div>
+
+        <!-- LIVE ROBOT RING COCKPIT STREAM CONTAINER (Displays live what each robot is doing) -->
+        <div id="adminLiveRobotRingFeed" style="display: none; background: #0f172a; color: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1.5px solid #334155; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);">
+          <!-- Dynamically populated by renderLiveRobotRingFeed() -->
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
