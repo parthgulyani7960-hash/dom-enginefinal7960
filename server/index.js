@@ -43,6 +43,8 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
   '.ico': 'image/x-icon'
 };
 
@@ -1419,7 +1421,7 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  // Admin: Approve Payment & Dispatch Robot Worker
+  // Admin: Approve Payment & Dispatch Robot Worker (Strict Idempotency & Cooldown Protection)
   if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/approve-payment')) {
     try {
       if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
@@ -1429,9 +1431,29 @@ const server = http.createServer(async (req, res) => {
       
       if (!order.robot) order.robot = {};
       if (!order.payment) order.payment = {};
+
+      if (order.isRefunded || order.payment.status === 'REFUNDED') {
+        return sendJson(res, 400, { error: 'Order #' + orderId + ' has already been refunded. Cannot approve or dispatch.', code: 'ORDER_REFUNDED' });
+      }
+
+      if (order.payment.status === 'PAYMENT_APPROVED' && order.robot.status === 'BUILDING_CART') {
+        return sendJson(res, 400, { error: 'Order #' + orderId + ' is already approved and robot is currently actively building the cart.', code: 'ALREADY_ACTIVE' });
+      }
+
+      // 30-Second Dispatch Cooldown
+      const lastDispatch = order.robot.lastDispatchedAt ? new Date(order.robot.lastDispatchedAt).getTime() : 0;
+      const elapsedSec = Math.floor((Date.now() - lastDispatch) / 1000);
+      if (elapsedSec < 30 && order.robot.status === 'QUEUED_FOR_ROBOT') {
+        return sendJson(res, 429, { 
+          error: `Order #${orderId} was dispatched ${elapsedSec}s ago. Please wait ${30 - elapsedSec}s cooldown before redispatching.`,
+          remainingSeconds: 30 - elapsedSec
+        });
+      }
+
       order.payment.status = 'PAYMENT_APPROVED';
       order.payment.verifiedAt = new Date().toISOString();
       order.robot.status = 'QUEUED_FOR_ROBOT';
+      order.robot.lastDispatchedAt = new Date().toISOString();
       order.robot.error = null;
       if (!order.robot.logs) order.robot.logs = [];
       order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] ✅ Payment approved by Admin. Domino's autonomous robot dispatched!`);
@@ -1450,34 +1472,58 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // Admin: Refund Customer Order to Digital Wallet
+  // Admin: Refund Customer Order to Digital Wallet (Single-Execution & Anti-Double-Refund Security Stack)
   if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/refund')) {
     try {
       if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
       const orderId = pathname.split('/')[4];
       const order = db.getOrderById(orderId);
       if (!order) return sendJson(res, 404, { error: 'Order not found' });
-      
+      const body = await parseBody(req).catch(() => ({}));
+
+      // 1. Strict Anti-Duplicate Refund Gate
+      if (order.isRefunded || order.payment?.status === 'REFUNDED') {
+        return sendJson(res, 400, { 
+          error: `Order #${order.id} has already been refunded on ${order.refundedAt || 'record'}. Duplicate refund is blocked by security policy.`, 
+          code: 'ALREADY_REFUNDED' 
+        });
+      }
+
+      // 2. Prevent automated refund on orders already delivered at customer doorstep
+      if ((order.robot?.status === 'DELIVERED' || order.status === 'DELIVERED') && !body.forceDeliveredRefund) {
+        return sendJson(res, 400, {
+          error: `Order #${order.id} is marked as DELIVERED by Domino's. Cannot issue automated refund on fulfilled orders. Supply forceDeliveredRefund=true with reason if authorized by store manager.`,
+          code: 'ORDER_ALREADY_DELIVERED'
+        });
+      }
+
       const refundAmount = order.payment?.amount || 0;
       const targetUserId = order.userId12 || order.user?.userId12 || 'CURRENT_USER';
+      const refundRef = 'RFND-' + Date.now() + '-' + (order.id.slice(-4));
 
+      // 3. Credit customer wallet exactly ONCE
       if (refundAmount > 0) {
         db.adjustUserWallet(targetUserId, {
           type: 'ADD',
           amount: refundAmount,
-          reason: `Admin refund for Domino's Order #${order.id}`
+          reason: `Admin refund for Domino's Order #${order.id} (Ref: ${refundRef}): ${body.reason || 'Order cancellation / Store issue'}`
         });
       }
 
       if (!order.robot) order.robot = {};
       if (!order.payment) order.payment = {};
+      order.isRefunded = true;
+      order.refundedAt = new Date().toISOString();
+      order.refundReference = refundRef;
+      order.refundAmount = refundAmount;
+      order.refundReason = body.reason || 'Admin initiated refund';
       order.payment.status = 'REFUNDED';
       order.robot.status = 'REFUNDED';
-      order.robot.error = 'Refunded by admin';
+      order.robot.error = `Refunded by admin (${refundRef})`;
       if (!order.robot.logs) order.robot.logs = [];
-      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 💳 Order refunded by Admin. ₹${refundAmount} credited back to customer wallet.`);
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 💳 Order refunded by Admin. ₹${refundAmount} credited back to customer wallet. Ref: ${refundRef}`);
 
-      // Release any locked account
+      // Release any locked Domino's account session
       if (order.robot.assignedAccountId) {
         db.releaseAccount(order.robot.assignedAccountId);
       }
@@ -1485,7 +1531,7 @@ const server = http.createServer(async (req, res) => {
       db.updateOrder(order.id, order);
       return sendJson(res, 200, {
         success: true,
-        message: `Order #${order.id} refunded successfully (₹${refundAmount} credited to customer wallet).`,
+        message: `Order #${order.id} refunded successfully (₹${refundAmount} credited to customer wallet, Ref: ${refundRef}).`,
         order
       });
     } catch (err) {
@@ -1504,29 +1550,44 @@ const server = http.createServer(async (req, res) => {
       const decision = body.decision; // 'refund' | 'proceed'
 
       if (decision === 'refund') {
+        if (order.isRefunded || order.payment?.status === 'REFUNDED') {
+          return sendJson(res, 400, { error: `Order #${order.id} was already refunded.`, code: 'ALREADY_REFUNDED' });
+        }
         const refundAmount = order.payment?.amount || 0;
         const targetUserId = order.userId12 || order.user?.userId12 || 'CURRENT_USER';
+        const refundRef = 'RFND-' + Date.now() + '-' + (order.id.slice(-4));
         if (refundAmount > 0) {
           db.adjustUserWallet(targetUserId, {
             type: 'ADD',
             amount: refundAmount,
-            reason: `Admin refund due to out-of-stock items in Order #${order.id}`
+            reason: `Admin refund due to out-of-stock items in Order #${order.id} (Ref: ${refundRef})`
           });
         }
         if (!order.payment) order.payment = {};
         if (!order.robot) order.robot = {};
+        order.isRefunded = true;
+        order.refundedAt = new Date().toISOString();
+        order.refundReference = refundRef;
+        order.refundAmount = refundAmount;
         order.payment.status = 'REFUNDED';
         order.robot.status = 'REFUNDED';
         order.robot.error = 'Items unavailable at local store - refunded by admin';
         if (!order.robot.logs) order.robot.logs = [];
-        order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 💳 Admin decided: Refund customer (₹${refundAmount} returned to digital wallet).`);
+        order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 💳 Admin decided: Refund customer (₹${refundAmount} returned to digital wallet). Ref: ${refundRef}`);
         if (order.robot.assignedAccountId) db.releaseAccount(order.robot.assignedAccountId);
         db.updateOrder(order.id, order);
         return sendJson(res, 200, { success: true, message: 'Order refunded to customer wallet.', order });
       } else if (decision === 'proceed') {
+        // Cooldown check
+        const lastDispatch = order.robot?.lastDispatchedAt ? new Date(order.robot.lastDispatchedAt).getTime() : 0;
+        const elapsedSec = Math.floor((Date.now() - lastDispatch) / 1000);
+        if (elapsedSec < 15) {
+          return sendJson(res, 429, { error: `Please wait ${15 - elapsedSec}s cooldown before redispatching.` });
+        }
         order.items = (order.items || []).filter(item => !item.isUnavailableAtArea && !item.outOfStock);
         if (!order.robot) order.robot = {};
         order.robot.status = 'QUEUED_FOR_ROBOT';
+        order.robot.lastDispatchedAt = new Date().toISOString();
         order.robot.error = null;
         if (!order.robot.logs) order.robot.logs = [];
         order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 🚀 Admin decided: Proceed with in-stock items. Robot re-enqueued.`);
@@ -1576,19 +1637,38 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 3c-3. Admin: Live Trigger Robot Dispatch Now
+  // 3c-3. Admin: Live Trigger Robot Dispatch Now (with 30s Anti-Spam Cooldown & Delivery Gate)
   if (method === 'POST' && pathname.startsWith('/api/admin/orders/') && pathname.endsWith('/dispatch-live')) {
     try {
       if (!checkAdminAuth(req)) return sendJson(res, 401, { error: 'Unauthorized' });
       const orderId = pathname.split('/')[4];
       const order = db.getOrderById(orderId);
       if (!order) return sendJson(res, 404, { error: 'Order not found' });
-      if (order.robot?.status === 'DELIVERED') {
-        return sendJson(res, 400, { error: 'Order is already delivered.' });
+
+      if (order.isRefunded || order.payment?.status === 'REFUNDED') {
+        return sendJson(res, 400, { error: 'Order #' + orderId + ' is already refunded. Cannot dispatch.', code: 'ORDER_REFUNDED' });
       }
+
+      if (order.robot?.status === 'DELIVERED' || order.status === 'DELIVERED') {
+        return sendJson(res, 400, { error: 'Order #' + orderId + ' is already delivered to customer doorstep. Dispatch cancelled.', code: 'ALREADY_DELIVERED' });
+      }
+
+      // 30-Second Dispatch Cooldown
+      const lastDispatch = order.robot?.lastDispatchedAt ? new Date(order.robot.lastDispatchedAt).getTime() : 0;
+      const elapsedSec = Math.floor((Date.now() - lastDispatch) / 1000);
+      if (elapsedSec < 30) {
+        return sendJson(res, 429, { 
+          error: `Order #${orderId} was dispatched ${elapsedSec}s ago. Please wait ${30 - elapsedSec}s cooldown before redispatching.`,
+          remainingSeconds: 30 - elapsedSec
+        });
+      }
+
       if (!order.robot) order.robot = {};
       order.robot.status = 'QUEUED_FOR_ROBOT';
+      order.robot.lastDispatchedAt = new Date().toISOString();
       order.robot.error = null;
+      if (!order.robot.logs) order.robot.logs = [];
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 🚀 Live robot dispatch triggered by Admin.`);
       db.updateOrder(order.id, order);
       queue.enqueue(order.id);
       return sendJson(res, 200, { success: true, message: `Live robot dispatch started for Order #${order.id}`, order });

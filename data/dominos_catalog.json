@@ -11,8 +11,8 @@
     "dominosCode": "PIZ0117",
     "skuId": "1#1#1",
     "description": "Classic delight with 100% real mozzarella cheese on fresh signature crust.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/71185d41-ea94-46bd-8c5d-563d356dd812_new_margherita_2502.webp",
+    "imageUrl": "/images/menu/margherita.webp",
+    "image": "/images/menu/margherita.webp",
     "sizes": {
       "Regular (Serves 1)": 109,
       "Medium (Serves 2)": 239,
@@ -62,8 +62,8 @@
     "dominosCode": "PIZ0118",
     "skuId": "1#2#1",
     "description": "An evergreen hit with loaded double mozzarella cheese for ultimate cheese pull.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bd807a40-61d0-4348-8708-867ef0f7931f_FullsizeDoubleCheeseMargaritaCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bd807a40-61d0-4348-8708-867ef0f7931f_FullsizeDoubleCheeseMargaritaCB.webp",
+    "imageUrl": "/images/menu/double-cheese-margherita.webp",
+    "image": "/images/menu/double-cheese-margherita.webp",
     "sizes": {
       "Regular (Serves 1)": 199,
       "Medium (Serves 2)": 379,
@@ -113,8 +113,8 @@
     "dominosCode": "PIZ0119",
     "skuId": "1#3#1",
     "description": "Delightful combination of onion, crisp capsicum, grilled mushroom & fresh tomato.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/08ec2d51-9032-4030-a7a1-e1c9d67ae19b_FullsizeFarmhouseCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/08ec2d51-9032-4030-a7a1-e1c9d67ae19b_FullsizeFarmhouseCB.webp",
+    "imageUrl": "/images/menu/farmhouse.webp",
+    "image": "/images/menu/farmhouse.webp",
     "sizes": {
       "Regular (Serves 1)": 259,
       "Medium (Serves 2)": 459,
@@ -164,8 +164,8 @@
     "dominosCode": "PIZ0120",
     "skuId": "1#4#1",
     "description": "Flavorful trio of juicy paneer chunks, crisp capsicum with spicy red paprika.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebRecommendedProductV1/67700b7e-ed6d-4b43-a102-2263e6e115a0_CorouselPeppyPaneerCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebRecommendedProductV1/67700b7e-ed6d-4b43-a102-2263e6e115a0_CorouselPeppyPaneerCB.webp",
+    "imageUrl": "/images/menu/peppy-paneer.webp",
+    "image": "/images/menu/peppy-paneer.webp",
     "sizes": {
       "Regular (Serves 1)": 259,
       "Medium (Serves 2)": 459,
@@ -215,8 +215,8 @@
     "dominosCode": "PIZ0128",
     "skuId": "1#5#1",
     "description": "Sweet and juicy golden corn with rich mozzarella cheese topping.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/39584442-e65b-496e-8a36-ee93fb0c9166_FullsizeCheeseandcornCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/39584442-e65b-496e-8a36-ee93fb0c9166_FullsizeCheeseandcornCB.webp",
+    "imageUrl": "/images/menu/cheese-n-corn.webp",
+    "image": "/images/menu/cheese-n-corn.webp",
     "sizes": {
       "Regular (Serves 1)": 179,
       "Medium (Serves 2)": 339,
@@ -266,8 +266,8 @@
     "dominosCode": "PIZ0124",
     "skuId": "1#4#1",
     "description": "A pizza loaded with crunchy onions, crisp capsicum, juicy tomatoes and jalapeno with a liberal sprinkling of exotic Mexican herbs.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a7e1cbf-73d9-4184-b157-153947113764_FullsizeMexicanGreenWaveCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a7e1cbf-73d9-4184-b157-153947113764_FullsizeMexicanGreenWaveCB.webp",
+    "imageUrl": "/images/menu/mexican-green-wave.webp",
+    "image": "/images/menu/mexican-green-wave.webp",
     "sizes": {
       "Regular (Serves 1)": 259,
       "Medium (Serves 2)": 459,
@@ -317,8 +317,8 @@
     "dominosCode": "PIZ0125",
     "skuId": "1#6#1",
     "description": "Goldern corn, black olives, crisp capsicum & red paprika.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ce05e7f2-988e-4a08-be67-954f443c6eec_FullsizeVeggieParadiseCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ce05e7f2-988e-4a08-be67-954f443c6eec_FullsizeVeggieParadiseCB.webp",
+    "imageUrl": "/images/menu/veggie-paradise.webp",
+    "image": "/images/menu/veggie-paradise.webp",
     "sizes": {
       "Regular (Serves 1)": 259,
       "Medium (Serves 2)": 459,
@@ -368,8 +368,8 @@
     "dominosCode": "PIZ0121",
     "skuId": "1#7#1",
     "description": "Tandoori paneer, red paprika, mint mayo and fresh onion for spicy tandoori lovers.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c0c00ef6-92e1-4560-8f92-91f86f85d263_IndianTandooriPaneer.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c0c00ef6-92e1-4560-8f92-91f86f85d263_IndianTandooriPaneer.webp",
+    "imageUrl": "/images/menu/indi-tandoori-paneer.webp",
+    "image": "/images/menu/indi-tandoori-paneer.webp",
     "sizes": {
       "Regular (Serves 1)": 299,
       "Medium (Serves 2)": 549,
@@ -419,8 +419,8 @@
     "dominosCode": "PIZ0122",
     "skuId": "1#8#1",
     "description": "Black olives, onion, capsicum, mushroom, golden corn, tomato, jalapeno & extra cheese.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/6d1223a8-3e4f-4840-812e-8736594517d5_new_veg_extravaganza.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/6d1223a8-3e4f-4840-812e-8736594517d5_new_veg_extravaganza.webp",
+    "imageUrl": "/images/menu/veg-extravaganza.webp",
+    "image": "/images/menu/veg-extravaganza.webp",
     "sizes": {
       "Regular (Serves 1)": 299,
       "Medium (Serves 2)": 549,
@@ -470,8 +470,8 @@
     "dominosCode": "PIZ5119",
     "skuId": "2#1#1",
     "description": "Pepper barbecue chicken for that flavorful, meaty kick in every bite.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/eb8542d6-0313-4ef8-a61f-d17f12ac6759_new_pepper_barbeque_chicken.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/eb8542d6-0313-4ef8-a61f-d17f12ac6759_new_pepper_barbeque_chicken.webp",
+    "imageUrl": "/images/menu/pepper-barbecue-chicken.webp",
+    "image": "/images/menu/pepper-barbecue-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 449,
@@ -521,8 +521,8 @@
     "dominosCode": "PIZ5123",
     "skuId": "2#2#1",
     "description": "Barbeque chicken with a golden topping of sweet corn loaded with extra mozzarella.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f7837e18-fbcb-4bb2-86ec-190d7cd13f50_FullsizeChickenGoldenDelightCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f7837e18-fbcb-4bb2-86ec-190d7cd13f50_FullsizeChickenGoldenDelightCB.webp",
+    "imageUrl": "/images/menu/chicken-golden-delight.webp",
+    "image": "/images/menu/chicken-golden-delight.webp",
     "sizes": {
       "Regular (Serves 1)": 279,
       "Medium (Serves 2)": 499,
@@ -572,8 +572,8 @@
     "dominosCode": "PIZ5124",
     "skuId": "2#3#1",
     "description": "Loaded with double pepper barbecue chicken, peri-peri chicken, chicken tikka & grilled chicken rasher.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b8c12238-5779-496e-a233-dc1af1d14b81_new_chicken_dominator.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b8c12238-5779-496e-a233-dc1af1d14b81_new_chicken_dominator.webp",
+    "imageUrl": "/images/menu/chicken-dominator.webp",
+    "image": "/images/menu/chicken-dominator.webp",
     "sizes": {
       "Regular (Serves 1)": 359,
       "Medium (Serves 2)": 599,
@@ -623,8 +623,8 @@
     "dominosCode": "PIZ5120",
     "skuId": "2#4#1",
     "description": "Supreme feast with black olives, grilled mushrooms, pepper barbecue chicken, peri-peri chicken & grilled rashers.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
+    "imageUrl": "/images/menu/non-veg-supreme.webp",
+    "image": "/images/menu/non-veg-supreme.webp",
     "sizes": {
       "Regular (Serves 1)": 359,
       "Medium (Serves 2)": 599,
@@ -674,8 +674,8 @@
     "dominosCode": "PIZ5121",
     "skuId": "2#5#1",
     "description": "Tandoori chicken tikka chunks with red paprika, mint mayo and fresh onion.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/fa090c3d-f24d-4969-afcb-dbbc174b76f0_IndianTandooriChickenTikka.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/fa090c3d-f24d-4969-afcb-dbbc174b76f0_IndianTandooriChickenTikka.webp",
+    "imageUrl": "/images/menu/indi-chicken-tikka.webp",
+    "image": "/images/menu/indi-chicken-tikka.webp",
     "sizes": {
       "Regular (Serves 1)": 359,
       "Medium (Serves 2)": 599,
@@ -725,8 +725,8 @@
     "dominosCode": "PM0001",
     "skuId": "3#1#1",
     "description": "Tomato, jalapeno, golden corn, grilled mushroom & mozzarella cheese.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
+    "imageUrl": "/images/menu/veg-loaded-pizza-mania.webp",
+    "image": "/images/menu/veg-loaded-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 139
     },
@@ -758,8 +758,8 @@
     "dominosCode": "PM0002",
     "skuId": "3#2#1",
     "description": "Delicious orange cheddar cheese dressing topped on classic crust.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
+    "imageUrl": "/images/menu/cheesy-pizza-mania.webp",
+    "image": "/images/menu/cheesy-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 99
     },
@@ -791,8 +791,8 @@
     "dominosCode": "PM0003",
     "skuId": "3#3#1",
     "description": "Creamy paneer cubes and crunchy onion with rich mozzarella.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
+    "imageUrl": "/images/menu/paneer-onion-pizza-mania.webp",
+    "image": "/images/menu/paneer-onion-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 119
     },
@@ -824,8 +824,8 @@
     "dominosCode": "PM0004",
     "skuId": "3#4#1",
     "description": "Sweet corn and 100% mozzarella cheese on hand-stretched dough.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
+    "imageUrl": "/images/menu/golden-corn-pizza-mania.webp",
+    "image": "/images/menu/golden-corn-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 89
     },
@@ -857,8 +857,8 @@
     "dominosCode": "PM0005",
     "skuId": "3#5#1",
     "description": "Crunchy onion with mozzarella cheese - the all-time pocket-friendly favorite.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
+    "imageUrl": "/images/menu/classic-onion-pizza-mania.webp",
+    "image": "/images/menu/classic-onion-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 69
     },
@@ -890,8 +890,8 @@
     "dominosCode": "PM5001",
     "skuId": "3#6#1",
     "description": "Peri-peri chicken, pepper barbecue chicken with spicy red paprika.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
+    "imageUrl": "/images/menu/non-veg-loaded-pizza-mania.webp",
+    "image": "/images/menu/non-veg-loaded-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 169
     },
@@ -923,8 +923,8 @@
     "dominosCode": "BRD0096",
     "skuId": "4#1#1",
     "description": "Baked to perfection. Your favorite garlic breadsticks seasoned with exotic herbs.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/fd03f314-0fe9-42c1-9812-607f840ce8ad_plainGBsidejpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/fd03f314-0fe9-42c1-9812-607f840ce8ad_plainGBsidejpgFull2x2702.webp",
+    "imageUrl": "/images/menu/garlic-breadsticks.webp",
+    "image": "/images/menu/garlic-breadsticks.webp",
     "discount": "16% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -951,8 +951,8 @@
     "dominosCode": "BRD0024",
     "skuId": "4#2#1",
     "description": "Freshly baked garlic bread stuffed with mozzarella cheese, sweet corn and spicy jalapenos.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0f66bac1-d48a-4300-874f-295d2d5e77aa_ClassicGBsidejpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0f66bac1-d48a-4300-874f-295d2d5e77aa_ClassicGBsidejpgFull2x2702.webp",
+    "imageUrl": "/images/menu/classic-stuffed-garlic-bread.webp",
+    "image": "/images/menu/classic-stuffed-garlic-bread.webp",
     "discount": "16% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -979,8 +979,8 @@
     "dominosCode": "SID0049",
     "skuId": "4#3#1",
     "description": "Snappy bite with seasoned vegetables folded inside golden pastry parcel.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
+    "imageUrl": "/images/menu/zingy-parcel-veg.webp",
+    "image": "/images/menu/zingy-parcel-veg.webp",
     "discount": "17% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1007,8 +1007,8 @@
     "dominosCode": "SID0050",
     "skuId": "4#4#1",
     "description": "Crispy warm parcel stuffed with flavorful chicken and savory spices.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
+    "imageUrl": "/images/menu/zingy-parcel-non-veg.webp",
+    "image": "/images/menu/zingy-parcel-non-veg.webp",
     "discount": "14% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1035,8 +1035,8 @@
     "dominosCode": "DIP0001",
     "skuId": "4#5#1",
     "description": "Super creamy, delicious cheddar cheese dip for crusts and garlic bread.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/70347c1a-3a1c-49b3-b0d3-7c6cb1f423ac_CheesyDipjpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/70347c1a-3a1c-49b3-b0d3-7c6cb1f423ac_CheesyDipjpgFull2x2702.webp",
+    "imageUrl": "/images/menu/cheesy-dip.webp",
+    "image": "/images/menu/cheesy-dip.webp",
     "discount": "14% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1063,8 +1063,8 @@
     "dominosCode": "CAKE02",
     "skuId": "5#1#1",
     "description": "Chocolate lovers delight! Indulgent, gooey molten hot chocolate lava inside chocolate cake.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/df4eb645-30c0-469d-b937-895593451583_Choco_Lava.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/df4eb645-30c0-469d-b937-895593451583_Choco_Lava.webp",
+    "imageUrl": "/images/menu/choco-lava-cake.webp",
+    "image": "/images/menu/choco-lava-cake.webp",
     "discount": "16% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1091,8 +1091,8 @@
     "dominosCode": "CAKE03",
     "skuId": "5#2#1",
     "description": "Sweet, creamy butterscotch mousse layered over soft sponge.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
+    "imageUrl": "/images/menu/butterscotch-mousse-cake.webp",
+    "image": "/images/menu/butterscotch-mousse-cake.webp",
     "discount": "16% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1119,8 +1119,8 @@
     "dominosCode": "CAKE04",
     "skuId": "5#3#1",
     "description": "Delightful red velvet cake oozing with sweet warm white chocolate lava.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a3818568-aaf4-40f9-b8c2-2ba85daae769_RVcakehome.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/a3818568-aaf4-40f9-b8c2-2ba85daae769_RVcakehome.webp",
+    "imageUrl": "/images/menu/red-velvet-lava-cake.webp",
+    "image": "/images/menu/red-velvet-lava-cake.webp",
     "discount": "13% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1147,8 +1147,8 @@
     "dominosCode": "BEV0001",
     "skuId": "6#1#1",
     "description": "Refreshing Pepsi cola 475ml.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/7f6b9213-aa06-4b2a-8677-47b2ffcf9bfa_pepsi.webp",
+    "imageUrl": "/images/menu/pepsi-475ml.webp",
+    "image": "/images/menu/pepsi-475ml.webp",
     "discount": "24% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1175,8 +1175,8 @@
     "dominosCode": "BEV0002",
     "skuId": "6#2#1",
     "description": "Sparkling orange flavour fruit drink 475ml.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
+    "imageUrl": "/images/menu/mirinda-fanta-475ml.webp",
+    "image": "/images/menu/mirinda-fanta-475ml.webp",
     "discount": "24% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1203,8 +1203,8 @@
     "dominosCode": "BEV0003",
     "skuId": "6#3#1",
     "description": "Clear, crisp lemon-lime refreshment 475ml.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
+    "imageUrl": "/images/menu/7up-sprite-475ml.webp",
+    "image": "/images/menu/7up-sprite-475ml.webp",
     "discount": "24% OFF",
     "isCustomizable": false,
     "allowedSizes": [
@@ -1232,8 +1232,8 @@
     "dominosCode": "SID0046",
     "skuId": "4101",
     "description": "Oven-baked buns with cheese, paneer, tomato, capsicum & red paprika in creamy mayo",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/951b5116-1df6-4bad-9793-8bceeecb9cd2_vegburgerpizzjpgFull2x2702.webp",
+    "imageUrl": "/images/menu/burger-pizza-premium-veg.webp",
+    "image": "/images/menu/burger-pizza-premium-veg.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1261,8 +1261,8 @@
     "dominosCode": "CAKE24",
     "skuId": "7161",
     "description": "Dive into the ultimate dessert experience with our Lavalicious Combo that’s Made to Share. \n*We don't include a spoon or napkin to support sustainability",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1f7ddf95-d357-4d61-8ab0-b0bafbeedad1_ChocoLavaCakeHomeProductV1.webp",
+    "imageUrl": "/images/menu/choco-lava-cake-gift-hamper.webp",
+    "image": "/images/menu/choco-lava-cake-gift-hamper.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1290,8 +1290,8 @@
     "dominosCode": "PIZ5188",
     "skuId": "6#391#4852",
     "description": "Authentic Indian Flavor of Makhani Sauce loaded with meaty Chicken Keema and crunchy Onion.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/0237d00d-540a-4247-8c8c-3462fa22b314_PMChickenKeemaMenu.webp",
+    "imageUrl": "/images/menu/chicken-keema-onion-with-desi-makhani-sauce.webp",
+    "image": "/images/menu/chicken-keema-onion-with-desi-makhani-sauce.webp",
     "sizes": {
       "Regular (Serves 1)": 159
     },
@@ -1323,8 +1323,8 @@
     "dominosCode": "SID0306",
     "skuId": "6633",
     "description": "Stuffed with tandoori-spiced paneer for a bold Indian twist. Double tacos for double fun",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
+    "imageUrl": "/images/menu/loaded-saucy-veg-taco-tandoori.webp",
+    "image": "/images/menu/loaded-saucy-veg-taco-tandoori.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1352,8 +1352,8 @@
     "dominosCode": "PIZ5106",
     "skuId": "6#115#7147",
     "description": "American classic! Spicy, herbed chicken sausage on pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9b676f85-4c99-4ac5-86fb-53556c0b092c_new_chicken_sausage.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9b676f85-4c99-4ac5-86fb-53556c0b092c_new_chicken_sausage.webp",
+    "imageUrl": "/images/menu/chicken-sausage.webp",
+    "image": "/images/menu/chicken-sausage.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -1403,8 +1403,8 @@
     "dominosCode": "SID0302",
     "skuId": "6629",
     "description": "Taco stuffed with tandoori-spiced paneer and fresh veggies for a bold Indian twist.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e4a4655a-1507-4f66-b7c7-3da24f8a963a_HomeProductV1TandooriLoadedVegTaco(Single)720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e4a4655a-1507-4f66-b7c7-3da24f8a963a_HomeProductV1TandooriLoadedVegTaco(Single)720x700px.webp",
+    "imageUrl": "/images/menu/loaded-saucy-veg-taco-tandoori-single.webp",
+    "image": "/images/menu/loaded-saucy-veg-taco-tandoori-single.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1432,8 +1432,8 @@
     "dominosCode": "PIZ0126",
     "skuId": "6#115#7140",
     "description": "Delectable combination of onion & capsicum, a veggie lovers pick",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/2e32cb51-82dd-40c2-8d5d-17a45a447020_new_fresh_veggie.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/2e32cb51-82dd-40c2-8d5d-17a45a447020_new_fresh_veggie.webp",
+    "imageUrl": "/images/menu/fresh-veggie.webp",
+    "image": "/images/menu/fresh-veggie.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -1483,8 +1483,8 @@
     "dominosCode": "PIZ0162",
     "skuId": "7#115#6162",
     "description": "Molten Cheese Indulgence with tangy & spicy achari flavours on a super cheesy onion pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c10971e8-09e3-460f-b8c3-817d39656847_updated_achari_do_pyaza.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/c10971e8-09e3-460f-b8c3-817d39656847_updated_achari_do_pyaza.webp",
+    "imageUrl": "/images/menu/achari-do-pyaza.webp",
+    "image": "/images/menu/achari-do-pyaza.webp",
     "sizes": {
       "Regular (Serves 1)": 365,
       "Medium (Serves 2)": 639,
@@ -1534,8 +1534,8 @@
     "dominosCode": "PIZ5460",
     "skuId": "6#1#8369",
     "description": "45+ gms of Protein: Chicken Rashers, Chicken Keema with Chicken Seekh Kebab in the crust layered with Shawarma Sauce.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/23b735f3-4d17-4220-b80c-2b619d332312_ShawarmaMaxxFHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/23b735f3-4d17-4220-b80c-2b619d332312_ShawarmaMaxxFHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/chicken-maxxx-shawarma.webp",
+    "image": "/images/menu/chicken-maxxx-shawarma.webp",
     "sizes": {
       "Regular (Serves 1)": 239,
       "Medium (Serves 2)": 419,
@@ -1585,8 +1585,8 @@
     "dominosCode": "PIZ0357",
     "skuId": "9#102#6310",
     "description": "Centre loaded with Molten Cheese & topped with Golden Corn, Black Olives, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/547ba006-9a6f-48c9-a3f5-5aed3715205b_FullSizeVeggieParadise.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/547ba006-9a6f-48c9-a3f5-5aed3715205b_FullSizeVeggieParadise.webp",
+    "imageUrl": "/images/menu/cheese-volcano-veg-paradise.webp",
+    "image": "/images/menu/cheese-volcano-veg-paradise.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -1636,8 +1636,8 @@
     "dominosCode": "PIZ5461",
     "skuId": "6#1#8370",
     "description": "45+ gms of Protein: BBQ Chicken, Chicken Keema with Chicken Seekh Kebab in the crust layered with Masala Curry Sauce.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/dbf9f6bf-baa5-4cd8-adcd-a4b783beb148_KVBBQMaxxKVINappHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/dbf9f6bf-baa5-4cd8-adcd-a4b783beb148_KVBBQMaxxKVINappHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/chicken-maxxx-bbq.webp",
+    "image": "/images/menu/chicken-maxxx-bbq.webp",
     "sizes": {
       "Regular (Serves 1)": 239,
       "Medium (Serves 2)": 419,
@@ -1687,8 +1687,8 @@
     "dominosCode": "SID0396",
     "skuId": "8245",
     "description": "Melted cheese with succulent spiced paneer inside crispy folded crust.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
+    "imageUrl": "/images/menu/paneer-tandoori-meltz-lxt.webp",
+    "image": "/images/menu/paneer-tandoori-meltz-lxt.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1716,8 +1716,8 @@
     "dominosCode": "PIZ0396",
     "skuId": "6#391#6596",
     "description": "A classic pizza topped with sprinkle of basil and parsley herbs",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5bb855d0-4273-48b5-b4d1-032ef9a52fd2_PMClassicMenu.webp",
+    "imageUrl": "/images/menu/classic-tomato-pizza-mania.webp",
+    "image": "/images/menu/classic-tomato-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 59
     },
@@ -1749,8 +1749,8 @@
     "dominosCode": "SID0242",
     "skuId": "6373",
     "description": "Juicy grilled chicken wings roasted with zesty lemon pepper seasoning for a delicious taste!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/a3bdd517-494f-4cc2-a08c-4933e01437ec_GrilledWingsLemonPepper.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/a3bdd517-494f-4cc2-a08c-4933e01437ec_GrilledWingsLemonPepper.webp",
+    "imageUrl": "/images/menu/grilled-wings-lemon-pepper.webp",
+    "image": "/images/menu/grilled-wings-lemon-pepper.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1778,8 +1778,8 @@
     "dominosCode": "DST0118",
     "skuId": "8170",
     "description": "A light, creamy blueberry mousse bursting with fruity freshness. A perfectly smooth finish!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d9375215-52ed-447f-b0b9-90d107535c1c_BlueberryMousseHOMEPRODUCT.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d9375215-52ed-447f-b0b9-90d107535c1c_BlueberryMousseHOMEPRODUCT.webp",
+    "imageUrl": "/images/menu/blueberry-mousse.webp",
+    "image": "/images/menu/blueberry-mousse.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1807,8 +1807,8 @@
     "dominosCode": "PIZ0355",
     "skuId": "9#102#6010",
     "description": "Centre loaded with Molten Cheese & topped with peppy Paneer, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bc74ba78-bf2c-4c4f-bfd8-53c0bb5d7637_volcanoHomePeppyPaneer.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bc74ba78-bf2c-4c4f-bfd8-53c0bb5d7637_volcanoHomePeppyPaneer.webp",
+    "imageUrl": "/images/menu/cheese-volcano-peppy-paneer.webp",
+    "image": "/images/menu/cheese-volcano-peppy-paneer.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -1858,8 +1858,8 @@
     "dominosCode": "BRD0053",
     "skuId": "6199",
     "description": "Freshly baked garlic bread infused with Spicy Guntur Sauce, Molten cheese, juicy corn & tangy jalapeno",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d8fef862-36b4-4e50-a5dc-8af4bbf1ab71_FullsizeGarlicBreadwithcornFiery.webp",
+    "imageUrl": "/images/menu/fiery-corn-jalapeno-garlic-bread.webp",
+    "image": "/images/menu/fiery-corn-jalapeno-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -1887,8 +1887,8 @@
     "dominosCode": "PIZ0498",
     "skuId": "11#115#8390",
     "description": "Big Big Pizza meets iconic Cheeseburst crust, bursting with gooey molten cheese and 6 bestseller veg flavours.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/201ae372-a245-48eb-95e3-68daeb4d4a65_BBPCBVxHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/201ae372-a245-48eb-95e3-68daeb4d4a65_BBPCBVxHomeProduct.webp",
+    "imageUrl": "/images/menu/big-big-6in1-cheeseburst-veg.webp",
+    "image": "/images/menu/big-big-6in1-cheeseburst-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 999,
       "Medium (Serves 2)": 1749,
@@ -1938,8 +1938,8 @@
     "dominosCode": "PIZ5458",
     "skuId": "6#1#8610",
     "description": "45+ gms of Protein: Chicken Tikka, Chicken Keema with Chicken Seekh Kebab in the crust layered with Tandoori Sauce",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/chicken-maxxx-tandoori.webp",
+    "image": "/images/menu/chicken-maxxx-tandoori.webp",
     "sizes": {
       "Regular (Serves 1)": 239,
       "Medium (Serves 2)": 419,
@@ -1989,8 +1989,8 @@
     "dominosCode": "BRD0055",
     "skuId": "6201",
     "description": "Freshly Baked Stuffed Garlic Bread infused with Korean Sweet Chili Sauce, Molten Cheese, Onion and Paneer Tikka fillings",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/582af029-c566-477a-8d74-38d4725ff0b8_CorouselGarlicBreadwithpaneerKorean.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/582af029-c566-477a-8d74-38d4725ff0b8_CorouselGarlicBreadwithpaneerKorean.webp",
+    "imageUrl": "/images/menu/korean-paneer-tikka-garlic-bread.webp",
+    "image": "/images/menu/korean-paneer-tikka-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2018,8 +2018,8 @@
     "dominosCode": "PIZ5159",
     "skuId": "7#1#4617",
     "description": "Loaded with 5 different Chicken toppings - grilled Chicken Rashers, Chicken Meatballs, Chicken Tikka, herby Chicken Sausage and flavorful Chicken Keema",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2fe42a32-0138-4612-b3a9-1f8aacb0b5b5_FullsizeThe5FeastChickenCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2fe42a32-0138-4612-b3a9-1f8aacb0b5b5_FullsizeThe5FeastChickenCB.webp",
+    "imageUrl": "/images/menu/the-5-chicken-feast-pizza.webp",
+    "image": "/images/menu/the-5-chicken-feast-pizza.webp",
     "sizes": {
       "Regular (Serves 1)": 775,
       "Medium (Serves 2)": 1359,
@@ -2069,8 +2069,8 @@
     "dominosCode": "BEV0224",
     "skuId": "6236",
     "description": "Packaged Drinking Water",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5d80611c-3b32-4f47-8c48-8a2965c47961_ClearWaterHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5d80611c-3b32-4f47-8c48-8a2965c47961_ClearWaterHomeProductV1.webp",
+    "imageUrl": "/images/menu/packaged-water-500ml.webp",
+    "image": "/images/menu/packaged-water-500ml.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2098,8 +2098,8 @@
     "dominosCode": "PIZ0571",
     "skuId": "6#1#8249",
     "description": "The awesome foursome! Golden corn, black olives, capsicum, red paprika",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/391142c2-055c-4214-b06a-c2005c5f9768_new_veggie_paradise.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/391142c2-055c-4214-b06a-c2005c5f9768_new_veggie_paradise.webp",
+    "imageUrl": "/images/menu/reg-veggie-paradise-lxt-oag.webp",
+    "image": "/images/menu/reg-veggie-paradise-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 269,
       "Medium (Serves 2)": 469,
@@ -2149,8 +2149,8 @@
     "dominosCode": "PIZ0631",
     "skuId": "6#1#8609",
     "description": "Loaded with 2x Paneer with fusion of sweet and spicy Makhani sauce along with crust stuffed with mesmerizing veg kebab.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5e9ed0a0-79b0-46af-bfbf-d0ad8bbc8dea_MakhanixPxHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5e9ed0a0-79b0-46af-bfbf-d0ad8bbc8dea_MakhanixPxHomeProduct.webp",
+    "imageUrl": "/images/menu/paneer-maxxx-makhani-fusion.webp",
+    "image": "/images/menu/paneer-maxxx-makhani-fusion.webp",
     "sizes": {
       "Regular (Serves 1)": 239,
       "Medium (Serves 2)": 419,
@@ -2200,8 +2200,8 @@
     "dominosCode": "PIZ0358",
     "skuId": "9#102#6013",
     "description": "Centre loaded with Molten Cheese & topped with juicy Golden Corn\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/69362a82-26e6-4516-abfa-80e46164ebe4_CartCornCheese.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/69362a82-26e6-4516-abfa-80e46164ebe4_CartCornCheese.webp",
+    "imageUrl": "/images/menu/corn-cheese-volcano.webp",
+    "image": "/images/menu/corn-cheese-volcano.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -2251,8 +2251,8 @@
     "dominosCode": "BRD0030",
     "skuId": "4584",
     "description": "Freshly Baked Stuffed Garlic Bread with Cheese, Onion and Paneer Tikka fillings. Comes with a dash of Basil Parsley Sprinkle on top",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/fb7e0ca4-a256-4183-947e-bd0e4512f162_paneerGBsidejpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/fb7e0ca4-a256-4183-947e-bd0e4512f162_paneerGBsidejpgFull2x2702.webp",
+    "imageUrl": "/images/menu/paneer-tikka-stuffed-gb.webp",
+    "image": "/images/menu/paneer-tikka-stuffed-gb.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2280,8 +2280,8 @@
     "dominosCode": "PIZ5526",
     "skuId": "6#125#8712",
     "description": "Burst of molten cheddar and cheesy melt with smoky Pepper Barbecue & fiery Peri Peri Chicken",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e43c7735-cedd-4763-9115-b26bd9c9717e_inCheeseBurstDoubleChickenInappHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e43c7735-cedd-4763-9115-b26bd9c9717e_inCheeseBurstDoubleChickenInappHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/2in1-cheese-burst-double-chicken.webp",
+    "image": "/images/menu/2in1-cheese-burst-double-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 419,
       "Medium (Serves 2)": 729,
@@ -2331,8 +2331,8 @@
     "dominosCode": "PIZ5357",
     "skuId": "7#121#6882",
     "description": "8 cheesy pull-aparts loaded with Pepper BBQ Chicken & Peri Peri Chicken! Pull, dip & relish the cheesy heaven.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/21db76fd-0d5d-4228-804e-16c705741722_cheHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/21db76fd-0d5d-4228-804e-16c705741722_cheHomeProductV1.webp",
+    "imageUrl": "/images/menu/cheese-lava-spiced-double-chicken.webp",
+    "image": "/images/menu/cheese-lava-spiced-double-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 329,
       "Medium (Serves 2)": 579,
@@ -2382,8 +2382,8 @@
     "dominosCode": "PIZ0779",
     "skuId": "12#126#8828",
     "description": "Sweet meets spicy meets cheesy in this loaded slice. Bold flavour, crispy crust. Can't-stop-eating energy.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0c0c354c-8673-49d9-8a20-53aa61fa1421_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0c0c354c-8673-49d9-8a20-53aa61fa1421_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-mexican-sizzle-veg.webp",
+    "image": "/images/menu/dominoid-mexican-sizzle-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 129,
       "Medium (Serves 2)": 229,
@@ -2433,8 +2433,8 @@
     "dominosCode": "BEV0847",
     "skuId": "8359",
     "description": "Indulge in flavor of our Rich, Creamy Cold Coffee",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/99f3da97-14e5-4cf8-a020-a0a0c10377eb_COFFEEGLASSSearchProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/99f3da97-14e5-4cf8-a020-a0a0c10377eb_COFFEEGLASSSearchProductVxpx.webp",
+    "imageUrl": "/images/menu/classic-cold-coffee-300-ml.webp",
+    "image": "/images/menu/classic-cold-coffee-300-ml.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2462,8 +2462,8 @@
     "dominosCode": "PIZ0625",
     "skuId": "6#1#8463",
     "description": "Loaded with 2x Paneer and drizzled with bold Garlic Ranch sauce along with crust stuffed with mesmerizing veg kebab.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b92a14d2-1f3a-4f56-b987-5c78b28b574e_GarlicRanchxPxHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b92a14d2-1f3a-4f56-b987-5c78b28b574e_GarlicRanchxPxHomeProduct.webp",
+    "imageUrl": "/images/menu/paneer-maxxx-garlic-ranch.webp",
+    "image": "/images/menu/paneer-maxxx-garlic-ranch.webp",
     "sizes": {
       "Regular (Serves 1)": 299,
       "Medium (Serves 2)": 519,
@@ -2513,8 +2513,8 @@
     "dominosCode": "SID0305",
     "skuId": "6632",
     "description": "Stuffed with tandoori sauce, spiced chicken for a bold Indian twist.. Double tacos for double fun",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/44a33bdf-5938-4317-89c4-d00adca521ee_HomeProductV1TandooriLoadedChickenTaco720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/44a33bdf-5938-4317-89c4-d00adca521ee_HomeProductV1TandooriLoadedChickenTaco720x700px.webp",
+    "imageUrl": "/images/menu/tandoori-loaded-chicken-taco.webp",
+    "image": "/images/menu/tandoori-loaded-chicken-taco.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2542,8 +2542,8 @@
     "dominosCode": "PIZ0171",
     "skuId": "7#1#4607",
     "description": "Cheese Overloaded Pizza with a medley of Mozzarella, Cheddar & Ghost Pepper flavoured Cheese.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/9f0b132c-18e4-4cb3-9ba8-8fdb976a9709_PIZ0171.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/9f0b132c-18e4-4cb3-9ba8-8fdb976a9709_PIZ0171.webp",
+    "imageUrl": "/images/menu/cheese-overload.webp",
+    "image": "/images/menu/cheese-overload.webp",
     "sizes": {
       "Regular (Serves 1)": 725,
       "Medium (Serves 2)": 1269,
@@ -2593,8 +2593,8 @@
     "dominosCode": "PIZ5554",
     "skuId": "12#126#8831",
     "description": "Sticky-spicy korean glaze, juicy chicken, cheese pull for days. Heat that's straight-up addictive.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b82befdd-af52-4650-bd20-5f9f57c51814_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b82befdd-af52-4650-bd20-5f9f57c51814_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-korean-heat-chicken.webp",
+    "image": "/images/menu/dominoid-korean-heat-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 149,
       "Medium (Serves 2)": 259,
@@ -2644,8 +2644,8 @@
     "dominosCode": "NVPARCEL",
     "skuId": "185",
     "description": "Snacky bites! Pizza rolls with chicken sausage & creamy harissa sauce",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/be9e4a58-a28f-4d62-9852-01602a63b6d9_Parcel_Nonveg.webp",
+    "imageUrl": "/images/menu/chicken-parcel.webp",
+    "image": "/images/menu/chicken-parcel.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2673,8 +2673,8 @@
     "dominosCode": "TACVG04",
     "skuId": "157",
     "description": "Truly irresistible! Crispy taco with veg patty & creamy harissa sauce",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
+    "imageUrl": "/images/menu/taco-mexicana-veg.webp",
+    "image": "/images/menu/taco-mexicana-veg.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2702,8 +2702,8 @@
     "dominosCode": "PIZ5122",
     "skuId": "7#1#59",
     "description": "Grilled chicken rashers, peri-peri chicken, onion & capsicum, a complete fiesta",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d5b5a2d5-55ad-4414-9c6b-5f736b399075_FullsizeChickenFiestaCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d5b5a2d5-55ad-4414-9c6b-5f736b399075_FullsizeChickenFiestaCB.webp",
+    "imageUrl": "/images/menu/chicken-fiesta.webp",
+    "image": "/images/menu/chicken-fiesta.webp",
     "sizes": {
       "Regular (Serves 1)": 615,
       "Medium (Serves 2)": 1079,
@@ -2753,8 +2753,8 @@
     "dominosCode": "PIZ0233",
     "skuId": "6#391#4850",
     "description": "Authentic Indian Flavor of Makhani Sauce loaded with juicy Paneer, crisp Capsicum and crunchy Onion.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9197e275-6983-4cc4-a682-c7e9e8868b94_PMOnionCapsicumPaneerMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9197e275-6983-4cc4-a682-c7e9e8868b94_PMOnionCapsicumPaneerMenu.webp",
+    "imageUrl": "/images/menu/paneer-onion-capsicum-with-desi-makhani-sauce.webp",
+    "image": "/images/menu/paneer-onion-capsicum-with-desi-makhani-sauce.webp",
     "sizes": {
       "Regular (Serves 1)": 129
     },
@@ -2786,8 +2786,8 @@
     "dominosCode": "PIZ0404",
     "skuId": "6#128#6620",
     "description": "Tomato, Jalapeno, Corn, Grilled Mushroom & crushed Aranchini Patty in a fresh pan crust",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/67b5ed83-ed05-4097-a909-cc3b0d0679f6_pizza_mania_veg_loaded.webp",
+    "imageUrl": "/images/menu/veg-loaded-pizza-mania.webp",
+    "image": "/images/menu/veg-loaded-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 139
     },
@@ -2819,8 +2819,8 @@
     "dominosCode": "BEV0832",
     "skuId": "8292",
     "description": "Sparkling and Refreshing Beverage",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
+    "imageUrl": "/images/menu/mini-coke-zero-can.webp",
+    "image": "/images/menu/mini-coke-zero-can.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2848,8 +2848,8 @@
     "dominosCode": "SID003",
     "skuId": "4110",
     "description": "Goodness of Tomato Ketchup in mini sachets",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5a733cfb-60cf-4912-b938-9b6286925b94_Tomato-ketchup-8gm_Upsell-Cards_450x216.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5a733cfb-60cf-4912-b938-9b6286925b94_Tomato-ketchup-8gm_Upsell-Cards_450x216.webp",
+    "imageUrl": "/images/menu/tomato-ketchup.webp",
+    "image": "/images/menu/tomato-ketchup.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2877,8 +2877,8 @@
     "dominosCode": "PIZ0468",
     "skuId": "7#121#6890",
     "description": "8 cheesy pull-aparts topped with paneer, capsicum & red paprika! Pull, dip & let the cheese take over.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0ab070e9-481f-452c-9e8b-51bf04b43df9_CheeseLavaPullApartPeppyPaneerHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/0ab070e9-481f-452c-9e8b-51bf04b43df9_CheeseLavaPullApartPeppyPaneerHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/cheese-lava-peppy-paneer.webp",
+    "image": "/images/menu/cheese-lava-peppy-paneer.webp",
     "sizes": {
       "Regular (Serves 1)": 329,
       "Medium (Serves 2)": 579,
@@ -2928,8 +2928,8 @@
     "dominosCode": "BEV0824",
     "skuId": "6398",
     "description": "Refreshing clear drink with a natural lemon flavour",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/e7db5ad9-7908-4ddf-93b2-0ab45576311d_SpriteHomeProductV1.webp",
+    "imageUrl": "/images/menu/sprite-475ml.webp",
+    "image": "/images/menu/sprite-475ml.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2957,8 +2957,8 @@
     "dominosCode": "BRD0052",
     "skuId": "6198",
     "description": "Freshly baked garlic bread infused with Korean Sweet Chili Sauce, Molten cheese, juicy corn & tangy jalapeno",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/43128242-d938-472d-b8d4-ddafb567a9c4_CartGarlicBreadwithcornkorean.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/43128242-d938-472d-b8d4-ddafb567a9c4_CartGarlicBreadwithcornkorean.webp",
+    "imageUrl": "/images/menu/korean-corn-jalapeno-garlic-bread.webp",
+    "image": "/images/menu/korean-corn-jalapeno-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -2986,8 +2986,8 @@
     "dominosCode": "SID0177",
     "skuId": "6047",
     "description": "Tender, Juicy, Melt in Mouth Chicken Meatballs in Chili Seasoning!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f9dccbd2-6e3d-4e35-b0dd-f55a6793cea8_Fullsizespicymeatballs.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f9dccbd2-6e3d-4e35-b0dd-f55a6793cea8_Fullsizespicymeatballs.webp",
+    "imageUrl": "/images/menu/spicy-chicken-bombs.webp",
+    "image": "/images/menu/spicy-chicken-bombs.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -3015,8 +3015,8 @@
     "dominosCode": "PIZ5161",
     "skuId": "6#3#4649",
     "description": "Flavourful & meaty chicken keema paratha and goodness of cheesy pizza coming together in an epic crossover!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/ff9b0a6d-7de3-4c54-9c7b-ceb57b6ca489_keemappsidejpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/ff9b0a6d-7de3-4c54-9c7b-ceb57b6ca489_keemappsidejpgFull2x2702.webp",
+    "imageUrl": "/images/menu/chicken-keema-paratha-pizza.webp",
+    "image": "/images/menu/chicken-keema-paratha-pizza.webp",
     "sizes": {
       "Regular (Serves 1)": 269,
       "Medium (Serves 2)": 469,
@@ -3066,8 +3066,8 @@
     "dominosCode": "SID0266",
     "skuId": "6411",
     "description": "Golden crunchy vegetarian bite-sized savory snack.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2df6fc60-d50a-438e-b484-9d941533c6ae_veg_taco_side.webp",
+    "imageUrl": "/images/menu/veggie-bites.webp",
+    "image": "/images/menu/veggie-bites.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -3095,8 +3095,8 @@
     "dominosCode": "PIZ5278",
     "skuId": "11#1#6652",
     "description": "6 Chicken Bangers in 1 Epic Pan Pizza: Pepper Barbeque Chicken, Chicken Dominator, Chicken Fiesta, Spiced Double Chicken, Chicken Golden Delight",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4465ab77-1c41-4d24-b96b-cd26bd92df0f_homep.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4465ab77-1c41-4d24-b96b-cd26bd92df0f_homep.webp",
+    "imageUrl": "/images/menu/big-big-6in1-pizza-non-veg.webp",
+    "image": "/images/menu/big-big-6in1-pizza-non-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 999,
       "Medium (Serves 2)": 1749,
@@ -3146,8 +3146,8 @@
     "dominosCode": "PIZ5253",
     "skuId": "9#102#6309",
     "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken & Golden Corn\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/bda23fb7-fbc5-4b61-b181-9ccdc1398859_CartCheeseVolcanoChickenDelight.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/bda23fb7-fbc5-4b61-b181-9ccdc1398859_CartCheeseVolcanoChickenDelight.webp",
+    "imageUrl": "/images/menu/cheese-volcano-chicken-delight.webp",
+    "image": "/images/menu/cheese-volcano-chicken-delight.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -3197,8 +3197,8 @@
     "dominosCode": "PIZ0356",
     "skuId": "9#102#6311",
     "description": "Centre loaded with Molten Cheese & topped with Onion, Capsicum, Tomato & Grilled Mushroom\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/8d76dc34-bcb2-41d4-9320-49ac8b3035db_CartFarmhouse.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/cart/8d76dc34-bcb2-41d4-9320-49ac8b3035db_CartFarmhouse.webp",
+    "imageUrl": "/images/menu/cheese-volcano-farmhouse.webp",
+    "image": "/images/menu/cheese-volcano-farmhouse.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -3248,8 +3248,8 @@
     "dominosCode": "PIZ0502",
     "skuId": "11#122#8187",
     "description": "Big Big crust oozing with molten cheddar cheese with six bestseller veg flavours.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6b1a99c-6029-42a5-97cb-aaf579ec3340_BBPLAVAVxHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6b1a99c-6029-42a5-97cb-aaf579ec3340_BBPLAVAVxHomeProduct.webp",
+    "imageUrl": "/images/menu/big-big-6in1-lavaburst-veg.webp",
+    "image": "/images/menu/big-big-6in1-lavaburst-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 1199,
       "Medium (Serves 2)": 2099,
@@ -3299,8 +3299,8 @@
     "dominosCode": "PIZ5355",
     "skuId": "7#121#6874",
     "description": "8 cheesy pull-aparts topped with pepper BBQ chicken! Pull, dip & melt into cheesy goodness.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/778023ef-a417-4c77-a77a-a7347a7de73f_CheeseLavaPullApartPepperBBQChickenHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/778023ef-a417-4c77-a77a-a7347a7de73f_CheeseLavaPullApartPepperBBQChickenHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/cheese-lava-pepper-bbq-chicken.webp",
+    "image": "/images/menu/cheese-lava-pepper-bbq-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 399,
       "Medium (Serves 2)": 699,
@@ -3350,8 +3350,8 @@
     "dominosCode": "PIZ0578",
     "skuId": "9#102#8250",
     "description": "Centre loaded with Molten Cheese & topped with peppy Paneer, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/441b82be-94f6-4de8-980b-5df660d82ee3_volcanoHomePeppyPaneer.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/441b82be-94f6-4de8-980b-5df660d82ee3_volcanoHomePeppyPaneer.webp",
+    "imageUrl": "/images/menu/reg-cv-peppy-paneer-lxt-oag.webp",
+    "image": "/images/menu/reg-cv-peppy-paneer-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 325,
       "Medium (Serves 2)": 569,
@@ -3401,8 +3401,8 @@
     "dominosCode": "PIZ5427",
     "skuId": "6#1#8235",
     "description": "Pepper barbecue chicken for that extra zing",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b704c14f-309f-446b-8828-1b98128ef440_PMPepperBBqChickenMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b704c14f-309f-446b-8828-1b98128ef440_PMPepperBBqChickenMenu.webp",
+    "imageUrl": "/images/menu/pepper-barbecue-chicken-pizza-mania.webp",
+    "image": "/images/menu/pepper-barbecue-chicken-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 169
     },
@@ -3434,8 +3434,8 @@
     "dominosCode": "BRD0054",
     "skuId": "6200",
     "description": "Freshly baked garlic bread infused with Creamy Makhani Sauce, Molten cheese, juicy corn & tangy jalapeno",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b37ea44d-021e-4cd3-a139-7239e569065d_FullsizeGarlicBreadwithcornMakhani.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b37ea44d-021e-4cd3-a139-7239e569065d_FullsizeGarlicBreadwithcornMakhani.webp",
+    "imageUrl": "/images/menu/makhani-corn-jalapeno-garlic-bread.webp",
+    "image": "/images/menu/makhani-corn-jalapeno-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -3463,8 +3463,8 @@
     "dominosCode": "PIZ5551",
     "skuId": "12#126#8830",
     "description": "Earthy truffle drizzle over tender chicken & gooey cheese — rich, savoury, straight-up indulgent on a crispy pan crust",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/af9bbb9b-3264-4c80-b261-4936661bb201_HomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/af9bbb9b-3264-4c80-b261-4936661bb201_HomeProduct.webp",
+    "imageUrl": "/images/menu/dominoid-italian-truffle-chicken.webp",
+    "image": "/images/menu/dominoid-italian-truffle-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 149,
       "Medium (Serves 2)": 259,
@@ -3514,8 +3514,8 @@
     "dominosCode": "PIZ5254",
     "skuId": "9#102#6016",
     "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken & Peri Peri Chicken.\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5a5346a4-cf9a-440e-80c6-981b051a3201_UpsellcardsizeCheeseVolcanoDoubleChicken.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5a5346a4-cf9a-440e-80c6-981b051a3201_UpsellcardsizeCheeseVolcanoDoubleChicken.webp",
+    "imageUrl": "/images/menu/cheese-volcano-double-chicken.webp",
+    "image": "/images/menu/cheese-volcano-double-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -3565,8 +3565,8 @@
     "dominosCode": "BEV0145",
     "skuId": "4562",
     "description": "Alphonsos only from Ratnagiri with the Goodness of Fiber",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/df088a5f-6840-4cc7-8511-2207d8da1aac_BNRatnagiriAlphonso-BEV0145-HomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/df088a5f-6840-4cc7-8511-2207d8da1aac_BNRatnagiriAlphonso-BEV0145-HomeProduct.webp",
+    "imageUrl": "/images/menu/b-natural-alphonsos-from-ratnagiri-300-ml.webp",
+    "image": "/images/menu/b-natural-alphonsos-from-ratnagiri-300-ml.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -3594,8 +3594,8 @@
     "dominosCode": "PIZ5251",
     "skuId": "9#102#6312",
     "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5d43160f-76b1-4d5d-965a-905ba557eae0_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/5d43160f-76b1-4d5d-965a-905ba557eae0_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
+    "imageUrl": "/images/menu/cheese-volcano-bbq-chicken.webp",
+    "image": "/images/menu/cheese-volcano-bbq-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -3645,8 +3645,8 @@
     "dominosCode": "TACNV06",
     "skuId": "155",
     "description": "Truly irresistible! Crispy taco with non-veg patty & creamy harissa sauce",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/03504667-bc4c-4cb1-be91-1be18d02fe86_nvtacosidejpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/03504667-bc4c-4cb1-be91-1be18d02fe86_nvtacosidejpgFull2x2702.webp",
+    "imageUrl": "/images/menu/taco-mexicana-non-veg.webp",
+    "image": "/images/menu/taco-mexicana-non-veg.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -3674,8 +3674,8 @@
     "dominosCode": "TACVG05",
     "skuId": "4200",
     "description": "Truly irresistible! Crispy taco with a delicious veg patty & creamy sauce",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9fbda5ac-139e-41a9-b420-dd2f83ec0b08_taco.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/9fbda5ac-139e-41a9-b420-dd2f83ec0b08_taco.webp",
+    "imageUrl": "/images/menu/taco-mexicana-veg-single.webp",
+    "image": "/images/menu/taco-mexicana-veg-single.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -3703,8 +3703,8 @@
     "dominosCode": "PIZ5555",
     "skuId": "12#126#8832",
     "description": "Sweet-spicy sauce, juicy chicken, cheesy finish — swicy flavour that keeps you coming back for one more bite.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/392dfd3b-386f-4c33-8b78-030c0c4e35bc_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/392dfd3b-386f-4c33-8b78-030c0c4e35bc_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-mexican-sizzle-chicken.webp",
+    "image": "/images/menu/dominoid-mexican-sizzle-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 149,
       "Medium (Serves 2)": 259,
@@ -3754,8 +3754,8 @@
     "dominosCode": "PIZ5359",
     "skuId": "7#121#6880",
     "description": "8 cheesy pull-aparts loaded with Pepper BBQ Chicken & golden corn! Pull, dip & melt into cheesy perfection.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5409ab6b-731f-4405-8497-1becf41bf6fb_CheeseLavaPullApartChickenGoldenDelightHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5409ab6b-731f-4405-8497-1becf41bf6fb_CheeseLavaPullApartChickenGoldenDelightHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/cheese-lava-chicken-golden-delight.webp",
+    "image": "/images/menu/cheese-lava-chicken-golden-delight.webp",
     "sizes": {
       "Regular (Serves 1)": 399,
       "Medium (Serves 2)": 699,
@@ -3805,8 +3805,8 @@
     "dominosCode": "BEV0842",
     "skuId": "8238",
     "description": "Maximum Taste, Zero Sugar",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/06af0d38-cf04-4f56-885c-6cf963a3c987_CokeZeroHomeProductV1.webp",
+    "imageUrl": "/images/menu/coke-zero-255ml-lxt.webp",
+    "image": "/images/menu/coke-zero-255ml-lxt.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -3834,8 +3834,8 @@
     "dominosCode": "PIZ5386",
     "skuId": "11#115#8391",
     "description": "Big Big Pizza meets iconic Cheeseburst crust, bursting with gooey molten cheese and 6 bestseller non veg flavours.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/59066b33-0b7b-4300-8422-ab1ca0ab3719_BBPCBNVxHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/59066b33-0b7b-4300-8422-ab1ca0ab3719_BBPCBNVxHomeProduct.webp",
+    "imageUrl": "/images/menu/big-big-6in1-cheeseburst-non-veg.webp",
+    "image": "/images/menu/big-big-6in1-cheeseburst-non-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 1199,
       "Medium (Serves 2)": 2099,
@@ -3885,8 +3885,8 @@
     "dominosCode": "PIZ0200",
     "skuId": "6#3#4647",
     "description": "A crazy fusion like never before. A delicious fusion of corn stuffed paratha and cheesy pizza.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/7ff4bbe1-f228-4ad7-ae4a-aa653b8c36d0_PPcornsidejpgFull2x2702.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/7ff4bbe1-f228-4ad7-ae4a-aa653b8c36d0_PPcornsidejpgFull2x2702.webp",
+    "imageUrl": "/images/menu/corn-n-cheese-paratha-pizza.webp",
+    "image": "/images/menu/corn-n-cheese-paratha-pizza.webp",
     "sizes": {
       "Regular (Serves 1)": 199,
       "Medium (Serves 2)": 349,
@@ -3936,8 +3936,8 @@
     "dominosCode": "PIZ0391",
     "skuId": "11#1#6560",
     "description": "6 Veggie Blockbusters in 1 Epic Pan Pizza: Corn N Cheese, Peppy Paneer, Farmhouse, Mexican Green Wave, Veg Paradise, Margherita",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/df5f7ff3-5ed4-47d3-b571-990b436b33be_HomeProductV1BigBigPizzaVeg.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/df5f7ff3-5ed4-47d3-b571-990b436b33be_HomeProductV1BigBigPizzaVeg.webp",
+    "imageUrl": "/images/menu/big-big-6in1-pizza-veg.webp",
+    "image": "/images/menu/big-big-6in1-pizza-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 799,
       "Medium (Serves 2)": 1399,
@@ -3987,8 +3987,8 @@
     "dominosCode": "SID0175",
     "skuId": "6045",
     "description": "Bite sized Chicken Popcorns, cooked to perfection with Chili Seasoning for a delicious snack experience!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/27047ecf-7101-498d-84b7-b7455ddc2bb4_FullsizespicyPops.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/27047ecf-7101-498d-84b7-b7455ddc2bb4_FullsizespicyPops.webp",
+    "imageUrl": "/images/menu/spicy-chicken-pops.webp",
+    "image": "/images/menu/spicy-chicken-pops.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4016,8 +4016,8 @@
     "dominosCode": "BRD0058",
     "skuId": "6204",
     "description": "Freshly Baked Garlic Bread infused with Korean Sweet Chili Sauce, Delectable Chicken Pepperoni & molten Cheese",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d28ef928-674c-4aac-acfb-03f5fe1c9bf1_FullsizeGarlicBreadwithPepperonikorean.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d28ef928-674c-4aac-acfb-03f5fe1c9bf1_FullsizeGarlicBreadwithPepperonikorean.webp",
+    "imageUrl": "/images/menu/korean-pepperoni-garlic-bread.webp",
+    "image": "/images/menu/korean-pepperoni-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4045,8 +4045,8 @@
     "dominosCode": "PIZ5157",
     "skuId": "7#1#4615",
     "description": "Delightful combination of our spicy duo- Pepper Barbecue Chicken and Peri Peri Chicken for Chicken Lovers.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/b1a34dfb-ddef-4ddc-9b15-b3effbf23bfa_UpsellcardDoubleSpiceChickenCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/b1a34dfb-ddef-4ddc-9b15-b3effbf23bfa_UpsellcardDoubleSpiceChickenCB.webp",
+    "imageUrl": "/images/menu/spiced-double-chicken.webp",
+    "image": "/images/menu/spiced-double-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 595,
       "Medium (Serves 2)": 1039,
@@ -4096,8 +4096,8 @@
     "dominosCode": "PIZ0637",
     "skuId": "7#1#8462",
     "description": "Loaded with 2x Paneer and a minty twist of Tandoori sauce along with crust stuffed with mesmerizing veg kebab.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2534890a-874d-46f0-92f9-c81b4fdfe8ec_TandooriTwistxPxHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2534890a-874d-46f0-92f9-c81b4fdfe8ec_TandooriTwistxPxHomeProduct.webp",
+    "imageUrl": "/images/menu/paneer-maxxx-tandoori-twist.webp",
+    "image": "/images/menu/paneer-maxxx-tandoori-twist.webp",
     "sizes": {
       "Regular (Serves 1)": 549,
       "Medium (Serves 2)": 959,
@@ -4147,8 +4147,8 @@
     "dominosCode": "PIZ5390",
     "skuId": "11#122#8188",
     "description": "Big Big crust oozing with molten cheddar cheese with six bestseller non-veg flavours.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/66348821-44bb-4a95-afeb-7750f6435cde_BBPLAVANVxHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/66348821-44bb-4a95-afeb-7750f6435cde_BBPLAVANVxHomeProduct.webp",
+    "imageUrl": "/images/menu/big-big-6in1-lavaburst-non-veg.webp",
+    "image": "/images/menu/big-big-6in1-lavaburst-non-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 1199,
       "Medium (Serves 2)": 2099,
@@ -4198,8 +4198,8 @@
     "dominosCode": "PIZ5525",
     "skuId": "6#125#8765",
     "description": "Molten cheddar & cheesy melt with juicy BBQ chicken chunks for extra zing",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7949e39c-84c1-4377-b960-c467c5609607_inCheeseBurstPepperBBQInappHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7949e39c-84c1-4377-b960-c467c5609607_inCheeseBurstPepperBBQInappHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/2in1-cheese-burst-pepper-bbq-chicken.webp",
+    "image": "/images/menu/2in1-cheese-burst-pepper-bbq-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -4249,8 +4249,8 @@
     "dominosCode": "PIZ0474",
     "skuId": "7#121#6877",
     "description": "8 cheesy pull-aparts topped with corn, capsicum, black olives & red paprika. Pull, dip & relish the cheesy indulgence.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d73d1091-199f-4d5e-81a6-4492c9e4fd3a_CheeseLavaPullApartVegParadiseHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/d73d1091-199f-4d5e-81a6-4492c9e4fd3a_CheeseLavaPullApartVegParadiseHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/cheese-lava-veg-paradise.webp",
+    "image": "/images/menu/cheese-lava-veg-paradise.webp",
     "sizes": {
       "Regular (Serves 1)": 399,
       "Medium (Serves 2)": 699,
@@ -4300,8 +4300,8 @@
     "dominosCode": "PIZ0734",
     "skuId": "6#125#8709",
     "description": "Rich molten cheddar & cheesy melt loaded with veggies & grilled mushroom",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fb8143ab-1da9-4fd9-95f0-8ad50c27f604_inCheeseBurstFarmHouseInappHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fb8143ab-1da9-4fd9-95f0-8ad50c27f604_inCheeseBurstFarmHouseInappHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/2in1-cheese-burst-farmhouse.webp",
+    "image": "/images/menu/2in1-cheese-burst-farmhouse.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -4351,8 +4351,8 @@
     "dominosCode": "SID0301",
     "skuId": "6628",
     "description": "Delicious Parcel stuffed with chicken & smoky tandoori sauce and bold spices for a punch of Indian flavour.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
+    "imageUrl": "/images/menu/loaded-saucy-chicken-parcel-tandoori.webp",
+    "image": "/images/menu/loaded-saucy-chicken-parcel-tandoori.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4380,8 +4380,8 @@
     "dominosCode": "PIZ0579",
     "skuId": "9#102#8239",
     "description": "Centre loaded with Molten Cheese & topped with Golden Corn, Black Olives, Capsicum & Red Paprika\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9aec579a-99b3-4954-99ce-1690069b56cf_FullSizeVeggieParadise.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9aec579a-99b3-4954-99ce-1690069b56cf_FullSizeVeggieParadise.webp",
+    "imageUrl": "/images/menu/reg-cv-veg-paradise-lxt-oag.webp",
+    "image": "/images/menu/reg-cv-veg-paradise-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 325,
       "Medium (Serves 2)": 569,
@@ -4431,8 +4431,8 @@
     "dominosCode": "PIZ0778",
     "skuId": "12#126#8827",
     "description": "That iconic korean glaze, melted cheese, loaded veggies on a crispy pan crust. Spicy enough to be a whole mood.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4df9709c-fe78-43d2-9a5c-6c57fdf3ffa1_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4df9709c-fe78-43d2-9a5c-6c57fdf3ffa1_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-korean-heat-veg.webp",
+    "image": "/images/menu/dominoid-korean-heat-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 129,
       "Medium (Serves 2)": 229,
@@ -4482,8 +4482,8 @@
     "dominosCode": "PIZ0570",
     "skuId": "6#1#8244",
     "description": "Flavorful trio of juicy paneer, crisp capsicum with spicy red paprika",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/43e3dd97-08a6-4893-90d9-80e1ab2fbc37_new_peppy_paneer.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/43e3dd97-08a6-4893-90d9-80e1ab2fbc37_new_peppy_paneer.webp",
+    "imageUrl": "/images/menu/reg-peppy-paneer-lxt-oag.webp",
+    "image": "/images/menu/reg-peppy-paneer-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 269,
       "Medium (Serves 2)": 469,
@@ -4533,8 +4533,8 @@
     "dominosCode": "PIZ5556",
     "skuId": "12#126#8833",
     "description": "Warm shawarma spices, tender chicken, garlicky cheesy finish. Slice-sized & drool-worthy.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/cb79c674-ec07-4d42-900e-d3189f99d135_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/cb79c674-ec07-4d42-900e-d3189f99d135_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-lebanese-shawarma-chicken.webp",
+    "image": "/images/menu/dominoid-lebanese-shawarma-chicken.webp",
     "sizes": {
       "Regular (Serves 1)": 149,
       "Medium (Serves 2)": 259,
@@ -4584,8 +4584,8 @@
     "dominosCode": "SID0261",
     "skuId": "6408",
     "description": "Bite sized Chicken Popcorns, cooked to perfection with Chili Seasoning for a delicious snack experience!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/78cde41f-e139-4c52-801f-6bf29a95229b_FullsizespicyPops.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/78cde41f-e139-4c52-801f-6bf29a95229b_FullsizespicyPops.webp",
+    "imageUrl": "/images/menu/chicken-pops-40gm.webp",
+    "image": "/images/menu/chicken-pops-40gm.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4613,8 +4613,8 @@
     "dominosCode": "DST0106",
     "skuId": "6602",
     "description": "Chocolate lovers delight! Indulgent, gooey Choco Bomb",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/SearchProductV1/9a9b7473-64c4-44e1-bc58-a577cbaf2b8d_CLC_side_small.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/SearchProductV1/9a9b7473-64c4-44e1-bc58-a577cbaf2b8d_CLC_side_small.webp",
+    "imageUrl": "/images/menu/choco-bomb.webp",
+    "image": "/images/menu/choco-bomb.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4642,8 +4642,8 @@
     "dominosCode": "VGPARCEL",
     "skuId": "187",
     "description": "Snacky bites! Pizza rolls with paneer & creamy harissa sauce",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/4fe3ac9b-e2d4-4d03-8ef3-95dc634ba28f_Parcel_Veg.webp",
+    "imageUrl": "/images/menu/veg-parcel.webp",
+    "image": "/images/menu/veg-parcel.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4671,8 +4671,8 @@
     "dominosCode": "PIZ5306",
     "skuId": "6#128#6619",
     "description": "Chicken sausage, pepper barbecue chicken & peri-peri chicken in a fresh pan crust",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/89bc0452-5617-401a-93f1-59b36d636c22_PMNVLoadedMenu.webp",
+    "imageUrl": "/images/menu/non-veg-loaded-pizza-mania.webp",
+    "image": "/images/menu/non-veg-loaded-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 169
     },
@@ -4704,8 +4704,8 @@
     "dominosCode": "SID0265",
     "skuId": "6412",
     "description": "Crisp hot folded meltz overflowing with molten cheese and spicy tandoori seasonings.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/9a3941eb-d02b-4e25-8838-78232be17256_TandooriMaxxFHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/spicy-tandoori-meltz.webp",
+    "image": "/images/menu/spicy-tandoori-meltz.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4733,8 +4733,8 @@
     "dominosCode": "PIZ0777",
     "skuId": "12#126#8826",
     "description": "Molten mozzarella, tangy tomato sauce a crispy pan crust base. Simple, cheesy, chef's classic.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a7639cde-da2a-41b9-a1b2-425e446dba02_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a7639cde-da2a-41b9-a1b2-425e446dba02_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-margherita.webp",
+    "image": "/images/menu/dominoid-margherita.webp",
     "sizes": {
       "Regular (Serves 1)": 119,
       "Medium (Serves 2)": 209,
@@ -4784,8 +4784,8 @@
     "dominosCode": "BRD0031",
     "skuId": "4585",
     "description": "Freshly Baked Garlic Bread stuffed with Delectable Chicken Pepperoni, Cheese and sprinkled with Basil Parsley",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5efc2bde-0333-4602-95b6-b3d9914bd6cd_BRD0031.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/5efc2bde-0333-4602-95b6-b3d9914bd6cd_BRD0031.webp",
+    "imageUrl": "/images/menu/chicken-pepperoni-stuffed-gb.webp",
+    "image": "/images/menu/chicken-pepperoni-stuffed-gb.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4813,8 +4813,8 @@
     "dominosCode": "PIZ0735",
     "skuId": "6#125#8710",
     "description": "Sweet corn meets 2in1 molten gooey cheese for maximum cheese rush",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/32b437e2-6239-4fa1-9524-5dc416d2da91_inCheeseBurstCornNCheeseInappHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/32b437e2-6239-4fa1-9524-5dc416d2da91_inCheeseBurstCornNCheeseInappHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/2in1-cheese-burst-corn-n-cheese.webp",
+    "image": "/images/menu/2in1-cheese-burst-corn-n-cheese.webp",
     "sizes": {
       "Regular (Serves 1)": 319,
       "Medium (Serves 2)": 559,
@@ -4864,8 +4864,8 @@
     "dominosCode": "PIZ5432",
     "skuId": "6#1#8241",
     "description": "Ultimate 2-layered Chicken Indulgence. Stuffed inside with juicy, garlicky chicken keema & topped with a medley of Peri Peri, BBQ & Chicken Rashers , finished with a drizzle of Tandoori Sauce.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fca8b3ad-42d4-4c2f-82bb-ead92ad663cd_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/fca8b3ad-42d4-4c2f-82bb-ead92ad663cd_HomeProductV1.webp",
+    "imageUrl": "/images/menu/reg-tndoori-chk-burst-lxt-oag.webp",
+    "image": "/images/menu/reg-tndoori-chk-burst-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 349,
       "Medium (Serves 2)": 609,
@@ -4915,8 +4915,8 @@
     "dominosCode": "DST0117",
     "skuId": "8169",
     "description": "A smooth, airy butterscotch flavoured mousse. Sweet, creamy, and irresistibly comforting!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2718e088-1219-4ed2-a396-393059250746_ButterscotchMousseHOMEPRODUCT.webp",
+    "imageUrl": "/images/menu/butterscotch-mousse.webp",
+    "image": "/images/menu/butterscotch-mousse.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4944,8 +4944,8 @@
     "dominosCode": "SID0397",
     "skuId": "8252",
     "description": "Tender chicken pieces coated in rich tandoori sauce and molten melted cheese.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4ee7f2ce-46f5-42c4-874a-3c3ed6c1b02d_HomeProductV1TandooriLoadedChickenParcel720x700px.webp",
+    "imageUrl": "/images/menu/chicken-tandoori-meltz-lxt.webp",
+    "image": "/images/menu/chicken-tandoori-meltz-lxt.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -4973,8 +4973,8 @@
     "dominosCode": "PIZ0397",
     "skuId": "6#391#6598",
     "description": "Our classic Pizza Mania topped with crunchy Onions",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/069cd045-cad6-4543-8ec1-65e74ae9c63f_pizza_mania_onion.webp",
+    "imageUrl": "/images/menu/classic-onion-pizza-mania.webp",
+    "image": "/images/menu/classic-onion-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 69
     },
@@ -5006,8 +5006,8 @@
     "dominosCode": "BRD0060",
     "skuId": "6206",
     "description": "Freshly Baked Garlic Bread infused with Creamy Makhani Sauce, Delectable Chicken Pepperoni & molten Cheese",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bbdf833c-2e2f-468f-aa30-e843a142dba1_FullsizeGarlicBreadwithPepperoniMakhani.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/bbdf833c-2e2f-468f-aa30-e843a142dba1_FullsizeGarlicBreadwithPepperoniMakhani.webp",
+    "imageUrl": "/images/menu/makhani-pepperoni-garlic-bread.webp",
+    "image": "/images/menu/makhani-pepperoni-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5035,8 +5035,8 @@
     "dominosCode": "PIZ0733",
     "skuId": "6#125#8708",
     "description": "2in1 the cheesy indulgence with juicy paneer, crisp capsicum & spicy red paprika",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1139905a-1fd4-43d9-9eed-6e37422737e9_inCheeseBurstPaneerPeppyInappHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/1139905a-1fd4-43d9-9eed-6e37422737e9_inCheeseBurstPaneerPeppyInappHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/2in1-cheese-burst-peppy-paneer.webp",
+    "image": "/images/menu/2in1-cheese-burst-peppy-paneer.webp",
     "sizes": {
       "Regular (Serves 1)": 249,
       "Medium (Serves 2)": 439,
@@ -5086,8 +5086,8 @@
     "dominosCode": "PIZ0234",
     "skuId": "6#391#4849",
     "description": "Internationally inspired Hot sauce to cater your spice cravings loaded with juicy Paneer and crisp Capsicum.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/b3be67a0-f02d-4ed6-b0eb-7ae053052c24_PMPaneerCapsicumMenu.webp",
+    "imageUrl": "/images/menu/paneer-capsicum-with-videshi-hot-sauce.webp",
+    "image": "/images/menu/paneer-capsicum-with-videshi-hot-sauce.webp",
     "sizes": {
       "Regular (Serves 1)": 119
     },
@@ -5119,8 +5119,8 @@
     "dominosCode": "SID0298",
     "skuId": "6625",
     "description": "Delicious Parcel stuffed with smoky tandoori paneer and bold spices for a punch of Indian flavour.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae81ee35-92af-44f3-a105-64923c7eecbc_HomeProductV1TandooriLoadedPaneerParcel720x700px.webp",
+    "imageUrl": "/images/menu/loaded-saucy-paneer-parcel-tandoori.webp",
+    "image": "/images/menu/loaded-saucy-paneer-parcel-tandoori.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5148,8 +5148,8 @@
     "dominosCode": "BEV0825",
     "skuId": "6399",
     "description": "Delicious Orange Flavoured Beverage",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/7a2d12ec-c6c0-4f12-a756-6aa32726a142_FantaHomeProduct.webp",
+    "imageUrl": "/images/menu/fanta-475ml.webp",
+    "image": "/images/menu/fanta-475ml.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5177,8 +5177,8 @@
     "dominosCode": "PIZ5429",
     "skuId": "6#115#8247",
     "description": "Molten Cheese Indulgence with Pepper Barbecue chicken for that extra zing",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5a4e8aa9-84d0-4c89-9d11-715f111d6c7a_FullsizePepperBarbequeChickenCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/5a4e8aa9-84d0-4c89-9d11-715f111d6c7a_FullsizePepperBarbequeChickenCB.webp",
+    "imageUrl": "/images/menu/reg-cb-ppr-bbq-chk-lxt-oag.webp",
+    "image": "/images/menu/reg-cb-ppr-bbq-chk-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 329,
       "Medium (Serves 2)": 579,
@@ -5228,8 +5228,8 @@
     "dominosCode": "PIZ0470",
     "skuId": "7#121#6875",
     "description": "8 cheesy pull-aparts topped with onion, capsicum, tomato & mushrooms! Pull, dip & taste the cheesy comfort.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/3f97413d-e0a4-453a-8fd1-c7f8c8c95cd3_CheeseLavaPullApartFarmhouseHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/3f97413d-e0a4-453a-8fd1-c7f8c8c95cd3_CheeseLavaPullApartFarmhouseHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/cheese-lava-farmhouse.webp",
+    "image": "/images/menu/cheese-lava-farmhouse.webp",
     "sizes": {
       "Regular (Serves 1)": 399,
       "Medium (Serves 2)": 699,
@@ -5279,8 +5279,8 @@
     "dominosCode": "SID0452",
     "skuId": "8704",
     "description": "Double the yum with our freshly baked rolls stuffed with two indulgent Seekh Kebabs and juicy Keema in creamy harissa sauce. Simply divine!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/edf5d555-ff87-4a34-9747-364c54eee7f1_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/edf5d555-ff87-4a34-9747-364c54eee7f1_HomeProductV1.webp",
+    "imageUrl": "/images/menu/double-chicken-kebab-rolls.webp",
+    "image": "/images/menu/double-chicken-kebab-rolls.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5308,8 +5308,8 @@
     "dominosCode": "BRD0056",
     "skuId": "6202",
     "description": "Freshly Baked Stuffed Garlic Bread infused with Spicy Guntur Sauce, Molten Cheese, Onion and Paneer Tikka fillings",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b66b5373-7858-4caa-b470-df1429818c78_FullsizeGarlicBreadwithpaneerFiery.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/b66b5373-7858-4caa-b470-df1429818c78_FullsizeGarlicBreadwithpaneerFiery.webp",
+    "imageUrl": "/images/menu/fiery-paneer-tikka-garlic-bread.webp",
+    "image": "/images/menu/fiery-paneer-tikka-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5337,8 +5337,8 @@
     "dominosCode": "PIZ0130",
     "skuId": "6#391#97",
     "description": "Sweet & juicy golden corn for that lipsmacking taste",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/d671fffb-85db-4d82-a9be-32764aec82e2_PMGoldneCornMenu.webp",
+    "imageUrl": "/images/menu/golden-corn-pizza-mania.webp",
+    "image": "/images/menu/golden-corn-pizza-mania.webp",
     "sizes": {
       "Regular (Serves 1)": 89
     },
@@ -5370,8 +5370,8 @@
     "dominosCode": "PIZ0574",
     "skuId": "6#115#8240",
     "description": "Molten Cheese Indulgence with Flavorful trio of juicy paneer, crisp capsicum & spicy red paprika",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebRecommendedProductV1/3c423a66-e86d-43f9-bada-745b0ddfefa0_CorouselPeppyPaneerCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebRecommendedProductV1/3c423a66-e86d-43f9-bada-745b0ddfefa0_CorouselPeppyPaneerCB.webp",
+    "imageUrl": "/images/menu/reg-cb-peppy-paneer-lxt-oag.webp",
+    "image": "/images/menu/reg-cb-peppy-paneer-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 349,
       "Medium (Serves 2)": 609,
@@ -5421,8 +5421,8 @@
     "dominosCode": "BEV0823",
     "skuId": "6397",
     "description": "Sparkling and Refreshing Beverage",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c75f77f0-987b-45df-b976-12be349df9dc_CokeHomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c75f77f0-987b-45df-b976-12be349df9dc_CokeHomeProductV1.webp",
+    "imageUrl": "/images/menu/coca-cola-475ml.webp",
+    "image": "/images/menu/coca-cola-475ml.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5450,8 +5450,8 @@
     "dominosCode": "PIZ0575",
     "skuId": "6#115#8251",
     "description": "Molten Cheese Indulgence with Golden corn, black olives, capsicum & red paprika",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6f7a75e-7a8f-4d0b-9f08-72bcb749b73f_FullsizeVeggieParadiseCB.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c6f7a75e-7a8f-4d0b-9f08-72bcb749b73f_FullsizeVeggieParadiseCB.webp",
+    "imageUrl": "/images/menu/reg-cb-veg-paradise-lxt-oag.webp",
+    "image": "/images/menu/reg-cb-veg-paradise-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 349,
       "Medium (Serves 2)": 609,
@@ -5501,8 +5501,8 @@
     "dominosCode": "PIZ0776",
     "skuId": "12#126#8825",
     "description": "That deep truffle aroma layered on melted cheese & veggies. Snack with luxe flavour in every bite.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae65df69-d0ec-4b77-ac44-a1d9eb10bacf_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/ae65df69-d0ec-4b77-ac44-a1d9eb10bacf_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-italian-truffle-veg.webp",
+    "image": "/images/menu/dominoid-italian-truffle-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 129,
       "Medium (Serves 2)": 229,
@@ -5552,8 +5552,8 @@
     "dominosCode": "BRD0057",
     "skuId": "6203",
     "description": "Freshly Baked Stuffed Garlic Bread infused with Creamy Makhani Sauce, Molten Cheese, Onion and Paneer Tikka fillings",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a93c2d3d-0ede-43f4-b731-806721a03965_FullsizeGarlicBreadwithpaneerMakhani.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/a93c2d3d-0ede-43f4-b731-806721a03965_FullsizeGarlicBreadwithpaneerMakhani.webp",
+    "imageUrl": "/images/menu/makhani-paneer-tikka-garlic-bread.webp",
+    "image": "/images/menu/makhani-paneer-tikka-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5581,8 +5581,8 @@
     "dominosCode": "DST0116",
     "skuId": "8168",
     "description": "A rich, velvety chocolate flavoured mousse that melts in your mouth. Pure indulgence in every spoon!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/38ac99b1-497b-4869-9fe8-d6e918006777_ChocolateMousseHOMEPRODUCT.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/38ac99b1-497b-4869-9fe8-d6e918006777_ChocolateMousseHOMEPRODUCT.webp",
+    "imageUrl": "/images/menu/choco-mousse.webp",
+    "image": "/images/menu/choco-mousse.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5610,8 +5610,8 @@
     "dominosCode": "SID0398",
     "skuId": "8248",
     "description": "Extra crispy vegetable nuggets dusted with Domino's signature seasonings.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/46ad3a45-5866-4984-8bb0-f8d4c660eef1_HomeProductV1TandooriLoadedVegTaco720x700px.webp",
+    "imageUrl": "/images/menu/crispy-veggie-bites-lxt.webp",
+    "image": "/images/menu/crispy-veggie-bites-lxt.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5639,8 +5639,8 @@
     "dominosCode": "PIZ5131",
     "skuId": "7#115#6171",
     "description": "Molten Cheese Indulgence with American classic flavored Chicken Pepperoni, topped with extra cheese",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/ba3b9fa4-b6c9-466e-8237-20c2c776d18c_cheesepepperoni.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/ba3b9fa4-b6c9-466e-8237-20c2c776d18c_cheesepepperoni.webp",
+    "imageUrl": "/images/menu/chicken-pepperoni.webp",
+    "image": "/images/menu/chicken-pepperoni.webp",
     "sizes": {
       "Regular (Serves 1)": 645,
       "Medium (Serves 2)": 1129,
@@ -5690,8 +5690,8 @@
     "dominosCode": "PIZ0732",
     "skuId": "6#125#8707",
     "description": "Loaded margherita with molten cheese-filled crust. Elite cheese pull. 10/10 vibes",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4c76a04a-d517-42f1-8cdd-013df121b12f_inCheeseBurstMargaritaInappHomeProductVxpx.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/4c76a04a-d517-42f1-8cdd-013df121b12f_inCheeseBurstMargaritaInappHomeProductVxpx.webp",
+    "imageUrl": "/images/menu/2in1-cheese-burst-margherita.webp",
+    "image": "/images/menu/2in1-cheese-burst-margherita.webp",
     "sizes": {
       "Regular (Serves 1)": 219,
       "Medium (Serves 2)": 379,
@@ -5741,8 +5741,8 @@
     "dominosCode": "SID0246",
     "skuId": "6371",
     "description": "A spicy and tangy dip with bold peri peri flavors!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/908f2f7e-2251-4c7c-b201-cc83a7ca343a_CustomPeriPeriDipChickenFeast.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/908f2f7e-2251-4c7c-b201-cc83a7ca343a_CustomPeriPeriDipChickenFeast.webp",
+    "imageUrl": "/images/menu/peri-peri-dip.webp",
+    "image": "/images/menu/peri-peri-dip.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5770,8 +5770,8 @@
     "dominosCode": "DST0122",
     "skuId": "8237",
     "description": "Chocolate lovers delight! Indulgent, gooey molten lava inside chocolate cake",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2b9952f1-c487-426b-90f0-b5d1633e06f8_CLC_side.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/2b9952f1-c487-426b-90f0-b5d1633e06f8_CLC_side.webp",
+    "imageUrl": "/images/menu/choco-lava-cake.webp",
+    "image": "/images/menu/choco-lava-cake.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5799,8 +5799,8 @@
     "dominosCode": "SID0440",
     "skuId": "8683",
     "description": "Freshly baked rolls stuffed with our indulgent Seekh Kebab and juicy Keema in creamy harissa sauce. Simply divine!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/6c6dca08-de24-4740-a2ef-6f3e8aaaed18_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/6c6dca08-de24-4740-a2ef-6f3e8aaaed18_HomeProductV1.webp",
+    "imageUrl": "/images/menu/chicken-kebab-rolls.webp",
+    "image": "/images/menu/chicken-kebab-rolls.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5828,8 +5828,8 @@
     "dominosCode": "SID0241",
     "skuId": "6375",
     "description": "Juicy grilled chicken wings roasted with rich Southern spices for a delicious flavor!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/3982b2aa-a60a-449d-b902-a4b4afd0460e_MenuGrilledWingsSouthernSpiceChickenFeast.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/HomeProductV1/3982b2aa-a60a-449d-b902-a4b4afd0460e_MenuGrilledWingsSouthernSpiceChickenFeast.webp",
+    "imageUrl": "/images/menu/grilled-wings-southern-spice.webp",
+    "image": "/images/menu/grilled-wings-southern-spice.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -5857,8 +5857,8 @@
     "dominosCode": "PIZ5435",
     "skuId": "9#102#8243",
     "description": "Centre loaded with Molten Cheese & topped with Pepper BBQ Chicken\n*Contains non-edible container under the Pizza",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/4b20775f-1eef-4c09-8596-2a1b86c66251_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebCrosssellV1/4b20775f-1eef-4c09-8596-2a1b86c66251_UpsellcardsizeCheeseVolcanoBBQChicken.webp",
+    "imageUrl": "/images/menu/reg-cv-ppr-bbq-chk-lxt-oag.webp",
+    "image": "/images/menu/reg-cv-ppr-bbq-chk-lxt-oag.webp",
     "sizes": {
       "Regular (Serves 1)": 375,
       "Medium (Serves 2)": 659,
@@ -5908,8 +5908,8 @@
     "dominosCode": "PIZ0232",
     "skuId": "6#391#4848",
     "description": "Internationally inspired Hot sauce to cater your spice cravings loaded with crisp Capsicum and spicy Red Paprika.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/f7cfd5ff-d32a-4305-b729-6a7aa8872e80_PMCapsicumPaprikaMenu.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/f7cfd5ff-d32a-4305-b729-6a7aa8872e80_PMCapsicumPaprikaMenu.webp",
+    "imageUrl": "/images/menu/capsicum-red-paprika-with-videshi-hot-sauce.webp",
+    "image": "/images/menu/capsicum-red-paprika-with-videshi-hot-sauce.webp",
     "sizes": {
       "Regular (Serves 1)": 99
     },
@@ -5941,8 +5941,8 @@
     "dominosCode": "PIZ0780",
     "skuId": "12#126#8829",
     "description": "Aromatic shawarma spice blend, melted cheese, veggie-loaded goodness. Flavour now impossible to resist.",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f1be79ed-1b52-4634-8f95-b9587f5f4493_HomeProductV1.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/f1be79ed-1b52-4634-8f95-b9587f5f4493_HomeProductV1.webp",
+    "imageUrl": "/images/menu/dominoid-lebanese-shawarma-veg.webp",
+    "image": "/images/menu/dominoid-lebanese-shawarma-veg.webp",
     "sizes": {
       "Regular (Serves 1)": 129,
       "Medium (Serves 2)": 229,
@@ -5992,8 +5992,8 @@
     "dominosCode": "BRD0059",
     "skuId": "6205",
     "description": "Freshly Baked Garlic Bread infused with Spicy Guntur Sauce, Delectable Chicken Pepperoni & molten Cheese",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/068426d3-a912-4bbd-894d-c18dd1e8640e_FullsizeGarlicBreadwithPepperoniFiery.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/068426d3-a912-4bbd-894d-c18dd1e8640e_FullsizeGarlicBreadwithPepperoniFiery.webp",
+    "imageUrl": "/images/menu/fiery-pepperoni-garlic-bread.webp",
+    "image": "/images/menu/fiery-pepperoni-garlic-bread.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"
@@ -6021,8 +6021,8 @@
     "dominosCode": "PIZ5125",
     "skuId": "7#1#19",
     "description": "Supreme combination of black olives, onion, capsicum, grilled mushroom, pepper barbecue chicken, peri-peri chicken & grilled chicken rashers",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/menu/1da72827-606f-4481-bdf8-3420206a4406_new_non_veg_supreme.webp",
+    "imageUrl": "/images/menu/non-veg-supreme.webp",
+    "image": "/images/menu/non-veg-supreme.webp",
     "sizes": {
       "Regular (Serves 1)": 635,
       "Medium (Serves 2)": 1109,
@@ -6072,8 +6072,8 @@
     "dominosCode": "SID0243",
     "skuId": "6372",
     "description": "Juicy grilled chicken wings roasted with bold garlic flavors for a delicious taste!",
-    "imageUrl": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c7632b6e-337f-4c71-83ae-74a1eb7b879c_FullsizeGrilledWingsSignatureGarlicChickenFeast.webp",
-    "image": "https://images.dominos.co.in/nextgen-catalog/media/prod/Dominos/WebHomeProductV1/c7632b6e-337f-4c71-83ae-74a1eb7b879c_FullsizeGrilledWingsSignatureGarlicChickenFeast.webp",
+    "imageUrl": "/images/menu/grilled-wings-signature-garlic.webp",
+    "image": "/images/menu/grilled-wings-signature-garlic.webp",
     "sizes": null,
     "allowedSizes": [
       "Standard"

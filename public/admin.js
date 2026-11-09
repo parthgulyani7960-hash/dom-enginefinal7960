@@ -1842,7 +1842,10 @@ function renderAdminOrders(orders) {
         <td><small style="font-family: monospace; color: #475569;">${giftCardUsed}</small></td>
         <td style="font-weight: 900; color: #16a34a; font-size: 13px;">₹${grandTotal}</td>
         <td>
-          ${(r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
+          ${(order.isRefunded || order.payment?.status === 'REFUNDED') ? `
+            <span style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">💳 Refunded (₹${order.refundAmount || order.payment?.amount || 0})</span>
+            <div style="font-size: 10px; color: #64748b; margin-top: 3px;">Ref: ${order.refundReference || 'PROCESSED'}</div>
+          ` : (r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
             <span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⏳ Awaiting Approval</span>
             <div style="font-size: 10px; color: #64748b; margin-top: 3px;">${order.payment?.method || 'UPI'} ${order.payment?.transactionId ? `<span style="font-family:monospace; color:#0284c7;">(${order.payment.transactionId})</span>` : ''}</div>
           ` : (r.status === 'WAITING_ADMIN_DECISION') ? `
@@ -1851,11 +1854,12 @@ function renderAdminOrders(orders) {
           ` : `
             <span class="status-idle" style="background:${isFailed ? '#fef2f2' : (r.status === 'DELIVERED' ? '#f0fdf4' : '#eff6ff')}; color:${isFailed ? '#dc2626' : (r.status === 'DELIVERED' ? '#15803d' : '#0284c7')}; font-size: 10px; font-weight: 800;">${r.status || 'ORDER_PLACED'}</span>
             <div style="margin-top: 4px;">${riderText}</div>
+            ${order.robot?.lastDispatchedAt ? `<div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">Last Dispatch: ${new Date(order.robot.lastDispatchedAt).toLocaleTimeString('en-IN')}</div>` : ''}
           `}
         </td>
         <td>
           <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-            ${(r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
+            ${(!order.isRefunded && order.payment?.status !== 'REFUNDED' && (r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL')) ? `
               <button class="btn-action-launch" style="font-size: 11px; padding: 3px 8px; cursor: pointer; color: white; background: #16a34a; border: none; font-weight: 800; border-radius: 4px;" onclick="approveOrderPayment('${order.id}')" title="Approve payment & immediately dispatch autonomous Domino's robot">
                 ⚡ Approve &amp; Dispatch
               </button>
@@ -4945,12 +4949,35 @@ async function approveOrderPayment(orderId) {
 window.approveOrderPayment = approveOrderPayment;
 
 async function refundOrder(orderId) {
-  if (!confirm(`Are you sure you want to refund Order #${orderId}? The full verified amount will be credited back to the customer's digital wallet.`)) return;
+  const reason = prompt(`Refund Order #${orderId} to customer's digital wallet.\n\nEnter refund reason:`, 'Customer cancellation / Store stock issue');
+  if (reason === null) return;
   try {
-    const res = await adminFetch(`/api/admin/orders/${orderId}/refund`, { method: 'POST' });
+    const res = await adminFetch(`/api/admin/orders/${orderId}/refund`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason })
+    });
     const data = await res.json();
-    if (!data.success) throw new Error(data.error);
-    showToast(`Order #${orderId} refunded successfully to customer digital wallet.`, '💳');
+    if (!res.ok || !data.success) {
+      if (data.code === 'ORDER_ALREADY_DELIVERED') {
+        const force = confirm(`⚠️ NOTICE: ${data.error}\n\nDo you want to override and FORCE the refund for this delivered order?`);
+        if (force) {
+          const resForce = await adminFetch(`/api/admin/orders/${orderId}/refund`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason: reason + ' (Store Manager Force Override)', forceDeliveredRefund: true })
+          });
+          const dataForce = await resForce.json();
+          if (!dataForce.success) throw new Error(dataForce.error);
+          showToast(`Order #${orderId} refunded successfully (Delivered Override). Ref: ${dataForce.order?.refundReference || 'PROCESSED'}`, '💳');
+          loadOrders();
+          return;
+        }
+        return;
+      }
+      throw new Error(data.error || 'Refund rejected');
+    }
+    showToast(`Order #${orderId} refunded successfully to customer digital wallet. Ref: ${data.order?.refundReference || 'PROCESSED'}`, '💳');
     loadOrders();
   } catch (e) {
     alert('Failed to refund order: ' + e.message);

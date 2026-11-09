@@ -391,8 +391,8 @@ const FALLBACK_CATEGORY_IMAGES = {
 };
 
 function getItemDefaultImage(item) {
-  if (item && item.image && !item.image.includes('images.dominos.co.in')) return item.image;
-  if (item && item.imageUrl && !item.imageUrl.includes('images.dominos.co.in')) return item.imageUrl;
+  if (item && item.image) return item.image;
+  if (item && item.imageUrl) return item.imageUrl;
   const cat = (item && item.category) ? item.category : '';
   if (cat.includes('Beverage')) return FALLBACK_CATEGORY_IMAGES['Beverages'];
   if (cat.includes('Dessert')) return FALLBACK_CATEGORY_IMAGES['Desserts'];
