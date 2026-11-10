@@ -2279,7 +2279,16 @@ const server = http.createServer(async (req, res) => {
 
   // 5. Admin: Get Domino's Account Pool (Enriched with Session Health & Age)
   if (method === 'GET' && pathname === '/api/admin/accounts') {
-    const rawAccounts = db.getAccounts();
+    let rawAccounts = db.getAccounts();
+    if (rawAccounts.length === 0) {
+      try {
+        const cloudData = await firebaseService.pullFromCloud();
+        if (cloudData) {
+          db.mergeCloudData(cloudData);
+          rawAccounts = db.getAccounts();
+        }
+      } catch (_) {}
+    }
     const enriched = rawAccounts.map(acc => ({
       ...acc,
       sessionHealth: calculateSessionHealth(acc)
@@ -3740,9 +3749,37 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, { success: true, notifications: notifs });
   }
 
-  // 10. Admin: Orders Live Monitor
+  // 10. Admin: Orders Live Monitor (Auto-heals from cloud if local array is empty)
   if (method === 'GET' && pathname === '/api/admin/orders') {
-    return sendJson(res, 200, db.getOrders());
+    let orders = db.getOrders();
+    if (orders.length === 0) {
+      try {
+        const cloudData = await firebaseService.pullFromCloud();
+        if (cloudData) {
+          db.mergeCloudData(cloudData);
+          orders = db.getOrders();
+        }
+      } catch (_) {}
+    }
+    return sendJson(res, 200, orders);
+  }
+
+  // Admin: Force Cloud Data Sync & Pull
+  if ((method === 'POST' || method === 'GET') && pathname === '/api/admin/cloud/pull') {
+    try {
+      const cloudData = await firebaseService.pullFromCloud();
+      if (cloudData) db.mergeCloudData(cloudData);
+      return sendJson(res, 200, {
+        success: true,
+        message: 'Successfully pulled and merged cloud records from Firebase RTDB',
+        accounts: db.getAccounts().length,
+        orders: db.getOrders().length,
+        users: db.getUsers().length,
+        vouchers: db.getVouchers().length
+      });
+    } catch (e) {
+      return sendJson(res, 500, { success: false, error: e.message });
+    }
   }
 
   // --- STATIC FILES ---

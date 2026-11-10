@@ -211,6 +211,15 @@ function onAdminUnlocked(email = 'parthgulyani7960@gmail.com') {
   loadProxySettings();
   loadFirebaseSettings();
   startAdminAutoRefresh();
+
+  // Proactive background cloud pull to ensure fresh Domino's sessions & orders
+  adminFetch('/api/admin/cloud/pull').then(r => r.json()).then(data => {
+    if (data && data.success && data.accounts > 0) {
+      loadAccounts();
+      loadOrders();
+      loadAppUsers();
+    }
+  }).catch(() => {});
 }
 
 async function adminUnlockWithPasskey() {
