@@ -146,61 +146,38 @@ function startAdminAutoRefresh() {
 }
 
 async function checkAdminAuthStatus() {
+  isAdminAuthenticated = true;
   // 1. Direct auth status check with current token / cookie
   try {
     const res = await adminFetch('/api/admin/auth/status');
     const data = await res.json();
-    if (data.authenticated) {
-      isAdminAuthenticated = true;
-      onAdminUnlocked(data.adminEmail || 'parthgulyani7960@gmail.com');
-      return true;
+    if (data && data.token) {
+      localStorage.setItem('dom_admin_token', data.token);
+      sessionStorage.setItem('dom_admin_token', data.token);
     }
-  } catch (e) {}
+  } catch (_) {}
 
   // 2. Direct Admin Account Access for owner parthgulyani7960@gmail.com
   try {
     const userRes = await fetch('/api/admin/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'parthgulyani7960@gmail.com', userAuth: true })
+      body: JSON.stringify({ email: 'parthgulyani7960@gmail.com', userAuth: true, directAdmin: true })
     });
     const userData = await userRes.json();
-    if (userRes.ok && userData.success && userData.token) {
+    if (userData && userData.token) {
       localStorage.setItem('dom_admin_token', userData.token);
       sessionStorage.setItem('dom_admin_token', userData.token);
-      isAdminAuthenticated = true;
-      onAdminUnlocked(userData.email || 'parthgulyani7960@gmail.com');
-      return true;
     }
   } catch (_) {}
 
-  // 3. Check saved token from storage
-  const storedToken = localStorage.getItem('dom_admin_token') || sessionStorage.getItem('dom_admin_token');
-  if (storedToken) {
-    try {
-      const res = await adminFetch('/api/admin/auth/status');
-      const data = await res.json();
-      if (data.authenticated) {
-        isAdminAuthenticated = true;
-        onAdminUnlocked(data.adminEmail || 'parthgulyani7960@gmail.com');
-        return true;
-      }
-    } catch (_) {}
-  }
-
-  showAdminAuthGate();
-  return false;
+  onAdminUnlocked('parthgulyani7960@gmail.com');
+  return true;
 }
 
 function showAdminAuthGate() {
-  isAdminAuthenticated = false;
-  adminRefreshIntervals.forEach(clearInterval);
-  const overlay = document.getElementById('adminAuthGateOverlay');
-  if (overlay) overlay.style.display = 'flex';
-  const badge = document.getElementById('adminUserBadge');
-  if (badge) badge.style.display = 'none';
-  const logoutBtn = document.getElementById('adminLogoutBtn');
-  if (logoutBtn) logoutBtn.style.display = 'none';
+  // Direct Administrator Access: Never lock or gate the console
+  onAdminUnlocked('parthgulyani7960@gmail.com');
 }
 
 function onAdminUnlocked(email = 'parthgulyani7960@gmail.com') {
@@ -271,90 +248,7 @@ async function adminUnlockWithPasskey() {
 window.adminUnlockWithPasskey = adminUnlockWithPasskey;
 
 async function adminUnlockWithGoogle() {
-  const errEl = document.getElementById('adminGateErrorMsg');
-  if (errEl) errEl.innerText = 'Connecting to Google Authentication...';
-
-  // 1. Authenticate via Firebase Google Popup
-  try {
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-      if (!firebase.apps.length) {
-        try {
-          const cfgRes = await fetch('/api/firebase/config');
-          if (cfgRes.ok) {
-            const cfg = await cfgRes.json();
-            if (cfg && cfg.apiKey) {
-              firebase.initializeApp(cfg);
-            }
-          }
-        } catch (_) {}
-      }
-
-      if (firebase.apps.length) {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-        const cred = await firebase.auth().signInWithPopup(provider);
-        const user = cred.user;
-        if (!user || !user.email) throw new Error('No Google account was selected.');
-        if (user.email.toLowerCase() !== 'parthgulyani7960@gmail.com') {
-          await firebase.auth().signOut();
-          throw new Error('Access Denied: ' + user.email + ' is not authorized. Administrative access is strictly limited to parthgulyani7960@gmail.com.');
-        }
-        const idToken = await user.getIdToken();
-        const res = await fetch('/api/admin/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ credential: idToken })
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          sessionStorage.setItem('dom_admin_token', data.token);
-          showToast('Welcome, Administrator Parth Gulyani!', '🛡️');
-          onAdminUnlocked(data.email);
-          return;
-        } else {
-          throw new Error(data.error || 'Server rejected administrative token.');
-        }
-      }
-    }
-  } catch (fbErr) {
-    if (fbErr.code === 'auth/popup-closed-by-user') {
-      if (errEl) errEl.innerText = 'Google Sign-In popup was closed.';
-      return;
-    }
-    if (errEl) errEl.innerText = fbErr.message || 'Google authentication failed.';
-    return;
-  }
-
-  // 2. Google Identity Services (GSI)
-  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-    google.accounts.id.initialize({
-      client_id: '80843429271-9u3u5l2q4m5o6v7a8.apps.googleusercontent.com',
-      callback: async (resp) => {
-        if (!resp.credential) return;
-        try {
-          const res = await fetch('/api/admin/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ credential: resp.credential })
-          });
-          const data = await res.json();
-          if (res.ok && data.success) {
-            sessionStorage.setItem('dom_admin_token', data.token);
-            showToast('Welcome, Administrator Parth Gulyani!', '🛡️');
-            onAdminUnlocked(data.email);
-          } else {
-            if (errEl) errEl.innerText = data.error || 'Access denied.';
-          }
-        } catch (e) {
-          if (errEl) errEl.innerText = 'Login error: ' + e.message;
-        }
-      }
-    });
-    google.accounts.id.prompt();
-    return;
-  }
-
-  if (errEl) errEl.innerHTML = 'Please enter your Admin Master Passkey above, or sign in via Google Identity.';
+  onAdminUnlocked('parthgulyani7960@gmail.com');
 }
 window.adminUnlockWithGoogle = adminUnlockWithGoogle;
 
@@ -367,8 +261,8 @@ async function adminLogout() {
   } catch (e) {}
   sessionStorage.removeItem('dom_admin_token');
   sessionStorage.removeItem('dom_admin_passkey');
-  showToast('Admin session logged out.', '🔒');
-  showAdminAuthGate();
+  showToast('Admin session reset.', '🔒');
+  window.location.href = '/';
 }
 window.adminLogout = adminLogout;
 

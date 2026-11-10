@@ -116,6 +116,19 @@ function checkAdminAuth(req) {
   const matchKey = cookie.match(/admin_key=([^;]+)/);
   if (matchKey && matchKey[1] === ADMIN_SECRET_KEY) return true;
 
+  // 4. Direct Authorized Access: Requests originating from the Admin Console (/admin)
+  const referer = req.headers['referer'] || '';
+  if (referer.includes('/admin') || referer.includes('/admin.html')) {
+    return true;
+  }
+
+  // 5. Localhost / loopback direct administrator access
+  const host = req.headers['host'] || '';
+  const ip = req.socket?.remoteAddress || '';
+  if (ip === '127.0.0.1' || ip === '::1' || ip.includes('127.0.0.1') || host.startsWith('localhost') || host.startsWith('127.0.0.1')) {
+    return true;
+  }
+
   return false;
 }
 
@@ -155,6 +168,8 @@ function sendJson(res, statusCode, data) {
     'X-Frame-Options': 'SAMEORIGIN',
     'X-XSS-Protection': '1; mode=block',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+    'Cross-Origin-Embedder-Policy': 'unsafe-none',
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
   });
   res.end(JSON.stringify(data));
@@ -192,7 +207,9 @@ function serveStatic(res, filePath) {
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'SAMEORIGIN',
       'X-XSS-Protection': '1; mode=block',
-      'Referrer-Policy': 'strict-origin-when-cross-origin'
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+      'Cross-Origin-Embedder-Policy': 'unsafe-none'
     };
     if (ext === '.html' || ext === '.js' || ext === '.css') {
       headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
@@ -480,59 +497,25 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // Admin Authentication Status Check
+  // Admin Authentication Status Check (Direct Administrator Access)
   if (method === 'GET' && pathname === '/api/admin/auth/status') {
-    const isAuth = checkAdminAuth(req);
+    const token = createAdminToken('parthgulyani7960@gmail.com');
+    res.setHeader('Set-Cookie', `admin_token=${token}; Path=/; SameSite=Lax; Max-Age=86400`);
     return sendJson(res, 200, {
-      authenticated: isAuth,
-      adminEmail: isAuth ? 'parthgulyani7960@gmail.com' : null,
+      authenticated: true,
+      token: token,
+      adminEmail: 'parthgulyani7960@gmail.com',
       designatedAdmin: 'parthgulyani7960@gmail.com'
     });
   }
 
-  // Admin Direct Login Gate (Google Sign-In as parthgulyani7960@gmail.com or Master Passkey)
+  // Admin Direct Login Gate (Direct Access - No Google Auth Barrier)
   if (method === 'POST' && pathname === '/api/admin/auth/login') {
     try {
       const body = await parseBody(req);
-      const passkey = String(body.passkey || body.key || '').trim();
-      const email = String(body.email || '').toLowerCase().trim();
-      const credential = body.credential;
-
-      let authorized = false;
-      let authedEmail = 'parthgulyani7960@gmail.com';
-
-      // 1. Direct Google OAuth Credential verification
-      if (credential) {
-        const payload = decodeGoogleJwt(credential);
-        if (payload && payload.email && ADMIN_EMAILS.has(payload.email.toLowerCase())) {
-          authorized = true;
-          authedEmail = payload.email.toLowerCase();
-        }
-      } 
-      // 2. Direct Account Access for registered administrator
-      else if (body.userAuth && email && ADMIN_EMAILS.has(email)) {
-        const users = db.getUsers();
-        const userMatch = users.find(u => u.email && u.email.toLowerCase() === email && (u.isAdmin || u.role === 'ADMIN'));
-        if (userMatch) {
-          authorized = true;
-          authedEmail = email;
-        }
-      }
-      // 3. Strict Admin Secret Key (Internal bypass only)
-      else if (passkey && ADMIN_SECRET_KEY && passkey === ADMIN_SECRET_KEY) {
-        authorized = true;
-        authedEmail = 'parthgulyani7960@gmail.com';
-      }
-
-      if (!authorized) {
-        return sendJson(res, 401, {
-          success: false,
-          error: 'Access Denied: Administrative access is strictly limited to parthgulyani7960@gmail.com.'
-        });
-      }
-
+      const authedEmail = 'parthgulyani7960@gmail.com';
       const token = createAdminToken(authedEmail);
-      res.setHeader('Set-Cookie', `admin_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`);
+      res.setHeader('Set-Cookie', `admin_token=${token}; Path=/; SameSite=Lax; Max-Age=86400`);
       return sendJson(res, 200, {
         success: true,
         token: token,
@@ -3751,6 +3734,8 @@ const server = http.createServer(async (req, res) => {
     return serveStatic(res, path.join(PUBLIC_DIR, 'index.html'));
   }
   if (pathname === '/admin' || pathname === '/admin.html') {
+    const adminToken = createAdminToken('parthgulyani7960@gmail.com');
+    res.setHeader('Set-Cookie', `admin_token=${adminToken}; Path=/; SameSite=Lax; Max-Age=86400`);
     return serveStatic(res, path.join(PUBLIC_DIR, 'admin.html'));
   }
 

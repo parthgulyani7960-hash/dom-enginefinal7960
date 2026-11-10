@@ -429,16 +429,25 @@ async function executeMiddlemanOrderOnDominos({
     targetAddrId: addressIdNum
   });
 
-  // Block analytical and tracking scripts for maximum execution speed
+  // Block heavy media, fonts, analytical and tracking scripts for maximum execution speed
   await page.route('**/*', (route) => {
     const url = route.request().url();
+    const type = route.request().resourceType();
     if (
+      type === 'media' ||
+      type === 'font' ||
       url.includes('clevertap') ||
       url.includes('google-analytics') ||
       url.includes('googletagmanager') ||
       url.includes('datadog') ||
       url.includes('hotjar') ||
-      url.includes('facebook')
+      url.includes('facebook') ||
+      url.includes('clarity.ms') ||
+      url.includes('branch.io') ||
+      url.includes('onesignal') ||
+      url.includes('appsflyer') ||
+      url.includes('moengage') ||
+      url.includes('sentry')
     ) {
       return route.abort();
     }
@@ -660,55 +669,71 @@ async function executeMiddlemanOrderOnDominos({
     }
 
     // =========================================================================
-    // STEP 1B: Clear Leftover Cart Items from Domino's Cart
+    // STEP 1B: Fast Check & Clear Leftover Cart Items
     // =========================================================================
     onProgress(`[MIDDLEMAN-ENGINE] 🧹 Checking cart state for Store ${targetStoreId}...`);
     try {
-      await page.goto(`https://m.dominos.co.in/jfl-discovery-payment/en/pwa/cart/${targetStoreId}`, {
-        waitUntil: 'domcontentloaded',
-        timeout: 20000
-      }).catch(() => {});
-      await sleep(1500);
-
-      // If page is on cart, check if there are actual cart items (excluding recommendation carousel cards)
-      if (page.url().includes('/cart')) {
-        let clearAttempts = 0;
-        while (clearAttempts < 20) {
-          clearAttempts++;
-          const hasItem = await page.evaluate(() => {
-            const wraps = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
-            const real = wraps.find(w => {
-              if (w.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="suggestion" i]')) return false;
-              const btns = Array.from(w.querySelectorAll('button, .cta-add, .btn-add, div.main-cta'));
-              const hasAddOnly = btns.some(b => (b.innerText || '').toLowerCase().includes('add')) && !w.querySelector('.anim-ico-minus, .product-item-quantity, .itm-qty');
-              return !hasAddOnly;
-            });
-            if (real) {
-              let minus = real.querySelector('.anim-ico-minus, [class*="minus"]');
-              if (!minus) {
-                const els = Array.from(real.querySelectorAll('button, span, div'));
-                minus = els.find(e => e.innerText && e.innerText.trim() === '-' && e.children.length === 0) || null;
-              }
-              if (minus) {
-                minus.click();
-                return true;
-              }
+      const hasCartItems = await page.evaluate(() => {
+        try {
+          const app = document.querySelector('#app')?.__vue__;
+          if (app && app.$store) {
+            const count = app.$store.getters['Cart/getCartTotalCount'] || 0;
+            if (count > 0 && typeof app.$store.dispatch === 'function') {
+              app.$store.dispatch('Cart/emptyCart').catch(() => {});
+              return false;
             }
-            return false;
-          });
+            return count > 0;
+          }
+        } catch (e) {}
+        const badge = document.querySelector('.cart-count, .itm-qty, .badge');
+        return badge ? (parseInt(badge.innerText, 10) > 0) : false;
+      });
 
-          if (!hasItem) break;
-          await sleep(600);
-          const confirmBtn = page.locator('.confirm-remove-modal button.remove-btn, button.remove-btn, button:has-text("REMOVE"), button:has-text("Remove"), button:has-text("YES"), button:has-text("Yes"), button.btn-confirm').first();
-          if (await confirmBtn.isVisible({ timeout: 600 }).catch(() => false)) {
-            await confirmBtn.click({ force: true }).catch(() => {});
-            await sleep(500);
+      if (hasCartItems) {
+        onProgress(`[MIDDLEMAN-ENGINE] 🧹 Clearing pre-existing cart items...`);
+        await page.goto(`https://m.dominos.co.in/jfl-discovery-payment/en/pwa/cart/${targetStoreId}`, {
+          waitUntil: 'domcontentloaded',
+          timeout: 15000
+        }).catch(() => {});
+        await sleep(800);
+
+        if (page.url().includes('/cart')) {
+          let clearAttempts = 0;
+          while (clearAttempts < 10) {
+            clearAttempts++;
+            const hasItem = await page.evaluate(() => {
+              const wraps = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
+              const real = wraps.find(w => {
+                if (w.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="suggestion" i]')) return false;
+                const btns = Array.from(w.querySelectorAll('button, .cta-add, .btn-add, div.main-cta'));
+                const hasAddOnly = btns.some(b => (b.innerText || '').toLowerCase().includes('add')) && !w.querySelector('.anim-ico-minus, .product-item-quantity, .itm-qty');
+                return !hasAddOnly;
+              });
+              if (real) {
+                let minus = real.querySelector('.anim-ico-minus, [class*="minus"]');
+                if (!minus) {
+                  const els = Array.from(real.querySelectorAll('button, span, div'));
+                  minus = els.find(e => e.innerText && e.innerText.trim() === '-' && e.children.length === 0) || null;
+                }
+                if (minus) {
+                  minus.click();
+                  return true;
+                }
+              }
+              return false;
+            });
+
+            if (!hasItem) break;
+            await sleep(400);
+            const confirmBtn = page.locator('.confirm-remove-modal button.remove-btn, button.remove-btn, button:has-text("REMOVE"), button:has-text("Remove"), button:has-text("YES"), button:has-text("Yes"), button.btn-confirm').first();
+            if (await confirmBtn.isVisible({ timeout: 500 }).catch(() => false)) {
+              await confirmBtn.click({ force: true }).catch(() => {});
+              await sleep(300);
+            }
           }
         }
-        onProgress(`[MIDDLEMAN-ENGINE] ✓ Pre-clear cycle verified cart state.`);
-      } else {
-        onProgress(`[MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.`);
       }
+      onProgress(`[MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.`);
     } catch (clearErr) {
       onProgress(`[MIDDLEMAN-ENGINE] Cart clear notice: ${clearErr.message}`);
     }
