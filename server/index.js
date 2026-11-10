@@ -579,8 +579,8 @@ const server = http.createServer(async (req, res) => {
 
   // --- API ROUTES ---
 
-  // Public / Admin Maintenance Status Endpoint
-  if (method === 'GET' && (pathname === '/api/maintenance' || pathname === '/api/admin/maintenance')) {
+  // Public / Admin Maintenance Status & Healthz Endpoint
+  if (method === 'GET' && (pathname === '/api/maintenance' || pathname === '/api/admin/maintenance' || pathname === '/healthz')) {
     return sendJson(res, 200, db.getMaintenanceMode());
   }
 

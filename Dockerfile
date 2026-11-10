@@ -20,9 +20,6 @@ COPY package*.json ./
 # Install production dependencies
 RUN npm install --omit=dev
 
-# Install Playwright Chromium binaries
-RUN npx playwright install chromium
-
 # Copy application codebase
 COPY . .
 

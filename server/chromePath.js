@@ -26,6 +26,18 @@ function getChromeExecutablePath() {
   }
 
   // Linux / Docker environments (Koyeb, Render, Ubuntu, Debian)
+  if (fs.existsSync('/ms-playwright')) {
+    try {
+      const entries = fs.readdirSync('/ms-playwright');
+      for (const e of entries) {
+        if (e.startsWith('chromium-')) {
+          const cPath = path.join('/ms-playwright', e, 'chrome-linux', 'chrome');
+          if (fs.existsSync(cPath)) return cPath;
+        }
+      }
+    } catch (_) {}
+  }
+
   const linuxPaths = [
     '/usr/bin/google-chrome',
     '/usr/bin/google-chrome-stable',
