@@ -1625,10 +1625,118 @@ const ROBOT_ACTIVE_STATUSES = [
   'WAITING_ADMIN_DECISION', 'PROCESSING', 'ASSIGNED', 'IN_KITCHEN', 'ROBOT_DISPATCHING'
 ];
 
+let adminAlertsEnabled = localStorage.getItem('adminAlertsEnabled') !== 'false';
+let seenAdminOrderIds = new Set();
+let hasInitializedOrdersOnce = false;
+
+function toggleAdminNotifications() {
+  if (!window.Notification) {
+    showToast('Browser notifications are not supported in this browser.', '⚠️');
+    return;
+  }
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission().then(permission => {
+      adminAlertsEnabled = (permission === 'granted');
+      localStorage.setItem('adminAlertsEnabled', adminAlertsEnabled ? 'true' : 'false');
+      updateAdminAlertsButtonUI();
+      if (adminAlertsEnabled) {
+        playAdminNotificationChime();
+        showToast('🔔 Browser notifications and audio alerts enabled!', '✓');
+      } else {
+        showToast('Notifications permission not granted', '⚠️');
+      }
+    });
+  } else {
+    adminAlertsEnabled = !adminAlertsEnabled;
+    localStorage.setItem('adminAlertsEnabled', adminAlertsEnabled ? 'true' : 'false');
+    updateAdminAlertsButtonUI();
+    if (adminAlertsEnabled) {
+      playAdminNotificationChime();
+      showToast('🔔 Audio & browser alerts ON', '✓');
+    } else {
+      showToast('🔕 Audio & browser alerts OFF', 'ℹ️');
+    }
+  }
+}
+window.toggleAdminNotifications = toggleAdminNotifications;
+
+function updateAdminAlertsButtonUI() {
+  const btn = document.getElementById('btnToggleAdminAlerts');
+  const lbl = document.getElementById('adminAlertsStatusLabel');
+  if (lbl) {
+    lbl.innerText = adminAlertsEnabled ? 'Alerts: ACTIVE' : 'Alerts: OFF';
+  }
+  if (btn) {
+    btn.style.background = adminAlertsEnabled ? '#2563eb' : '#64748b';
+  }
+}
+
+function playAdminNotificationChime() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    
+    // First tone (D5 - 587.33 Hz)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(587.33, now);
+    gain1.gain.setValueAtTime(0.3, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.35);
+
+    // Second chime tone (A5 - 880.00 Hz)
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(880.00, now + 0.12);
+    gain2.gain.setValueAtTime(0.35, now + 0.12);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.12);
+    osc2.stop(now + 0.85);
+  } catch (e) {}
+}
+
+function updatePendingPaymentsBanner(pendingOrders) {
+  const banner = document.getElementById('adminPendingPaymentsBanner');
+  if (!banner) return;
+  if (!pendingOrders || pendingOrders.length === 0) {
+    banner.style.display = 'none';
+    return;
+  }
+  banner.style.display = 'block';
+  banner.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 22px;">🔔</span>
+        <div>
+          <strong style="color: #92400e; font-size: 14px;">${pendingOrders.length} Order(s) Awaiting Payment Verification &amp; Approval</strong>
+          <div style="color: #b45309; font-size: 11px; margin-top: 2px;">
+            Incoming customer orders need payment approval to dispatch autonomous Domino's robot workers.
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button onclick="filterByRobotCategory('PENDING')" style="background: #f59e0b; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 11px; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);">
+          ⚡ View &amp; Approve Orders (${pendingOrders.length})
+        </button>
+      </div>
+    </div>
+  `;
+}
+
 function filterByRobotCategory(cat) {
   currentAdminOrderFilter = cat;
   
   const cards = {
+    'PENDING': document.getElementById('statCardPending'),
     'ACTIVE': document.getElementById('statCardActive'),
     'DELIVERED': document.getElementById('statCardDelivered'),
     'FAILED': document.getElementById('statCardFailed'),
@@ -1738,6 +1846,46 @@ async function loadOrders() {
     const no = document.getElementById('navBadgeOrders');
     if (no) no.innerText = orders.length;
 
+    // Calculate Pending Payments Telemetry
+    const pendingOrders = orders.filter(o => 
+      !o.isRefunded && o.payment?.status !== 'REFUNDED' &&
+      (o.payment?.status === 'PENDING_APPROVAL' || o.robot?.status === 'AWAITING_PAYMENT_APPROVAL' || o.payment?.status === 'PENDING' || (!o.payment?.utr && o.payment?.method === 'UPI'))
+    );
+    const pendingCount = pendingOrders.length;
+    const elPending = document.getElementById('statPendingOrders');
+    if (elPending) elPending.innerText = `${pendingCount} Pending`;
+    const elPendingBadge = document.getElementById('statPendingActionBadge');
+    if (elPendingBadge) {
+      elPendingBadge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+      elPendingBadge.innerText = `${pendingCount} ACTION REQUIRED`;
+    }
+
+    // Trigger Notification & Chime if new pending orders detected
+    if (!hasInitializedOrdersOnce) {
+      pendingOrders.forEach(po => seenAdminOrderIds.add(po.id));
+      hasInitializedOrdersOnce = true;
+    } else {
+      for (const po of pendingOrders) {
+        if (!seenAdminOrderIds.has(po.id)) {
+          seenAdminOrderIds.add(po.id);
+          if (adminAlertsEnabled) {
+            playAdminNotificationChime();
+            showToast(`🚨 New Order #${po.id} (₹${po.payment?.amount || 0}) awaiting payment approval!`, '💳');
+            if (window.Notification && Notification.permission === 'granted') {
+              new Notification('🚨 Domino\'s Order Needs Payment Approval', {
+                body: `Order #${po.id} (₹${po.payment?.amount || 0}) placed by ${po.user?.name || 'Customer'}. Click to approve & dispatch!`,
+                icon: '/images/dominos-logo.png'
+              });
+            }
+            document.title = `(${pendingCount}) 🚨 New Order! | Domino's Admin Console`;
+          }
+        }
+      }
+    }
+
+    updatePendingPaymentsBanner(pendingOrders);
+    updateAdminAlertsButtonUI();
+
     // Calculate Live Robot Dispatches Telemetry
     const activeOrders = orders.filter(o => ROBOT_ACTIVE_STATUSES.includes((o.robot?.status || o.status || '').toUpperCase()));
     const deliveredOrders = orders.filter(o => ['DELIVERED', 'COMPLETED'].includes((o.robot?.status || o.status || '').toUpperCase()));
@@ -1775,7 +1923,12 @@ async function loadOrders() {
 
 function filterAdminOrders(query = '') {
   let baseOrders = cachedAdminOrders;
-  if (currentAdminOrderFilter === 'ACTIVE') {
+  if (currentAdminOrderFilter === 'PENDING') {
+    baseOrders = baseOrders.filter(o => 
+      !o.isRefunded && o.payment?.status !== 'REFUNDED' &&
+      (o.payment?.status === 'PENDING_APPROVAL' || o.robot?.status === 'AWAITING_PAYMENT_APPROVAL' || o.payment?.status === 'PENDING' || (!o.payment?.utr && o.payment?.method === 'UPI'))
+    );
+  } else if (currentAdminOrderFilter === 'ACTIVE') {
     baseOrders = baseOrders.filter(o => ROBOT_ACTIVE_STATUSES.includes((o.robot?.status || o.status || '').toUpperCase()));
   } else if (currentAdminOrderFilter === 'DELIVERED') {
     baseOrders = baseOrders.filter(o => ['DELIVERED', 'COMPLETED'].includes((o.robot?.status || o.status || '').toUpperCase()));

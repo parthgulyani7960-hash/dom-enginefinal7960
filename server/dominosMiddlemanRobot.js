@@ -24,6 +24,7 @@ const CHROME_PATH = getChromeExecutablePath();
  */
 async function handleDominosCustomizationSheet(page, item, onProgress) {
   try {
+    if (!item.isCustomizable && !item.customSize && !item.customCrust) return;
     // Check if legitimate Domino's customization drawer is actively mounted
     const hasCustomDrawer = await page.evaluate(() => {
       const modal = document.querySelector('.customise-bottom-sheet, .customisation-modal, div[class*="customiz" i], div[class*="bottom-sheet" i]');
@@ -517,7 +518,7 @@ async function executeMiddlemanOrderOnDominos({
     // STEP 1: Direct Fast-Track Navigation to Store Menu & In-Page Address Sync
     // =========================================================================
     onProgress(`[MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store ${targetStoreId}...`);
-    await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=false&scrollTo=3`, {
+    await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=true&scrollTo=3`, {
       waitUntil: 'domcontentloaded',
       timeout: 25000
     }).catch(() => {});
@@ -771,7 +772,7 @@ async function executeMiddlemanOrderOnDominos({
 
     if (!page.url().includes(`/menu-v1/${targetStoreId}`)) {
       onProgress(`[MIDDLEMAN-ENGINE] 🛒 Opening Domino's Menu V1 for Store ${targetStoreId}...`);
-      await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=false&scrollTo=3`, {
+      await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=true&scrollTo=3`, {
         waitUntil: 'domcontentloaded',
         timeout: 25000
       }).catch(() => {});
@@ -824,19 +825,35 @@ async function executeMiddlemanOrderOnDominos({
 
       // Strategy 1: Domino's In-Page Search Modal with Native Playwright Click
       try {
-        isSearchOpen = await searchInput.isVisible({ timeout: 600 }).catch(() => false);
-        if (!isSearchOpen) {
-          const searchTrigger = page.locator('#searchCta, .menu-search-icon, .jfi-search, .search-wrap').first();
-          if (await searchTrigger.isVisible({ timeout: 1200 }).catch(() => false)) {
-            await searchTrigger.click({ force: true }).catch(() => {});
-            await sleep(500);
+        searchInput = page.locator('#searchQueryInputModal, .search-query-input').first();
+        let searchInputVisible = await searchInput.isVisible({ timeout: 1500 }).catch(() => false);
+        if (!searchInputVisible) {
+          await page.evaluate(() => {
+            const trg = document.querySelector('#searchCta, .menu-search-icon, .jfi-search, .search-wrap');
+            if (trg) trg.click();
+          }).catch(() => {});
+          await sleep(600);
+          searchInput = page.locator('#searchQueryInputModal, .search-query-input').first();
+          searchInputVisible = await searchInput.isVisible({ timeout: 1500 }).catch(() => false);
+          if (!searchInputVisible) {
+            await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=true&scrollTo=3`, {
+              waitUntil: 'domcontentloaded',
+              timeout: 15000
+            }).catch(() => {});
+            await sleep(1000);
+            searchInput = page.locator('#searchQueryInputModal, .search-query-input').first();
+            searchInputVisible = await searchInput.isVisible({ timeout: 2000 }).catch(() => false);
           }
         }
-        searchInput = page.locator('#searchQueryInputModal, .search-query-input').first();
 
-        if (await searchInput.isVisible({ timeout: 1000 }).catch(() => false)) {
+        if (searchInputVisible) {
+          const directNoPizza = cleanName.replace(/\bPizza\s+Mania\b/gi, '').replace(/\bMania\b/gi, '').replace(/\bPizza\b/gi, '').replace(/&/g, ' ').replace(/\s+/g, ' ').trim();
+          // Put single distinctive tokens FIRST because Domino's PWA search returns rich results on single keyword queries (e.g. 'Paneer', 'Corn', 'Golden')
           const searchCandidates = Array.from(new Set([
+            tokens[0],
             primaryKeyword,
+            directNoPizza,
+            tokens.length > 1 ? tokens[1] : null,
             baseClean,
             tokens.slice(0, 2).join(' '),
             rawName.replace(/[^a-zA-Z0-9\s]/g, ' ').trim()
@@ -845,13 +862,18 @@ async function executeMiddlemanOrderOnDominos({
           for (const query of searchCandidates) {
             if (added) break;
 
-            // Clear any existing search query cleanly
-            const clearIcon = page.locator('.search-clear-icon, .jfi-close, .close-search, .icon-close').first();
-            if (await clearIcon.isVisible({ timeout: 400 }).catch(() => false)) {
-              await clearIcon.click({ force: true }).catch(() => {});
-              await sleep(300);
-            }
-            await searchInput.fill('');
+            // Clear any existing search query cleanly without touching modal close buttons
+            await searchInput.fill('').catch(() => {});
+            await page.evaluate(() => {
+              const inp = document.querySelector('#searchQueryInputModal, .search-query-input');
+              if (inp) {
+                inp.value = '';
+                inp.dispatchEvent(new Event('input', { bubbles: true }));
+                inp.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+            }).catch(() => {});
+            await sleep(200);
+
             await searchInput.fill(query);
             // Dispatch Vue v-model input and change events to ensure reactive search results update
             await page.evaluate((val) => {
@@ -863,7 +885,10 @@ async function executeMiddlemanOrderOnDominos({
               }
             }, query).catch(() => {});
             await searchInput.press('Enter').catch(() => {});
-            await sleep(1000);
+            await sleep(1400);
+
+            const searchCardsCount = await page.locator('.card-item-search').count();
+            onProgress(`[MIDDLEMAN-ENGINE] 🔍 Query "${query}" returned ${searchCardsCount} search card(s)`);
 
             // Find matching card index in search results using token overlap matching
             const match = await page.evaluate(({ rName, cName, expPrice }) => {
@@ -882,7 +907,7 @@ async function executeMiddlemanOrderOnDominos({
 
               const normTarget = norm(cName || rName);
               const targetTokens = normTarget.split(' ').filter(w => w.length >= 3);
-              const searchCards = Array.from(document.querySelectorAll('.card-item-search, [data-label="product-card"], .search-item, .search-card, .card-content, .product-card')).filter(c => c.querySelector('button, .cta-add, .btn-add, div.main-cta, .anim-ico-plus, [class*="plus"]'));
+              const searchCards = Array.from(document.querySelectorAll('.card-item-search'));
 
               const hasConflict = (h, target) => {
                 const families = ['burger', 'dominoid', 'volcano', 'lava', 'paratha', 'taco', 'pasta', 'dip', 'beverage', 'dessert'];
@@ -916,32 +941,67 @@ async function executeMiddlemanOrderOnDominos({
                 }
               }
 
+              // Pass 3: Distinctive first token match
+              if (targetTokens.length > 0) {
+                for (let i = 0; i < searchCards.length; i++) {
+                  const card = searchCards[i];
+                  const heading = card.querySelector('.pizza-title, h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
+                  const hText = (heading?.innerText || '').trim();
+                  const normH = norm(hText);
+                  if (hasConflict(normH, normTarget)) continue;
+                  if (normH.includes(targetTokens[0])) {
+                    return { idx: i, title: hText };
+                  }
+                }
+              }
+
               return null;
             }, { rName: rawName, cName: cleanName, expPrice: item.price });
 
+            // Look for card either via evaluated match or direct Playwright text filter
+            let cardLocator = null;
+            let matchedTitle = null;
+
             if (match) {
-              onProgress(`[MIDDLEMAN-ENGINE] 🎯 Found search match: "${match.title}"`);
-              // Target matching product card by exact title text using native locator filter
-              const cardLocator = page.locator('.card-item-search, [data-label="product-card"], .search-item, .search-card, .card-content, .product-card')
+              matchedTitle = match.title;
+              cardLocator = page.locator('.card-item-search')
                 .filter({ hasText: match.title })
                 .first();
+            } else {
+              const directCandidate = cleanName.replace(/\bPizza\s+Mania\b/gi, '').replace(/\bMania\b/gi, '').replace(/\bPizza\b/gi, '').replace(/&/g, ' ').replace(/\s+/g, ' ').trim();
+              const candNames = [directCandidate, ...directCandidate.split(' ').filter(w => w.length >= 3)];
+              for (const cName of candNames) {
+                if (cardLocator) break;
+                const directLocator = page.locator('.card-item-search').filter({ hasText: cName }).first();
+                if (await directLocator.isVisible({ timeout: 600 }).catch(() => false)) {
+                  matchedTitle = cName;
+                  cardLocator = directLocator;
+                }
+              }
+            }
+
+            if (cardLocator) {
+              onProgress(`[MIDDLEMAN-ENGINE] 🎯 Found search match: "${matchedTitle}"`);
+              await cardLocator.scrollIntoViewIfNeeded().catch(() => {});
               const addBtn = cardLocator.locator('button.cta-add, .cta-add, div.main-cta, button:has-text("Add"), button:has-text("ADD")').first();
               
               if (await addBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
                 await addBtn.click({ force: true });
                 await sleep(1000);
 
-                // Handle customization drawer if appeared
-                const drawerModal = page.locator('div[class*="drawer"], div[class*="bottom-sheet"], [role="dialog"], .customization-drawer').first();
-                if (await drawerModal.isVisible({ timeout: 1200 }).catch(() => false)) {
-                  const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart"), button:has-text("Add"), button:has-text("ADD"), button:has-text("I CHOOSE"), button:has-text("Continue"), [class*="add-to-cart" i]').first();
-                  if (await drawerBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-                    onProgress(`[MIDDLEMAN-ENGINE] 📝 Confirming product drawer Add button...`);
-                    await drawerBtn.click({ force: true }).catch(() => {});
-                    await sleep(1000);
+                // Handle legitimate customization drawer ONLY if item requires customization
+                if (item.isCustomizable || item.customSize || item.customCrust) {
+                  const drawerModal = page.locator('.customise-bottom-sheet, .customisation-modal, div[class*="customiz" i]').first();
+                  if (await drawerModal.isVisible({ timeout: 1200 }).catch(() => false)) {
+                    const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart"), button:has-text("Add"), button:has-text("ADD"), button:has-text("I CHOOSE"), button:has-text("Continue"), [class*="add-to-cart" i]').first();
+                    if (await drawerBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+                      onProgress(`[MIDDLEMAN-ENGINE] 📝 Confirming product drawer Add button...`);
+                      await drawerBtn.click({ force: true }).catch(() => {});
+                      await sleep(1000);
+                    }
                   }
+                  await handleDominosCustomizationSheet(page, item, onProgress);
                 }
-                await handleDominosCustomizationSheet(page, item, onProgress);
 
                 // For quantities > 1, use native Playwright click on stepper plus button
                 if (item.qty > 1) {
@@ -1370,20 +1430,33 @@ async function executeMiddlemanOrderOnDominos({
         return false;
       };
 
-      const allCards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
+      const allCards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper, .itm-dtl, .cart-item'));
       // Filter out recommendation / carousel items that only display an 'Add' CTA
       const cards = allCards.filter(c => {
         if (c.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="recommend" i], [class*="suggestion" i], [class*="cross-sell" i]')) return false;
         const hasAddOnly = !!c.querySelector('button.cta-add, .btn-add, div.main-cta') && !c.querySelector('.anim-ico-minus, [class*="minus"], .product-item-quantity, .itm-qty, .item-quantity, [class*="stepper"]');
         return !hasAddOnly;
       });
-      const foundItems = cards.map(c => {
+      const domFoundItems = cards.map(c => {
         const titleEl = c.querySelector('.popular-menu-header, h1, h2, h3, h4, .itm-name, .title, [class*="name"]');
         const firstLine = (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
         const qtyEl = c.querySelector('.item-quantity, .product-item-quantity, .cta-edit span');
         const qty = parseInt((qtyEl?.innerText || '1').replace(/[^0-9]/g, '') || '1', 10);
         return { firstLine, normTitle: norm(firstLine), qty };
       });
+
+      let storedItems = [];
+      try {
+        storedItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      } catch (e) {}
+
+      const foundItems = [...domFoundItems];
+      for (const si of storedItems) {
+        const sName = (si.productName || si.name || '').trim();
+        if (sName && !foundItems.some(f => matchHelper(f.firstLine, sName))) {
+          foundItems.push({ firstLine: sName, normTitle: norm(sName), qty: si.quantity || 1 });
+        }
+      }
 
       // 1. Rogue items not in expected order
       const rogue = foundItems.filter(f => !expectedNames.some(exp => matchHelper(f.firstLine, exp)));
@@ -1392,7 +1465,7 @@ async function executeMiddlemanOrderOnDominos({
       const missing = expectedItems.filter(exp => !foundItems.some(f => matchHelper(f.firstLine, exp.name)));
 
       return {
-        totalCartCards: cards.length,
+        totalCartCards: Math.max(cards.length, storedItems.length),
         foundItems,
         rogueCount: rogue.length,
         rogueNames: rogue.map(r => r.firstLine),
@@ -1468,14 +1541,27 @@ async function executeMiddlemanOrderOnDominos({
         return false;
       };
 
-      const cards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
-      const items = cards.map(c => {
+      // Hybrid Cart Audit: Gather authoritative items from localStorage.cartItems AND live DOM elements
+      let storedItems = [];
+      try {
+        storedItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      } catch (e) {}
+
+      const cards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper, .itm-dtl, .cart-item'));
+      const domTitles = cards.map(c => {
         const titleEl = c.querySelector('.popular-menu-header, h1, h2, h3, h4, .itm-name, .title, [class*="name"]');
         return (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
-      });
-      const rogue = items.filter(title => !expectedNames.some(exp => matchHelper(title, exp)));
-      const missing = expectedItems.filter(exp => !items.some(title => matchHelper(title, exp.name)));
-      return { totalCards: cards.length, rogueCount: rogue.length, missingCount: missing.length, missing: missing.map(m => m.name) };
+      }).filter(Boolean);
+
+      const combinedTitles = Array.from(new Set([
+        ...storedItems.map(i => i.productName || i.name || i.title).filter(Boolean),
+        ...domTitles
+      ]));
+
+      const rogue = combinedTitles.filter(title => !expectedNames.some(exp => matchHelper(title, exp)));
+      const missing = expectedItems.filter(exp => !combinedTitles.some(title => matchHelper(title, exp.name)));
+      const totalCards = Math.max(cards.length, storedItems.length);
+      return { totalCards, rogueCount: rogue.length, missingCount: missing.length, missing: missing.map(m => m.name), foundTitles: combinedTitles };
     }, { expectedNames: expectedItemNames, expectedItems: flattenedItems });
 
     if (finalAudit.rogueCount > 0) {

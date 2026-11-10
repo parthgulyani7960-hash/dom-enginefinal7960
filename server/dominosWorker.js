@@ -242,7 +242,9 @@ class DominosAutomationRobot {
 
       order.robot.storeId = String(outlet.storeId);
       order.robot.storeName = outlet.storeName;
-      order.robot.estimatedDelivery = outlet.polygonTime || '30 mins';
+      order.robot.estimatedDelivery = outlet.polygonTime ? (String(outlet.polygonTime).includes('min') ? String(outlet.polygonTime) : `${outlet.polygonTime} mins`) : '30 mins';
+      order.robot.estimatedDeliveryMinutes = 30;
+      order.estimatedDeliveryMinutes = 30;
       if (!order.address) order.address = {};
       order.address.storeId = String(outlet.storeId);
       order.address.storeName = outlet.storeName;
