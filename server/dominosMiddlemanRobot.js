@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { chromium } = require('playwright-core');
 const path = require('path');
 const proxyService = require('./proxyService');
@@ -917,31 +918,59 @@ async function executeMiddlemanOrderOnDominos({
                 return false;
               };
 
-              // Pass 1: Strict all-token match (e.g. "paneer" and "onion" both present in title)
+              // Pass 0: EXACT MATCH (Highest Priority - e.g. "Margherita" === "Margherita")
+              for (let i = 0; i < searchCards.length; i++) {
+                const card = searchCards[i];
+                const heading = card.querySelector('.pizza-title, h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
+                const hText = (heading?.innerText || '').trim();
+                const normH = norm(hText);
+                if (normH === normTarget) {
+                  return { idx: i, title: hText };
+                }
+              }
+
+              // Pass 1: Prefix / Word-boundary match (e.g. "Margherita Pizza" when target is "Margherita")
               for (let i = 0; i < searchCards.length; i++) {
                 const card = searchCards[i];
                 const heading = card.querySelector('.pizza-title, h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
                 const hText = (heading?.innerText || '').trim();
                 const normH = norm(hText);
                 if (hasConflict(normH, normTarget)) continue;
+                if (!normTarget.includes('double') && normH.includes('double')) continue;
+                if (!normTarget.includes('cheese burst') && normH.includes('cheese burst')) continue;
+                if (normH.startsWith(normTarget + ' ') || normTarget.startsWith(normH + ' ')) {
+                  return { idx: i, title: hText };
+                }
+              }
+
+              // Pass 2: Strict all-token match (e.g. "paneer" and "onion" both present in title)
+              for (let i = 0; i < searchCards.length; i++) {
+                const card = searchCards[i];
+                const heading = card.querySelector('.pizza-title, h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
+                const hText = (heading?.innerText || '').trim();
+                const normH = norm(hText);
+                if (hasConflict(normH, normTarget)) continue;
+                if (!normTarget.includes('double') && normH.includes('double')) continue;
+                if (!normTarget.includes('cheese burst') && normH.includes('cheese burst')) continue;
                 if (targetTokens.length > 0 && targetTokens.every(t => normH.includes(t))) {
                   return { idx: i, title: hText };
                 }
               }
 
-              // Pass 2: Exact or Substring match
+              // Pass 3: Substring match (with modifiers guarded)
               for (let i = 0; i < searchCards.length; i++) {
                 const card = searchCards[i];
                 const heading = card.querySelector('.pizza-title, h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]');
                 const hText = (heading?.innerText || '').trim();
                 const normH = norm(hText);
                 if (hasConflict(normH, normTarget)) continue;
-                if (normH === normTarget || normH.startsWith(normTarget + ' ') || normTarget.startsWith(normH + ' ') || (normTarget.length >= 5 && (normH.includes(normTarget) || normTarget.includes(normH)))) {
+                if (!normTarget.includes('double') && normH.includes('double')) continue;
+                if (normTarget.length >= 5 && (normH.includes(normTarget) || normTarget.includes(normH))) {
                   return { idx: i, title: hText };
                 }
               }
 
-              // Pass 3: Distinctive first token match
+              // Pass 4: Distinctive first token match (fallback)
               if (targetTokens.length > 0) {
                 for (let i = 0; i < searchCards.length; i++) {
                   const card = searchCards[i];
@@ -949,6 +978,7 @@ async function executeMiddlemanOrderOnDominos({
                   const hText = (heading?.innerText || '').trim();
                   const normH = norm(hText);
                   if (hasConflict(normH, normTarget)) continue;
+                  if (!normTarget.includes('double') && normH.includes('double')) continue;
                   if (normH.includes(targetTokens[0])) {
                     return { idx: i, title: hText };
                   }
