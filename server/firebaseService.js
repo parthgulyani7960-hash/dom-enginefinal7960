@@ -313,31 +313,49 @@ class FirebaseService {
     this.initAdminSdk();
 
     const rawPayload = {
-      accounts: storeData.accounts || [],
-      orders: storeData.orders || [],
-      users: storeData.users || [],
       userProfile: storeData.userProfile || {},
-      walletDeposits: storeData.walletDeposits || [],
-      walletWithdrawals: storeData.walletWithdrawals || [],
-      vouchers: storeData.vouchers || [],
       menu: storeData.menu || [],
       combos: storeData.combos || [],
       couponRules: storeData.couponRules || {},
       paymentSettings: storeData.paymentSettings || {},
       maintenanceMode: storeData.maintenanceMode || {},
-      tickets: storeData.tickets || [],
-      notifications: storeData.notifications || [],
       announcements: storeData.announcements || [],
-      dominosRegisteredPhones: storeData.dominosRegisteredPhones || {},
+      dominosRegisteredPhones: storeData.dominosRegisteredPhones || [],
       lastSyncedAt: new Date().toISOString()
     };
 
+    // Safe Non-Destructive Protection: Never wipe existing cloud collections with empty local arrays
+    if (Array.isArray(storeData.accounts) && storeData.accounts.length > 0) {
+      rawPayload.accounts = storeData.accounts;
+    }
+    if (Array.isArray(storeData.orders) && storeData.orders.length > 0) {
+      rawPayload.orders = storeData.orders;
+    }
+    if (Array.isArray(storeData.users) && storeData.users.length > 0) {
+      rawPayload.users = storeData.users;
+    }
+    if (Array.isArray(storeData.walletDeposits) && storeData.walletDeposits.length > 0) {
+      rawPayload.walletDeposits = storeData.walletDeposits;
+    }
+    if (Array.isArray(storeData.walletWithdrawals) && storeData.walletWithdrawals.length > 0) {
+      rawPayload.walletWithdrawals = storeData.walletWithdrawals;
+    }
+    if (Array.isArray(storeData.vouchers) && storeData.vouchers.length > 0) {
+      rawPayload.vouchers = storeData.vouchers;
+    }
+    if (Array.isArray(storeData.tickets) && storeData.tickets.length > 0) {
+      rawPayload.tickets = storeData.tickets;
+    }
+    if (Array.isArray(storeData.notifications) && storeData.notifications.length > 0) {
+      rawPayload.notifications = storeData.notifications;
+    }
+
     const syncPayload = this.sanitizeForFirebase(rawPayload);
 
-    // Strategy 1: Firebase Admin SDK
+    // Strategy 1: Firebase Admin SDK (Non-destructive update)
     if (this.rtdbInstance) {
       try {
-        await this.rtdbInstance.ref('dominos_order_engine').set(syncPayload);
+        await this.rtdbInstance.ref('dominos_order_engine').update(syncPayload);
         this.config.lastSyncAt = new Date().toISOString();
         this.config.syncStatus = 'SYNCED';
         this.saveConfig({ lastSyncAt: this.config.lastSyncAt, syncStatus: 'SYNCED' });
@@ -348,13 +366,13 @@ class FirebaseService {
       }
     }
 
-    // Strategy 2: REST fallback
+    // Strategy 2: REST fallback (Non-destructive PATCH)
     const baseUrl = this.getRtdbBaseUrl();
     if (!baseUrl) return { success: false, error: 'Database URL not configured' };
 
     try {
       const endpoint = `${baseUrl}/dominos_order_engine.json`;
-      const res = await this.httpsRequest(endpoint, 'PUT', syncPayload);
+      const res = await this.httpsRequest(endpoint, 'PATCH', syncPayload);
 
       if (res.statusCode >= 200 && res.statusCode < 300) {
         this.config.lastSyncAt = new Date().toISOString();

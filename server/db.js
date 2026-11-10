@@ -212,12 +212,32 @@ const INITIAL_DATA = {
     }
   ],
   dominosRegisteredPhones: [],
-  orders: []
+  orders: [],
+  users: [],
+  userProfile: {
+    name: "Customer",
+    phone: "",
+    email: "",
+    savedAddresses: []
+  },
+  walletDeposits: [],
+  walletWithdrawals: [],
+  tickets: [],
+  announcements: [],
+  notifications: [],
+  maintenanceMode: {
+    active: false,
+    message: "Domino's Order Engine is currently undergoing scheduled maintenance. We will be back shortly!",
+    until: null
+  },
+  deletedAccountIds: [],
+  deletedUserIds: []
 };
 
 class Database {
   constructor() {
-    this.data = INITIAL_DATA;
+    this.data = JSON.parse(JSON.stringify(INITIAL_DATA));
+    this.ensureDataShape();
     this.load();
     this.reapStaleInUseAccounts();
     // Periodic session auto-reaper every 30 seconds
@@ -228,6 +248,26 @@ class Database {
         } catch (_) {}
       }, 30000);
     }
+  }
+
+  ensureDataShape() {
+    if (!this.data || typeof this.data !== 'object') this.data = {};
+    if (!Array.isArray(this.data.accounts)) this.data.accounts = [];
+    if (!Array.isArray(this.data.users)) this.data.users = [];
+    if (!Array.isArray(this.data.orders)) this.data.orders = [];
+    if (!Array.isArray(this.data.walletDeposits)) this.data.walletDeposits = [];
+    if (!Array.isArray(this.data.walletWithdrawals)) this.data.walletWithdrawals = [];
+    if (!Array.isArray(this.data.tickets)) this.data.tickets = [];
+    if (!Array.isArray(this.data.vouchers)) this.data.vouchers = INITIAL_DATA.vouchers;
+    if (!Array.isArray(this.data.menu)) this.data.menu = INITIAL_DATA.menu;
+    if (!Array.isArray(this.data.combos)) this.data.combos = INITIAL_DATA.combos;
+    if (!Array.isArray(this.data.announcements)) this.data.announcements = [];
+    if (!Array.isArray(this.data.notifications)) this.data.notifications = [];
+    if (!Array.isArray(this.data.dominosRegisteredPhones)) this.data.dominosRegisteredPhones = [];
+    if (!this.data.couponRules) this.data.couponRules = INITIAL_DATA.couponRules;
+    if (!this.data.paymentSettings) this.data.paymentSettings = INITIAL_DATA.paymentSettings;
+    if (!this.data.maintenanceMode) this.data.maintenanceMode = INITIAL_DATA.maintenanceMode;
+    if (!this.data.userProfile) this.data.userProfile = INITIAL_DATA.userProfile;
   }
 
   load() {
@@ -300,11 +340,13 @@ class Database {
             }
           });
         }
+        this.ensureDataShape();
         if (needsSave) {
           this.save();
         }
       } else {
-        this.save();
+        console.log('[DB] Note: Local data/store.json not present on startup. Awaiting Firebase cloud pull.');
+        this.ensureDataShape();
       }
     } catch (err) {
       console.error('[DB] Error loading database file:', err.message);
@@ -361,13 +403,30 @@ class Database {
 
   mergeCloudData(cloudData) {
     if (!cloudData || typeof cloudData !== 'object') return;
+    this.ensureDataShape();
     console.log('[DB] ☁️ Merging cloud records from Firebase Realtime Database...');
 
+    const toArr = (val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return val.filter(Boolean);
+      if (typeof val === 'object') return Object.values(val).filter(Boolean);
+      return [];
+    };
+
+    const cloudAccounts = toArr(cloudData.accounts);
+    const cloudUsers = toArr(cloudData.users);
+    const cloudOrders = toArr(cloudData.orders);
+    const cloudVouchers = toArr(cloudData.vouchers);
+    const cloudDeposits = toArr(cloudData.walletDeposits);
+    const cloudTickets = toArr(cloudData.tickets);
+    const cloudMenu = toArr(cloudData.menu);
+    const cloudCombos = toArr(cloudData.combos);
+
     // 1. Merge accounts (Respect deleted tombstone IDs)
-    if (Array.isArray(cloudData.accounts) && cloudData.accounts.length > 0) {
+    if (cloudAccounts.length > 0) {
       if (!Array.isArray(this.data.accounts)) this.data.accounts = [];
       const deletedIds = new Set(this.data.deletedAccountIds || []);
-      for (const cloudAcc of cloudData.accounts) {
+      for (const cloudAcc of cloudAccounts) {
         if (!cloudAcc || !cloudAcc.id) continue;
         if (deletedIds.has(cloudAcc.id) || (cloudAcc.cleanPhone && deletedIds.has(cloudAcc.cleanPhone))) {
           continue; // Account was deleted by admin - do not resurrect from cloud
@@ -517,8 +576,9 @@ class Database {
       this.data.maintenanceMode = { ...this.data.maintenanceMode, ...cloudData.maintenanceMode };
     }
 
+    this.ensureDataShape();
     this.save();
-    console.log(`[DB] ✅ Full cloud data merged: ${this.data.accounts.length} accounts, ${this.data.users.length} users, ${this.data.orders.length} orders, ${this.data.vouchers.length} vouchers, ${this.data.menu.length} menu items in pool.`);
+    console.log(`[DB] ✅ Full cloud data merged: ${(this.data.accounts || []).length} accounts, ${(this.data.users || []).length} users, ${(this.data.orders || []).length} orders, ${(this.data.vouchers || []).length} vouchers, ${(this.data.menu || []).length} menu items in pool.`);
   }
 
   // Auto-Reaper for Stuck Domino's Sessions
