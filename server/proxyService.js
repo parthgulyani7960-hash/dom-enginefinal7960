@@ -123,6 +123,99 @@ class ProxyService {
   }
 
   /**
+   * Ultra-fast proxy-aware fetch for Domino's direct backend APIs.
+   * If proxy is enabled, tunnels through rotating proxy with Basic Auth.
+   * If proxy fails, automatically falls back to direct connection.
+   */
+  async proxyFetch(targetUrl, options = {}) {
+    if (!this.config.enabled || !this.config.host || !this.config.port) {
+      return fetch(targetUrl, options);
+    }
+
+    try {
+      const parsed = new URL(targetUrl);
+      const isHttps = parsed.protocol === 'https:';
+      const proxyHost = this.config.host;
+      const proxyPort = parseInt(this.config.port, 10);
+      const timeoutMs = options.timeout || 8000;
+      const tls = require('tls');
+
+      return await new Promise((resolve, reject) => {
+        const connectOpts = {
+          host: proxyHost,
+          port: proxyPort,
+          method: 'CONNECT',
+          path: `${parsed.hostname}:${parsed.port || (isHttps ? 443 : 80)}`,
+          timeout: timeoutMs
+        };
+        if (this.config.username) {
+          const auth = Buffer.from(`${this.config.username}:${this.config.password || ''}`).toString('base64');
+          connectOpts.headers = { 'Proxy-Authorization': `Basic ${auth}` };
+        }
+
+        const connectReq = http.request(connectOpts);
+        connectReq.on('connect', (res, socket) => {
+          if (res.statusCode !== 200) {
+            socket.destroy();
+            return reject(new Error(`Proxy CONNECT returned ${res.statusCode}`));
+          }
+          const agentSocket = isHttps ? tls.connect({
+            host: parsed.hostname,
+            socket: socket,
+            servername: parsed.hostname
+          }) : socket;
+
+          const reqLib = isHttps ? https : http;
+          const outReq = reqLib.request({
+            host: parsed.hostname,
+            port: parsed.port || (isHttps ? 443 : 80),
+            method: options.method || 'GET',
+            path: parsed.pathname + parsed.search,
+            headers: {
+              Host: parsed.hostname,
+              ...(options.headers || {})
+            },
+            socket: agentSocket,
+            agent: false,
+            timeout: timeoutMs
+          }, (outRes) => {
+            let chunks = [];
+            outRes.on('data', c => chunks.push(c));
+            outRes.on('end', () => {
+              const bodyBuf = Buffer.concat(chunks);
+              resolve({
+                ok: outRes.statusCode >= 200 && outRes.statusCode < 300,
+                status: outRes.statusCode,
+                statusText: outRes.statusMessage,
+                headers: outRes.headers,
+                text: async () => bodyBuf.toString('utf8'),
+                json: async () => JSON.parse(bodyBuf.toString('utf8')),
+                buffer: async () => bodyBuf
+              });
+            });
+          });
+
+          outReq.on('error', reject);
+          if (options.body) {
+            outReq.write(typeof options.body === 'string' ? options.body : JSON.stringify(options.body));
+          }
+          outReq.end();
+        });
+
+        connectReq.on('timeout', () => {
+          connectReq.destroy();
+          reject(new Error('Proxy connect timed out'));
+        });
+        connectReq.on('error', reject);
+        connectReq.end();
+      });
+    } catch (err) {
+      console.warn(`[PROXY] proxyFetch fallback to direct: ${err.message}`);
+      return fetch(targetUrl, options);
+    }
+  }
+
+  /**
    * Live test the rotating proxy by querying an external IP reflection service
    */
   async testProxy() {

@@ -429,11 +429,12 @@ async function executeMiddlemanOrderOnDominos({
     targetAddrId: addressIdNum
   });
 
-  // Block heavy media, fonts, analytical and tracking scripts for maximum execution speed
+  // Block heavy media, images, fonts, analytical and tracking scripts for maximum execution speed
   await page.route('**/*', (route) => {
     const url = route.request().url();
     const type = route.request().resourceType();
     if (
+      type === 'image' ||
       type === 'media' ||
       type === 'font' ||
       url.includes('clevertap') ||

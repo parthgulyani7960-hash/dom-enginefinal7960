@@ -17,6 +17,7 @@
 const fs = require('fs');
 const path = require('path');
 const locationService = require('./locationService');
+const proxyService = require('./proxyService');
 const { getItemImageUrl, CATEGORY_IMAGES } = require('./itemImages');
 
 const DOMINOS_HEADERS = {
@@ -165,7 +166,7 @@ class DominosMenuService {
     console.log(`[DOMINOS-MENU] Fetching live store menu: ${url}`);
 
     try {
-      const res = await fetch(url, { headers: DOMINOS_HEADERS });
+      const res = await proxyService.proxyFetch(url, { headers: DOMINOS_HEADERS });
       if (!res.ok) {
         console.warn(`[DOMINOS-MENU] Store ${storeId} returned ${res.status} (cached to prevent hammering)`);
         storeMenuCache.set(cacheKey, { timestamp: Date.now(), data: null });
@@ -328,10 +329,36 @@ class DominosMenuService {
           .replace(/\s+/g, ' ')
           .trim();
 
-        const match = storeInventory.storeItems.get(item.dominosCode) ||
-                      (item.parentSkuId && storeInventory.storeItems.get(item.parentSkuId)) ||
-                      storeInventory.storeItems.get(item.name.toLowerCase().trim()) ||
-                      (normItemName && storeInventory.storeItems.get(normItemName));
+        let match = storeInventory.storeItems.get(item.dominosCode) ||
+                    (item.parentSkuId && storeInventory.storeItems.get(item.parentSkuId)) ||
+                    storeInventory.storeItems.get(item.name.toLowerCase().trim()) ||
+                    (normItemName && storeInventory.storeItems.get(normItemName));
+
+        // Resilient fallback token matching across store products
+        if (!match && storeInventory.rawProducts) {
+          const normLocal = (s) => (s || '').toLowerCase()
+            .replace(/\(.*\)/g, '')
+            .replace(/&/g, ' ')
+            .replace(/[,+\-–—/.]/g, ' ')
+            .replace(/\band\b/g, '')
+            .replace(/\bgb\b/g, 'garlic bread')
+            .replace(/\bcb\b/g, 'cheese burst')
+            .replace(/\bnht\b/g, 'new hand tossed')
+            .replace(/\bmania\b/g, '')
+            .replace(/\bpizza\b/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+          const targetNorm = normLocal(item.name);
+          const targetTokens = targetNorm.split(' ').filter(w => w.length >= 3);
+          const cand = storeInventory.rawProducts.find(p => {
+            const pNorm = normLocal(p.name);
+            if (targetTokens.length > 0 && targetTokens.every(t => pNorm.includes(t))) return true;
+            return pNorm.includes(targetNorm) || targetNorm.includes(pNorm);
+          });
+          if (cand) {
+            match = storeInventory.storeItems.get(cand.menuCode) || cand;
+          }
+        }
 
         if (match && match.isAvailable === false) {
           // Explicitly out of stock or disabled by this store
@@ -349,9 +376,10 @@ class DominosMenuService {
               const cr = v.crust || 'New Hand Tossed';
               sizesSet.add(sz);
               crustsSet.add(cr);
-              if (v.price) {
+              const vp = v.price?.currentPrice || v.price || v.currentPrice;
+              if (vp) {
                 if (!sizeCrustPricingMap[sz]) sizeCrustPricingMap[sz] = {};
-                sizeCrustPricingMap[sz][cr] = v.price;
+                sizeCrustPricingMap[sz][cr] = Math.round(vp);
               }
             });
 
@@ -362,14 +390,19 @@ class DominosMenuService {
             if (crustsSet.size > 0) itemAllowedCrusts = Array.from(crustsSet);
 
             const regVariant = match.variants.find(v => (v.size || '').toLowerCase() === 'regular') || match.variants[0];
-            if (regVariant && regVariant.price) {
-              livePrice = regVariant.price;
-              if ((item.isPromotional || item.isCombo || item.category === 'Deals & Combos') && regVariant.regularPrice && regVariant.regularPrice > livePrice) {
-                liveOriginalPrice = regVariant.regularPrice;
+            const pVal = regVariant ? (regVariant.price?.currentPrice || regVariant.price || regVariant.currentPrice) : null;
+            const rVal = regVariant ? (regVariant.price?.regularPrice || regVariant.regularPrice) : null;
+            if (pVal) {
+              livePrice = Math.round(pVal);
+              if (rVal && rVal > pVal) {
+                liveOriginalPrice = Math.round(rVal);
               }
             }
-          } else if (match && match.price) {
-            livePrice = match.price;
+          } else if (match && (match.price || (match.variants && match.variants[0]))) {
+            const pVal = match.price || match.variants[0]?.price?.currentPrice || match.variants[0]?.currentPrice;
+            const rVal = match.regularPrice || match.variants[0]?.price?.regularPrice || match.variants[0]?.regularPrice;
+            if (pVal) livePrice = Math.round(pVal);
+            if (rVal && rVal > pVal) liveOriginalPrice = Math.round(rVal);
           }
         }
       }
