@@ -54,14 +54,18 @@ function cleanupOlderScreenshots(maxToKeep = 5) {
       } catch (e) {}
     }
 
-    // Unlink deleted screenshots from store.json orders so the database stays lean
+    // Unlink deleted screenshots from store.json orders ONLY if no data URI backup exists
     try {
       const db = require('./db');
       const validFiles = new Set(fs.readdirSync(dir).filter(f => f.endsWith('.png')));
       let dbChanged = false;
       if (db.data && Array.isArray(db.data.orders)) {
         for (const o of db.data.orders) {
-          if (o.robot?.proofScreenshotUrl) {
+          // If order has base64 data URI, keep screenshot URLs permanently so serveStatic can reconstruct them
+          if (o.robot?.proofScreenshotDataUri || o.robot?.cartBillScreenshotDataUri) {
+            continue;
+          }
+          if (o.robot?.proofScreenshotUrl && !o.robot.proofScreenshotUrl.startsWith('data:')) {
             const basename = path.basename(o.robot.proofScreenshotUrl);
             if (!validFiles.has(basename)) {
               o.robot.proofScreenshotUrl = null;

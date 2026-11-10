@@ -1566,33 +1566,51 @@ async function executeMiddlemanOrderOnDominos({
 
     if (finalAudit.rogueCount > 0) {
       const errProofFile = `proof-${customerOrder.id}-${Date.now()}.png`;
-      const errProofPath = path.join(__dirname, '..', 'public', 'screenshots', errProofFile);
+      const ssDir = path.join(__dirname, '..', 'public', 'screenshots');
+      fs.mkdirSync(ssDir, { recursive: true });
+      const errProofPath = path.join(ssDir, errProofFile);
       await page.screenshot({ path: errProofPath, fullPage: false }).catch(() => {});
       const proofUrl = `/screenshots/${errProofFile}`;
+      let errDataUri = null;
+      try {
+        const buf = fs.readFileSync(errProofPath);
+        errDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+      } catch (_) {}
       if (customerOrder.robot) {
         customerOrder.robot.proofScreenshotUrl = proofUrl;
         customerOrder.robot.cartBillScreenshotUrl = proofUrl;
         customerOrder.robot.errorProofUrl = proofUrl;
+        if (errDataUri) customerOrder.robot.proofScreenshotDataUri = errDataUri;
       }
       const err = new Error(`Cart verification failed: ${finalAudit.rogueCount} rogue item(s) remain in Domino's cart. Order blocked to prevent ordering incorrect items.`);
       err.proofScreenshotUrl = proofUrl;
+      err.proofScreenshotDataUri = errDataUri;
       throw err;
     }
 
     if (finalAudit.missingCount > 0) {
       const errProofFile = `proof-${customerOrder.id}-${Date.now()}.png`;
-      const errProofPath = path.join(__dirname, '..', 'public', 'screenshots', errProofFile);
+      const ssDir = path.join(__dirname, '..', 'public', 'screenshots');
+      fs.mkdirSync(ssDir, { recursive: true });
+      const errProofPath = path.join(ssDir, errProofFile);
       await page.screenshot({ path: errProofPath, fullPage: false }).catch(() => {});
       const proofUrl = `/screenshots/${errProofFile}`;
+      let errDataUri = null;
+      try {
+        const buf = fs.readFileSync(errProofPath);
+        errDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+      } catch (_) {}
       if (customerOrder.robot) {
         customerOrder.robot.proofScreenshotUrl = proofUrl;
         customerOrder.robot.cartBillScreenshotUrl = proofUrl;
         customerOrder.robot.errorProofUrl = proofUrl;
+        if (errDataUri) customerOrder.robot.proofScreenshotDataUri = errDataUri;
       }
       const err = new Error(`Cart verification failed: Ordered item(s) missing from Domino's cart: [${finalAudit.missing.join(', ')}]. Item(s) out of stock or unavailable at local Domino's store.`);
       err.isItemUnavailableAtStore = true;
       err.unavailableItems = finalAudit.missing;
       err.proofScreenshotUrl = proofUrl;
+      err.proofScreenshotDataUri = errDataUri;
       throw err;
     }
 
@@ -1989,12 +2007,23 @@ async function executeMiddlemanOrderOnDominos({
       await sleep(1500);
 
       // Capture Screenshot 1: Live Domino's Cart & Itemized Bill Review for Admin Audit
+      let cartBillDataUri = null;
       try {
         const orderRefNum = (customerOrder.id || 'ORDER').replace(/[^a-zA-Z0-9]/g, '');
         const cartBillFile = `cart-bill-${orderRefNum}.png`;
-        const cartBillPath = path.join(__dirname, '..', 'public', 'screenshots', cartBillFile);
+        const ssDir = path.join(__dirname, '..', 'public', 'screenshots');
+        fs.mkdirSync(ssDir, { recursive: true });
+        const cartBillPath = path.join(ssDir, cartBillFile);
         await page.screenshot({ path: cartBillPath, fullPage: false });
         cartBillUrl = `/screenshots/${cartBillFile}`;
+        try {
+          const buf = fs.readFileSync(cartBillPath);
+          cartBillDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+          if (customerOrder.robot) {
+            customerOrder.robot.cartBillScreenshotUrl = cartBillUrl;
+            customerOrder.robot.cartBillScreenshotDataUri = cartBillDataUri;
+          }
+        } catch (_) {}
         onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured live Domino's cart & itemized bill review screenshot: ${cartBillFile}`);
       } catch (cbErr) {
         onProgress(`[MIDDLEMAN-ENGINE] Cart bill review screenshot note: ${cbErr.message}`);
@@ -2280,12 +2309,23 @@ async function executeMiddlemanOrderOnDominos({
     await sleep(1000);
 
     const proofFile = `proof-${customerOrder.id}.png`;
-    const proofPath = path.join(__dirname, '..', 'public', 'screenshots', proofFile);
+    const ssDir = path.join(__dirname, '..', 'public', 'screenshots');
+    fs.mkdirSync(ssDir, { recursive: true });
+    const proofPath = path.join(ssDir, proofFile);
     let proofUrl = null;
+    let proofDataUri = null;
 
     try {
       await page.screenshot({ path: proofPath, fullPage: false });
       proofUrl = `/screenshots/${proofFile}`;
+      try {
+        const buf = fs.readFileSync(proofPath);
+        proofDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+        if (customerOrder.robot) {
+          customerOrder.robot.proofScreenshotUrl = proofUrl;
+          customerOrder.robot.proofScreenshotDataUri = proofDataUri;
+        }
+      } catch (_) {}
       onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured physical screenshot of Domino's order/bill: ${proofFile}`);
       try {
         const { cleanupOlderScreenshots } = require('./screenshotHelper');
@@ -2409,7 +2449,9 @@ async function executeMiddlemanOrderOnDominos({
       success: true,
       dominosOrderRef: realOrderRef,
       proofScreenshotUrl: proofUrl,
+      proofScreenshotDataUri: proofDataUri,
       cartBillScreenshotUrl: cartBillUrl,
+      cartBillScreenshotDataUri: cartBillDataUri,
       dominosAddressId: interceptedAddressId,
       voucherApplied: voucherApplied,
       voucherBalance: voucherBalanceReflected,
@@ -2420,18 +2462,26 @@ async function executeMiddlemanOrderOnDominos({
   } catch (err) {
     onProgress(`[MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: ${err.message}`);
     let capturedErrUrl = err.proofScreenshotUrl || null;
+    let capturedErrDataUri = err.proofScreenshotDataUri || null;
     if (!capturedErrUrl && page && !page.isClosed()) {
       try {
         const errProofFile = `err-proof-${customerOrder.id}-${Date.now()}.png`;
-        const errProofPath = path.join(__dirname, '..', 'public', 'screenshots', errProofFile);
+        const ssDir = path.join(__dirname, '..', 'public', 'screenshots');
+        fs.mkdirSync(ssDir, { recursive: true });
+        const errProofPath = path.join(ssDir, errProofFile);
         await page.screenshot({ path: errProofPath, fullPage: false }).catch(() => {});
         capturedErrUrl = `/screenshots/${errProofFile}`;
+        try {
+          const buf = fs.readFileSync(errProofPath);
+          capturedErrDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+        } catch (_) {}
       } catch (_) {}
     }
     if (customerOrder.robot && capturedErrUrl) {
       customerOrder.robot.proofScreenshotUrl = capturedErrUrl;
       customerOrder.robot.cartBillScreenshotUrl = capturedErrUrl;
       customerOrder.robot.errorProofUrl = capturedErrUrl;
+      if (capturedErrDataUri) customerOrder.robot.proofScreenshotDataUri = capturedErrDataUri;
     }
     await browser.close().catch(() => {});
     return {
@@ -2440,6 +2490,7 @@ async function executeMiddlemanOrderOnDominos({
       isItemUnavailableAtStore: err.isItemUnavailableAtStore || false,
       unavailableItems: err.unavailableItems || [],
       proofScreenshotUrl: capturedErrUrl,
+      proofScreenshotDataUri: capturedErrDataUri,
       cartBillScreenshotUrl: capturedErrUrl
     };
   }

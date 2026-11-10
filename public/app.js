@@ -426,6 +426,13 @@ function getItemDefaultImage(item) {
   return FALLBACK_CATEGORY_IMAGES['Veg Pizza'];
 }
 
+function handleMenuImageError(imgEl, isVeg = true) {
+  if (!imgEl) return;
+  imgEl.onerror = null;
+  imgEl.src = isVeg ? 'https://images.dominos.co.in/veg_pizza.png' : 'https://images.dominos.co.in/non_veg_pizza.png';
+}
+window.handleMenuImageError = handleMenuImageError;
+
 function renderMenu(items) {
   const container = document.getElementById('menuGrid');
   if (!container) return;
@@ -486,7 +493,7 @@ function renderMenu(items) {
     return `
       <div class="card ${availClass}" id="card-${item.id}">
         <div class="card-img-wrap">
-          <img src="${imgUrl}" class="card-img" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src=getItemDefaultImage(item)">
+          <img src="${imgUrl}" class="card-img" alt="${item.name}" loading="lazy" onerror="handleMenuImageError(this, ${isVegFood})">
           <div class="badge-veg-type">
             <span class="${isVegFood ? 'dot-veg' : 'dot-nonveg'}"></span>
             <span>${typeLabel}</span>
@@ -4581,14 +4588,37 @@ function updateTrackingUI(order) {
       payStatusBadge.innerHTML = '<span style="color: #dc2626; font-weight: 800;">❌ Order Cancelled</span>';
     } else if (p.method === 'COD') {
       payStatusBadge.innerHTML = '<span style="color: #15803d; font-weight: 700;">✓ Cash on Delivery (Pay upon arrival)</span>';
-    } else if (p.status === 'SUCCESS' || p.status === 'CONFIRMED') {
-      payStatusBadge.innerHTML = '<span style="color: #15803d; font-weight: 700;">✓ Instant UPI Paid</span>';
+    } else if (p.status === 'SUCCESS' || p.status === 'CONFIRMED' || p.status === 'PAID_CONFIRMED' || p.status === 'WALLET_PAID') {
+      payStatusBadge.innerHTML = '<span style="color: #15803d; font-weight: 700;">✓ Payment Confirmed</span>';
+    } else if (p.status === 'PENDING_APPROVAL' || r.status === 'AWAITING_PAYMENT_APPROVAL') {
+      payStatusBadge.innerHTML = `
+        <span style="color: #d97706; font-weight: 700; margin-right: 6px;">⏳ Payment Submitted (UTR: ${p.utr || 'Recorded'})</span>
+        <button onclick="dispatchPendingOrderToRobot('${order.id}')" style="background: #16a34a; color: white; border: none; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;">⚡ Dispatch to Robot</button>
+      `;
     } else {
       payStatusBadge.innerHTML = `
         <span style="color: #b91c1c; font-weight: 700; margin-right: 6px;">⏳ Awaiting Payment</span>
         <button onclick="openPaymentModal(currentOrder)" style="background: #0066a3; color: white; border: none; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; cursor: pointer;">📱 Pay Now</button>
       `;
     }
+  }
+
+  // Helper to allow manual dispatch
+  if (!window.dispatchPendingOrderToRobot) {
+    window.dispatchPendingOrderToRobot = async function(orderId) {
+      try {
+        const res = await fetch(`/api/orders/${orderId}/retry`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          showToastNotice('🚀 Order dispatched to Domino\'s autonomous robot worker!', '🍕');
+          fetchOrderStatus(orderId, true);
+        } else {
+          alert(data.error || 'Failed to dispatch');
+        }
+      } catch (e) {
+        alert(e.message);
+      }
+    };
   }
 
   // 3. Handle Order Cancellation Alert Banner (currentPosState 99 / CANCELLED)
@@ -4664,7 +4694,7 @@ function updateTrackingUI(order) {
 
   // 6. Proof Screenshot Card (Order Confirmation & Cart Bill)
   const proofCard = document.getElementById('proofPhotoCard');
-  const proofUrl = r.proofScreenshotUrl || r.cartBillScreenshotUrl;
+  const proofUrl = r.proofScreenshotDataUri || r.cartBillScreenshotDataUri || r.proofScreenshotUrl || r.cartBillScreenshotUrl;
   if (proofUrl && proofCard) {
     proofCard.style.display = 'block';
   }
@@ -5094,7 +5124,8 @@ async function promptUpdateRiderPhone() {
 }
 
 function viewProofScreenshot(url = null) {
-  const targetUrl = url || currentOrder?.robot?.proofScreenshotUrl || currentOrder?.robot?.cartBillScreenshotUrl;
+  const r = currentOrder?.robot || {};
+  const targetUrl = url || r.proofScreenshotDataUri || r.cartBillScreenshotDataUri || r.proofScreenshotUrl || r.cartBillScreenshotUrl;
   if (!targetUrl) {
     alert('Domino\'s settlement proof photo is still being generated. Please wait a moment.');
     return;
@@ -5102,7 +5133,19 @@ function viewProofScreenshot(url = null) {
   const img = document.getElementById('proofImgDisplay');
   const link = document.getElementById('proofNewTabLink');
   if (img) img.src = targetUrl;
-  if (link) link.href = targetUrl;
+  if (link) {
+    if (targetUrl.startsWith('data:')) {
+      link.href = '#';
+      link.onclick = (e) => {
+        e.preventDefault();
+        const w = window.open('');
+        w.document.write(`<img src="${targetUrl}" style="max-width:100%; height:auto;" />`);
+      };
+    } else {
+      link.href = targetUrl;
+      link.onclick = null;
+    }
+  }
   openModal('screenshotProofModal');
 }
 
@@ -5262,9 +5305,9 @@ function renderMyOrders(orders) {
       statusBadge = '<span style="background: #eff6ff; color: #0284c7; border: 1px solid #93c5fd; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">💵 COD (Pay on Delivery)</span>';
     }
 
-    const proofPhotoUrl = r.proofScreenshotUrl || r.cartBillScreenshotUrl;
+    const proofPhotoUrl = r.proofScreenshotDataUri || r.cartBillScreenshotDataUri || r.proofScreenshotUrl || r.cartBillScreenshotUrl;
     const proofBtn = proofPhotoUrl ? `
-      <button onclick="viewProofScreenshot('${proofPhotoUrl}')" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+      <button onclick="viewProofScreenshot('${proofPhotoUrl.startsWith('data:') ? '' : proofPhotoUrl}')" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
         🧾 View Bill Photo
       </button>
     ` : '';

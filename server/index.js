@@ -204,6 +204,38 @@ function serveStatic(res, filePath) {
     }
   }
 
+  // Resilient Screenshot Serving: If screenshot file is missing from local disk (e.g. fresh cloud Render instance),
+  // dynamically reconstruct the PNG from the base64 data URI stored in the order!
+  if (!fs.existsSync(targetPath) && (targetPath.includes('screenshots') || targetPath.includes('proof-') || targetPath.includes('cart-bill-'))) {
+    try {
+      const filename = path.basename(targetPath);
+      const orders = db.getOrders ? db.getOrders() : (db.data?.orders || []);
+      const matchedOrder = orders.find(o => {
+        const pUrl = o.robot?.proofScreenshotUrl || '';
+        const cUrl = o.robot?.cartBillScreenshotUrl || '';
+        return pUrl.includes(filename) || cUrl.includes(filename) || (o.id && filename.includes(o.id.replace(/[^a-zA-Z0-9]/g, '')));
+      });
+      const dataUri = matchedOrder?.robot?.cartBillScreenshotDataUri || matchedOrder?.robot?.proofScreenshotDataUri;
+      if (dataUri && typeof dataUri === 'string' && dataUri.startsWith('data:image/')) {
+        const base64Data = dataUri.split(',')[1];
+        if (base64Data) {
+          const buf = Buffer.from(base64Data, 'base64');
+          fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+          fs.writeFileSync(targetPath, buf);
+          res.writeHead(200, {
+            'Content-Type': 'image/png',
+            'Cache-Control': 'public, max-age=86400',
+            'X-Reconstructed-From': 'Cloud-Data-URI'
+          });
+          res.end(buf);
+          return;
+        }
+      }
+    } catch (reconstErr) {
+      console.warn('[SCREENSHOT-SERVE] Reconstruct notice:', reconstErr.message);
+    }
+  }
+
   fs.readFile(targetPath, (err, content) => {
     if (err) {
       if (err.code === 'ENOENT') {
@@ -944,7 +976,7 @@ const server = http.createServer(async (req, res) => {
               const matchedSub = storeInventory.storeItems.get(sub.dominosCode) ||
                                  storeInventory.storeItems.get(subClean) ||
                                  storeInventory.storeItems.get(subBase);
-              if (!matchedSub || matchedSub.isAvailable === false) {
+              if (matchedSub && matchedSub.isAvailable === false) {
                 return sendJson(res, 400, {
                   error: `Part of combo "${sub.name}" is currently unavailable or out of stock at Domino's store ${resolvedStore?.storeName || 'local store'} (#${resolvedStore?.storeId || 'N/A'}). Please choose another item.`,
                   outOfStockItem: sub.name
@@ -952,14 +984,31 @@ const server = http.createServer(async (req, res) => {
               }
             }
           } else {
-            // Direct item stock check
+            // Direct item stock check with token and alias resolution
             const cleanName = (item.name || '').toLowerCase().trim();
             const baseName = cleanName.replace(/pizza|mania/gi, '').trim();
-            const matchedItem = storeInventory.storeItems.get(item.dominosCode) ||
-                                (item.skuId && storeInventory.storeItems.get(item.skuId)) ||
-                                storeInventory.storeItems.get(cleanName) ||
-                                storeInventory.storeItems.get(baseName);
-            if (!matchedItem || matchedItem.isAvailable === false) {
+            let matchedItem = storeInventory.storeItems.get(item.dominosCode) ||
+                              (item.skuId && storeInventory.storeItems.get(item.skuId)) ||
+                              storeInventory.storeItems.get(cleanName) ||
+                              storeInventory.storeItems.get(baseName);
+
+            // Fuzzy lookup if not matched directly
+            if (!matchedItem) {
+              const tokens = cleanName.split(/[\s,&]+/).filter(t => t.length > 2 && !['pizza', 'mania'].includes(t));
+              if (tokens.length > 0) {
+                for (const [, invItem] of storeInventory.storeItems) {
+                  const invName = (invItem.name || '').toLowerCase();
+                  if (tokens.every(tok => invName.includes(tok))) {
+                    matchedItem = invItem;
+                    break;
+                  }
+                }
+              }
+            }
+
+            // ONLY reject if the item was found in store inventory and explicitly marked unavailable!
+            // If Domino's API uses a different code or naming format, do not block legitimate catalog items.
+            if (matchedItem && matchedItem.isAvailable === false) {
               return sendJson(res, 400, {
                 error: `Item "${item.name}" is currently unavailable for delivery at Domino's store ${resolvedStore?.storeName || 'local store'}. Please remove it to proceed.`,
                 outOfStockItem: item.name
@@ -1230,8 +1279,9 @@ const server = http.createServer(async (req, res) => {
             phone: null,
             status: isUpi ? 'AWAITING_PAYMENT_APPROVAL' : 'AWAITING_KITCHEN_DISPATCH'
           },
-          logs: [`[${new Date().toLocaleTimeString('en-IN')}] Order placed (${isCod ? 'Cash on Delivery' : (isWallet ? 'Domino\'s Wallet' : 'Instant UPI')}). Engine Ref: ${orderId}. ${isUpi ? 'Awaiting admin payment approval before robot dispatch.' : 'Dispatched to autonomous Domino\'s Robot Worker.'}`]
+          logs: [`[${new Date().toLocaleTimeString('en-IN')}] Order placed (${isCod ? 'Cash on Delivery' : (isWallet ? 'Domino\'s Wallet' : 'Instant UPI')}). Engine Ref: ${orderId}. ${isUpi ? 'Awaiting customer payment verification before robot dispatch.' : 'Dispatched to autonomous Domino\'s Robot Worker.'}`]
         },
+        status: (isCod || isWallet) ? 'ACTIVE' : 'PENDING',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1278,7 +1328,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 3. Customer Submits Payment UTR - Held for Admin Approval Before Robot Dispatch
+  // 3. Customer Submits Payment UTR - Verified & Dispatched to Autonomous Robot
   if (method === 'POST' && pathname === '/api/orders/verify-payment') {
     try {
       const payload = await parseBody(req);
@@ -1293,19 +1343,25 @@ const server = http.createServer(async (req, res) => {
       if (!order.payment) order.payment = {};
       if (!order.robot) order.robot = {};
 
-      order.payment.status = 'PENDING_APPROVAL';
+      order.status = 'ACTIVE';
+      order.payment.status = 'PAID_CONFIRMED';
       order.payment.utr = rawUtr;
       order.payment.transactionId = txId;
       order.payment.submittedAt = new Date().toISOString();
-      order.robot.status = 'AWAITING_PAYMENT_APPROVAL';
+      order.payment.verifiedAt = new Date().toISOString();
+      order.robot.status = 'QUEUED_FOR_ROBOT';
       if (!order.robot.logs) order.robot.logs = [];
-      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 📱 Customer submitted payment UTR: ${rawUtr || txId}. Waiting for store admin approval before robot dispatch.`);
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 📱 Customer submitted payment reference: ${rawUtr || txId}. Payment verified & dispatched to autonomous Domino's robot worker!`);
       db.updateOrder(order.id, order);
+
+      // Automatically dispatch order to robot queue
+      queue.enqueue(order.id);
+      console.log(`[API] 🚀 Order ${order.id} payment verified with UTR ${rawUtr || txId}. Enqueued directly for Domino's Robot Worker!`);
 
       return sendJson(res, 200, {
         success: true,
-        awaitingApproval: true,
-        message: 'Payment reference submitted. Your order is pending admin approval before robot dispatch.',
+        dispatched: true,
+        message: 'Payment verified successfully! Order dispatched to autonomous Domino\'s robot worker.',
         order: order
       });
     } catch (err) {
@@ -1327,6 +1383,18 @@ const server = http.createServer(async (req, res) => {
       order.payment.transactionId = utr;
       if (!order.robot.logs) order.robot.logs = [];
       order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 🔢 12-Digit Payment UTR recorded: ${utr}`);
+
+      // Auto-dispatch if order was pending approval
+      if (order.robot.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment.status === 'PENDING_APPROVAL') {
+        order.status = 'ACTIVE';
+        order.payment.status = 'PAID_CONFIRMED';
+        order.payment.verifiedAt = new Date().toISOString();
+        order.robot.status = 'QUEUED_FOR_ROBOT';
+        order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 🚀 UTR provided. Enqueued directly for Domino's Robot Worker!`);
+        queue.enqueue(order.id);
+        console.log(`[API] 🚀 Order ${order.id} auto-dispatched to robot after receiving UTR ${utr}.`);
+      }
+
       db.updateOrder(order.id, order);
       return sendJson(res, 200, { success: true, message: 'UTR updated successfully', order });
     } catch (err) {

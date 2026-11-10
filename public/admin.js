@@ -2760,12 +2760,24 @@ function switchBillPhotoTab(tab) {
   const openBtn = document.getElementById('adminBillPhotoOpenBtn');
   const photoTitle = document.getElementById('billPhotoCurrentTitle');
 
-  const targetUrl = tab === 'cart' ? (r.cartBillScreenshotUrl || r.proofScreenshotUrl) : (r.proofScreenshotUrl || r.cartBillScreenshotUrl);
+  const cartUrl = r.cartBillScreenshotDataUri || r.cartBillScreenshotUrl;
+  const proofUrl = r.proofScreenshotDataUri || r.proofScreenshotUrl;
+  const targetUrl = tab === 'cart' ? (cartUrl || proofUrl) : (proofUrl || cartUrl);
   if (photoImg && targetUrl) {
     photoImg.src = targetUrl;
   }
   if (openBtn && targetUrl) {
-    openBtn.href = targetUrl;
+    if (targetUrl.startsWith('data:')) {
+      openBtn.href = '#';
+      openBtn.onclick = (e) => {
+        e.preventDefault();
+        const w = window.open('');
+        w.document.write(`<img src="${targetUrl}" style="max-width:100%; height:auto;" />`);
+      };
+    } else {
+      openBtn.href = targetUrl;
+      openBtn.onclick = null;
+    }
   }
   if (photoTitle) {
     photoTitle.innerText = tab === 'cart' 
@@ -2792,7 +2804,9 @@ function openAdminBillPhoto(orderId, preferredTab = null) {
   const contentBox = document.getElementById('billPhotoContent');
   const emptyBox = document.getElementById('billPhotoEmptyState');
 
-  const hasAnyScreenshot = Boolean(r.cartBillScreenshotUrl || r.proofScreenshotUrl);
+  const cartUrl = r.cartBillScreenshotDataUri || r.cartBillScreenshotUrl;
+  const proofUrl = r.proofScreenshotDataUri || r.proofScreenshotUrl;
+  const hasAnyScreenshot = Boolean(cartUrl || proofUrl);
 
   if (hasAnyScreenshot) {
     if (contentBox) contentBox.style.display = 'block';
@@ -2802,13 +2816,13 @@ function openAdminBillPhoto(orderId, preferredTab = null) {
     const btnCart = document.getElementById('btnBillTabCart');
     const btnProof = document.getElementById('btnBillTabProof');
     if (btnCart) {
-      btnCart.style.display = r.cartBillScreenshotUrl ? 'inline-flex' : 'none';
+      btnCart.style.display = cartUrl ? 'inline-flex' : 'none';
     }
     if (btnProof) {
-      btnProof.style.display = r.proofScreenshotUrl ? 'inline-flex' : 'none';
+      btnProof.style.display = proofUrl ? 'inline-flex' : 'none';
     }
 
-    const defaultTab = preferredTab || (r.cartBillScreenshotUrl ? 'cart' : 'proof');
+    const defaultTab = preferredTab || (cartUrl ? 'cart' : 'proof');
     switchBillPhotoTab(defaultTab);
 
     const storeEl = document.getElementById('billPhotoStoreName');

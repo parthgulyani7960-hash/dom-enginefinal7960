@@ -291,7 +291,7 @@ class DominosAutomationRobot {
             customerOrder: order,
             accountSession: { ...account, couponCode: selectedPromo },
             voucher: availableVoucher || null,
-            paymentMethod: order.payment?.method || 'COD',
+            paymentMethod: availableVoucher ? 'VOUCHER' : 'COD',
             headless: true,
             onProgress: (msg) => {
               if (msg.includes('Adding') || msg.includes('Menu V1') || msg.includes('Opening Domino')) {
@@ -329,7 +329,13 @@ class DominosAutomationRobot {
             order.robot.dominosAddressId = robotResult.dominosAddressId;
           }
           order.robot.cartBillScreenshotUrl = robotResult.cartBillScreenshotUrl || null;
+          if (robotResult.cartBillScreenshotDataUri) {
+            order.robot.cartBillScreenshotDataUri = robotResult.cartBillScreenshotDataUri;
+          }
           order.robot.proofScreenshotUrl = proofUrl;
+          if (robotResult.proofScreenshotDataUri) {
+            order.robot.proofScreenshotDataUri = robotResult.proofScreenshotDataUri;
+          }
           order.robot.dominosOrderRef = realRef;
           order.robot.status = 'ORDER_PLACED';
           order.robot.voucherApplied = robotResult.voucherApplied;
@@ -406,6 +412,12 @@ class DominosAutomationRobot {
           if (robotResult?.proofScreenshotUrl) {
             order.robot.proofScreenshotUrl = robotResult.proofScreenshotUrl;
             order.robot.cartBillScreenshotUrl = robotResult.cartBillScreenshotUrl || robotResult.proofScreenshotUrl;
+            if (robotResult.proofScreenshotDataUri) {
+              order.robot.proofScreenshotDataUri = robotResult.proofScreenshotDataUri;
+            }
+            if (robotResult.cartBillScreenshotDataUri) {
+              order.robot.cartBillScreenshotDataUri = robotResult.cartBillScreenshotDataUri;
+            }
             addLog(order, `📸 State snapshot captured directly from Domino's: ${order.robot.proofScreenshotUrl}`);
           }
           db.updateOrder(orderId, order);
