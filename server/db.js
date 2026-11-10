@@ -211,32 +211,7 @@ const INITIAL_DATA = {
       dominosCode: 'BEV-COKE-475'
     }
   ],
-  dominosRegisteredPhones: [
-    {
-      phone: '+91 7888402429',
-      cleanPhone: '7888402429',
-      isDominoRegistered: true,
-      autoCoupon: 'PARTY',
-      couponCode: 'PARTY',
-      accountType: 'EXISTING_ACCOUNT',
-      categoryName: '🔵 Party Repeat Order Tier',
-      customerName: "Parth (Verified Domino's Customer)",
-      lastCheckedAt: '2026-11-01T12:00:00.000Z',
-      source: 'DOMINOS_LIVE_NXG_PROBE'
-    },
-    {
-      phone: '+91 7888422429',
-      cleanPhone: '7888422429',
-      isDominoRegistered: true,
-      autoCoupon: 'PARTY',
-      couponCode: 'PARTY',
-      accountType: 'EXISTING_ACCOUNT',
-      categoryName: '🔵 Party Repeat Order Tier',
-      customerName: "Parth (Verified Domino's Customer)",
-      lastCheckedAt: '2026-11-01T12:00:00.000Z',
-      source: 'DOMINOS_LIVE_NXG_PROBE'
-    }
-  ],
+  dominosRegisteredPhones: [],
   orders: []
 };
 
@@ -288,23 +263,24 @@ class Database {
         if (!Array.isArray(this.data.dominosRegisteredPhones)) {
           this.data.dominosRegisteredPhones = [];
         }
-        // Pre-seed known Domino's India registered phones (such as 7888402429 / 7888422429)
-        const seedPhones = ['7888402429', '7888422429'];
-        for (const sp of seedPhones) {
-          if (!this.data.dominosRegisteredPhones.some(p => p.cleanPhone === sp)) {
-            this.data.dominosRegisteredPhones.push({
-              phone: `+91 ${sp}`,
-              cleanPhone: sp,
-              isDominoRegistered: true,
-              autoCoupon: 'PARTY',
-              couponCode: 'PARTY',
-              accountType: 'EXISTING_ACCOUNT',
-              categoryName: '🔵 Party Repeat Order Tier',
-              customerName: "Parth (Verified Domino's Customer)",
-              lastCheckedAt: new Date().toISOString(),
-              source: 'DOMINOS_LIVE_NXG_PROBE'
-            });
-            needsSave = true;
+        // Seed registered phones from accounts currently in pool
+        if (Array.isArray(this.data.accounts)) {
+          for (const acc of this.data.accounts) {
+            if (acc && acc.cleanPhone && !this.data.dominosRegisteredPhones.some(p => p.cleanPhone === acc.cleanPhone)) {
+              this.data.dominosRegisteredPhones.push({
+                phone: acc.phone || `+91 ${acc.cleanPhone}`,
+                cleanPhone: acc.cleanPhone,
+                isDominoRegistered: true,
+                autoCoupon: acc.couponCode || 'PARTY',
+                couponCode: acc.couponCode || 'PARTY',
+                accountType: acc.accountType || 'EXISTING_ACCOUNT',
+                categoryName: acc.categoryName || 'Active Session Tier',
+                customerName: acc.customerName || "Customer",
+                lastCheckedAt: new Date().toISOString(),
+                source: 'ACTIVE_SESSION_POOL'
+              });
+              needsSave = true;
+            }
           }
         }
         // Migrate legacy Unsplash URLs to authentic Domino's CDN images

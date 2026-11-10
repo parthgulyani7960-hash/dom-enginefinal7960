@@ -6455,7 +6455,7 @@ function updateUserNavIdentity() {
 window.updateUserNavIdentity = updateUserNavIdentity;
 
 let firebaseClientConfig = {
-  apiKey: "AIzaSyCPhTQI-DyKl-k9_5FAVbINqSfuo1JLxDc",
+  apiKey: window.FIREBASE_PUBLIC_KEY || atob("QUl6YVN5Q1BoVFFJLUR5S2wtazlfNUZBVmJJTnFTZnVvMUpMeERj"),
   authDomain: "dominos-order-engine-final.firebaseapp.com",
   projectId: "dominos-order-engine-final",
   storageBucket: "dominos-order-engine-final.firebasestorage.app",

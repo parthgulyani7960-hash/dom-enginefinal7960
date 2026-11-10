@@ -2392,12 +2392,12 @@ function getExtractionGuide() {
     ],
     sampleJson: {
       source: "Domino's India Web",
-      phone: "7893618933",
+      phone: "9876500000",
       name: "Domino's Customer",
-      token: "Bearer eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..8hAfuNu5MwjTcu6u03nnBQ.2AzP6h1g6QcRdW0S2tmBx24YH9R89mL3sxqoMkb8vhki_iYl",
+      token: "Bearer <PASTE_DOMINOS_AUTH_TOKEN>",
       cookies: [
-        { name: "token", value: "Bearer eyJlbmMi...", domain: ".dominos.co.in", path: "/" },
-        { name: "PHPSESSID", value: "dom_sess_89234812", domain: ".dominos.co.in", path: "/" }
+        { name: "token", value: "Bearer <PASTE_DOMINOS_AUTH_TOKEN>", domain: ".dominos.co.in", path: "/" },
+        { name: "PHPSESSID", value: "dom_sess_sample", domain: ".dominos.co.in", path: "/" }
       ]
     }
   };

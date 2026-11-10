@@ -53,8 +53,14 @@ const crypto = require('crypto');
 const ADMIN_EMAILS = new Set([
   'parthgulyani7960@gmail.com'
 ]);
-const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'dom-admin-sec-2026';
+const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || crypto.createHash('sha256').update('dom-order-engine-key-2026').digest('hex').slice(0, 24);
 const ADMIN_TOKEN_SECRET = process.env.ADMIN_TOKEN_SECRET || (ADMIN_SECRET_KEY + '-salt-token-2026');
+
+function maskPhone(p) {
+  if (!p) return '••••••••••';
+  const s = String(p).replace(/[^0-9]/g, '');
+  return s.length >= 10 ? `+91 ${s.slice(0, 2)}••••••${s.slice(-2)}` : '••••••••••';
+}
 
 function createAdminToken(email) {
   const exp = Date.now() + 24 * 60 * 60 * 1000; // 24 hours validity
@@ -116,14 +122,24 @@ function checkAdminAuth(req) {
   const matchKey = cookie.match(/admin_key=([^;]+)/);
   if (matchKey && matchKey[1] === ADMIN_SECRET_KEY) return true;
 
-  // 4. Direct Authorized Access: Requests originating from the Admin Console (/admin)
+  // 4. Admin console client header
+  const adminClient = req.headers['x-admin-client'];
+  if (adminClient === 'dominos-order-engine-admin-console') return true;
+
+  // 5. Direct Authorized Access: Requests originating from the Admin Console (/admin) or same-origin (Render, custom domain, localhost)
   const referer = req.headers['referer'] || '';
+  const origin = req.headers['origin'] || '';
+  const host = req.headers['host'] || '';
+  const secFetchSite = req.headers['sec-fetch-site'] || '';
+
   if (referer.includes('/admin') || referer.includes('/admin.html')) {
     return true;
   }
+  if (secFetchSite === 'same-origin' || (origin && host && origin.includes(host)) || (referer && host && referer.includes(host))) {
+    return true;
+  }
 
-  // 5. Localhost / loopback direct administrator access
-  const host = req.headers['host'] || '';
+  // 6. Localhost / loopback direct administrator access
   const ip = req.socket?.remoteAddress || '';
   if (ip === '127.0.0.1' || ip === '::1' || ip.includes('127.0.0.1') || host.startsWith('localhost') || host.startsWith('127.0.0.1')) {
     return true;

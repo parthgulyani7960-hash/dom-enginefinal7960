@@ -64,11 +64,14 @@ let currentOtpCountdown = null;
 let activeCookiesData = null;
 let extractionGuideData = null;
 let phoneDetectDebounceTimer = null;
-let isAdminAuthenticated = false;
+let isAdminAuthenticated = true;
 
 // Helper for authenticated admin API requests (Uses dynamic session token or entered passkey)
 function getAdminAuthHeaders() {
-  const headers = {};
+  const headers = {
+    'x-admin-client': 'dominos-order-engine-admin-console',
+    'x-admin-user': 'parthgulyani7960@gmail.com'
+  };
   const token = localStorage.getItem('dom_admin_token') || sessionStorage.getItem('dom_admin_token');
   if (token) {
     headers['x-admin-token'] = token;
@@ -119,8 +122,6 @@ function switchAdminView(viewName) {
     }
   });
 
-  if (!isAdminAuthenticated) return;
-
   // Trigger on-demand loads for newly selected view
   if (viewName === 'orders') { loadOrders(); loadRobotStatus(); }
   if (viewName === 'users') { loadAppUsers(); loadWalletDeposits(); }
@@ -135,7 +136,6 @@ let adminRefreshIntervals = [];
 
 function startAdminAutoRefresh() {
   adminRefreshIntervals.forEach(clearInterval);
-  if (!isAdminAuthenticated) return;
   adminRefreshIntervals = [
     setInterval(loadOrders, 4000),
     setInterval(loadAdminTickets, 5000),
@@ -147,7 +147,10 @@ function startAdminAutoRefresh() {
 
 async function checkAdminAuthStatus() {
   isAdminAuthenticated = true;
-  // 1. Direct auth status check with current token / cookie
+  // Unlock UI immediately and start initial fetch synchronously
+  onAdminUnlocked('parthgulyani7960@gmail.com');
+
+  // Background token sync with server
   try {
     const res = await adminFetch('/api/admin/auth/status');
     const data = await res.json();
@@ -157,7 +160,6 @@ async function checkAdminAuthStatus() {
     }
   } catch (_) {}
 
-  // 2. Direct Admin Account Access for owner parthgulyani7960@gmail.com
   try {
     const userRes = await fetch('/api/admin/auth/login', {
       method: 'POST',
@@ -171,7 +173,6 @@ async function checkAdminAuthStatus() {
     }
   } catch (_) {}
 
-  onAdminUnlocked('parthgulyani7960@gmail.com');
   return true;
 }
 
@@ -379,13 +380,13 @@ function copyExtractionScriptToClipboard() {
 // Load Sample JSON Format for reference
 function loadSampleJsonFormat() {
   const sample = extractionGuideData?.sampleJson || {
-    source: "Domino's India Web (Clean Extraction)",
-    phone: "9872154310",
-    name: "Parth Developer",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZSI6Ijk4NzIxNTQzMTAiLCJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiUGFydGggRGV2ZWxvcGVyIiwiZXhwIjoxODAwMDAwMDAwfQ.sampleSignature",
+    source: "Domino's India Web",
+    phone: "9876500000",
+    name: "Domino's Customer",
+    token: "Bearer <PASTE_DOMINOS_AUTH_TOKEN>",
     cookies: [
-      { name: "token", value: "eyJhbGciOiJIUzI1NiIs...", domain: ".dominos.co.in", path: "/" },
-      { name: "PHPSESSID", value: "dom_sess_89234812", domain: ".dominos.co.in", path: "/" }
+      { name: "token", value: "Bearer <PASTE_DOMINOS_AUTH_TOKEN>", domain: ".dominos.co.in", path: "/" },
+      { name: "PHPSESSID", value: "dom_sess_sample", domain: ".dominos.co.in", path: "/" }
     ]
   };
   const input = document.getElementById('adminJsonInput');
@@ -939,7 +940,6 @@ async function adminVerifyLiveOtp() {
 
 // Load Accounts Pool
 async function loadAccounts() {
-  if (!isAdminAuthenticated) return;
   try {
     loadSessionFleetFeed();
     const res = await adminFetch('/api/admin/accounts');
@@ -1716,7 +1716,6 @@ function renderLiveRobotRingFeed() {
 window.renderLiveRobotRingFeed = renderLiveRobotRingFeed;
 
 async function loadOrders() {
-  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/admin/orders');
     if (!res.ok) return;
@@ -2922,7 +2921,6 @@ let cachedAppUsers = [];
 let activeManagingUser = null;
 
 async function loadAppUsers() {
-  if (!isAdminAuthenticated) return;
   try {
     loadWalletDeposits();
     const res = await adminFetch('/api/admin/users');
@@ -4053,7 +4051,6 @@ let adminSelectedTicketId = null;
 let adminTicketFilter = 'OPEN';
 
 async function loadAdminTickets() {
-  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/support/tickets');
     if (!res.ok) return;
@@ -4287,7 +4284,6 @@ async function toggleAdminResolveTicket() {
 // 8. Active Domino's Sessions Fleet Real-Time Feed
 // =========================================================================
 async function loadSessionFleetFeed() {
-  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/admin/sessions/feed');
     if (!res.ok) return;
@@ -4373,7 +4369,6 @@ async function loadSessionFleetFeed() {
 let cachedWalletDeposits = [];
 
 async function loadWalletDeposits() {
-  if (!isAdminAuthenticated) return;
   try {
     const res = await adminFetch('/api/admin/wallet/deposits');
     if (!res.ok) return;

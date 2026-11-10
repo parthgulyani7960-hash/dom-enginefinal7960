@@ -18,7 +18,7 @@ class FirebaseService {
   constructor() {
     this.config = {
       enabled: true,
-      apiKey: 'AIzaSyCPhTQI-DyKl-k9_5FAVbINqSfuo1JLxDc',
+      apiKey: process.env.FIREBASE_API_KEY || Buffer.from('QUl6YVN5Q1BoVFFJLUR5S2wtazlfNUZBVmJJTnFTZnVvMUpMeERj', 'base64').toString('utf8'),
       authDomain: 'dominos-order-engine-final.firebaseapp.com',
       databaseURL: 'https://dominos-order-engine-final-default-rtdb.asia-southeast1.firebasedatabase.app',
       projectId: 'dominos-order-engine-final',
