@@ -924,6 +924,9 @@
               <strong id="confirmModalGrandTotal" style="font-size: 20px; font-weight: 900; color: #0066a3;">₹0</strong>
             </div>
           </div>
+          <div id="confirmModalUpiNote" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: 6px; padding: 8px 10px; margin-top: 10px; font-size: 11px; color: #166534; font-weight: 600;">
+            📱 <strong>Instant UPI QR Settlement:</strong> On the next screen, scan the dynamic QR code and enter your 12-digit UTR reference number from PhonePe, Google Pay, or Paytm for immediate order verification.
+          </div>
         </div>
       </div>
 
@@ -1002,14 +1005,23 @@
           <span>⚡ Pay via UPI App (Instant App Open) &rarr;</span>
         </a>
 
-        <!-- UPI Transaction UTR Input Field -->
-        <div style="margin: 14px 0 16px; text-align: left; background: #f0f9ff; border: 1.5px solid #0284c7; border-radius: 10px; padding: 12px; box-sizing: border-box;">
-          <label style="font-size: 12px; font-weight: 800; color: #0369a1; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-            <span>🔢</span> <span>Enter 12-Digit UPI Reference / UTR Number:</span>
+        <!-- UPI Transaction 12-Digit UTR Input Field -->
+        <div style="margin: 14px 0 16px; text-align: left; background: #f0fdf4; border: 2px solid #16a34a; border-radius: 10px; padding: 14px; box-sizing: border-box; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.12);">
+          <label style="font-size: 13px; font-weight: 900; color: #166534; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <span style="display: flex; align-items: center; gap: 6px;"><span>🔢</span> <span>Enter 12-Digit UPI Reference / UTR Number:</span></span>
+            <span style="font-size: 10px; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 4px; font-weight: 800; border: 1px solid #86efac;">INSTANT VERIFICATION</span>
           </label>
-          <input type="text" id="upiTxnInput" class="form-input" placeholder="e.g. 432109876543 (from GPay / PhonePe / Paytm)" maxlength="22" style="font-size: 14px; font-weight: 800; font-family: monospace; width: 100%; border: 1.5px solid #bae6fd; border-radius: 8px; padding: 10px 12px; box-sizing: border-box; background: white; color: #0f172a;">
-          <div style="font-size: 11px; color: #0284c7; margin-top: 5px; font-weight: 600;">
-            💡 <strong>Instant Admin Verification:</strong> Providing your 12-digit UTR helps the store manager verify and dispatch your pizza without delay.
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="upiTxnInput" class="form-input" placeholder="e.g. 432109876543 (from PhonePe / GPay / Paytm)" maxlength="22" style="font-size: 15px; font-weight: 900; font-family: monospace; width: 100%; border: 2px solid #86efac; border-radius: 8px; padding: 10px 12px; box-sizing: border-box; background: white; color: #0f172a; letter-spacing: 0.5px;">
+            <button type="button" onclick="pasteCheckoutUpiUtr()" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #7dd3fc; border-radius: 8px; padding: 0 14px; font-weight: 800; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;"><span>📋</span> <span>Paste</span></button>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; font-size: 10px; font-weight: 700;">
+            <span style="background: white; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; color: #475569;">📱 PhonePe: 12-digit UTR</span>
+            <span style="background: white; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; color: #475569;">📱 Google Pay: UPI txn ID</span>
+            <span style="background: white; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; color: #475569;">📱 Paytm: UPI Ref No.</span>
+          </div>
+          <div style="font-size: 11px; color: #166534; margin-top: 6px; font-weight: 600;">
+            💡 <strong>Instant Admin Verification:</strong> Locate the 12-digit UTR in your payment app receipt and enter it above for immediate order approval &amp; autonomous robot dispatch.
           </div>
         </div>
 
@@ -1219,6 +1231,28 @@
             </div>
             <div id="trackerLiveStageBadge" style="background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 10px;">
               🔥 IN OVEN BAKING
+            </div>
+          </div>
+        </div>
+
+        <!-- Dedicated UPI Payment Reference & 12-Digit UTR Status Card -->
+        <div id="trackerUpiUtrCard" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #166534; display: flex; align-items: center; gap: 4px;">
+                <span>🔢</span> <span>UPI PAYMENT REFERENCE / 12-DIGIT UTR</span>
+              </div>
+              <div id="trackerUtrValueDisplay" style="font-family: monospace; font-size: 14px; font-weight: 900; color: #0284c7; margin-top: 3px;">
+                Awaiting 12-digit UTR...
+              </div>
+              <div style="font-size: 11px; color: #15803d; margin-top: 2px;" id="trackerUtrStatusNote">
+                Verified by Domino's store admin for autonomous dispatch
+              </div>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" onclick="promptUpdateOrderUtr()" style="background: #0284c7; color: white; border: none; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                ✏️ Update UTR
+              </button>
             </div>
           </div>
         </div>
@@ -1924,14 +1958,18 @@
             <span>⚡ Pay via UPI App (GPay / PhonePe / Paytm) &rarr;</span>
           </a>
 
-          <!-- Optional UPI Reference / 12-Digit UTR Input Field -->
-          <div style="margin-bottom: 12px; text-align: left;">
-            <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">
-              UPI Reference / 12-Digit UTR Number (Optional):
+          <!-- Prominent 12-Digit UPI UTR Input Field -->
+          <div style="margin-bottom: 12px; text-align: left; background: #f0fdf4; border: 2px solid #16a34a; border-radius: 10px; padding: 12px; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.1);">
+            <label style="font-size: 12px; font-weight: 800; color: #166534; display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+              <span style="display: flex; align-items: center; gap: 5px;"><span>🔢</span> <span>Enter 12-Digit UPI Reference / UTR Number:</span></span>
+              <span style="font-size: 10px; background: #dcfce7; color: #15803d; padding: 1px 6px; border-radius: 4px; font-weight: 800;">FOR FAST APPROVAL</span>
             </label>
-            <input type="text" id="depositUtrInput" class="form-input" placeholder="e.g. 432109876543 (from GPay / PhonePe / Paytm)" maxlength="22" style="font-size: 13px; font-weight: 700; font-family: monospace; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; box-sizing: border-box;">
-            <div style="font-size: 10px; color: #64748b; margin-top: 3px;">
-              💡 Providing your UPI UTR helps the store admin verify and credit your wallet immediately.
+            <div style="display: flex; gap: 6px;">
+              <input type="text" id="depositUtrInput" class="form-input" placeholder="e.g. 432109876543 (from PhonePe / GPay / Paytm)" maxlength="22" style="font-size: 14px; font-weight: 800; font-family: monospace; width: 100%; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 12px; box-sizing: border-box; background: white; color: #0f172a; letter-spacing: 0.5px;">
+              <button type="button" onclick="pasteDepositUtr()" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #7dd3fc; border-radius: 8px; padding: 0 12px; font-weight: 800; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;"><span>📋</span> <span>Paste</span></button>
+            </div>
+            <div style="font-size: 10px; color: #15803d; margin-top: 4px; font-weight: 600;">
+              💡 Providing your 12-digit UTR from Google Pay, PhonePe, or Paytm ensures instant store admin audit and wallet credit.
             </div>
           </div>
 
@@ -1952,8 +1990,8 @@
           <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Deposit Submitted for Approval</h4>
           <p style="font-size: 12px; color: #475569; margin-bottom: 14px; line-height: 1.5;">
             Reference: <strong id="submittedRefDisplay" style="font-family: monospace; color: #0066a3;">DEP-000000</strong> (<span id="submittedAmtDisplay" style="font-weight: 800; color: #16a34a;">₹50</span>).<br>
-            <span id="submittedUtrDisplay" style="display: block; font-size: 11px; font-weight: 700; color: #0284c7; margin-top: 2px;"></span>
-            Your payment is currently being verified by the admin desk. Your Domino's digital wallet balance will be credited within a few minutes.
+            <span id="submittedUtrDisplay" style="display: inline-block; font-size: 12px; font-weight: 800; color: #0284c7; margin-top: 6px; background: #e0f2fe; padding: 3px 8px; border-radius: 4px; border: 1px solid #7dd3fc; font-family: monospace;"></span><br>
+            Your payment reference is currently being verified by the admin desk. Your Domino's digital wallet balance will be credited within a few minutes.
           </p>
           <div style="display: flex; gap: 8px; justify-content: center;">
             <button type="button" class="btn-primary" onclick="closeModal('walletDepositModal'); openUserProfileModal();" style="width: auto; padding: 8px 18px; font-size: 12px; background: #0066a3;">
@@ -1974,15 +2012,15 @@
     <div class="modal-card" style="max-width: 480px; width: 95%;">
       <div class="modal-header">
         <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
-          <span>ℹ️</span> <span>Domino's Order Engine Dynamic UPI Auto-Verification</span>
+          <span>ℹ️</span> <span>Domino's Order Engine Dynamic UPI &amp; 12-Digit UTR Verification</span>
         </div>
         <button class="modal-close" onclick="closeModal('depositInfoModal')">&times;</button>
       </div>
       <div class="modal-body" style="padding: 18px; font-size: 13px; line-height: 1.6; color: #334155;">
         <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
-          <strong style="color: #1e40af; font-size: 13px;">⚡ Automatic Reference Matching</strong>
+          <strong style="color: #1e40af; font-size: 13px;">⚡ 12-Digit UTR Instant Verification</strong>
           <p style="margin: 4px 0 0; font-size: 12px; color: #1e3a8a;">
-            Domino's Order Engine uses automated cryptographic reference tags. You do not need to manually copy or type in bank UTR transaction numbers!
+            Locate your 12-digit UTR / UPI Reference ID from your PhonePe, Google Pay, or Paytm payment receipt and enter it above. The store manager audits the UTR for immediate 1-click credit to your wallet!
           </p>
         </div>
         <ol style="padding-left: 20px; margin: 0 0 16px; display: flex; flex-direction: column; gap: 10px;">

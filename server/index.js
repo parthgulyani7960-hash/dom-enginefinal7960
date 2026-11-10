@@ -1287,17 +1287,19 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 404, { error: 'Order not found' });
       }
 
-      const txId = (payload.transactionId || '').trim() || `UPI-${Date.now().toString().slice(-8)}`;
+      const rawUtr = (payload.utr || payload.transactionId || '').trim();
+      const txId = rawUtr || `UPI-${Date.now().toString().slice(-8)}`;
 
       if (!order.payment) order.payment = {};
       if (!order.robot) order.robot = {};
 
       order.payment.status = 'PENDING_APPROVAL';
+      order.payment.utr = rawUtr;
       order.payment.transactionId = txId;
       order.payment.submittedAt = new Date().toISOString();
       order.robot.status = 'AWAITING_PAYMENT_APPROVAL';
       if (!order.robot.logs) order.robot.logs = [];
-      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 📱 Customer submitted payment UTR: ${txId}. Waiting for store admin approval before robot dispatch.`);
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 📱 Customer submitted payment UTR: ${rawUtr || txId}. Waiting for store admin approval before robot dispatch.`);
       db.updateOrder(order.id, order);
 
       return sendJson(res, 200, {
@@ -1306,6 +1308,27 @@ const server = http.createServer(async (req, res) => {
         message: 'Payment reference submitted. Your order is pending admin approval before robot dispatch.',
         order: order
       });
+    } catch (err) {
+      return sendJson(res, 400, { error: err.message });
+    }
+  }
+
+  // 3b. Customer or Admin Submits/Updates 12-Digit Payment UTR
+  if (method === 'POST' && pathname === '/api/orders/update-utr') {
+    try {
+      const payload = await parseBody(req);
+      const order = db.getOrderById(payload.orderId);
+      if (!order) return sendJson(res, 404, { error: 'Order not found' });
+      const utr = (payload.utr || payload.transactionId || '').trim();
+      if (!utr) return sendJson(res, 400, { error: 'Valid 12-digit UPI UTR number is required.' });
+      if (!order.payment) order.payment = {};
+      if (!order.robot) order.robot = {};
+      order.payment.utr = utr;
+      order.payment.transactionId = utr;
+      if (!order.robot.logs) order.robot.logs = [];
+      order.robot.logs.push(`[${new Date().toLocaleTimeString('en-IN')}] 🔢 12-Digit Payment UTR recorded: ${utr}`);
+      db.updateOrder(order.id, order);
+      return sendJson(res, 200, { success: true, message: 'UTR updated successfully', order });
     } catch (err) {
       return sendJson(res, 400, { error: err.message });
     }
@@ -3236,7 +3259,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // Customer Wallet Deposit API: Step 2 - Submit "I Have Paid" for Admin Approval (No UTR Required)
+  // Customer Wallet Deposit API: Step 2 - Submit "I Have Paid" for Admin Approval
   if (method === 'POST' && pathname === '/api/user/wallet/deposit/submit') {
     try {
       const body = await parseBody(req);
@@ -3245,7 +3268,7 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 400, { error: 'Valid deposit reference is required.' });
       }
 
-      const utr = body.utr || body.transactionId || '';
+      const utr = (body.utr || body.transactionId || '').trim();
       const deposit = db.submitWalletDeposit(reference, utr);
 
       return sendJson(res, 200, {
@@ -3253,6 +3276,29 @@ const server = http.createServer(async (req, res) => {
         message: 'Deposit confirmed! Awaiting admin approval. Your wallet balance will be credited within a few minutes.',
         deposit: deposit
       });
+    } catch (err) {
+      return sendJson(res, 400, { error: err.message });
+    }
+  }
+
+  // Update UTR on a Wallet Deposit (Customer or Admin)
+  if (method === 'POST' && (pathname === '/api/user/wallet/deposit/update-utr' || pathname === '/api/admin/wallet/deposits/update-utr')) {
+    try {
+      const body = await parseBody(req);
+      const referenceId = body.referenceId || body.reference || body.id;
+      const utr = (body.utr || body.transactionId || '').trim();
+      if (!referenceId) return sendJson(res, 400, { error: 'Deposit reference required.' });
+      if (!utr) return sendJson(res, 400, { error: 'Valid 12-digit UTR required.' });
+
+      const deposits = db.getWalletDeposits();
+      const dep = deposits.find(d => d.reference === referenceId || d.referenceId === referenceId || d.id === referenceId);
+      if (!dep) return sendJson(res, 404, { error: 'Deposit not found.' });
+
+      dep.utr = utr;
+      dep.updatedAt = new Date().toISOString();
+      db.save();
+
+      return sendJson(res, 200, { success: true, message: 'Deposit UTR updated', deposit: dep });
     } catch (err) {
       return sendJson(res, 400, { error: err.message });
     }

@@ -1794,11 +1794,12 @@ function filterAdminOrders(query = '') {
     const uid12 = String(o.userId12 || o.user?.userId12 || '').toLowerCase();
     const custPhone = String(o.user?.phone || o.address?.phone || '').toLowerCase();
     const custName = String(o.user?.name || '').toLowerCase();
+    const utr = String(o.payment?.utr || o.payment?.transactionId || '').toLowerCase();
     const sessionPhone = String(o.robot?.accountPhone || o.robot?.sessionPhone || '').toLowerCase();
     const store = String(o.robot?.storeName || '').toLowerCase();
     const promo = String(o.robot?.couponCode || '').toLowerCase();
 
-    return engRef.includes(q) || domRef.includes(q) || uid12.includes(q) || custPhone.includes(q) || custName.includes(q) || sessionPhone.includes(q) || store.includes(q) || promo.includes(q);
+    return engRef.includes(q) || domRef.includes(q) || uid12.includes(q) || custPhone.includes(q) || custName.includes(q) || utr.includes(q) || sessionPhone.includes(q) || store.includes(q) || promo.includes(q);
   });
   renderAdminOrders(filtered);
 }
@@ -1956,7 +1957,23 @@ function renderAdminOrders(orders) {
         <td>${sessionHtml}</td>
         <td>${couponAuditHtml}</td>
         <td><small style="font-family: monospace; color: #475569;">${giftCardUsed}</small></td>
-        <td style="font-weight: 900; color: #16a34a; font-size: 13px;">₹${grandTotal}</td>
+        <td>
+          <div style="font-weight: 900; color: #16a34a; font-size: 13px;">₹${grandTotal}</div>
+          <div style="font-size: 10px; color: #475569; margin-top: 2px;">
+            <span style="font-weight: 700;">Method:</span> ${order.payment?.method === 'COD' ? '💵 COD' : '📱 Instant UPI'}
+          </div>
+          ${(order.payment?.utr || (order.payment?.transactionId && !order.payment.transactionId.startsWith('ORD-') && !order.payment.transactionId.startsWith('UPI-'))) ? `
+            <div style="margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 11px; font-weight: 800; color: #065f46;">
+              <span>🔢</span> <span>${escapeHtml(order.payment.utr || order.payment.transactionId)}</span>
+              <button type="button" onclick="navigator.clipboard.writeText('${escapeHtml(order.payment.utr || order.payment.transactionId)}'); showToast('UTR Copied: ${escapeHtml(order.payment.utr || order.payment.transactionId)}', '📋');" style="background: none; border: none; cursor: pointer; font-size: 10px; padding: 0;" title="Copy 12-Digit UTR">📋</button>
+            </div>
+          ` : (order.payment?.method === 'UPI' ? `
+            <div style="margin-top: 4px; display: inline-flex; align-items: center; gap: 3px;">
+              <span style="font-size: 10px; color: #b45309; background: #fffbeb; border: 1px dashed #fde68a; padding: 1px 4px; border-radius: 3px; font-weight: 700;">No UTR</span>
+              <button type="button" onclick="adminPromptOrderUtr('${order.id}')" style="background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; border-radius: 3px; padding: 1px 5px; font-size: 9px; font-weight: 800; cursor: pointer;" title="Enter 12-digit UTR from payment receipt">+ UTR</button>
+            </div>
+          ` : '')}
+        </td>
         <td>
           ${(order.isRefunded || order.payment?.status === 'REFUNDED') ? `
             <span style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">💳 Refunded (₹${order.refundAmount || order.payment?.amount || 0})</span>
@@ -1964,11 +1981,16 @@ function renderAdminOrders(orders) {
           ` : (r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
             <span style="background: #fef3c7; color: #b45309; border: 1.5px solid #fde68a; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⏳ Awaiting UPI Verification</span>
             <div style="font-size: 11px; color: #475569; margin-top: 4px;">
-              ${order.payment?.transactionId ? `
+              ${(order.payment?.utr || (order.payment?.transactionId && !order.payment.transactionId.startsWith('ORD-') && !order.payment.transactionId.startsWith('UPI-'))) ? `
                 <div style="background: #e0f2fe; border: 1px solid #7dd3fc; border-radius: 4px; padding: 3px 6px; color: #0369a1; font-weight: 800; font-family: monospace; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                  <span>🔢 UTR:</span> <span>${escapeHtml(order.payment.transactionId)}</span>
+                  <span>🔢 UTR:</span> <span>${escapeHtml(order.payment.utr || order.payment.transactionId)}</span>
                 </div>
-              ` : `<span style="color: #64748b; font-size: 10px;">Method: ${order.payment?.method || 'UPI'}</span>`}
+              ` : `
+                <div style="display: inline-flex; align-items: center; gap: 4px;">
+                  <span style="color: #b45309; font-size: 10px; background: #fffbeb; padding: 2px 4px; border-radius: 3px; border: 1px dashed #fde68a;">⚠️ No UTR</span>
+                  <button type="button" onclick="adminPromptOrderUtr('${order.id}')" style="background: #eff6ff; color: #0284c7; border: 1px solid #93c5fd; padding: 1px 5px; border-radius: 3px; cursor: pointer; font-size: 10px; font-weight: 700;">+ Add UTR</button>
+                </div>
+              `}
             </div>
           ` : (r.status === 'WAITING_ADMIN_DECISION') ? `
             <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⚠️ Unavailable Item</span>
@@ -4458,8 +4480,21 @@ async function loadWalletDeposits() {
             <strong style="color: #16a34a; font-size: 14px;">₹${dep.amount}</strong>
           </td>
           <td>
-            <code style="font-family: monospace; font-size: 11px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 2px 6px; border-radius: 4px;">${dep.referenceId || dep.reference || 'N/A'}</code>
-            <div style="font-size: 10px; color: #64748b;">Method: ${dep.method || 'UPI / QR'}</div>
+            ${dep.utr ? `
+              <div style="display: inline-flex; align-items: center; gap: 6px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 6px; padding: 4px 8px;">
+                <span style="font-size: 11px;">🔢</span>
+                <strong style="font-family: monospace; font-size: 13px; color: #065f46; letter-spacing: 0.5px;">${escapeHtml(dep.utr)}</strong>
+                <button type="button" onclick="navigator.clipboard.writeText('${escapeHtml(dep.utr)}'); showToast('UTR Copied: ${escapeHtml(dep.utr)}', '📋');" style="background: white; border: 1px solid #a7f3d0; border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 800; cursor: pointer; color: #047857;" title="Copy 12-Digit UTR">📋</button>
+              </div>
+            ` : `
+              <div style="display: inline-flex; align-items: center; gap: 4px;">
+                <span style="background: #fffbeb; color: #b45309; border: 1px dashed #fde68a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; display: inline-block;">
+                  ⚠️ No UTR entered
+                </span>
+                <button type="button" onclick="adminPromptDepositUtr('${ref}')" style="background: #f0f9ff; color: #0284c7; border: 1px solid #7dd3fc; border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 800; cursor: pointer;" title="Enter 12-Digit UTR from bank SMS">+ UTR</button>
+              </div>
+            `}
+            <div style="font-size: 10px; color: #64748b; margin-top: 3px;">Ref: <code style="font-size: 10px;">${ref}</code> • Method: ${dep.method || 'UPI / QR'}</div>
           </td>
           <td>${statusBadge}</td>
           <td style="font-size: 11px; color: #64748b;">${reqDate}</td>
@@ -4507,6 +4542,44 @@ async function adminRejectDeposit(refId) {
     alert('Error rejecting deposit: ' + err.message);
   }
 }
+
+async function adminPromptOrderUtr(orderId) {
+  const utr = prompt(`🔢 Enter / Update 12-Digit UPI Reference (UTR) for Order ${orderId}:`);
+  if (!utr || !utr.trim()) return;
+  try {
+    const res = await adminFetch('/api/orders/update-utr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: orderId, utr: utr.trim() })
+    });
+    const d = await res.json();
+    if (!d.success) throw new Error(d.error || 'Failed to update UTR');
+    showToast(`Order ${orderId} UTR updated to ${utr.trim()}!`, '🔢');
+    loadAdminOrders();
+  } catch (err) {
+    alert('Failed to update UTR: ' + err.message);
+  }
+}
+window.adminPromptOrderUtr = adminPromptOrderUtr;
+
+async function adminPromptDepositUtr(refId) {
+  const utr = prompt(`🔢 Enter 12-Digit UPI Reference (UTR) for Deposit ${refId}:`);
+  if (!utr || !utr.trim()) return;
+  try {
+    const res = await adminFetch('/api/admin/wallet/deposits/update-utr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ referenceId: refId, utr: utr.trim() })
+    });
+    const d = await res.json();
+    if (!d.success) throw new Error(d.error || 'Failed to update UTR');
+    showToast(`Deposit ${refId} UTR updated to ${utr.trim()}!`, '🔢');
+    loadWalletDeposits();
+  } catch (err) {
+    alert('Failed to update UTR: ' + err.message);
+  }
+}
+window.adminPromptDepositUtr = adminPromptDepositUtr;
 
 // Account Disable / Enable Toggle
 async function adminToggleAccountDisabled(accountId) {

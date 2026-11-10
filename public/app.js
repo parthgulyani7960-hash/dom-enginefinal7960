@@ -3536,6 +3536,11 @@ async function proceedToPaymentQR() {
     }
   }
 
+  const confUpiNote = document.getElementById('confirmModalUpiNote');
+  if (confUpiNote) {
+    confUpiNote.style.display = currentPaymentMethod === 'UPI' ? 'block' : 'none';
+  }
+
   const confTotalEl = document.getElementById('confirmModalGrandTotal');
   if (confTotalEl) {
     const subtotal = cart.reduce((s, itm) => s + ((itm.price || 0) * (itm.quantity || 1)), 0);
@@ -3799,13 +3804,52 @@ function startPaymentCountdown(durationSeconds) {
   }, 1000);
 }
 
+async function pasteCheckoutUpiUtr() {
+  try {
+    const text = await navigator.clipboard.readText();
+    const clean = (text || '').trim();
+    if (clean) {
+      const inp = document.getElementById('upiTxnInput');
+      if (inp) {
+        inp.value = clean;
+        showToastNotice('Pasted UTR: ' + clean, '📋');
+      }
+    }
+  } catch (_) {
+    const inp = document.getElementById('upiTxnInput');
+    if (inp) inp.focus();
+  }
+}
+window.pasteCheckoutUpiUtr = pasteCheckoutUpiUtr;
+
+async function promptUpdateOrderUtr(orderId) {
+  const targetId = orderId || currentTrackingOrderId || (currentOrder ? currentOrder.id : null);
+  if (!targetId) return;
+  const utr = prompt('🔢 Enter your 12-Digit UPI Transaction / UTR Reference Number (from PhonePe / Google Pay / Paytm / BHIM):');
+  if (!utr || !utr.trim()) return;
+  try {
+    const res = await fetch('/api/orders/update-utr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: targetId, utr: utr.trim() })
+    });
+    const d = await res.json();
+    if (!d.success) throw new Error(d.error || 'Failed to update UTR');
+    showToastNotice('✅ UTR updated to ' + utr.trim() + '! Notified store manager.', '🔢');
+    fetchOrderStatus(targetId, true);
+  } catch (err) {
+    alert('Failed to update UTR: ' + err.message);
+  }
+}
+window.promptUpdateOrderUtr = promptUpdateOrderUtr;
+
 async function confirmPaymentAndRelease() {
   if (!currentOrder) return;
   const txnInput = document.getElementById('upiTxnInput');
   let txnId = txnInput ? txnInput.value.trim() : '';
 
   if (!txnId) {
-    const promptedUtr = prompt('💡 Enter 12-Digit UPI UTR Reference Number:\n\nPlease enter the 12-digit UTR from your payment app (GPay / PhonePe / Paytm / BHIM) to verify your payment immediately.\n\n(Click Cancel if you will provide it later):', '');
+    const promptedUtr = prompt('💡 Enter 12-Digit UPI Reference / UTR Number:\n\nPlease enter the 12-digit UTR from your payment app (Google Pay / PhonePe / Paytm / BHIM) to verify your payment immediately.\n\n(Click Cancel if you will provide it later in the tracker):', '');
     if (promptedUtr !== null && promptedUtr.trim()) {
       txnId = promptedUtr.trim();
       if (txnInput) txnInput.value = txnId;
@@ -3818,7 +3862,8 @@ async function confirmPaymentAndRelease() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         orderId: currentOrder.id,
-        transactionId: txnId || currentOrder.id
+        transactionId: txnId || currentOrder.id,
+        utr: txnId
       })
     });
     const data = await res.json();
@@ -4212,6 +4257,27 @@ function updateTrackingUI(order) {
 
   const payMethodEl = document.getElementById('trackerPayMethod');
   if (payMethodEl) payMethodEl.innerText = p.method === 'COD' ? '💵 Cash to Rider' : '📱 Instant UPI';
+
+  // Dedicated Real-Time UPI & 12-Digit UTR Status Display
+  const utrCard = document.getElementById('trackerUpiUtrCard');
+  const utrValDisplay = document.getElementById('trackerUtrValueDisplay');
+  const utrNote = document.getElementById('trackerUtrStatusNote');
+  const isUpiOrder = p.method === 'UPI' || (p.upiString && p.upiString.length > 0) || p.utr || (p.transactionId && !p.transactionId.startsWith('ORD-'));
+  if (utrCard) {
+    if (isUpiOrder) {
+      utrCard.style.display = 'block';
+      const actualUtr = p.utr || (p.transactionId && !p.transactionId.startsWith('ORD-') && !p.transactionId.startsWith('UPI-') ? p.transactionId : '');
+      if (actualUtr) {
+        if (utrValDisplay) utrValDisplay.innerHTML = `<span style="color: #065f46; background: #ecfdf5; border: 1.5px solid #6ee7b7; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-family: monospace;">🔢 UTR: ${escapeHtml(actualUtr)}</span>`;
+        if (utrNote) utrNote.innerText = '✓ Verified 12-digit UTR recorded for store dispatch.';
+      } else {
+        if (utrValDisplay) utrValDisplay.innerHTML = `<span style="color: #b45309; background: #fffbeb; border: 1.5px dashed #fde68a; padding: 2px 8px; border-radius: 4px; font-weight: 700;">⚠️ 12-Digit UTR Not Submitted Yet</span>`;
+        if (utrNote) utrNote.innerText = 'Tap "Update UTR" to provide the 12-digit reference from your UPI app receipt.';
+      }
+    } else {
+      utrCard.style.display = 'none';
+    }
+  }
 
   // Populate Ordered Items in Tracker
   const itemsContainer = document.getElementById('trackerItemsContainer');
@@ -5642,6 +5708,24 @@ async function downloadDepositQr() {
 }
 window.downloadDepositQr = downloadDepositQr;
 
+async function pasteDepositUtr() {
+  try {
+    const text = await navigator.clipboard.readText();
+    const clean = (text || '').trim();
+    if (clean) {
+      const inp = document.getElementById('depositUtrInput');
+      if (inp) {
+        inp.value = clean;
+        showToastNotice('Pasted UTR: ' + clean, '📋');
+      }
+    }
+  } catch (_) {
+    const inp = document.getElementById('depositUtrInput');
+    if (inp) inp.focus();
+  }
+}
+window.pasteDepositUtr = pasteDepositUtr;
+
 async function submitDepositPaidConfirmation() {
   if (!activeDepositRequest) return;
   const btn = document.getElementById('btnConfirmPaid');
@@ -5656,7 +5740,16 @@ async function submitDepositPaidConfirmation() {
       depositCountdownInterval = null;
     }
 
-    const utrVal = document.getElementById('depositUtrInput') ? document.getElementById('depositUtrInput').value.trim() : '';
+    let utrVal = document.getElementById('depositUtrInput') ? document.getElementById('depositUtrInput').value.trim() : '';
+
+    if (!utrVal) {
+      const prompted = prompt('🔢 Please enter the 12-Digit UPI Reference / UTR Number from your payment app (Google Pay / PhonePe / Paytm / BHIM) so the store admin can instantly verify and credit your wallet:');
+      if (prompted && prompted.trim()) {
+        utrVal = prompted.trim();
+        const inp = document.getElementById('depositUtrInput');
+        if (inp) inp.value = utrVal;
+      }
+    }
 
     const res = await fetch('/api/user/wallet/deposit/submit', {
       method: 'POST',
@@ -5678,7 +5771,11 @@ async function submitDepositPaidConfirmation() {
     const subAmt = document.getElementById('submittedAmtDisplay');
     if (subAmt) subAmt.innerText = `₹${activeDepositRequest.amount}`;
     const subUtr = document.getElementById('submittedUtrDisplay');
-    if (subUtr) subUtr.innerText = utrVal ? `UTR: ${utrVal}` : '';
+    if (subUtr) {
+      subUtr.innerHTML = utrVal
+        ? `<span>🔢 12-Digit UTR:</span> <code style="font-size: 13px; font-weight: 900; color: #0284c7;">${escapeHtml(utrVal)}</code>`
+        : `<span style="color:#b45309;">⚠️ No UTR entered</span>`;
+    }
 
     document.getElementById('depositStepPayment').style.display = 'none';
     document.getElementById('depositStepSubmitted').style.display = 'block';
