@@ -844,10 +844,26 @@ async function executeMiddlemanOrderOnDominos({
 
           for (const query of searchCandidates) {
             if (added) break;
+
+            // Clear any existing search query cleanly
+            const clearIcon = page.locator('.search-clear-icon, .jfi-close, .close-search, .icon-close').first();
+            if (await clearIcon.isVisible({ timeout: 400 }).catch(() => false)) {
+              await clearIcon.click({ force: true }).catch(() => {});
+              await sleep(300);
+            }
             await searchInput.fill('');
             await searchInput.fill(query);
+            // Dispatch Vue v-model input and change events to ensure reactive search results update
+            await page.evaluate((val) => {
+              const inp = document.querySelector('#searchQueryInputModal, .search-query-input');
+              if (inp) {
+                inp.value = val;
+                inp.dispatchEvent(new Event('input', { bubbles: true }));
+                inp.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+            }, query).catch(() => {});
             await searchInput.press('Enter').catch(() => {});
-            await sleep(900);
+            await sleep(1000);
 
             // Find matching card index in search results using token overlap matching
             const match = await page.evaluate(({ rName, cName, expPrice }) => {
@@ -904,9 +920,12 @@ async function executeMiddlemanOrderOnDominos({
             }, { rName: rawName, cName: cleanName, expPrice: item.price });
 
             if (match) {
-              onProgress(`[MIDDLEMAN-ENGINE] 🎯 Found search match: "${match.title}" (Index ${match.idx})`);
-              const cardLocator = page.locator('.card-item-search, [data-label="product-card"], .search-item, .search-card').nth(match.idx);
-              const addBtn = cardLocator.locator('button.cta-add, .cta-add, div.main-cta, button:has-text("Add")').first();
+              onProgress(`[MIDDLEMAN-ENGINE] 🎯 Found search match: "${match.title}"`);
+              // Target matching product card by exact title text using native locator filter
+              const cardLocator = page.locator('.card-item-search, [data-label="product-card"], .search-item, .search-card, .card-content, .product-card')
+                .filter({ hasText: match.title })
+                .first();
+              const addBtn = cardLocator.locator('button.cta-add, .cta-add, div.main-cta, button:has-text("Add"), button:has-text("ADD")').first();
               
               if (await addBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
                 await addBtn.click({ force: true });
@@ -928,7 +947,7 @@ async function executeMiddlemanOrderOnDominos({
                 if (item.qty > 1) {
                   onProgress(`[MIDDLEMAN-ENGINE] ⚡ Adding ${item.qty - 1} extra unit(s) of "${cleanName}" via stepper...`);
                   for (let k = 1; k < item.qty; k++) {
-                    const plusBtn = cardLocator.locator('.anim-ico-plus, [class*="plus"]').first();
+                    const plusBtn = cardLocator.locator('.anim-ico-plus, [class*="plus"], button:has-text("+"), .stepper-add').first();
                     if (await plusBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
                       await plusBtn.click({ force: true });
                       await sleep(600);
@@ -995,7 +1014,7 @@ async function executeMiddlemanOrderOnDominos({
               }, { cName: cleanName, rName: rawName });
 
               if (cardMatch) {
-                const cardLocator = page.locator('.card-content, .product-card, div[class*="card"]').nth(cardMatch.idx);
+                const cardLocator = page.locator('.card-content, .product-card, div[class*="card"]').filter({ hasText: cardMatch.title }).first();
                 const btn = cardLocator.locator('button.cta-add, .cta-add, button:has-text("Add"), div.main-cta').first();
                 if (await btn.isVisible({ timeout: 1200 }).catch(() => false)) {
                   await btn.click({ force: true });
@@ -1460,13 +1479,34 @@ async function executeMiddlemanOrderOnDominos({
     }, { expectedNames: expectedItemNames, expectedItems: flattenedItems });
 
     if (finalAudit.rogueCount > 0) {
-      throw new Error(`Cart verification failed: ${finalAudit.rogueCount} rogue item(s) remain in Domino's cart. Order blocked to prevent ordering incorrect items.`);
+      const errProofFile = `proof-${customerOrder.id}-${Date.now()}.png`;
+      const errProofPath = path.join(__dirname, '..', 'public', 'screenshots', errProofFile);
+      await page.screenshot({ path: errProofPath, fullPage: false }).catch(() => {});
+      const proofUrl = `/screenshots/${errProofFile}`;
+      if (customerOrder.robot) {
+        customerOrder.robot.proofScreenshotUrl = proofUrl;
+        customerOrder.robot.cartBillScreenshotUrl = proofUrl;
+        customerOrder.robot.errorProofUrl = proofUrl;
+      }
+      const err = new Error(`Cart verification failed: ${finalAudit.rogueCount} rogue item(s) remain in Domino's cart. Order blocked to prevent ordering incorrect items.`);
+      err.proofScreenshotUrl = proofUrl;
+      throw err;
     }
 
     if (finalAudit.missingCount > 0) {
+      const errProofFile = `proof-${customerOrder.id}-${Date.now()}.png`;
+      const errProofPath = path.join(__dirname, '..', 'public', 'screenshots', errProofFile);
+      await page.screenshot({ path: errProofPath, fullPage: false }).catch(() => {});
+      const proofUrl = `/screenshots/${errProofFile}`;
+      if (customerOrder.robot) {
+        customerOrder.robot.proofScreenshotUrl = proofUrl;
+        customerOrder.robot.cartBillScreenshotUrl = proofUrl;
+        customerOrder.robot.errorProofUrl = proofUrl;
+      }
       const err = new Error(`Cart verification failed: Ordered item(s) missing from Domino's cart: [${finalAudit.missing.join(', ')}]. Item(s) out of stock or unavailable at local Domino's store.`);
       err.isItemUnavailableAtStore = true;
       err.unavailableItems = finalAudit.missing;
+      err.proofScreenshotUrl = proofUrl;
       throw err;
     }
 
@@ -1621,45 +1661,33 @@ async function executeMiddlemanOrderOnDominos({
       }
       await sleep(1500);
 
-      // Select address card matching user flat or street or newly intercepted address ID
-      const deliverClicked = await page.evaluate(({ userFlat, userStreet, targetAddrId, userCity }) => {
-        const cards = Array.from(document.querySelectorAll('.address_card_lst li, .address_card_lst, .address-card'));
-        for (const card of cards) {
-          const text = (card.innerText || '').toLowerCase();
-          const matchFlat = userFlat && text.includes(userFlat.toLowerCase());
-          const matchStreet = userStreet && text.includes(userStreet.toLowerCase());
-          const matchId = targetAddrId && card.innerHTML.includes(String(targetAddrId));
+      // Select address card matching user flat or street or newly intercepted address ID using native clicks
+      let deliverClicked = false;
+      const candidates = [
+        addr.flat && page.locator('.address_card_lst li, .address_card_lst, .address-card').filter({ hasText: addr.flat }).first(),
+        (addr.street || addr.building) && page.locator('.address_card_lst li, .address_card_lst, .address-card').filter({ hasText: addr.street || addr.building }).first(),
+        interceptedAddressId && page.locator(`.address_card_lst li, .address-card`).filter({ hasText: String(interceptedAddressId) }).first(),
+        addr.city && page.locator('.address_card_lst li, .address_card_lst, .address-card').filter({ hasText: addr.city }).first()
+      ].filter(Boolean);
 
-          if (matchFlat || matchStreet || matchId) {
-            const btn = card.querySelector('button.deliverBtn') || card.querySelector('button');
-            if (btn) {
-              btn.click();
-              return true;
-            }
+      for (const card of candidates) {
+        if (await card.isVisible({ timeout: 1000 }).catch(() => false)) {
+          const btn = card.locator('button.deliverBtn, button:has-text("DELIVER HERE"), button:has-text("Deliver Here"), button').first();
+          if (await btn.isVisible({ timeout: 1000 }).catch(() => false)) {
+            await btn.click({ force: true }).catch(() => {});
+            deliverClicked = true;
+            break;
           }
         }
-        // Fallback: match by city
-        for (const card of cards) {
-          if (userCity && (card.innerText || '').toLowerCase().includes(userCity.toLowerCase())) {
-            const btn = card.querySelector('button.deliverBtn') || card.querySelector('button');
-            if (btn) {
-              btn.click();
-              return true;
-            }
-          }
+      }
+
+      if (!deliverClicked) {
+        const anyDeliver = page.locator('button.deliverBtn, button:has-text("DELIVER HERE"), button:has-text("Deliver Here")').first();
+        if (await anyDeliver.isVisible({ timeout: 1200 }).catch(() => false)) {
+          await anyDeliver.click({ force: true }).catch(() => {});
+          deliverClicked = true;
         }
-        const firstDeliver = document.querySelector('button.deliverBtn');
-        if (firstDeliver) {
-          firstDeliver.click();
-          return true;
-        }
-        return false;
-      }, {
-        userFlat: addr.flat,
-        userStreet: addr.street || addr.building,
-        targetAddrId: interceptedAddressId,
-        userCity: addr.city
-      });
+      }
 
       if (deliverClicked) {
         onProgress(`[MIDDLEMAN-ENGINE] ✓ Delivery address confirmed on cart screen!`);
@@ -2305,10 +2333,28 @@ async function executeMiddlemanOrderOnDominos({
 
   } catch (err) {
     onProgress(`[MIDDLEMAN-ENGINE] ❌ Error executing on Domino's: ${err.message}`);
+    let capturedErrUrl = err.proofScreenshotUrl || null;
+    if (!capturedErrUrl && page && !page.isClosed()) {
+      try {
+        const errProofFile = `err-proof-${customerOrder.id}-${Date.now()}.png`;
+        const errProofPath = path.join(__dirname, '..', 'public', 'screenshots', errProofFile);
+        await page.screenshot({ path: errProofPath, fullPage: false }).catch(() => {});
+        capturedErrUrl = `/screenshots/${errProofFile}`;
+      } catch (_) {}
+    }
+    if (customerOrder.robot && capturedErrUrl) {
+      customerOrder.robot.proofScreenshotUrl = capturedErrUrl;
+      customerOrder.robot.cartBillScreenshotUrl = capturedErrUrl;
+      customerOrder.robot.errorProofUrl = capturedErrUrl;
+    }
     await browser.close().catch(() => {});
     return {
       success: false,
-      error: err.message
+      error: err.message,
+      isItemUnavailableAtStore: err.isItemUnavailableAtStore || false,
+      unavailableItems: err.unavailableItems || [],
+      proofScreenshotUrl: capturedErrUrl,
+      cartBillScreenshotUrl: capturedErrUrl
     };
   }
 }

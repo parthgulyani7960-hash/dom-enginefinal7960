@@ -385,31 +385,36 @@ class DominosAutomationRobot {
             robotResult?.isStoreOffline ||
             failureMsg.toLowerCase().includes('store not available for the time') ||
             failureMsg.toLowerCase().includes('outside delivery hours');
+          const isItemUnavailable = robotResult?.isItemUnavailableAtStore ||
+            failureMsg.includes('out of stock') ||
+            failureMsg.includes('missing from Domino\'s cart') ||
+            failureMsg.includes('unavailable');
 
           addLog(order, `❌ Domino's Placement Notice: ${failureMsg}`);
-          order.robot.status = isStoreTiming ? 'STORE_OFFLINE' : 'ERROR';
+          order.robot.status = isStoreTiming ? 'STORE_OFFLINE' : (isItemUnavailable ? 'WAITING_ADMIN_DECISION' : 'ERROR');
           order.robot.error = failureMsg;
           if (isStoreTiming) {
             order.robot.storeOffline = true;
             order.robot.nextOpeningTime = '11:00 AM IST';
             addLog(order, `🏪 Domino's kitchen is currently preparing to open. Online delivery orders start at 11:00 AM IST. Order is securely preserved.`);
           }
-          if (robotResult?.cartBillScreenshotUrl) {
-            order.robot.cartBillScreenshotUrl = robotResult.cartBillScreenshotUrl;
+          if (robotResult?.unavailableItems && robotResult.unavailableItems.length > 0) {
+            order.robot.unavailableItems = robotResult.unavailableItems;
           }
           if (robotResult?.proofScreenshotUrl) {
             order.robot.proofScreenshotUrl = robotResult.proofScreenshotUrl;
-            addLog(order, `📸 State snapshot captured at rejection: ${order.robot.proofScreenshotUrl}`);
+            order.robot.cartBillScreenshotUrl = robotResult.cartBillScreenshotUrl || robotResult.proofScreenshotUrl;
+            addLog(order, `📸 State snapshot captured directly from Domino's: ${order.robot.proofScreenshotUrl}`);
           }
           db.updateOrder(orderId, order);
 
           // Automated Real-Time Error Reporting to Admin Console
           try {
             db.broadcastNotification({
-              title: `🚨 Robot Placement ${isStoreTiming ? 'Offline Notice' : 'Alert'}: #${order.id}`,
+              title: `🚨 Robot Placement ${isStoreTiming ? 'Offline Notice' : (isItemUnavailable ? 'Item Stock Alert' : 'Alert')}: #${order.id}`,
               message: `Order #${order.id} for ${order.customer?.name || 'Customer'} (${order.customer?.phone || ''}) could not be completed: ${failureMsg}`,
               type: 'ALERT',
-              badge: isStoreTiming ? 'OFFLINE' : 'ROBOT_FAIL'
+              badge: isStoreTiming ? 'OFFLINE' : (isItemUnavailable ? 'STOCK_ALERT' : 'ROBOT_FAIL')
             });
             db.createTicket({
               orderId: order.id,
@@ -417,7 +422,7 @@ class DominosAutomationRobot {
               userPhone: order.customer?.phone || null,
               userName: order.customer?.name || 'Customer',
               category: 'OTHER',
-              description: `[AUTOMATED ROBOT INCIDENT] Robot failed to complete order #${order.id}. Error reason: ${failureMsg}. Review customer cart & Domino's store status.`
+              description: `[AUTOMATED ROBOT INCIDENT] ${isItemUnavailable ? 'Item unavailable at Domino\'s store' : 'Robot failed to complete order'} #${order.id}. Reason: ${failureMsg}. Review customer cart & Domino's store status.`
             });
           } catch (alertErr) {
             console.warn('[ROBOT-ADMIN-ALERT-ERR]', alertErr.message);

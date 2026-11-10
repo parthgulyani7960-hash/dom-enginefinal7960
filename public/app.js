@@ -4198,6 +4198,8 @@ function updateTrackingUI(order) {
   const friendlyStatusMap = {
       'AWAITING_PAYMENT_APPROVAL': 'Awaiting Approval',
       'WAITING_ADMIN_DECISION': 'Paused (Stock Issue)',
+      'ERROR': 'Placement Notice',
+      'STORE_OFFLINE': 'Store Offline',
       'REFUNDED': 'Refunded',
       'STORE_RESOLVING': 'Connecting Kitchen',
       'SESSION_ASSIGNING': 'Session Assigned',
@@ -4360,6 +4362,12 @@ function updateTrackingUI(order) {
       liveStageBadgeEl.innerText = '📦 PACKED & READY';
       liveStageBadgeEl.style.background = '#fef3c7';
       liveStageBadgeEl.style.color = '#b45309';
+    } else if (status === 'ERROR' || status === 'WAITING_ADMIN_DECISION') {
+      liveEtaCountdownEl.innerText = status === 'WAITING_ADMIN_DECISION' ? 'Item Unavailable' : 'Placement Issue';
+      liveEtaCountdownEl.style.color = '#dc2626';
+      liveStageBadgeEl.innerText = status === 'WAITING_ADMIN_DECISION' ? '⚠️ STOCK NOTICE' : '⚠️ PLACEMENT NOTICE';
+      liveStageBadgeEl.style.background = '#fef2f2';
+      liveStageBadgeEl.style.color = '#dc2626';
     } else {
       liveEtaCountdownEl.innerText = '~20 mins (Domino\'s Oven)';
       liveEtaCountdownEl.style.color = '#d97706';
@@ -4530,6 +4538,22 @@ function updateTrackingUI(order) {
     if (animSubtitleEl) animSubtitleEl.innerText = 'Pizza freshly hand-tossed and baking inside 465°F oven';
     setMarkerState(mConfirmed, true, '#10b981');
     setMarkerState(mOven, true, '#f59e0b');
+    setMarkerState(mRoad, false);
+    setMarkerState(mDoor, false);
+  } else if (status === 'ERROR' || status === 'WAITING_ADMIN_DECISION') {
+    if (bigEtaEl) bigEtaEl.innerText = status === 'WAITING_ADMIN_DECISION' ? 'Item Unavailable at Store' : 'Placement Notice';
+    if (bigStagePillEl) {
+      bigStagePillEl.innerText = status === 'WAITING_ADMIN_DECISION' ? '⚠️ STOCK ISSUE' : '⚠️ PLACEMENT NOTICE';
+      bigStagePillEl.style.background = 'rgba(239, 68, 68, 0.5)';
+    }
+    if (progressFillEl) progressFillEl.style.width = '18%';
+    if (scooterEl) {
+      scooterEl.style.display = 'block';
+      scooterEl.style.left = '18%';
+    }
+    if (animSubtitleEl) animSubtitleEl.innerText = r.error || 'Cart verification notice: ordered items require review.';
+    setMarkerState(mConfirmed, true, '#ef4444');
+    setMarkerState(mOven, false);
     setMarkerState(mRoad, false);
     setMarkerState(mDoor, false);
   } else {
