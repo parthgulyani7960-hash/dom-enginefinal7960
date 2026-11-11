@@ -1080,12 +1080,21 @@ const server = http.createServer(async (req, res) => {
       const accounts = db.getAccounts();
       const activeAccounts = accounts.filter(a => {
         if (a.disabled || a.status === 'DISABLED') return false;
+        // Strictly exclude accounts currently executing an active order to eliminate session concurrency bugs
+        if (a.status === 'IN_USE' || a.activeOrderId) return false;
         if (isCodPayment && a.codDisabledUntil && a.codDisabledUntil > Date.now()) return false;
         return true;
       });
       const nonExpiredAccounts = activeAccounts.filter(a => !a.expiresAt || new Date(a.expiresAt).getTime() > Date.now());
       const idleAccounts = nonExpiredAccounts.filter(a => a.status === 'IDLE');
       const pool = idleAccounts.length > 0 ? idleAccounts : (nonExpiredAccounts.length > 0 ? nonExpiredAccounts : activeAccounts);
+
+      // Sort pool by least recently used to guarantee smooth round-robin rotation across sessions
+      pool.sort((a, b) => {
+        const tA = a.lastActive ? new Date(a.lastActive).getTime() : 0;
+        const tB = b.lastActive ? new Date(b.lastActive).getTime() : 0;
+        return tA - tB;
+      });
 
       if (pool.length === 0) {
         return sendJson(res, 503, {

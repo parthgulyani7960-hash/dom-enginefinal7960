@@ -915,23 +915,22 @@ class Database {
 
     let eligibleAccounts = this.data.accounts.filter(isEligible);
     if (eligibleAccounts.length === 0) {
-      // Fallback 1: check if an idle account exists with refresh token that is not disabled
-      const fallbackAcc = this.data.accounts.find(a => !a.disabled && a.status !== 'DISABLED' && a.status === 'IDLE' && (a.refreshToken || a.credentials?.refreshToken));
+      // Fallback 1: check if an idle non-busy account exists with refresh token that is not disabled
+      const fallbackAcc = this.data.accounts.find(a => !a.disabled && a.status !== 'DISABLED' && a.status === 'IDLE' && !a.activeOrderId && (a.refreshToken || a.credentials?.refreshToken));
       if (fallbackAcc) eligibleAccounts.push(fallbackAcc);
     }
 
-    // Resilient Fallback 2: If still no account, pick any non-disabled active account in the fleet
-    // to ensure robot order placement never fails due to pool exhaustion
+    // Resilient Fallback 2: Look strictly for an account that is NOT in use and has no activeOrderId
     if (eligibleAccounts.length === 0) {
-      const anyActiveAcc = this.data.accounts.filter(a => !a.disabled && a.status !== 'DISABLED');
-      if (anyActiveAcc.length > 0) {
-        // Sort by least recently active
-        anyActiveAcc.sort((a, b) => {
+      const anyFreeAcc = this.data.accounts.filter(a => !a.disabled && a.status !== 'DISABLED' && a.status !== 'IN_USE' && !a.activeOrderId);
+      if (anyFreeAcc.length > 0) {
+        // Sort by least recently active to evenly rotate accounts
+        anyFreeAcc.sort((a, b) => {
           const tA = a.lastActive ? new Date(a.lastActive).getTime() : 0;
           const tB = b.lastActive ? new Date(b.lastActive).getTime() : 0;
           return tA - tB;
         });
-        eligibleAccounts.push(anyActiveAcc[0]);
+        eligibleAccounts.push(anyFreeAcc[0]);
       }
     }
 
