@@ -2703,6 +2703,9 @@ async function syncStorePaymentSettings() {
   } catch (e) {}
 }
 
+// Real-time poller: Synchronize payment methods (COD / UPI) every 4 seconds without browser refresh
+setInterval(syncStorePaymentSettings, 4000);
+
 function applyPaymentSettingsUI() {
   const lblCOD = document.getElementById('lblPayCOD');
   const lblUPI = document.getElementById('lblPayUPI');

@@ -930,7 +930,8 @@ const server = http.createServer(async (req, res) => {
     }
     try {
       const payload = await parseBody(req);
-      const orderId = payload.orderId || `DOM-ENG-${Date.now().toString().slice(-6)}`;
+      const uniqueSuffix = `${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
+      const orderId = payload.orderId || `DOM-ENG-${uniqueSuffix}`;
       const dominosOfficialRef = null; // Authentic Domino's token is assigned upon verified robot placement
       const userProf = db.getUserProfile();
       const userId12 = payload.user?.userId12 || userProf.userId12 || '948271035824';
@@ -1266,7 +1267,8 @@ const server = http.createServer(async (req, res) => {
           receiverPayeeName: paySettings.payeeName,
           upiString: upiString,
           status: (isCod || isUpi) ? 'PENDING_APPROVAL' : 'CONFIRMED_WALLET',
-          transactionId: isCod ? `COD-${Date.now().toString().slice(-8)}` : (isWallet ? `WAL-${Date.now().toString().slice(-8)}` : null),
+          transactionId: isCod ? `COD-${uniqueSuffix}` : (isWallet ? `WAL-${uniqueSuffix}` : `UPI-REQ-${uniqueSuffix}`),
+          paymentId: `PAY-${uniqueSuffix}`,
           verifiedAt: isWallet ? new Date().toISOString() : null
         },
         robot: {
