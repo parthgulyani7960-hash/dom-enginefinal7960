@@ -203,10 +203,19 @@ async function executeMiddlemanOrderOnDominos({
     permissions: ['geolocation']
   });
 
+  // Extract auth tokens & user identifiers first
+  const cleanMobile = (accountSession?.cleanPhone || customerOrder.user?.phone || '7893618933').replace(/[^0-9]/g, '').slice(-10);
+  const userId = accountSession?.userId || '353304039';
+  const cartId = accountSession?.cartId || '9017428133253221191';
+  const activeToken = accountSession?.credentials?.accessToken || accountSession?.sessionToken || '';
+  const authBearerToken = activeToken.startsWith('Bearer ') ? activeToken : `Bearer ${activeToken}`;
+  const rawUserInfo = accountSession?.localStorage?.userInfo || accountSession?.userInfo;
+  const cleanToken = activeToken.replace(/^Bearer\s+/i, '').trim();
+
   // Inject authenticated admin session cookies into browser context
-  if (accountSession?.cookies) {
-    try {
-      let cookiesToAdd = [];
+  try {
+    let cookiesToAdd = [];
+    if (accountSession?.cookies) {
       if (Array.isArray(accountSession.cookies)) {
         cookiesToAdd = accountSession.cookies.map(c => ({
           name: c.name,
@@ -225,25 +234,31 @@ async function executeMiddlemanOrderOnDominos({
           };
         }).filter(c => c.name && c.value);
       }
-      if (cookiesToAdd.length > 0) {
-        onProgress(`[MIDDLEMAN-ENGINE] 🔑 Injecting ${cookiesToAdd.length} saved Domino's session cookies...`);
-        await context.addCookies(cookiesToAdd);
-      }
-    } catch (cookieErr) {
-      onProgress(`[MIDDLEMAN-ENGINE] ⚠️ Session cookie injection notice: ${cookieErr.message}`);
     }
+
+    // Guarantee essential Domino's auth cookies are always set for Next.js / PWA routing
+    if (cleanToken) {
+      if (!cookiesToAdd.some(c => c.name === 'token')) {
+        cookiesToAdd.push({ name: 'token', value: cleanToken, domain: 'dominos.co.in', path: '/' });
+      }
+      if (!cookiesToAdd.some(c => c.name === 'authToken')) {
+        cookiesToAdd.push({ name: 'authToken', value: cleanToken, domain: 'dominos.co.in', path: '/' });
+      }
+    }
+    if (userId && !cookiesToAdd.some(c => c.name === 'userId')) {
+      cookiesToAdd.push({ name: 'userId', value: String(userId), domain: 'dominos.co.in', path: '/' });
+    }
+
+    if (cookiesToAdd.length > 0) {
+      onProgress(`[MIDDLEMAN-ENGINE] 🔑 Injecting ${cookiesToAdd.length} saved Domino's session cookies...`);
+      await context.addCookies(cookiesToAdd);
+    }
+  } catch (cookieErr) {
+    onProgress(`[MIDDLEMAN-ENGINE] ⚠️ Session cookie injection notice: ${cookieErr.message}`);
   }
 
   const page = await context.newPage();
   let cartBillUrl = null;
-
-  // Extract auth tokens & user identifiers
-  const cleanMobile = (accountSession?.cleanPhone || customerOrder.user?.phone || '7893618933').replace(/[^0-9]/g, '').slice(-10);
-  const userId = accountSession?.userId || '353304039';
-  const cartId = accountSession?.cartId || '9017428133253221191';
-  const activeToken = accountSession?.credentials?.accessToken || accountSession?.sessionToken || '';
-  const authBearerToken = activeToken.startsWith('Bearer ') ? activeToken : `Bearer ${activeToken}`;
-  const rawUserInfo = accountSession?.localStorage?.userInfo || accountSession?.userInfo;
 
   // Resolve Store Kitchen for coordinates first
   let targetStoreId = null;

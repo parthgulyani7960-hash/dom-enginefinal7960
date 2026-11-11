@@ -273,59 +273,120 @@ class DominosAutomationRobot {
       addLog(order, `Kitchen Resolved: ${outlet.storeName} (Store ID: #${outlet.storeId}) - Delivery ETA: ${order.robot.estimatedDelivery}`);
       db.updateOrder(orderId, order);
 
-      // STEP 3: Execute Single Unified Playwright Session against Domino's Site
-      order.robot.status = 'BUILDING_CART';
-      db.updateOrder(orderId, order);
-      addLog(order, `🤖 Launching unified Middleman Robot on m.dominos.co.in (Address -> Cart -> Cash on Delivery)...`);
+      // STEP 3: Execute Middleman Robot Session against Domino's Site with Fleet Account Failover
+      const isCustomerCod = order.payment?.method === 'COD' || order.payment?.method === 'CASH';
+      const allVouchers = typeof db.getVouchers === 'function' ? db.getVouchers() : [];
+      let availableVoucher = null;
+
+      if (!isCustomerCod) {
+        if (order.assignedVoucherId) {
+          availableVoucher = allVouchers.find(v => v.id === order.assignedVoucherId && v.status !== 'USED');
+        }
+        if (!availableVoucher) {
+          availableVoucher = allVouchers.find(v => v.status === 'UNUSED' && Number(v.balance || 0) > 0);
+        }
+        if (availableVoucher) {
+          if (!order.robot) order.robot = {};
+          order.robot.assignedVoucherId = availableVoucher.id;
+          order.robot.voucherCode = availableVoucher.code;
+          order.robot.assignedVoucherMasked = availableVoucher.code.slice(0, 4) + ' **** **** ' + availableVoucher.code.slice(-4);
+          order.robot.voucherPin = availableVoucher.pin;
+          order.robot.voucherBalance = availableVoucher.balance;
+        }
+      }
 
       let proofUrl = null;
       let realRef = null;
+      const triedAccountIds = [];
+      let robotResult = null;
+      let orderPlacedSuccessfully = false;
+      const maxAccountRetries = isCustomerCod ? 3 : 1;
 
-      try {
-        // Respect customer's chosen payment method: If customer chose COD / CASH, do NOT force Gift Voucher!
-        const isCustomerCod = order.payment?.method === 'COD' || order.payment?.method === 'CASH';
-        const allVouchers = typeof db.getVouchers === 'function' ? db.getVouchers() : [];
-        let availableVoucher = null;
+      for (let attempt = 0; attempt < maxAccountRetries; attempt++) {
+        if (!account) {
+          order.robot.status = 'SESSION_ASSIGNING';
+          db.updateOrder(orderId, order);
+          account = db.claimAvailableAccount(order.preferredCategory, orderId, order.payment?.method, order.pricing?.subtotal || order.itemsTotal || 0, triedAccountIds);
+          if (!account) {
+            addLog(order, `⚠️ No further alternative fleet accounts available for failover.`);
+            break;
+          }
+          addLog(order, `Claimed Domino's Session: ${account.phone} (${account.id}) [Attempt ${attempt + 1}/${maxAccountRetries}]`);
 
-        if (!isCustomerCod) {
-          if (order.assignedVoucherId) {
-            availableVoucher = allVouchers.find(v => v.id === order.assignedVoucherId && v.status !== 'USED');
+          const rToken = account.refreshToken || account.credentials?.refreshToken;
+          const uId = account.userId || account.credentials?.userId;
+          if (rToken && uId) {
+            try {
+              const refreshRes = await refreshDominoSession(uId, rToken);
+              if (refreshRes && refreshRes.success) {
+                applyAccountRefresh(account, refreshRes);
+                db.save();
+              }
+            } catch (_) {}
           }
-          if (!availableVoucher) {
-            availableVoucher = allVouchers.find(v => v.status === 'UNUSED' && Number(v.balance || 0) > 0);
-          }
-          if (availableVoucher) {
-            if (!order.robot) order.robot = {};
-            order.robot.assignedVoucherId = availableVoucher.id;
-            order.robot.voucherCode = availableVoucher.code;
-            order.robot.assignedVoucherMasked = availableVoucher.code.slice(0, 4) + ' **** **** ' + availableVoucher.code.slice(-4);
-            order.robot.voucherPin = availableVoucher.pin;
-            order.robot.voucherBalance = availableVoucher.balance;
-          }
+          order.robot.assignedAccountId = account.id;
+          order.robot.sessionPhone = account.phone;
+          db.updateOrder(orderId, order);
         }
 
-        const robotResult = await Promise.race([
-          executeMiddlemanOrderOnDominos({
-            customerOrder: order,
-            accountSession: { ...account, couponCode: selectedPromo },
-            voucher: availableVoucher || null,
-            paymentMethod: isCustomerCod ? 'COD' : (availableVoucher ? 'VOUCHER' : 'COD'),
-            headless: true,
-            onProgress: (msg) => {
-              if (msg.includes('Adding') || msg.includes('Menu V1') || msg.includes('Opening Domino')) {
-                order.robot.status = 'BUILDING_CART';
-              } else if (msg.includes('Applying coupon') || msg.includes('Promo Code') || msg.includes('Gift Card')) {
-                order.robot.status = 'APPLYING_COUPON';
-              } else if (msg.includes('Cash on Delivery') || msg.includes('payment') || msg.includes('Payment screen')) {
-                order.robot.status = 'STORE_CONFIRMATION';
+        order.robot.status = 'BUILDING_CART';
+        db.updateOrder(orderId, order);
+        addLog(order, `🤖 Launching Middleman Robot on m.dominos.co.in using session ${account.phone}...`);
+
+        try {
+          robotResult = await Promise.race([
+            executeMiddlemanOrderOnDominos({
+              customerOrder: order,
+              accountSession: { ...account, couponCode: selectedPromo },
+              voucher: availableVoucher || null,
+              paymentMethod: isCustomerCod ? 'COD' : (availableVoucher ? 'VOUCHER' : 'COD'),
+              headless: true,
+              onProgress: (msg) => {
+                if (msg.includes('Adding') || msg.includes('Menu V1') || msg.includes('Opening Domino')) {
+                  order.robot.status = 'BUILDING_CART';
+                } else if (msg.includes('Applying coupon') || msg.includes('Promo Code') || msg.includes('Gift Card')) {
+                  order.robot.status = 'APPLYING_COUPON';
+                } else if (msg.includes('Cash on Delivery') || msg.includes('payment') || msg.includes('Payment screen')) {
+                  order.robot.status = 'STORE_CONFIRMATION';
+                }
+                addLog(order, msg);
               }
-              addLog(order, msg);
-            }
-          }),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Middleman Robot timed out after 300 seconds while interacting with Domino\'s site.')), 300000))
-        ]);
+            }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Middleman Robot timed out after 300 seconds while interacting with Domino\'s site.')), 300000))
+          ]);
+        } catch (botErr) {
+          addLog(order, `Middleman robot attempt error: ${botErr.message}`);
+          robotResult = { success: false, error: botErr.message };
+        }
 
         if (robotResult && robotResult.success) {
+          orderPlacedSuccessfully = true;
+          break;
+        }
+
+        // Check if failure is COD restriction
+        const failureMsg = robotResult?.error || '';
+        const isCodDisabled = robotResult?.codDisabled ||
+          failureMsg.toLowerCase().includes('payment option is not allowed') ||
+          failureMsg.toLowerCase().includes('invpayopt') ||
+          failureMsg.toLowerCase().includes('cod');
+
+        if (isCodDisabled && isCustomerCod && attempt < maxAccountRetries - 1) {
+          account.codDisabledUntil = Date.now() + 60 * 60 * 1000;
+          db.save();
+          db.releaseAccount(account.id);
+          triedAccountIds.push(account.id);
+          addLog(order, `⚠️ Domino's reported Cash on Delivery restricted on account ${account.phone} (${failureMsg}). Auto-switching to next fleet account in real time...`);
+          account = null;
+          await sleep(1500);
+          continue;
+        } else {
+          break;
+        }
+      }
+
+      try {
+        if (orderPlacedSuccessfully && robotResult && robotResult.success) {
           if (availableVoucher && (robotResult.voucherApplied || robotResult.success)) {
             // PERMANENTLY mark gift card as USED so it can never be reused
             availableVoucher.status = 'USED';

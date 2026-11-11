@@ -881,14 +881,15 @@ class Database {
     return this.data.dominosRegisteredPhones;
   }
 
-  claimAvailableAccount(preferredCategory = null, orderId = null, paymentMethod = null, cartSubtotal = 0) {
+  claimAvailableAccount(preferredCategory = null, orderId = null, paymentMethod = null, cartSubtotal = 0, excludeAccountIds = []) {
     this.reapStaleInUseAccounts();
     const now = Date.now();
+    const excluded = Array.isArray(excludeAccountIds) ? excludeAccountIds : [];
 
     // Priority 0: Check if an explicit account was assigned by admin for this order
     if (orderId) {
       const order = this.data.orders ? this.data.orders.find(o => o.id === orderId) : null;
-      if (order && order.assignedAccountId) {
+      if (order && order.assignedAccountId && !excluded.includes(order.assignedAccountId)) {
         const explicitAcc = this.data.accounts.find(a => a.id === order.assignedAccountId && !a.disabled && a.status !== 'DISABLED');
         if (explicitAcc) {
           explicitAcc.status = 'IN_USE';
@@ -902,9 +903,11 @@ class Database {
 
     // Look for IDLE account matching category or any account that is not expired
     const isEligible = (a) => {
+      // Excluded accounts (e.g. already attempted in current failover chain)
+      if (excluded.includes(a.id)) return false;
       // Disabled accounts in the fleet cannot be assigned
       if (a.disabled || a.status === 'DISABLED') return false;
-      // If already assigned to this specific order, it is always eligible
+      // If already assigned to this specific order, it is always eligible (unless excluded)
       if (orderId && a.activeOrderId === orderId) return true;
       if (a.status !== 'IDLE') return false;
       if (a.expiresAt && new Date(a.expiresAt).getTime() <= now) return false;
@@ -916,13 +919,13 @@ class Database {
     let eligibleAccounts = this.data.accounts.filter(isEligible);
     if (eligibleAccounts.length === 0) {
       // Fallback 1: check if an idle non-busy account exists with refresh token that is not disabled
-      const fallbackAcc = this.data.accounts.find(a => !a.disabled && a.status !== 'DISABLED' && a.status === 'IDLE' && !a.activeOrderId && (a.refreshToken || a.credentials?.refreshToken));
+      const fallbackAcc = this.data.accounts.find(a => !excluded.includes(a.id) && !a.disabled && a.status !== 'DISABLED' && a.status === 'IDLE' && !a.activeOrderId && (a.refreshToken || a.credentials?.refreshToken));
       if (fallbackAcc) eligibleAccounts.push(fallbackAcc);
     }
 
     // Resilient Fallback 2: Look strictly for an account that is NOT in use and has no activeOrderId
     if (eligibleAccounts.length === 0) {
-      const anyFreeAcc = this.data.accounts.filter(a => !a.disabled && a.status !== 'DISABLED' && a.status !== 'IN_USE' && !a.activeOrderId);
+      const anyFreeAcc = this.data.accounts.filter(a => !excluded.includes(a.id) && !a.disabled && a.status !== 'DISABLED' && a.status !== 'IN_USE' && !a.activeOrderId);
       if (anyFreeAcc.length > 0) {
         // Sort by least recently active to evenly rotate accounts
         anyFreeAcc.sort((a, b) => {

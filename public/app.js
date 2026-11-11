@@ -4995,8 +4995,15 @@ function updateTrackingUI(order) {
 
   // 8. Event Logs Console
   const logsEl = document.getElementById('terminalLogs');
-  if (logsEl && r.logs) {
-    logsEl.innerHTML = r.logs.map(log => `<div>${log}</div>`).join('');
+  if (logsEl && r.logs && r.logs.length > 0) {
+    logsEl.innerHTML = r.logs.map(log => {
+      let color = '#cbd5e1';
+      if (log.includes('❌') || log.includes('Error') || log.includes('rejected')) color = '#f87171';
+      else if (log.includes('✓') || log.includes('✅') || log.includes('Confirmed')) color = '#4ade80';
+      else if (log.includes('⚠️') || log.includes('Notice') || log.includes('restricted')) color = '#fbbf24';
+      else if (log.includes('🤖') || log.includes('Launching') || log.includes('Claimed') || log.includes('Failover')) color = '#38bdf8';
+      return `<div style="color: ${color}; word-break: break-word; padding: 1px 0;">${escapeHtml(log)}</div>`;
+    }).join('');
     logsEl.scrollTop = logsEl.scrollHeight;
   }
 }
