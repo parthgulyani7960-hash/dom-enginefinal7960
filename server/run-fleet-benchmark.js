@@ -12,10 +12,11 @@ async function main() {
   const testItems = [
     { name: 'Margherita', customSize: 'Regular', customCrust: 'New Hand Tossed' },
     { name: 'Golden Corn', customSize: 'Regular', customCrust: 'Classic Hand Tossed' },
-    { name: 'Farmhouse', customSize: 'Medium', customCrust: 'Cheese Burst' }
+    { name: 'Farmhouse', customSize: 'Medium', customCrust: 'Cheese Burst' },
+    { name: 'Garlic Breadsticks' }
   ];
 
-  console.log('Test items per session:', testItems.map(i => `${i.name} [${i.customSize}, ${i.customCrust}]`));
+  console.log('Test items per session:', testItems.map(i => `${i.name}${i.customSize ? ' [' + i.customSize + ', ' + i.customCrust + ']' : ''}`));
   console.log('Starting parallel sessions across fleet...\n');
 
   const startTime = Date.now();
@@ -25,7 +26,7 @@ async function main() {
       accountSession: account,
       storeId: '66409', // SECTOR-15C, CHANDIGARH
       testItems: testItems,
-      cycles: 2, // 2 full add -> customize -> cart audit -> prune cycles
+      cycles: 3, // 3 comprehensive training cycles
       onLog: (msg) => console.log(msg)
     });
   });

@@ -1481,13 +1481,13 @@ async function executeMiddlemanOrderOnDominos({
                 m.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
               }
             }).catch(() => {});
-            await sleep(400);
+            await sleep(200);
 
             // Also try Playwright locator if still visible
             const minusBtn = card.locator('.anim-ico-minus, [class*="minus"], .minus, span:has-text("-"), button:has-text("-"), button:has-text("Remove"), span:has-text("Remove")').first();
             if (await minusBtn.isVisible().catch(() => false)) {
               await minusBtn.click({ force: true }).catch(() => {});
-              await sleep(400);
+              await sleep(200);
             }
 
             // Immediately handle Domino's remove confirmation dialog
@@ -1504,16 +1504,16 @@ async function executeMiddlemanOrderOnDominos({
             });
 
             const confirmRemoveBtn = page.locator('button:has-text("REMOVE"), button:has-text("YES"), div:has-text("REMOVE"), div:has-text("YES"), span:has-text("REMOVE"), span:has-text("YES"), .remove-btn, [class*="confirm" i]').first();
-            if (await confirmRemoveBtn.isVisible({ timeout: 600 }).catch(() => false)) {
+            if (await confirmRemoveBtn.isVisible({ timeout: 400 }).catch(() => false)) {
               await confirmRemoveBtn.click({ force: true }).catch(() => {});
-              await sleep(400);
+              await sleep(200);
             }
             removeAttempts++;
             if (!(await card.isVisible().catch(() => false))) {
               removed = true;
               break;
             }
-            await sleep(400);
+            await sleep(200);
           }
           if (!removed) {
             failedPruneTitles.add(firstLine);
