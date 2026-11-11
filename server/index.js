@@ -734,7 +734,7 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await parseBody(req);
       const verification = await dominosMenuService.verifyCart({
-        items: body.items || [],
+        items: body.items || body.cartItems || [],
         storeId: body.storeId,
         lat: body.lat,
         lng: body.lng

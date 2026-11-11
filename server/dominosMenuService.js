@@ -149,7 +149,7 @@ class DominosMenuService {
   }
 
   /**
-   * Fetch store-specific menu and availability directly from Domino's SSR page
+   * Fetch store-specific menu and availability directly from Domino's Store Menu API
    */
   async fetchStoreMenu(storeId) {
     if (!storeId) return null;
@@ -162,49 +162,104 @@ class DominosMenuService {
       }
     }
 
-    const url = `https://pizzaonline.dominos.co.in/jfl-discovery-ui/en/dt/menu-v1/${storeId}`;
-    console.log(`[DOMINOS-MENU] Fetching live store menu: ${url}`);
+    const apiUrl = `https://api.dominos.co.in/catalog-service/ve2/stores/${storeId}/menu?site=jflcms`;
+    console.log(`[DOMINOS-MENU] Fetching live store menu: ${apiUrl}`);
+
+    const apiHeaders = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+      'api_key': 'd2aeb489bb8df385',
+      'client_type': 'web app-chrome',
+      'source': 'PWA18',
+      'Origin': 'https://m.dominos.co.in',
+      'Referer': 'https://m.dominos.co.in/'
+    };
 
     try {
-      const res = await proxyService.proxyFetch(url, { headers: DOMINOS_HEADERS });
-      if (!res.ok) {
-        console.warn(`[DOMINOS-MENU] Store ${storeId} returned ${res.status} (cached to prevent hammering)`);
+      let products = [];
+      let isJsonApiSuccess = false;
+
+      // Primary: Official Domino's Catalog JSON API
+      try {
+        const res = await proxyService.proxyFetch(apiUrl, { headers: apiHeaders });
+        if (res.ok) {
+          const json = await res.json();
+          if (json && Array.isArray(json.data) && json.data.length > 0) {
+            json.data.forEach(cat => {
+              if (Array.isArray(cat.data)) {
+                cat.data.forEach(p => products.push(p));
+              }
+            });
+            isJsonApiSuccess = true;
+          }
+        }
+      } catch (apiErr) {
+        console.warn(`[DOMINOS-MENU] Catalog JSON API attempt error for store ${storeId}:`, apiErr.message);
+      }
+
+      // Secondary fallback: Domino's SSR page scraper
+      if (!isJsonApiSuccess || products.length === 0) {
+        const ssrUrl = `https://pizzaonline.dominos.co.in/jfl-discovery-ui/en/dt/menu-v1/${storeId}`;
+        console.log(`[DOMINOS-MENU] Fallback: fetching SSR page ${ssrUrl}`);
+        const res = await proxyService.proxyFetch(ssrUrl, { headers: DOMINOS_HEADERS });
+        if (res.ok) {
+          const content = await res.text();
+          const startTag = '<menu-products data-results="';
+          const startIdx = content.indexOf(startTag);
+          if (startIdx !== -1) {
+            const valStart = startIdx + startTag.length;
+            let valEnd = -1;
+            for (let i = valStart; i < content.length; i++) {
+              if (content[i] === '"' && content[i - 1] !== '\\') {
+                valEnd = i;
+                break;
+              }
+            }
+            if (valEnd !== -1) {
+              const rawAttr = content.slice(valStart, valEnd);
+              const unescaped = rawAttr.replace(/&quot;/g, '"')
+                                       .replace(/&amp;/g, '&')
+                                       .replace(/&lt;/g, '<')
+                                       .replace(/&gt;/g, '>')
+                                       .replace(/&#39;/g, "'");
+              const parsed = JSON.parse(unescaped);
+              products = parsed.productDefinitions || [];
+            }
+          }
+        }
+      }
+
+      if (products.length === 0) {
+        console.warn(`[DOMINOS-MENU] Could not retrieve store products for store ${storeId}`);
         storeMenuCache.set(cacheKey, { timestamp: Date.now(), data: null });
         return null;
       }
 
-      const content = await res.text();
-      const startTag = '<menu-products data-results="';
-      const startIdx = content.indexOf(startTag);
-      if (startIdx === -1) {
-        console.warn(`[DOMINOS-MENU] Could not find menu-products tag for store ${storeId}`);
-        return null;
-      }
-
-      const valStart = startIdx + startTag.length;
-      let valEnd = -1;
-      for (let i = valStart; i < content.length; i++) {
-        if (content[i] === '"' && content[i - 1] !== '\\') {
-          valEnd = i;
-          break;
-        }
-      }
-
-      const rawAttr = content.slice(valStart, valEnd);
-      const unescaped = rawAttr.replace(/&quot;/g, '"')
-                               .replace(/&amp;/g, '&')
-                               .replace(/&lt;/g, '<')
-                               .replace(/&gt;/g, '>')
-                               .replace(/&#39;/g, "'");
-
-      const parsed = JSON.parse(unescaped);
-      const products = parsed.productDefinitions || [];
-
-      // Build store inventory map: menuCode / skuId -> availability info
+      // Build store inventory map: menuCode / skuId / normalized name -> availability info
       const storeItems = new Map();
       products.forEach(p => {
-        const prodDisabled = p.isCartDisabled || p.cartDisabled || p.masterDisabled || (p.disabledOrderTypes && p.disabledOrderTypes.includes('D'));
-        
+        const prodDisabled = p.isCartDisabled || p.cartDisabled || p.masterDisabled || p.disableClick || (p.disabledOrderTypes && p.disabledOrderTypes.includes('D'));
+
+        const sizeCrustPricingMap = {};
+        const allowedSizesSet = new Set();
+        const allowedCrustsSet = new Set();
+        let regNhtPrice = null;
+
+        if (Array.isArray(p.crust)) {
+          p.crust.forEach(cr => {
+            const crName = cr.name || '';
+            if (crName) allowedCrustsSet.add(crName);
+            (cr.sizes || []).forEach(sz => {
+              const szName = sz.name || '';
+              if (szName) allowedSizesSet.add(szName);
+              if (!sizeCrustPricingMap[szName]) sizeCrustPricingMap[szName] = {};
+              sizeCrustPricingMap[szName][crName] = sz.price;
+              if (szName === 'Regular' && (crName.includes('Hand Tossed') || !regNhtPrice)) {
+                regNhtPrice = sz.price;
+              }
+            });
+          });
+        }
+
         let availableVariantsCount = 0;
         const variants = (p.variants || []).map(v => {
           const vDisabled = v.isCartDisabled || v.cartDisabled || v.masterDisabled || (v.disabledOrderTypes && v.disabledOrderTypes.includes('D'));
@@ -221,44 +276,43 @@ class DominosMenuService {
           };
         });
 
+        let basePrice = p.defaultCrustPrice || p.defaultPrice || (p.price && p.price.currentPrice) || p.originalPrice || 0;
+        if (regNhtPrice) {
+          basePrice = regNhtPrice;
+        } else if (sizeCrustPricingMap['Regular']) {
+          const firstCr = Object.values(sizeCrustPricingMap['Regular'])[0];
+          if (firstCr) basePrice = firstCr;
+        }
+
         const isAvailable = !prodDisabled && (variants.length === 0 || availableVariantsCount > 0);
+        const itemCode = p.code || p.menuCode;
 
         const itemInfo = {
-          productMasterUID: p.productMasterUID,
+          productMasterUID: p.productMasterUID || itemCode,
           name: p.name,
-          menuCode: p.menuCode,
+          menuCode: itemCode,
           parentSkuId: p.parentSkuId,
+          skuId: String(p.skuId || p.id || ''),
+          price: basePrice,
+          originalPrice: p.originalPrice || basePrice,
           isAvailable,
+          sizeCrustPricingMap,
+          allowedSizes: Array.from(allowedSizesSet),
+          allowedCrusts: Array.from(allowedCrustsSet),
           variants
         };
 
-        // If item already exists, merge variants so we don't lose sizes/crusts
         const normKey = (p.name || '').toLowerCase()
           .replace(/\b(pizza mania|mania|pizza)\b/gi, '')
           .replace(/&/g, 'and')
           .replace(/\s+/g, ' ')
           .trim();
 
-        const existing = storeItems.get(p.menuCode);
-        if (!existing) {
-          if (p.menuCode) storeItems.set(p.menuCode, itemInfo);
-          if (p.parentSkuId) storeItems.set(p.parentSkuId, itemInfo);
-          if (p.name) storeItems.set(p.name.toLowerCase().trim(), itemInfo);
-          if (normKey && !storeItems.has(normKey)) storeItems.set(normKey, itemInfo);
-        } else {
-          // Merge variants
-          variants.forEach(nv => {
-            if (!existing.variants.some(ev => ev.skuId === nv.skuId || (ev.size === nv.size && ev.crust === nv.crust))) {
-              existing.variants.push(nv);
-            }
-          });
-          if (p.name && !storeItems.has(p.name.toLowerCase().trim())) {
-            storeItems.set(p.name.toLowerCase().trim(), existing);
-          }
-          if (normKey && !storeItems.has(normKey)) {
-            storeItems.set(normKey, existing);
-          }
-        }
+        if (itemCode) storeItems.set(itemCode, itemInfo);
+        if (p.parentSkuId) storeItems.set(p.parentSkuId, itemInfo);
+        if (p.skuId) storeItems.set(String(p.skuId), itemInfo);
+        if (p.name) storeItems.set(p.name.toLowerCase().trim(), itemInfo);
+        if (normKey && !storeItems.has(normKey)) storeItems.set(normKey, itemInfo);
       });
 
       const result = {
@@ -366,7 +420,16 @@ class DominosMenuService {
           isAvailable = false;
           unavailableReason = `Out of stock at ${resolvedStore?.storeName || 'your area'}`;
         } else if (match) {
-          if (match.variants && match.variants.length > 0 && isCustomizable) {
+          const isDealsCategory = item.category === 'Deals & Combos' || item.isPromotional === true;
+          if (match.sizeCrustPricingMap && Object.keys(match.sizeCrustPricingMap).length > 0 && isCustomizable) {
+            itemSizeCrustMap = match.sizeCrustPricingMap;
+            if (match.allowedSizes && match.allowedSizes.length > 0) itemAllowedSizes = match.allowedSizes;
+            if (match.allowedCrusts && match.allowedCrusts.length > 0) itemAllowedCrusts = match.allowedCrusts;
+            if (match.price) livePrice = Math.round(match.price);
+            if (match.originalPrice && match.originalPrice > match.price && isDealsCategory) {
+              liveOriginalPrice = Math.round(match.originalPrice);
+            }
+          } else if (match.variants && match.variants.length > 0 && isCustomizable) {
             itemVariants = match.variants;
             const sizeCrustPricingMap = {};
             const sizesSet = new Set();
@@ -395,15 +458,17 @@ class DominosMenuService {
             const rVal = regVariant ? (regVariant.price?.regularPrice || regVariant.regularPrice) : null;
             if (pVal) {
               livePrice = Math.round(pVal);
-              if (rVal && rVal > pVal) {
+              if (rVal && rVal > pVal && isDealsCategory) {
                 liveOriginalPrice = Math.round(rVal);
               }
             }
           } else if (match && (match.price || (match.variants && match.variants[0]))) {
             const pVal = match.price || match.variants[0]?.price?.currentPrice || match.variants[0]?.currentPrice;
-            const rVal = match.regularPrice || match.variants[0]?.price?.regularPrice || match.variants[0]?.regularPrice;
+            const rVal = match.originalPrice || match.regularPrice || match.variants[0]?.price?.regularPrice || match.variants[0]?.regularPrice;
             if (pVal) livePrice = Math.round(pVal);
-            if (rVal && rVal > pVal) liveOriginalPrice = Math.round(rVal);
+            if (rVal && rVal > pVal && isDealsCategory) {
+              liveOriginalPrice = Math.round(rVal);
+            }
           }
         }
       }

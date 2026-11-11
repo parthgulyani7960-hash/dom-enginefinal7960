@@ -577,7 +577,7 @@ function applyCurrentFilters() {
     const targetCat = currentCategoryFilter.toLowerCase().trim();
     items = items.filter(i => {
       const c = (i.category || '').toLowerCase().trim();
-      return c === targetCat || (targetCat.includes('sides') && c.includes('sides')) || (targetCat.includes('garlic') && c.includes('garlic'));
+      return c === targetCat || (targetCat.includes('sides') && (c.includes('sides') || c.includes('tacos') || c.includes('bread') || c.includes('dip')));
     });
   }
 
@@ -2028,6 +2028,16 @@ function renderCrustOptions() {
 
   container.innerHTML = crustsToShow.map(c => {
     const isSelected = selectedPizzaCrust === c.name;
+    let crustDelta = c.delta;
+    if (currentCustomizingItem && currentCustomizingItem.sizeCrustPricingMap && currentCustomizingItem.sizeCrustPricingMap[selectedPizzaSize]) {
+      const sizeMap = currentCustomizingItem.sizeCrustPricingMap[selectedPizzaSize];
+      const baseCrustPrice = sizeMap['New Hand Tossed'] || Object.values(sizeMap)[0] || 0;
+      const thisCrustPrice = sizeMap[c.name];
+      if (thisCrustPrice !== undefined && baseCrustPrice) {
+        crustDelta = Math.max(0, thisCrustPrice - baseCrustPrice);
+      }
+    }
+    const deltaDisplay = crustDelta > 0 ? `+₹${crustDelta}` : 'Free';
     return `
       <div onclick="selectPizzaCrust('${c.name}')" 
            style="display: flex; justify-content: space-between; align-items: center; border: 1.5px solid ${isSelected ? '#0066a3' : 'var(--gray-200)'}; background: ${isSelected ? '#eff6ff' : 'white'}; border-radius: 8px; padding: 10px 12px; cursor: pointer; transition: all 0.2s;">
@@ -2038,8 +2048,8 @@ function renderCrustOptions() {
             <div style="font-size: 11px; color: var(--gray-500);">${c.desc}</div>
           </div>
         </div>
-        <span style="font-weight: 800; font-size: 12px; color: ${c.delta > 0 ? '#16a34a' : 'var(--gray-500)'};">
-          ${c.delta > 0 ? `+₹${c.delta}` : 'Free'}
+        <span style="font-weight: 800; font-size: 12px; color: ${crustDelta > 0 ? '#16a34a' : 'var(--gray-500)'};">
+          ${deltaDisplay}
         </span>
       </div>
     `;
@@ -2130,9 +2140,14 @@ function updateCustomizationTotalPrice() {
   const total = calculateCustomizationPrice();
   const el = document.getElementById('customTotalPrice');
   if (el) {
-    const origPrice = Math.round((total * 1.25) / 10) * 10 - 1;
-    const saveAmt = origPrice - total;
-    el.innerHTML = `₹${total} <span style="font-size: 13px; color: #94a3b8; text-decoration: line-through; font-weight: 500; margin-left: 6px;">₹${origPrice}</span> <span style="font-size: 11px; background: #dcfce7; color: #15803d; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">Save ₹${saveAmt}</span>`;
+    const isPromotional = currentCustomizingItem && (currentCustomizingItem.category === 'Deals & Combos' || currentCustomizingItem.isPromotional === true);
+    if (isPromotional && currentCustomizingItem.originalPrice && currentCustomizingItem.originalPrice > total) {
+      const origPrice = currentCustomizingItem.originalPrice;
+      const saveAmt = origPrice - total;
+      el.innerHTML = `₹${total} <span style="font-size: 13px; color: #94a3b8; text-decoration: line-through; font-weight: 500; margin-left: 6px;">₹${origPrice}</span> <span style="font-size: 11px; background: #dcfce7; color: #15803d; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">Save ₹${saveAmt}</span>`;
+    } else {
+      el.innerHTML = `₹${total}`;
+    }
   }
 }
 
