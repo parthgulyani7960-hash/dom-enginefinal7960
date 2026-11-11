@@ -1932,8 +1932,9 @@ async function executeMiddlemanOrderOnDominos({
     // =========================================================================
     // STEP 5: Proceed to Payment & Commit Selected Payment Method
     // =========================================================================
-    const isCod = !paymentMethod || paymentMethod === 'COD' || paymentMethod === 'CASH' || customerOrder.payment?.method === 'COD';
-    onProgress(`[MIDDLEMAN-ENGINE] 💳 Proceeding to Payment Screen (${isCod ? 'Cash on Delivery (COD)' : 'Instant UPI'})...`);
+    const hasVoucher = Boolean(voucher && voucher.code);
+    const isCod = !hasVoucher && (!paymentMethod || paymentMethod === 'COD' || paymentMethod === 'CASH' || customerOrder.payment?.method === 'COD');
+    onProgress(`[MIDDLEMAN-ENGINE] 💳 Proceeding to Payment Screen (${hasVoucher ? 'Admin Gift Card / E-Voucher' : (isCod ? 'Cash on Delivery (COD)' : 'Instant UPI')})...`);
 
     // In Domino's PWA, the cart bottom footer has:
     // Left: .truncate-radio-btn / .width-iconwith-text-footer (Payment method selector trigger)
