@@ -162,8 +162,25 @@ class DominosAutomationRobot {
       let targetLat = addr.latitude || order.location?.latitude;
       let targetLng = addr.longitude || order.location?.longitude;
 
+      // FAST PATH: If store was already verified/resolved during checkout, lock it instantly!
+      if (addr.storeId && addr.storeName) {
+        outlet = {
+          storeId: String(addr.storeId),
+          storeName: addr.storeName,
+          polygonTime: '30 mins'
+        };
+        addLog(order, `✓ Using pre-verified local Domino's kitchen: ${outlet.storeName} (#${outlet.storeId})`);
+      } else if (order.location?.store?.storeId) {
+        outlet = {
+          storeId: String(order.location.store.storeId),
+          storeName: order.location.store.storeName || 'Domino\'s Store',
+          polygonTime: '30 mins'
+        };
+        addLog(order, `✓ Using pre-verified local Domino's kitchen: ${outlet.storeName} (#${outlet.storeId})`);
+      }
+
       // If coordinates are missing or invalid, dynamically geocode using customer full address text
-      if (!targetLat || !targetLng || isNaN(targetLat) || isNaN(targetLng) || (targetLat === 30.7339 && targetLng === 76.7889 && addr.city && !addr.city.toLowerCase().includes('chandigarh'))) {
+      if (!outlet && (!targetLat || !targetLng || isNaN(targetLat) || isNaN(targetLng) || (targetLat === 30.7339 && targetLng === 76.7889 && addr.city && !addr.city.toLowerCase().includes('chandigarh')))) {
         const fullAddrStr = [addr.flat, addr.building, addr.street, addr.landmark, addr.city, addr.pincode]
           .filter(Boolean).join(', ') || addr.completeAddress || '';
         if (fullAddrStr) {
@@ -190,9 +207,9 @@ class DominosAutomationRobot {
 
       const lat = parseFloat(targetLat) || 28.6245;
       const lng = parseFloat(targetLng) || 77.0367;
-      addLog(order, `Resolving official Domino's delivery kitchen for coordinates: [${lat.toFixed(5)}, ${lng.toFixed(5)}]`);
 
       if (!outlet) {
+        addLog(order, `Resolving official Domino's delivery kitchen for coordinates: [${lat.toFixed(5)}, ${lng.toFixed(5)}]`);
         try {
           const liveResult = await locationService.resolveStoreByCoordinates(lat, lng);
           if (liveResult && liveResult.assignedStore) {

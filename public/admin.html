@@ -2006,15 +2006,15 @@
 
   <!-- Modal: Order Dossier Details -->
   <div class="modal-overlay" id="orderDossierModal">
-    <div class="modal-card" style="max-width: 620px;">
-      <div class="modal-header">
+    <div class="modal-card" style="max-width: 860px; max-height: 92vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="flex-shrink: 0;">
         <div>
-          <div class="modal-title">📋 Complete Domino's Order Dossier</div>
+          <div class="modal-title">📋 Autonomous Domino's Order Cockpit &amp; Execution Stream</div>
           <div style="font-size: 12px; color: var(--gray-600);" id="dossierOrderRefLabel">Order Ref</div>
         </div>
         <button class="modal-close" onclick="closeModal('orderDossierModal')">&times;</button>
       </div>
-      <div class="modal-body" style="padding: 18px;" id="orderDossierBody">
+      <div class="modal-body" style="padding: 18px; max-height: calc(92vh - 100px); overflow-y: auto;" id="orderDossierBody">
         <!-- Rendered by JS -->
       </div>
     </div>

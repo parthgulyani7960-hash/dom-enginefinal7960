@@ -689,6 +689,7 @@ async function executeMiddlemanOrderOnDominos({
         if (customerOrder.robot) {
           customerOrder.robot.addressVerifiedScreenshotUrl = `/screenshots/${addrProofFile}`;
           customerOrder.robot.addressVerifiedScreenshotDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+          try { db.updateOrder(customerOrder.id, { robot: customerOrder.robot }); } catch (_) {}
         }
         onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured Domino's address & delivery store verification screenshot: ${addrProofFile}`);
       } catch (_) {}
@@ -701,6 +702,19 @@ async function executeMiddlemanOrderOnDominos({
     // =========================================================================
     onProgress(`[MIDDLEMAN-ENGINE] 🧹 Checking cart state for Store ${targetStoreId}...`);
     try {
+      await page.evaluate(() => {
+        try {
+          localStorage.removeItem('cartItems');
+          localStorage.removeItem('cart');
+          sessionStorage.removeItem('cartItems');
+        } catch (_) {}
+        try {
+          const app = document.querySelector('#app')?.__vue__;
+          if (app && app.$store && typeof app.$store.dispatch === 'function') {
+            app.$store.dispatch('Cart/emptyCart').catch(() => {});
+          }
+        } catch (_) {}
+      });
       const hasCartItems = await page.evaluate(() => {
         try {
           const app = document.querySelector('#app')?.__vue__;
@@ -1182,6 +1196,7 @@ async function executeMiddlemanOrderOnDominos({
       if (customerOrder.robot) {
         customerOrder.robot.itemAddedScreenshotUrl = `/screenshots/${itemProofFile}`;
         customerOrder.robot.itemAddedScreenshotDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+        try { db.updateOrder(customerOrder.id, { robot: customerOrder.robot }); } catch (_) {}
       }
       onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured Domino's item addition confirmation screenshot: ${itemProofFile}`);
     } catch (_) {}
@@ -1433,7 +1448,7 @@ async function executeMiddlemanOrderOnDominos({
       if (!prunedAny) break;
     }
 
-    // Reconcile and trim any excess quantities
+    // Reconcile and trim any excess quantities or deficit quantities
     const finalCartCards = await page.locator('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper').all();
     for (const card of finalCartCards) {
       const firstLine = await card.evaluate(c => {
@@ -1452,6 +1467,15 @@ async function executeMiddlemanOrderOnDominos({
           for (let k = 0; k < excess; k++) {
             await card.scrollIntoViewIfNeeded().catch(() => {});
             await minusBtn.click({ force: true }).catch(() => {});
+            await sleep(800);
+          }
+        } else if (currentQty < match.qty) {
+          const deficit = match.qty - currentQty;
+          onProgress(`[MIDDLEMAN-ENGINE] ➕ Incrementing ${deficit} unit(s) of "${match.name}" to match customer order...`);
+          const plusBtn = card.locator('.anim-ico-plus, [class*="plus"], span:has-text("+"), button:has-text("+")').first();
+          for (let k = 0; k < deficit; k++) {
+            await card.scrollIntoViewIfNeeded().catch(() => {});
+            await plusBtn.click({ force: true }).catch(() => {});
             await sleep(800);
           }
         }
@@ -1514,18 +1538,7 @@ async function executeMiddlemanOrderOnDominos({
         return { firstLine, normTitle: norm(firstLine), qty };
       });
 
-      let storedItems = [];
-      try {
-        storedItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-      } catch (e) {}
-
       const foundItems = [...domFoundItems];
-      for (const si of storedItems) {
-        const sName = (si.productName || si.name || '').trim();
-        if (sName && !foundItems.some(f => matchHelper(f.firstLine, sName))) {
-          foundItems.push({ firstLine: sName, normTitle: norm(sName), qty: si.quantity || 1 });
-        }
-      }
 
       // 1. Rogue items not in expected order
       const rogue = foundItems.filter(f => !expectedNames.some(exp => matchHelper(f.firstLine, exp)));
@@ -1534,7 +1547,7 @@ async function executeMiddlemanOrderOnDominos({
       const missing = expectedItems.filter(exp => !foundItems.some(f => matchHelper(f.firstLine, exp.name)));
 
       return {
-        totalCartCards: Math.max(cards.length, storedItems.length),
+        totalCartCards: cards.length,
         foundItems,
         rogueCount: rogue.length,
         rogueNames: rogue.map(r => r.firstLine),
@@ -1610,26 +1623,21 @@ async function executeMiddlemanOrderOnDominos({
         return false;
       };
 
-      // Hybrid Cart Audit: Gather authoritative items from localStorage.cartItems AND live DOM elements
-      let storedItems = [];
-      try {
-        storedItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-      } catch (e) {}
+      const cards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper, .itm-dtl, .cart-item')).filter(c => {
+        if (c.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="recommend" i], [class*="suggestion" i], [class*="cross-sell" i]')) return false;
+        const hasAddOnly = !!c.querySelector('button.cta-add, .btn-add, div.main-cta') && !c.querySelector('.anim-ico-minus, [class*="minus"], .product-item-quantity, .itm-qty, .item-quantity, [class*="stepper"]');
+        return !hasAddOnly;
+      });
 
-      const cards = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper, .itm-dtl, .cart-item'));
       const domTitles = cards.map(c => {
         const titleEl = c.querySelector('.popular-menu-header, h1, h2, h3, h4, .itm-name, .title, [class*="name"]');
         return (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
       }).filter(Boolean);
 
-      const combinedTitles = Array.from(new Set([
-        ...storedItems.map(i => i.productName || i.name || i.title).filter(Boolean),
-        ...domTitles
-      ]));
-
+      const combinedTitles = domTitles;
       const rogue = combinedTitles.filter(title => !expectedNames.some(exp => matchHelper(title, exp)));
       const missing = expectedItems.filter(exp => !combinedTitles.some(title => matchHelper(title, exp.name)));
-      const totalCards = Math.max(cards.length, storedItems.length);
+      const totalCards = cards.length;
       return { totalCards, rogueCount: rogue.length, missingCount: missing.length, missing: missing.map(m => m.name), foundTitles: combinedTitles };
     }, { expectedNames: expectedItemNames, expectedItems: flattenedItems });
 
@@ -1646,10 +1654,10 @@ async function executeMiddlemanOrderOnDominos({
         errDataUri = `data:image/png;base64,${buf.toString('base64')}`;
       } catch (_) {}
       if (customerOrder.robot) {
-        customerOrder.robot.proofScreenshotUrl = proofUrl;
-        customerOrder.robot.cartBillScreenshotUrl = proofUrl;
         customerOrder.robot.errorProofUrl = proofUrl;
-        if (errDataUri) customerOrder.robot.proofScreenshotDataUri = errDataUri;
+        if (errDataUri) customerOrder.robot.errorProofDataUri = errDataUri;
+        customerOrder.robot.error = `Cart verification failed: ${finalAudit.rogueCount} rogue item(s) remain in Domino's cart. Order blocked to prevent ordering incorrect items.`;
+        try { db.updateOrder(customerOrder.id, { robot: customerOrder.robot }); } catch (_) {}
       }
       const err = new Error(`Cart verification failed: ${finalAudit.rogueCount} rogue item(s) remain in Domino's cart. Order blocked to prevent ordering incorrect items.`);
       err.proofScreenshotUrl = proofUrl;
@@ -1670,12 +1678,12 @@ async function executeMiddlemanOrderOnDominos({
         errDataUri = `data:image/png;base64,${buf.toString('base64')}`;
       } catch (_) {}
       if (customerOrder.robot) {
-        customerOrder.robot.proofScreenshotUrl = proofUrl;
-        customerOrder.robot.cartBillScreenshotUrl = proofUrl;
         customerOrder.robot.errorProofUrl = proofUrl;
-        if (errDataUri) customerOrder.robot.proofScreenshotDataUri = errDataUri;
+        if (errDataUri) customerOrder.robot.errorProofDataUri = errDataUri;
+        customerOrder.robot.error = `Cart verification failed: ${finalAudit.missingCount} ordered item(s) (${finalAudit.missing.join(', ')}) not found in Domino's cart.`;
+        try { db.updateOrder(customerOrder.id, { robot: customerOrder.robot }); } catch (_) {}
       }
-      const err = new Error(`Cart verification failed: Ordered item(s) missing from Domino's cart: [${finalAudit.missing.join(', ')}]. Item(s) out of stock or unavailable at local Domino's store.`);
+      const err = new Error(`Cart verification failed: ordered item(s) (${finalAudit.missing.join(', ')}) not found in Domino's cart. Item may be out of stock or unavailable at target kitchen.`);
       err.isItemUnavailableAtStore = true;
       err.unavailableItems = finalAudit.missing;
       err.proofScreenshotUrl = proofUrl;
@@ -2091,6 +2099,7 @@ async function executeMiddlemanOrderOnDominos({
           if (customerOrder.robot) {
             customerOrder.robot.cartBillScreenshotUrl = cartBillUrl;
             customerOrder.robot.cartBillScreenshotDataUri = cartBillDataUri;
+            try { db.updateOrder(customerOrder.id, { robot: customerOrder.robot }); } catch (_) {}
           }
         } catch (_) {}
         onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured live Domino's cart & itemized bill review screenshot: ${cartBillFile}`);
@@ -2393,6 +2402,7 @@ async function executeMiddlemanOrderOnDominos({
         if (customerOrder.robot) {
           customerOrder.robot.proofScreenshotUrl = proofUrl;
           customerOrder.robot.proofScreenshotDataUri = proofDataUri;
+          try { db.updateOrder(customerOrder.id, { robot: customerOrder.robot }); } catch (_) {}
         }
       } catch (_) {}
       onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured physical screenshot of Domino's order/bill: ${proofFile}`);
@@ -2550,11 +2560,13 @@ async function executeMiddlemanOrderOnDominos({
         } catch (_) {}
       } catch (_) {}
     }
-    if (customerOrder.robot && capturedErrUrl) {
-      customerOrder.robot.proofScreenshotUrl = capturedErrUrl;
-      customerOrder.robot.cartBillScreenshotUrl = capturedErrUrl;
-      customerOrder.robot.errorProofUrl = capturedErrUrl;
-      if (capturedErrDataUri) customerOrder.robot.proofScreenshotDataUri = capturedErrDataUri;
+    if (customerOrder && customerOrder.robot) {
+      if (capturedErrUrl) {
+        customerOrder.robot.errorProofUrl = capturedErrUrl;
+        if (capturedErrDataUri) customerOrder.robot.errorProofDataUri = capturedErrDataUri;
+      }
+      customerOrder.robot.error = err.message || 'Domino\'s autonomous execution error';
+      try { db.updateOrder(customerOrder.id, { robot: customerOrder.robot }); } catch (_) {}
     }
     await browser.close().catch(() => {});
     return {

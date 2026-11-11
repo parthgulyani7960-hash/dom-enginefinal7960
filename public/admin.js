@@ -336,6 +336,10 @@ function openModal(id) {
 function closeModal(id) {
   const m = document.getElementById(id);
   if (m) m.classList.remove('active');
+  if (id === 'orderDossierModal') {
+    stopDossierLivePolling();
+    currentDossierOrderId = null;
+  }
 }
 
 // Switch between Method 1 (Live SMS OTP) and Method 2 (Domino's JSON / Token Import)
@@ -2350,7 +2354,7 @@ window.adminTriggerLiveRobot = adminTriggerLiveRobot;
 async function refreshDossierData(orderId) {
   if (currentDossierOrderId !== orderId) return;
   try {
-    const res = await fetch(`/api/orders/${orderId}`);
+    const res = await adminFetch(`/api/orders/${orderId}`);
     if (res.ok) {
       const freshOrder = await res.json();
       // Update local cache
@@ -2371,13 +2375,13 @@ function openOrderDossier(orderId) {
   renderOrderDossierContent(order);
   openModal('orderDossierModal');
 
-  // If order is actively executing or queued, poll every 2.5s for live telemetry
+  // Continual 1.5s live polling while modal is open for live telemetry
   const rSt = (order.robot?.status || order.status || '').toUpperCase();
-  const isActivelyRunning = ['SESSION_ASSIGNING', 'BUILDING_CART', 'APPLYING_COUPON', 'STORE_CONFIRMATION', 'PROCESSING', 'QUEUED_FOR_ROBOT'].includes(rSt);
-  if (isActivelyRunning) {
+  const isTerminal = ['DELIVERED', 'REFUNDED'].includes(rSt);
+  if (!isTerminal) {
     dossierLivePollTimer = setInterval(() => {
       refreshDossierData(orderId);
-    }, 2500);
+    }, 1500);
   }
 }
 window.openOrderDossier = openOrderDossier;
@@ -2600,54 +2604,78 @@ function renderOrderDossierContent(order) {
       </div>
     </div>
 
-    <!-- 4. ADMIN DECISION & OVERRIDE CONTROLS -->
+    <!-- 4. AUTONOMOUS ROBOT FLEET & PAYMENT SETTLEMENT STATUS -->
     <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
-      <div style="font-size: 11px; font-weight: 900; color: #334155; text-transform: uppercase; margin-bottom: 10px;">
-        ⚙️ Admin Platform Session &amp; Gift Card Decision Controls
+      <div style="font-size: 11px; font-weight: 900; color: #334155; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+        <span>🤖 Autonomous Dispatch Fleet &amp; Auto-Assignment Telemetry</span>
+        <span style="font-size: 10px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 800;">AUTO-PILOT</span>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-bottom: 12px;">
-        <!-- Assign Session Selector -->
-        <div>
-          <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">
-            Assign Fleet Session (0 Orders First Priority):
-          </label>
-          <div style="display: flex; gap: 6px;">
-            <select id="dossierSessionSelect_${order.id}" class="form-input" style="font-size: 11px; padding: 6px 8px; flex: 1;">
-              ${sessionOptionsHtml}
-            </select>
-            <button type="button" onclick="adminAssignSessionToOrder('${order.id}')" style="background: #0284c7; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap;">
-              Set Session
-            </button>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 12px; font-size: 12px;">
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+          <span style="font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase;">Fleet Session Phone</span>
+          <div style="font-weight: 800; color: #0284c7; margin-top: 2px; font-size: 13px;">
+            ${r.accountPhone || r.sessionPhone || '⚡ Auto-Assigned by Engine'}
+          </div>
+          <div style="font-size: 10px; color: #64748b; margin-top: 2px;">
+            ${r.categoryName || 'Top Priority 0-Order Account'}
           </div>
         </div>
 
-        <!-- Assign Gift Card Selector -->
-        <div>
-          <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">
-            Assign Vault Gift Card / E-Voucher:
-          </label>
-          <div style="display: flex; gap: 6px;">
-            <select id="dossierVoucherSelect_${order.id}" class="form-input" style="font-size: 11px; padding: 6px 8px; flex: 1;">
-              ${voucherOptionsHtml}
-            </select>
-            <button type="button" onclick="adminAssignVoucherToOrder('${order.id}')" style="background: #16a34a; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap;">
-              Set Card
-            </button>
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+          <span style="font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase;">Payment Settlement</span>
+          <div style="font-weight: 800; color: #16a34a; margin-top: 2px; font-size: 13px;">
+            ${r.assignedVoucherMasked ? `Vault Card: ${r.assignedVoucherMasked}` : (order.payment?.method === 'COD' ? '💵 Cash on Delivery (Zero Admin Card Due)' : '⚡ Auto Vault E-Voucher')}
+          </div>
+          <div style="font-size: 10px; color: #64748b; margin-top: 2px;">
+            Promo: <strong>${r.couponCode || 'DOMNEW50'}</strong> | Settled: ₹${r.giftCardAppliedAmount || r.voucherBalance || order.payment?.amount || 0}
+          </div>
+        </div>
+
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+          <span style="font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase;">Domino's Outlet Target</span>
+          <div style="font-weight: 800; color: #334155; margin-top: 2px; font-size: 13px;">
+            ${escapeHtml(r.storeName || addr.storeName || 'Auto-Detected Outlet')}
+          </div>
+          <div style="font-size: 10px; color: #15803d; margin-top: 2px; font-weight: 700;">
+            Store #${r.storeId || addr.storeId || 'Auto'} • Locked
           </div>
         </div>
       </div>
 
-      <!-- Quick Action Buttons Strip -->
+      <!-- Execution Error Alert Banner (if error exists) -->
+      ${(r.error || order.error) ? `
+        <div style="background: #fef2f2; border: 1.5px solid #f87171; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; color: #991b1b;">
+          <div style="font-weight: 900; font-size: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+            <span>⚠️</span> Autonomous Execution Error Detected
+          </div>
+          <div style="font-size: 12px; font-weight: 700; margin-top: 4px; line-height: 1.4;">
+            ${escapeHtml(r.error || order.error)}
+          </div>
+          ${r.errorScreenshotUrl ? `
+            <div style="margin-top: 6px;">
+              <a href="${r.errorScreenshotUrl}" target="_blank" style="color: #dc2626; font-size: 11px; font-weight: 800; text-decoration: underline;">
+                📸 Inspect Error Screenshot Evidence ↗
+              </a>
+            </div>
+          ` : ''}
+        </div>
+      ` : ''}
+
+      <!-- Action Buttons Strip -->
       <div style="display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #e2e8f0; padding-top: 10px;">
-        <button type="button" onclick="adminTriggerLiveRobot('${order.id}')" style="background: #0066a3; color: white; border: none; padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-          🚀 Trigger Live Robot Dispatch
-        </button>
-        <button type="button" onclick="retryAdminOrder('${order.id}')" style="background: #f0fdf4; border: 1.5px solid #86efac; color: #15803d; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
-          🔄 Retry Placement
-        </button>
-        <button type="button" onclick="cancelAdminOrder('${order.id}')" style="background: #fef2f2; border: 1.5px solid #fca5a5; color: #dc2626; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
-          🛑 Cancel Order
+        ${(order.payment?.status === 'PENDING_APPROVAL' || r.status === 'AWAITING_PAYMENT_APPROVAL') ? `
+          <button type="button" onclick="approveOrderPayment('${order.id}')" style="background: #16a34a; color: white; border: none; padding: 8px 18px; border-radius: 6px; font-size: 12px; font-weight: 900; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(22,163,74,0.3);">
+            ✅ Approve Payment &amp; Launch Autonomous Robot
+          </button>
+        ` : `
+          <div style="background: #f0fdf4; border: 1px solid #86efac; color: #15803d; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;">
+            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e; animation: pulse 1s infinite;"></span>
+            Autonomous Execution Live (Non-stop Pipeline)
+          </div>
+        `}
+        <button type="button" onclick="refundOrder('${order.id}')" style="background: #fef2f2; border: 1.5px solid #fca5a5; color: #dc2626; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+          🛑 Cancel &amp; Refund
         </button>
         <a href="${dominosTrackerUrl}" target="_blank" style="background: white; border: 1.5px solid #cbd5e1; color: #334155; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
           🌐 Domino's Live Tracker ↗
@@ -2787,25 +2815,41 @@ function switchBillPhotoTab(tab) {
   let titleColor = '#0284c7';
 
   if (tab === 'address') {
-    targetUrl = addressUrl || cartUrl || proofUrl;
+    targetUrl = addressUrl;
     titleText = '📍 Milestone 1: Domino\'s Delivery Address & Store Verified in Cart/Session';
     titleColor = '#6366f1';
   } else if (tab === 'items') {
-    targetUrl = itemsUrl || cartUrl || proofUrl;
+    targetUrl = itemsUrl;
     titleText = '🍕 Milestone 2: Items & Customizations Added to Domino\'s Basket';
     titleColor = '#ca8a04';
   } else if (tab === 'cart') {
-    targetUrl = cartUrl || proofUrl || itemsUrl || addressUrl;
+    targetUrl = cartUrl;
     titleText = '🛒 Milestone 3: Domino\'s Cart & Itemized Bill Review (Items, Prices & Dispatched Cart)';
     titleColor = '#0284c7';
   } else {
-    targetUrl = proofUrl || cartUrl || itemsUrl || addressUrl;
+    targetUrl = proofUrl;
     titleText = '🧾 Milestone 4: Official Domino\'s Order Confirmation Receipt (Order Confirmed)';
     titleColor = '#16a34a';
   }
 
-  if (photoImg && targetUrl) {
-    photoImg.src = targetUrl;
+  if (photoImg) {
+    if (targetUrl) {
+      photoImg.style.display = 'block';
+      photoImg.src = targetUrl;
+      const noEvidenceEl = document.getElementById('billPhotoNoEvidenceNotice');
+      if (noEvidenceEl) noEvidenceEl.style.display = 'none';
+    } else {
+      photoImg.style.display = 'none';
+      let noEvidenceEl = document.getElementById('billPhotoNoEvidenceNotice');
+      if (!noEvidenceEl) {
+        noEvidenceEl = document.createElement('div');
+        noEvidenceEl.id = 'billPhotoNoEvidenceNotice';
+        noEvidenceEl.style.cssText = 'padding: 40px 20px; text-align: center; color: #64748b; font-size: 13px; font-weight: 600;';
+        photoImg.parentNode.insertBefore(noEvidenceEl, photoImg);
+      }
+      noEvidenceEl.style.display = 'block';
+      noEvidenceEl.innerText = `⏳ Milestone screenshot not yet available. It will be captured automatically during live execution.`;
+    }
   }
   if (openBtn && targetUrl) {
     if (targetUrl.startsWith('data:')) {
