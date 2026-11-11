@@ -2282,6 +2282,24 @@ async function executeMiddlemanOrderOnDominos({
       }
     }
 
+    // Handle "Add Contact Details" modal if prompted by Domino's
+    const contactModal = page.locator('div:has-text("Add Contact Details"), .contact-details-modal').first();
+    if (await contactModal.isVisible({ timeout: 2000 }).catch(() => false)) {
+      onProgress(`[MIDDLEMAN-ENGINE] 👤 "Add Contact Details" prompt detected. Populating customer name...`);
+      const nameInput = page.locator('input[placeholder*="Name" i], input[type="text"]').last();
+      const customerName = customerOrder.user?.name || customerOrder.address?.name || 'Customer';
+      if (await nameInput.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await nameInput.fill(customerName).catch(() => {});
+        await sleep(500);
+      }
+      const saveBtn = page.locator('button:has-text("Save & Continue"), button:has-text("Save"), button:has-text("Continue"), div.btn:has-text("Save & Continue")').first();
+      if (await saveBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+        onProgress(`[MIDDLEMAN-ENGINE] 👤 Submitting contact details ("Save & Continue")...`);
+        await saveBtn.click({ force: true }).catch(() => {});
+        await sleep(2000);
+      }
+    }
+
     // =========================================================================
     // STEP 6: Capture Real Confirmation Proof & Verify Genuine Order Reference
     // =========================================================================
@@ -2382,6 +2400,24 @@ async function executeMiddlemanOrderOnDominos({
           await sleep(2500);
         }
         continue;
+      }
+
+      // Check if "Add Contact Details" modal appeared during submission
+      const loopContactModal = page.locator('div:has-text("Add Contact Details"), .contact-details-modal').first();
+      if (await loopContactModal.isVisible({ timeout: 400 }).catch(() => false)) {
+        onProgress(`[MIDDLEMAN-ENGINE] 👤 "Add Contact Details" prompt detected. Populating customer name...`);
+        const nameInput = page.locator('input[placeholder*="Name" i], input[type="text"]').last();
+        const customerName = customerOrder.user?.name || customerOrder.address?.name || 'Customer';
+        if (await nameInput.isVisible({ timeout: 600 }).catch(() => false)) {
+          await nameInput.fill(customerName).catch(() => {});
+          await sleep(400);
+        }
+        const saveBtn = page.locator('button:has-text("Save & Continue"), button:has-text("Save"), button:has-text("Continue"), div.btn:has-text("Save & Continue")').first();
+        if (await saveBtn.isVisible({ timeout: 800 }).catch(() => false)) {
+          onProgress(`[MIDDLEMAN-ENGINE] 👤 Submitting contact details ("Save & Continue")...`);
+          await saveBtn.click({ force: true }).catch(() => {});
+          await sleep(2000);
+        }
       }
 
       if (interceptedOrderError && !interceptedOrderError.toLowerCase().includes('price') && !interceptedOrderError.toLowerCase().includes('review')) {
