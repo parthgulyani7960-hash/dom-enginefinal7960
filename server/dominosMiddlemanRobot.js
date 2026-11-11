@@ -1035,17 +1035,22 @@ async function executeMiddlemanOrderOnDominos({
             let cardLocator = null;
             let matchedTitle = null;
 
-            if (match) {
+            if (match && typeof match.idx === 'number') {
               matchedTitle = match.title;
-              cardLocator = page.locator('.card-item-search')
-                .filter({ hasText: match.title })
-                .first();
+              cardLocator = page.locator('.card-item-search').nth(match.idx);
+            } else if (match) {
+              matchedTitle = match.title;
+              cardLocator = page.locator('.card-item-search').filter({
+                has: page.locator('h1, h2, h3, h4, .itm-name, .pizza-title, [class*="title"]').filter({ hasText: match.title })
+              }).first();
             } else {
               const directCandidate = cleanName.replace(/\bPizza\s+Mania\b/gi, '').replace(/\bMania\b/gi, '').replace(/\bPizza\b/gi, '').replace(/&/g, ' ').replace(/\s+/g, ' ').trim();
               const candNames = [directCandidate, ...directCandidate.split(' ').filter(w => w.length >= 3)];
               for (const cName of candNames) {
                 if (cardLocator) break;
-                const directLocator = page.locator('.card-item-search').filter({ hasText: cName }).first();
+                const directLocator = page.locator('.card-item-search').filter({
+                  has: page.locator('h1, h2, h3, h4, .itm-name, .pizza-title, [class*="title"]').filter({ hasText: cName })
+                }).first();
                 if (await directLocator.isVisible({ timeout: 600 }).catch(() => false)) {
                   matchedTitle = cName;
                   cardLocator = directLocator;
@@ -1145,7 +1150,11 @@ async function executeMiddlemanOrderOnDominos({
               }, { cName: cleanName, rName: rawName });
 
               if (cardMatch) {
-                const cardLocator = page.locator('.card-content, .product-card, div[class*="card"]').filter({ hasText: cardMatch.title }).first();
+                const cardLocator = (typeof cardMatch.idx === 'number')
+                  ? page.locator('.card-content, .product-card, div[class*="card"]').nth(cardMatch.idx)
+                  : page.locator('.card-content, .product-card, div[class*="card"]').filter({
+                      has: page.locator('h1, h2, h3, h4, .itm-name, .title, [class*="title"], [class*="name"]').filter({ hasText: cardMatch.title })
+                    }).first();
                 const btn = cardLocator.locator('button.cta-add, .cta-add, button:has-text("Add"), div.main-cta').first();
                 if (await btn.isVisible({ timeout: 1200 }).catch(() => false)) {
                   await btn.click({ force: true });
@@ -1401,7 +1410,8 @@ async function executeMiddlemanOrderOnDominos({
       return false;
     };
 
-    for (let pass = 0; pass < 5; pass++) {
+    const failedPruneTitles = new Set();
+    for (let pass = 0; pass < 2; pass++) {
       const cartCards = await page.locator('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper').all();
       if (cartCards.length === 0) break;
 
@@ -1421,6 +1431,8 @@ async function executeMiddlemanOrderOnDominos({
           const titleEl = c.querySelector('.popular-menu-header, h1, h2, h3, h4, .itm-name, .title, [class*="name"]');
           return (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
         }).catch(() => '');
+
+        if (failedPruneTitles.has(firstLine)) continue;
         
         // Strict match against expected items using token-aware matching
         const isMatched = expectedItemNames.some(name => isItemMatch(firstLine, name));
@@ -1428,12 +1440,13 @@ async function executeMiddlemanOrderOnDominos({
           onProgress(`[MIDDLEMAN-ENGINE] 🗑️ Removing unwanted/rogue item from cart: "${firstLine}"`);
           const minusBtn = card.locator('.anim-ico-minus, [class*="minus"], .minus, span:has-text("-"), button:has-text("-"), button:has-text("Remove"), span:has-text("Remove")').first();
           let removeAttempts = 0;
-          while (await card.isVisible().catch(() => false) && removeAttempts < 6) {
+          let removed = false;
+          while (await card.isVisible().catch(() => false) && removeAttempts < 2) {
             await card.scrollIntoViewIfNeeded().catch(() => {});
             if (await minusBtn.isVisible().catch(() => false)) {
               await minusBtn.scrollIntoViewIfNeeded().catch(() => {});
               await minusBtn.click({ force: true }).catch(() => {});
-              await sleep(500);
+              await sleep(400);
 
               // Handle remove confirmation modal (can be button, div, span, or a)
               await page.evaluate(() => {
@@ -1449,17 +1462,25 @@ async function executeMiddlemanOrderOnDominos({
               });
 
               const confirmRemoveBtn = page.locator('button:has-text("REMOVE"), button:has-text("YES"), div:has-text("REMOVE"), div:has-text("YES"), span:has-text("REMOVE"), span:has-text("YES"), .remove-btn, [class*="confirm" i]').first();
-              if (await confirmRemoveBtn.isVisible({ timeout: 800 }).catch(() => false)) {
+              if (await confirmRemoveBtn.isVisible({ timeout: 600 }).catch(() => false)) {
                 await confirmRemoveBtn.click({ force: true }).catch(() => {});
-                await sleep(500);
+                await sleep(400);
               }
             } else {
               break;
             }
             removeAttempts++;
+            if (!(await card.isVisible().catch(() => false))) {
+              removed = true;
+              break;
+            }
           }
-          prunedAny = true;
-          break; // Re-scan after DOM change
+          if (!removed) {
+            failedPruneTitles.add(firstLine);
+          } else {
+            prunedAny = true;
+            break; // Re-scan after DOM change
+          }
         }
       }
       if (!prunedAny) break;
@@ -1578,7 +1599,7 @@ async function executeMiddlemanOrderOnDominos({
     // If rogue items exist, try one more aggressive cleanup pass
     if (cartAuditResult.rogueCount > 0) {
       onProgress(`[MIDDLEMAN-ENGINE] 🧹 Aggressively purging ${cartAuditResult.rogueCount} rogue item(s): [${cartAuditResult.rogueNames.join(', ')}]...`);
-      for (let pass = 0; pass < 3; pass++) {
+      for (let pass = 0; pass < 1; pass++) {
         const cards = await page.locator('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper').all();
         for (const card of cards) {
           const firstLine = await card.evaluate(c => {
@@ -1592,10 +1613,10 @@ async function executeMiddlemanOrderOnDominos({
             if (await minus.isVisible().catch(() => false)) {
               await minus.scrollIntoViewIfNeeded().catch(() => {});
               await minus.click({ force: true }).catch(() => {});
-              await sleep(600);
+              await sleep(400);
               const conf = page.locator('.confirm-remove-modal button.remove-btn, button.remove-btn, button:has-text("REMOVE"), button:has-text("YES")').first();
-              if (await conf.isVisible({ timeout: 800 }).catch(() => false)) await conf.click({ force: true }).catch(() => {});
-              await sleep(800);
+              if (await conf.isVisible({ timeout: 600 }).catch(() => false)) await conf.click({ force: true }).catch(() => {});
+              await sleep(500);
             }
           }
         }
