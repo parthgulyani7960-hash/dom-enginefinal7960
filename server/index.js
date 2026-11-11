@@ -1076,8 +1076,13 @@ const server = http.createServer(async (req, res) => {
       // Priority 2: Cheesy 2nd order accounts (1 past order)
       // Priority 3: Other active sessions
       // STRICT REQUIREMENT: Disabled sessions (disabled === true || status === 'DISABLED') MUST NEVER BE ASSIGNED!
+      const isCodPayment = payload.payment?.method === 'COD' || payload.payment?.method === 'CASH';
       const accounts = db.getAccounts();
-      const activeAccounts = accounts.filter(a => !a.disabled && a.status !== 'DISABLED');
+      const activeAccounts = accounts.filter(a => {
+        if (a.disabled || a.status === 'DISABLED') return false;
+        if (isCodPayment && a.codDisabledUntil && a.codDisabledUntil > Date.now()) return false;
+        return true;
+      });
       const nonExpiredAccounts = activeAccounts.filter(a => !a.expiresAt || new Date(a.expiresAt).getTime() > Date.now());
       const idleAccounts = nonExpiredAccounts.filter(a => a.status === 'IDLE');
       const pool = idleAccounts.length > 0 ? idleAccounts : (nonExpiredAccounts.length > 0 ? nonExpiredAccounts : activeAccounts);

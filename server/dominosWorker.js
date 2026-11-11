@@ -41,12 +41,17 @@ class DominosAutomationRobot {
       if (preAssignedId) {
         const preAcc = db.getAccountById ? db.getAccountById(preAssignedId) : db.getAccounts().find(a => a.id === preAssignedId);
         if (preAcc && !preAcc.disabled && preAcc.status !== 'DISABLED') {
-          account = preAcc;
-          account.status = 'IN_USE';
-          account.activeOrderId = orderId;
-          account.lastActive = new Date().toISOString();
-          db.save();
-          addLog(order, `Resuming pre-assigned Domino's Session: ${account.phone} (${account.id}) - Category: ${account.categoryName || 'Standard'}`);
+          const isCodOrder = order.payment?.method === 'COD' || order.payment?.method === 'CASH';
+          if (isCodOrder && preAcc.codDisabledUntil && preAcc.codDisabledUntil > Date.now()) {
+            addLog(order, `⚠️ Pre-assigned session ${preAcc.phone} has COD temporarily restricted by Domino's. Auto-routing to next available fleet account...`);
+          } else {
+            account = preAcc;
+            account.status = 'IN_USE';
+            account.activeOrderId = orderId;
+            account.lastActive = new Date().toISOString();
+            db.save();
+            addLog(order, `Resuming pre-assigned Domino's Session: ${account.phone} (${account.id}) - Category: ${account.categoryName || 'Standard'}`);
+          }
         }
       }
 
