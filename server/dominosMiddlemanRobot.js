@@ -2066,8 +2066,8 @@ async function executeMiddlemanOrderOnDominos({
       }
     }
 
-    let codCheck = { found: false, isUnavailable: false };
-    if (isCod) {
+    // If order was placed as Cash on Delivery (COD), ensure COD is selected
+    if (isCod || (!voucherApplied && (paymentMethod === 'COD' || customerOrder.payment?.method === 'COD'))) {
       // 1. SCROLL DOWN directly to Cash / UPI on Delivery section
       onProgress(`[MIDDLEMAN-ENGINE] 📜 Scrolling down payment screen to locate 'Cash / UPI on Delivery'...`);
       codCheck = await page.evaluate(() => {
