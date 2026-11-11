@@ -1067,9 +1067,12 @@ async function executeMiddlemanOrderOnDominos({
                 await addBtn.click({ force: true });
                 await sleep(1000);
 
-                // Check and confirm any customization drawer or bottom sheet mounted by Domino's
+                // Handle Domino's size/crust customization sheet FIRST before clicking add/dismiss
+                await handleDominosCustomizationSheet(page, item, onProgress);
+
+                // If any residual product drawer or bottom sheet is open, confirm it
                 const drawerModal = page.locator('.customise-bottom-sheet, .customisation-modal, div[class*="customiz" i], div[class*="bottom-sheet" i]').first();
-                if (await drawerModal.isVisible({ timeout: 1200 }).catch(() => false)) {
+                if (await drawerModal.isVisible({ timeout: 1000 }).catch(() => false)) {
                   const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart"), button:has-text("Add"), button:has-text("ADD"), button:has-text("I CHOOSE"), button:has-text("Continue"), [class*="add-to-cart" i]').first();
                   if (await drawerBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
                     onProgress(`[MIDDLEMAN-ENGINE] 📝 Confirming product drawer Add button...`);
@@ -1077,7 +1080,6 @@ async function executeMiddlemanOrderOnDominos({
                     await sleep(1000);
                   }
                 }
-                await handleDominosCustomizationSheet(page, item, onProgress);
 
                 // For quantities > 1, use native Playwright click on stepper plus button
                 if (item.qty > 1) {
