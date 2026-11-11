@@ -159,7 +159,9 @@ async function searchStoresByQuery(query) {
     city: storeResult.nearestCity,
     state: '',
     pincode: '',
-    country: 'India'
+    country: 'India',
+    latitude: targetLat,
+    longitude: targetLng
   };
   storeResult.geocodedAddress = geocodedAddress;
 

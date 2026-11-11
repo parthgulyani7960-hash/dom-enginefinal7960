@@ -825,16 +825,21 @@ const server = http.createServer(async (req, res) => {
       const q = parsedUrl.query.query || parsedUrl.query.q;
       if (q) {
         const searchRes = await locationService.searchStoresByQuery(q);
+        const resolvedStore = searchRes.assignedStore || searchRes.availability?.store;
         return sendJson(res, 200, {
           success: true,
+          serviceable: searchRes.serviceable !== false,
+          assignedStore: resolvedStore,
+          coordinates: searchRes.coordinates,
           availability: searchRes.availability,
           nearbyStores: searchRes.nearbyStores || [],
           geocodedAddress: searchRes.geocodedAddress,
           nearestStore: {
-            store: searchRes.availability ? searchRes.availability.store : null,
-            distanceKm: searchRes.availability ? searchRes.availability.distanceKm : 1.5,
-            estimatedMinutes: searchRes.availability ? searchRes.availability.estimatedDeliveryTime : '30 mins',
-            isServiceable: searchRes.availability ? searchRes.availability.isServiceable : false
+            store: resolvedStore,
+            distanceKm: searchRes.availability ? searchRes.availability.distanceKm : (resolvedStore?.driveDistanceKm || 1.5),
+            estimatedMinutes: searchRes.availability ? searchRes.availability.estimatedDeliveryTime : (resolvedStore?.polygonTime || '30 mins'),
+            isServiceable: searchRes.serviceable !== false,
+            unserviceableReason: searchRes.availability?.unserviceableReason || null
           }
         });
       }
@@ -842,20 +847,25 @@ const server = http.createServer(async (req, res) => {
       const lat = parseFloat(parsedUrl.query.lat) || 30.7339;
       const lng = parseFloat(parsedUrl.query.lng) || 76.7889;
       
-      const availability = await locationService.fetchStoreAvailabilityAtLocation(lat, lng);
-      const nearbyStores = await locationService.findNearbyStores(lat, lng, 6);
+      const storeResult = await locationService.resolveStoreByCoordinates(lat, lng);
+      const availability = storeResult.availability;
+      const assignedStore = storeResult.assignedStore || availability?.store;
+      const nearbyStores = (storeResult.nearbyStores || []).slice(0, 6);
       const geocodedAddress = await locationService.reverseGeocode(lat, lng);
 
       return sendJson(res, 200, {
         success: true,
+        serviceable: storeResult.serviceable !== false,
+        assignedStore: assignedStore,
+        coordinates: { latitude: lat, longitude: lng },
         availability: availability,
         nearbyStores: nearbyStores,
         geocodedAddress: geocodedAddress,
         nearestStore: {
-          store: availability ? availability.store : null,
-          distanceKm: availability ? availability.distanceKm : 0,
-          estimatedMinutes: availability ? availability.estimatedDeliveryTime : 'N/A',
-          isServiceable: availability ? availability.isServiceable : false,
+          store: assignedStore,
+          distanceKm: availability ? availability.distanceKm : (assignedStore ? assignedStore.driveDistanceKm : 0),
+          estimatedMinutes: availability ? availability.estimatedDeliveryTime : (assignedStore ? assignedStore.polygonTime : 'N/A'),
+          isServiceable: storeResult.serviceable !== false,
           unserviceableReason: availability ? availability.unserviceableReason : null
         }
       });

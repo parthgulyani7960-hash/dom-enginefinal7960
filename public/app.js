@@ -994,11 +994,11 @@ async function autoResolveFormCoordinates(queryText = null) {
     const res = await fetch(`/api/location/resolve?query=${encodeURIComponent(fullQ)}`);
     if (res.ok) {
       const data = await res.json();
-      if (data.success && (data.geocodedAddress || (data.availability && data.availability.store))) {
-        const store = data.availability?.store;
+      if (data.success && (data.geocodedAddress || (data.availability && data.availability.store) || data.assignedStore)) {
+        const store = data.assignedStore || data.availability?.store;
         // Prioritize actual geocoded customer building coordinates for precision doorstep delivery
-        const lat = (data.geocodedAddress ? data.geocodedAddress.latitude : null) || (store ? store.latitude : null);
-        const lng = (data.geocodedAddress ? data.geocodedAddress.longitude : null) || (store ? store.longitude : null);
+        const lat = (data.geocodedAddress ? data.geocodedAddress.latitude : null) || (data.coordinates ? data.coordinates.latitude : null) || (store ? store.latitude : null);
+        const lng = (data.geocodedAddress ? data.geocodedAddress.longitude : null) || (data.coordinates ? data.coordinates.longitude : null) || (store ? store.longitude : null);
         if (lat && lng) {
           const fLat = document.getElementById('formLat');
           const fLng = document.getElementById('formLng');
@@ -1011,6 +1011,17 @@ async function autoResolveFormCoordinates(queryText = null) {
           }
           if (store && store.storeName) {
             showToastNotice(`📍 GPS coordinates locked to nearest Domino's kitchen: ${store.storeName}!`, '✅');
+          }
+          // Real-time update store UI immediately
+          if (store) {
+            updateStoreUI({
+              isServiceable: data.serviceable !== false,
+              store: store,
+              assignedStore: store,
+              coordinates: { latitude: Number(lat), longitude: Number(lng) },
+              estimatedDeliveryTime: data.nearestStore?.estimatedMinutes || store.polygonTime || '30 mins',
+              distanceKm: data.nearestStore?.distanceKm || store.driveDistanceKm || 1.5
+            });
           }
         }
       }
@@ -1248,6 +1259,10 @@ async function submitAddressForm() {
     syncTopBarAddressOptions();
     toggleAddAddressForm(false);
 
+    if (lat && lng) {
+      applyResolvedLocation(Number(lat), Number(lng), LOCATION_PRIORITY.USER_MANUAL, 'Saved Address Lock');
+    }
+
     if (data.dominosSync?.success) {
       showToastNotice(`✓ Address saved & synced to Domino's! (ID: #${data.dominosSync.dominosAddressId})`, '☁️');
     } else {
@@ -1272,6 +1287,10 @@ async function makeAddressDefault(addressId) {
     renderProfileAddresses(currentUser.savedAddresses);
     syncCartAddressOptions();
     syncTopBarAddressOptions();
+    const def = (currentUser.savedAddresses || []).find(a => a.id === addressId);
+    if (def && def.latitude && def.longitude) {
+      applyResolvedLocation(Number(def.latitude), Number(def.longitude), LOCATION_PRIORITY.USER_MANUAL, 'Default Address Changed');
+    }
     showToastNotice('Default delivery address updated!', '★');
   } catch (err) {
     alert('Failed to set default address: ' + err.message);
@@ -1420,10 +1439,10 @@ function updateStoreUI(avail) {
     currentCoordinates = avail.coordinates;
   }
 
-  const store = avail.store || currentResolvedStore;
+  const store = avail.store || avail.assignedStore || currentResolvedStore;
   if (!store) return;
-  if (avail.store) {
-    currentResolvedStore = avail.store;
+  if (avail.store || avail.assignedStore) {
+    currentResolvedStore = avail.store || avail.assignedStore;
   }
 
   if (store && store.city) {
@@ -1447,6 +1466,26 @@ function updateStoreUI(avail) {
     } else {
       topStoreLbl.innerHTML = `⚠️ Store: <strong>Unserviceable Area</strong>`;
     }
+  }
+
+  // Update Top Bar GPS button label with live store
+  const topGpsBtnLabel = document.getElementById('gpsBtnLabel');
+  if (topGpsBtnLabel && store?.storeName) {
+    topGpsBtnLabel.innerText = `✓ Kitchen: ${store.storeName}`;
+  }
+
+  // Real-time update of checkout confirmation modal if open
+  const confStoreName = document.getElementById('confirmModalStoreName');
+  if (confStoreName && store?.storeName) {
+    confStoreName.innerText = store.storeName;
+  }
+  const confStoreBadge = document.getElementById('confirmModalStoreIdBadge');
+  if (confStoreBadge && store?.storeId) {
+    confStoreBadge.innerText = `#${store.storeId}`;
+  }
+  const confEta = document.getElementById('confirmModalEta');
+  if (confEta && (avail.estimatedDeliveryTime || store.polygonTime)) {
+    confEta.innerText = avail.estimatedDeliveryTime || store.polygonTime;
   }
 
   if (statusContainer) {
@@ -1704,8 +1743,19 @@ async function applyResolvedLocation(lat, lng, priority = LOCATION_PRIORITY.IP_A
     } else {
       const data = await res.json();
       if (reqSeq !== activeLocationSeq) return;
-      if (data.success && data.availability) {
-        updateStoreUI(data.availability);
+      if (data.success && (data.availability || data.assignedStore)) {
+        const availPayload = data.availability || {
+          isServiceable: data.serviceable !== false,
+          store: data.assignedStore,
+          assignedStore: data.assignedStore,
+          coordinates: data.coordinates,
+          estimatedDeliveryTime: data.nearestStore?.estimatedMinutes || data.assignedStore?.polygonTime || '30 mins',
+          distanceKm: data.nearestStore?.distanceKm || data.assignedStore?.driveDistanceKm || 1.5
+        };
+        if (!availPayload.store && data.assignedStore) {
+          availPayload.store = data.assignedStore;
+        }
+        updateStoreUI(availPayload);
       }
     }
 
@@ -1771,8 +1821,9 @@ async function modalSearchArea() {
   try {
     const res = await fetch(`/api/location/resolve?query=${encodeURIComponent(query)}`);
     const data = await res.json();
-    if (data.success && data.availability && data.availability.store) {
-      const coords = data.availability.coordinates || { latitude: data.availability.store.latitude, longitude: data.availability.store.longitude };
+    if (data.success && (data.assignedStore || (data.availability && data.availability.store))) {
+      const store = data.assignedStore || data.availability.store;
+      const coords = data.coordinates || data.availability?.coordinates || { latitude: store.latitude, longitude: store.longitude };
       await applyResolvedLocation(coords.latitude, coords.longitude, LOCATION_PRIORITY.USER_MANUAL, 'Modal Area Search');
       closeModal('locationRequiredModal');
       processPendingAddToCart();
@@ -3076,6 +3127,8 @@ async function onTopBarAddressSelectChange(val) {
       displayCartAddress(addr, true);
       if (addr.latitude && addr.longitude) {
         await applyResolvedLocation(addr.latitude, addr.longitude, LOCATION_PRIORITY.USER_MANUAL, 'Top Bar Selected Address');
+      } else {
+        await autoResolveAddressCoordinates(addr);
       }
     }
   }
@@ -3206,9 +3259,15 @@ async function autoResolveAddressCoordinates(addr) {
     if (data.geocodedAddress && data.geocodedAddress.latitude && data.geocodedAddress.longitude) {
       lat = parseFloat(data.geocodedAddress.latitude);
       lng = parseFloat(data.geocodedAddress.longitude);
+    } else if (data.coordinates?.latitude && data.coordinates?.longitude) {
+      lat = parseFloat(data.coordinates.latitude);
+      lng = parseFloat(data.coordinates.longitude);
     } else if (data.availability?.coordinates?.latitude && data.availability?.coordinates?.longitude) {
       lat = parseFloat(data.availability.coordinates.latitude);
       lng = parseFloat(data.availability.coordinates.longitude);
+    } else if (data.assignedStore?.latitude && data.assignedStore?.longitude) {
+      lat = parseFloat(data.assignedStore.latitude);
+      lng = parseFloat(data.assignedStore.longitude);
     } else if (data.availability?.store?.latitude && data.availability?.store?.longitude) {
       lat = parseFloat(data.availability.store.latitude);
       lng = parseFloat(data.availability.store.longitude);
@@ -3291,6 +3350,9 @@ function displayCartAddress(addr, forceSync = false) {
   if (coordEl) {
     if (addr.latitude && addr.longitude) {
       coordEl.innerText = `📡 Locked GPS: [${Number(addr.latitude).toFixed(6)}, ${Number(addr.longitude).toFixed(6)}]`;
+      if (!currentResolvedStore || (addr.storeId && String(currentResolvedStore.storeId) !== String(addr.storeId))) {
+        applyResolvedLocation(Number(addr.latitude), Number(addr.longitude), LOCATION_PRIORITY.USER_MANUAL, 'Cart Address Sync');
+      }
     } else {
       coordEl.innerText = '📡 Resolving GPS...';
       autoResolveAddressCoordinates(addr);
