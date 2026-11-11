@@ -702,78 +702,82 @@ async function executeMiddlemanOrderOnDominos({
     // =========================================================================
     onProgress(`[MIDDLEMAN-ENGINE] 🧹 Checking cart state for Store ${targetStoreId}...`);
     try {
-      await page.evaluate(() => {
-        try {
-          localStorage.removeItem('cartItems');
-          localStorage.removeItem('cart');
-          sessionStorage.removeItem('cartItems');
-        } catch (_) {}
-        try {
-          const app = document.querySelector('#app')?.__vue__;
-          if (app && app.$store && typeof app.$store.dispatch === 'function') {
-            app.$store.dispatch('Cart/emptyCart').catch(() => {});
-          }
-        } catch (_) {}
-      });
-      const hasCartItems = await page.evaluate(() => {
+      const cartCount = await page.evaluate(() => {
         try {
           const app = document.querySelector('#app')?.__vue__;
           if (app && app.$store) {
-            const count = app.$store.getters['Cart/getCartTotalCount'] || 0;
-            if (count > 0 && typeof app.$store.dispatch === 'function') {
-              app.$store.dispatch('Cart/emptyCart').catch(() => {});
-              return false;
-            }
-            return count > 0;
+            return app.$store.getters['Cart/getCartTotalCount'] || 0;
           }
         } catch (e) {}
         const badge = document.querySelector('.cart-count, .itm-qty, .badge');
-        return badge ? (parseInt(badge.innerText, 10) > 0) : false;
+        return badge ? (parseInt(badge.innerText, 10) || 0) : 0;
       });
 
-      if (hasCartItems) {
-        onProgress(`[MIDDLEMAN-ENGINE] 🧹 Clearing pre-existing cart items...`);
+      if (cartCount > 0) {
+        onProgress(`[MIDDLEMAN-ENGINE] 🧹 Detected ${cartCount} pre-existing item(s) in Domino's cart. Clearing cart before adding ordered items...`);
         await page.goto(`https://m.dominos.co.in/jfl-discovery-payment/en/pwa/cart/${targetStoreId}`, {
           waitUntil: 'domcontentloaded',
           timeout: 15000
         }).catch(() => {});
-        await sleep(800);
+        await sleep(1200);
 
         if (page.url().includes('/cart')) {
           let clearAttempts = 0;
           while (clearAttempts < 10) {
             clearAttempts++;
-            const hasItem = await page.evaluate(() => {
-              const wraps = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper'));
+            const removedItem = await page.evaluate(() => {
+              const wraps = Array.from(document.querySelectorAll('.cart-item-wrap .card-iteration-wrapper, .card-iteration-wrapper, .itm-dtl, .cart-item'));
               const real = wraps.find(w => {
                 if (w.closest('.carousel, .recommendation, .upsell, .cart-suggestion, [class*="suggestion" i]')) return false;
-                const btns = Array.from(w.querySelectorAll('button, .cta-add, .btn-add, div.main-cta'));
-                const hasAddOnly = btns.some(b => (b.innerText || '').toLowerCase().includes('add')) && !w.querySelector('.anim-ico-minus, .product-item-quantity, .itm-qty');
+                const hasAddOnly = !!w.querySelector('button.cta-add, .btn-add, div.main-cta') && !w.querySelector('.anim-ico-minus, [class*="minus"], .product-item-quantity, .itm-qty, .item-quantity, [class*="stepper"]');
                 return !hasAddOnly;
               });
               if (real) {
-                let minus = real.querySelector('.anim-ico-minus, [class*="minus"]');
+                let minus = real.querySelector('.anim-ico-minus, [class*="minus"], .minus');
                 if (!minus) {
-                  const els = Array.from(real.querySelectorAll('button, span, div'));
-                  minus = els.find(e => e.innerText && e.innerText.trim() === '-' && e.children.length === 0) || null;
+                  const els = Array.from(real.querySelectorAll('button, span, div, i'));
+                  minus = els.find(e => (e.innerText || '').trim() === '-' && e.children.length === 0) || null;
                 }
                 if (minus) {
                   minus.click();
+                  minus.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
                   return true;
                 }
               }
               return false;
             });
 
-            if (!hasItem) break;
+            if (!removedItem) break;
             await sleep(400);
-            const confirmBtn = page.locator('.confirm-remove-modal button.remove-btn, button.remove-btn, button:has-text("REMOVE"), button:has-text("Remove"), button:has-text("YES"), button:has-text("Yes"), button.btn-confirm').first();
-            if (await confirmBtn.isVisible({ timeout: 500 }).catch(() => false)) {
+
+            // Handle removal confirmation dialog
+            await page.evaluate(() => {
+              const allBtns = Array.from(document.querySelectorAll('button, div.btn, span.btn, div, span, a'));
+              const btn = allBtns.find(el => {
+                const t = (el.innerText || '').trim().toUpperCase();
+                return (t === 'REMOVE' || t === 'YES' || t === 'YES, REMOVE' || t === 'DELETE' || t === 'CONFIRM') && el.offsetHeight > 15;
+              });
+              if (btn) {
+                btn.click();
+                btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+              }
+            });
+
+            const confirmBtn = page.locator('button:has-text("REMOVE"), button:has-text("YES"), div:has-text("REMOVE"), div:has-text("YES"), span:has-text("REMOVE"), span:has-text("YES"), .remove-btn, [class*="confirm" i]').first();
+            if (await confirmBtn.isVisible({ timeout: 600 }).catch(() => false)) {
               await confirmBtn.click({ force: true }).catch(() => {});
-              await sleep(300);
+              await sleep(400);
             }
           }
         }
+
+        // Return to store menu
+        onProgress(`[MIDDLEMAN-ENGINE] ✓ Pre-existing cart items cleared. Returning to store menu...`);
+        await page.goto(`https://m.dominos.co.in/jfl-discovery-ui/en/pwa/menu-v1/${targetStoreId}?&showSearchModal=true&scrollTo=3`, {
+          waitUntil: 'domcontentloaded',
+          timeout: 15000
+        }).catch(() => {});
+        await sleep(1000);
       }
       onProgress(`[MIDDLEMAN-ENGINE] ✓ Cart clean and ready for new customer items.`);
     } catch (clearErr) {
@@ -1422,19 +1426,32 @@ async function executeMiddlemanOrderOnDominos({
         const isMatched = expectedItemNames.some(name => isItemMatch(firstLine, name));
         if (!isMatched) {
           onProgress(`[MIDDLEMAN-ENGINE] 🗑️ Removing unwanted/rogue item from cart: "${firstLine}"`);
-          const minusBtn = card.locator('.anim-ico-minus, [class*="minus"], span:has-text("-"), button:has-text("-"), button:has-text("Remove"), span:has-text("Remove")').first();
+          const minusBtn = card.locator('.anim-ico-minus, [class*="minus"], .minus, span:has-text("-"), button:has-text("-"), button:has-text("Remove"), span:has-text("Remove")').first();
           let removeAttempts = 0;
-          while (await card.isVisible().catch(() => false) && removeAttempts < 5) {
+          while (await card.isVisible().catch(() => false) && removeAttempts < 6) {
             await card.scrollIntoViewIfNeeded().catch(() => {});
             if (await minusBtn.isVisible().catch(() => false)) {
               await minusBtn.scrollIntoViewIfNeeded().catch(() => {});
               await minusBtn.click({ force: true }).catch(() => {});
-              await sleep(600);
-              // Handle remove confirmation modal if appeared
-              const confirmRemoveBtn = page.locator('.confirm-remove-modal button.remove-btn, button.remove-btn, button:has-text("REMOVE"), button:has-text("Remove"), button:has-text("YES"), button:has-text("Yes"), button.btn-confirm').first();
-              if (await confirmRemoveBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+              await sleep(500);
+
+              // Handle remove confirmation modal (can be button, div, span, or a)
+              await page.evaluate(() => {
+                const allBtns = Array.from(document.querySelectorAll('button, div.btn, span.btn, div, span, a'));
+                const btn = allBtns.find(el => {
+                  const t = (el.innerText || '').trim().toUpperCase();
+                  return (t === 'REMOVE' || t === 'YES' || t === 'YES, REMOVE' || t === 'DELETE' || t === 'CONFIRM') && el.offsetHeight > 15;
+                });
+                if (btn) {
+                  btn.click();
+                  btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+                }
+              });
+
+              const confirmRemoveBtn = page.locator('button:has-text("REMOVE"), button:has-text("YES"), div:has-text("REMOVE"), div:has-text("YES"), span:has-text("REMOVE"), span:has-text("YES"), .remove-btn, [class*="confirm" i]').first();
+              if (await confirmRemoveBtn.isVisible({ timeout: 800 }).catch(() => false)) {
                 await confirmRemoveBtn.click({ force: true }).catch(() => {});
-                await sleep(600);
+                await sleep(500);
               }
             } else {
               break;
@@ -1629,16 +1646,29 @@ async function executeMiddlemanOrderOnDominos({
         return !hasAddOnly;
       });
 
-      const domTitles = cards.map(c => {
+      const parsedItems = cards.map(c => {
         const titleEl = c.querySelector('.popular-menu-header, h1, h2, h3, h4, .itm-name, .title, [class*="name"]');
-        return (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
-      }).filter(Boolean);
+        const title = (titleEl ? titleEl.innerText : c.innerText.split('\n')[0]).trim();
+        
+        // Check price of item (to ignore free promo gifts / ketchup / free add-ons)
+        const priceEl = c.querySelector('.price, .item-price, [class*="price"], .rupee');
+        const text = c.innerText.toLowerCase();
+        let isFree = text.includes('free') || text.includes('₹0') || text.includes('rs 0') || text.includes('rs.0');
+        if (priceEl) {
+          const pText = priceEl.innerText.replace(/[^\d.]/g, '');
+          const pVal = parseFloat(pText);
+          if (!isNaN(pVal) && pVal === 0) isFree = true;
+        }
+        return { title, isFree };
+      }).filter(x => x.title);
 
-      const combinedTitles = domTitles;
-      const rogue = combinedTitles.filter(title => !expectedNames.some(exp => matchHelper(title, exp)));
-      const missing = expectedItems.filter(exp => !combinedTitles.some(title => matchHelper(title, exp.name)));
+      const billedRogue = parsedItems.filter(item => {
+        if (item.isFree) return false; // Free promo items / sachets are allowed
+        return !expectedNames.some(exp => matchHelper(item.title, exp));
+      });
+      const missing = expectedItems.filter(exp => !parsedItems.some(item => matchHelper(item.title, exp.name)));
       const totalCards = cards.length;
-      return { totalCards, rogueCount: rogue.length, missingCount: missing.length, missing: missing.map(m => m.name), foundTitles: combinedTitles };
+      return { totalCards, rogueCount: billedRogue.length, rogueTitles: billedRogue.map(r => r.title), missingCount: missing.length, missing: missing.map(m => m.name), foundTitles: parsedItems.map(p => p.title) };
     }, { expectedNames: expectedItemNames, expectedItems: flattenedItems });
 
     if (finalAudit.rogueCount > 0) {
