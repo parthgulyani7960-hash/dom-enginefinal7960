@@ -1443,42 +1443,56 @@ async function executeMiddlemanOrderOnDominos({
         const isMatched = expectedItemNames.some(name => isItemMatch(firstLine, name));
         if (!isMatched) {
           onProgress(`[MIDDLEMAN-ENGINE] 🗑️ Removing unwanted/rogue item from cart: "${firstLine}"`);
-          const minusBtn = card.locator('.anim-ico-minus, [class*="minus"], .minus, span:has-text("-"), button:has-text("-"), button:has-text("Remove"), span:has-text("Remove")').first();
           let removeAttempts = 0;
           let removed = false;
-          while (await card.isVisible().catch(() => false) && removeAttempts < 2) {
+          while (await card.isVisible().catch(() => false) && removeAttempts < 3) {
             await card.scrollIntoViewIfNeeded().catch(() => {});
+            
+            // Try clicking minus or remove button via DOM evaluation first for 100% reliable trigger
+            await card.evaluate(el => {
+              let m = el.querySelector('.anim-ico-minus, [class*="minus"], .minus');
+              if (!m) {
+                const nodes = Array.from(el.querySelectorAll('button, span, div, i, a'));
+                m = nodes.find(n => (n.innerText || '').trim() === '-' || (n.innerText || '').toLowerCase().includes('remove'));
+              }
+              if (m) {
+                m.click();
+                m.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+              }
+            }).catch(() => {});
+            await sleep(400);
+
+            // Also try Playwright locator if still visible
+            const minusBtn = card.locator('.anim-ico-minus, [class*="minus"], .minus, span:has-text("-"), button:has-text("-"), button:has-text("Remove"), span:has-text("Remove")').first();
             if (await minusBtn.isVisible().catch(() => false)) {
-              await minusBtn.scrollIntoViewIfNeeded().catch(() => {});
               await minusBtn.click({ force: true }).catch(() => {});
               await sleep(400);
+            }
 
-              // Handle remove confirmation modal (can be button, div, span, or a)
-              await page.evaluate(() => {
-                const allBtns = Array.from(document.querySelectorAll('button, div.btn, span.btn, div, span, a'));
-                const btn = allBtns.find(el => {
-                  const t = (el.innerText || '').trim().toUpperCase();
-                  return (t === 'REMOVE' || t === 'YES' || t === 'YES, REMOVE' || t === 'DELETE' || t === 'CONFIRM') && el.offsetHeight > 15;
-                });
-                if (btn) {
-                  btn.click();
-                  btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-                }
+            // Immediately handle Domino's remove confirmation dialog
+            await page.evaluate(() => {
+              const allBtns = Array.from(document.querySelectorAll('button, div.btn, span.btn, div, span, a'));
+              const btn = allBtns.find(el => {
+                const t = (el.innerText || '').trim().toUpperCase();
+                return (t === 'REMOVE' || t === 'YES' || t === 'YES, REMOVE' || t === 'DELETE' || t === 'CONFIRM') && el.offsetHeight > 15;
               });
-
-              const confirmRemoveBtn = page.locator('button:has-text("REMOVE"), button:has-text("YES"), div:has-text("REMOVE"), div:has-text("YES"), span:has-text("REMOVE"), span:has-text("YES"), .remove-btn, [class*="confirm" i]').first();
-              if (await confirmRemoveBtn.isVisible({ timeout: 600 }).catch(() => false)) {
-                await confirmRemoveBtn.click({ force: true }).catch(() => {});
-                await sleep(400);
+              if (btn) {
+                btn.click();
+                btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
               }
-            } else {
-              break;
+            });
+
+            const confirmRemoveBtn = page.locator('button:has-text("REMOVE"), button:has-text("YES"), div:has-text("REMOVE"), div:has-text("YES"), span:has-text("REMOVE"), span:has-text("YES"), .remove-btn, [class*="confirm" i]').first();
+            if (await confirmRemoveBtn.isVisible({ timeout: 600 }).catch(() => false)) {
+              await confirmRemoveBtn.click({ force: true }).catch(() => {});
+              await sleep(400);
             }
             removeAttempts++;
             if (!(await card.isVisible().catch(() => false))) {
               removed = true;
               break;
             }
+            await sleep(400);
           }
           if (!removed) {
             failedPruneTitles.add(firstLine);
