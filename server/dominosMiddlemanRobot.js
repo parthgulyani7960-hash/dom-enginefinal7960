@@ -2206,6 +2206,18 @@ async function executeMiddlemanOrderOnDominos({
           await sleep(3000);
         }
       }
+    } else if (voucherApplied && dueAmountToRider <= 0) {
+      onProgress(`[MIDDLEMAN-ENGINE] 🎟️ Full order settled via Admin Gift Card (₹0 due)! Submitting final order placement...`);
+      await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
+      await sleep(1000);
+      const placeOrderBtn = page.locator('button:has-text("Place Order"), div.btn:has-text("Place Order"), div.btn.secondary.force-font-14.medium.domino-red, .footer-main .btn, .footer-main button, button.btn-place-order-color').last();
+      if (await placeOrderBtn.isVisible({ timeout: 4000 }).catch(() => false)) {
+        const btnTxt = await placeOrderBtn.innerText().catch(() => 'Place Order');
+        onProgress(`[MIDDLEMAN-ENGINE] 🚀 Confirming order placement on Domino's India ("${btnTxt.replace(/\n+/g, ' ').trim()}")...`);
+        await placeOrderBtn.scrollIntoViewIfNeeded().catch(() => {});
+        await placeOrderBtn.click({ force: true }).catch(() => {});
+        await sleep(2500);
+      }
     } else {
       // Online / UPI QR flow
       onProgress(`[MIDDLEMAN-ENGINE] 📱 Selecting UPI payment method on Domino's...`);

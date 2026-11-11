@@ -4277,6 +4277,33 @@ function updateTrackingUI(order) {
           </div>
         </div>
       `;
+    } else if (r.errorType === 'COD_UNAVAILABLE' || (r.error && (r.error.includes('payment option is not allowed') || r.error.includes('codDisabled') || r.error.includes('COD')))) {
+      noticeBanner.style.display = 'block';
+      noticeBanner.innerHTML = `
+        <div style="background: #eff6ff; border: 2px solid #3b82f6; border-radius: 12px; padding: 14px 16px; text-align: left; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15); margin-bottom: 8px;">
+          <div style="font-weight: 800; color: #1e40af; font-size: 13.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 18px;">🚫</span> <span>Cash on Delivery Not Allowed at Domino's Outlet</span>
+          </div>
+          <div style="font-size: 12px; color: #1e3a8a; line-height: 1.5; margin-bottom: 12px;">
+            Domino's Store (${r.storeName || 'Local Kitchen'}) has temporarily restricted Cash on Delivery for this delivery address. Please pay via UPI or online to complete your order.
+          </div>
+          <button type="button" onclick="closeModal('trackingModal'); openPaymentModal(currentOrder);" style="width: 100%; background: #2563eb; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);">
+            <span>⚡</span> <span>Pay via UPI &amp; Place Order &rarr;</span>
+          </button>
+        </div>
+      `;
+    } else if (status === 'STORE_OFFLINE' || (r.error && r.error.toLowerCase().includes('store is offline'))) {
+      noticeBanner.style.display = 'block';
+      noticeBanner.innerHTML = `
+        <div style="background: #fff7ed; border: 2px solid #fdba74; border-radius: 12px; padding: 14px 16px; text-align: left; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.15); margin-bottom: 8px;">
+          <div style="font-weight: 800; color: #c2410c; font-size: 13.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 18px;">🏪</span> <span>Domino's Kitchen Currently Offline</span>
+          </div>
+          <div style="font-size: 12px; color: #9a3412; line-height: 1.5;">
+            ${r.storeName || 'Domino\'s Outlet'} is currently offline or preparing to open (online delivery begins at 11:00 AM IST). Your order is securely preserved.
+          </div>
+        </div>
+      `;
     } else {
       noticeBanner.style.display = 'none';
       noticeBanner.innerHTML = '';

@@ -424,6 +424,14 @@ class DominosAutomationRobot {
             failureMsg.includes('missing from Domino\'s cart') ||
             failureMsg.includes('unavailable');
 
+          const isCodDisabled = robotResult?.codDisabled ||
+            failureMsg.toLowerCase().includes('payment option is not allowed') ||
+            failureMsg.toLowerCase().includes('cod');
+          if (isCodDisabled) {
+            order.robot.errorType = 'COD_UNAVAILABLE';
+            order.robot.customerNotice = "Domino's kitchen has temporarily disabled Cash on Delivery for this location. Please pay via UPI to place this order.";
+          }
+
           addLog(order, `❌ Domino's Placement Notice: ${failureMsg}`);
           order.robot.status = isStoreTiming ? 'STORE_OFFLINE' : (isItemUnavailable ? 'WAITING_ADMIN_DECISION' : 'ERROR');
           order.robot.error = failureMsg;
