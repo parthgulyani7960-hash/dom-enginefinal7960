@@ -4783,6 +4783,30 @@ function updateTrackingUI(order) {
   setStep('step-dominos', ['BAKING', 'PACKED'].includes(status) ? 'active' : (['DISPATCHED', 'DELIVERED'].includes(status) ? 'done' : ''));
   setStep('step-dispatch', status === 'DISPATCHED' ? 'active' : (status === 'DELIVERED' ? 'done' : ''));
 
+  // Dynamic tracker pipeline step descriptions (real-time store kitchen & session telemetry)
+  const sessionDescEl = document.getElementById('sessionDesc');
+  if (sessionDescEl) {
+    if (resolvedStoreName) {
+      const storeCodeStr = r.storeId ? ` (Store #${r.storeId})` : '';
+      sessionDescEl.innerHTML = `Delivering Kitchen: <strong>${escapeHtml(resolvedStoreName)}${storeCodeStr}</strong>`;
+    } else if (['SESSION_ASSIGNING', 'QUEUED_FOR_ROBOT'].includes(status)) {
+      sessionDescEl.innerText = 'Assigning autonomous Domino\'s session & resolving kitchen...';
+    } else {
+      sessionDescEl.innerText = 'Resolving nearest Domino\'s kitchen...';
+    }
+  }
+
+  const cartDescEl = document.getElementById('cartDesc');
+  if (cartDescEl) {
+    if (['ORDER_PLACED', 'BAKING', 'PACKED', 'DISPATCHED', 'DELIVERED'].includes(status)) {
+      cartDescEl.innerHTML = 'Cart verified &amp; order accepted by Domino\'s kitchen.';
+    } else if (['STORE_RESOLVING', 'BUILDING_CART', 'APPLYING_COUPON', 'STORE_CONFIRMATION'].includes(status)) {
+      cartDescEl.innerText = 'Verifying items, local kitchen inventory & delivery route...';
+    } else if (isErr) {
+      cartDescEl.innerText = r.error || 'Cart verification notice: ordered items require review.';
+    }
+  }
+
   // 6. Proof Screenshot Card (Order Confirmation & Cart Bill)
   const proofCard = document.getElementById('proofPhotoCard');
   const proofUrl = r.proofScreenshotDataUri || r.cartBillScreenshotDataUri || r.proofScreenshotUrl || r.cartBillScreenshotUrl;
