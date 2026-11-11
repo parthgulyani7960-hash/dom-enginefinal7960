@@ -2550,9 +2550,15 @@ function renderCartDrawer(triggerRemoteVerify = true) {
     }
     if (isItemOutOfStock) hasOutOfStockItem = true;
 
-    const customInfo = item.isCustomizedPizza 
+    // Display explicit size & crust for core pizzas even if default Regular/New Hand Tossed
+    const displaySize = item.customSize || item.size || (item.category?.includes('Pizza') ? 'Regular' : '');
+    const displayCrust = item.customCrust || item.crust || (item.category?.includes('Pizza') && !item.category?.includes('Mania') ? 'New Hand Tossed' : '');
+
+    const customInfo = (item.isCustomizedPizza || displaySize)
       ? `<div style="font-size: 11px; color: #0284c7; font-weight: 600; margin-top: 2px;">
-           ${item.customSize} • ${item.customCrust} ${item.customToppings?.length ? `• +${item.customToppings.join(', ')}` : ''}
+           <span style="background: #e0f2fe; color: #0369a1; padding: 1px 6px; border-radius: 4px; font-weight: 700; margin-right: 4px;">${displaySize}</span>
+           ${displayCrust ? `<span>• ${displayCrust}</span>` : ''}
+           ${item.customToppings?.length ? `• +${item.customToppings.join(', ')}` : ''}
          </div>`
       : '';
 
