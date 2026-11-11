@@ -48,6 +48,7 @@ async function handleDominosCustomizationSheet(page, item, onProgress) {
         const attrMatches = Array.from(modal.querySelectorAll(`[data-quid*="${normTarget}" i], [data-testid*="${normTarget}" i], [data-label*="${normTarget}" i]`));
         if (attrMatches.length > 0) {
           attrMatches[0].click();
+          attrMatches[0].dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
           return true;
         }
 
@@ -58,13 +59,14 @@ async function handleDominosCustomizationSheet(page, item, onProgress) {
           if (txt === normTarget || txt.startsWith(normTarget + '\n') || txt.startsWith(normTarget + ' ') || txt.includes(normTarget)) {
             if (el.children.length <= 2) {
               el.click();
+              el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
               return true;
             }
           }
         }
         return false;
       }, sizeTarget);
-      await sleep(600);
+      await sleep(200);
     }
 
     // 2. Select Pizza Crust (e.g. Cheese Burst / Fresh Pan Pizza / New Hand Tossed / Wheat Thin Crust)
@@ -80,12 +82,13 @@ async function handleDominosCustomizationSheet(page, item, onProgress) {
           if (txt.includes(normTarget)) {
             const clickable = el.querySelector('input[type="radio"]') || el.querySelector('button') || el;
             clickable.click();
+            clickable.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
             return true;
           }
         }
         return false;
       }, crustTarget);
-      await sleep(600);
+      await sleep(200);
     }
 
     // 3. Confirm and Add to Cart (supports button, div.btn, and DOM evaluation)
@@ -112,7 +115,7 @@ async function handleDominosCustomizationSheet(page, item, onProgress) {
     let confirmed = false;
     for (const cSel of confirmSelectors) {
       const btn = page.locator(cSel).first();
-      if (await btn.isVisible({ timeout: 800 }).catch(() => false)) {
+      if (await btn.isVisible({ timeout: 500 }).catch(() => false)) {
         await btn.click({ force: true }).catch(() => {});
         confirmed = true;
         break;
@@ -127,13 +130,16 @@ async function handleDominosCustomizationSheet(page, item, onProgress) {
           const t = (b.innerText || '').toLowerCase().replace(/\s+/g, ' ');
           return t.includes('add to cart') || t.includes('i choose') || t.includes('continue') || t.includes('apply');
         });
-        if (target) target.click();
+        if (target) {
+          target.click();
+          target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
       });
     }
 
     // Wait for customization modal to disappear after confirmation
-    await page.waitForSelector('div[class*="customiz"], div[class*="bottom-sheet"], .c-modal', { state: 'hidden', timeout: 3500 }).catch(() => {});
-    await sleep(800);
+    await page.waitForSelector('div[class*="customiz"], div[class*="bottom-sheet"], .c-modal', { state: 'hidden', timeout: 1500 }).catch(() => {});
+    await sleep(200);
   } catch (cErr) {
     onProgress(`[MIDDLEMAN-ENGINE] Customization notice: ${cErr.message}`);
   }
@@ -1083,19 +1089,19 @@ async function executeMiddlemanOrderOnDominos({
               
               if (await addBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
                 await addBtn.click({ force: true });
-                await sleep(1000);
+                await sleep(350);
 
                 // Handle Domino's size/crust customization sheet FIRST before clicking add/dismiss
                 await handleDominosCustomizationSheet(page, item, onProgress);
 
                 // If any residual product drawer or bottom sheet is open, confirm it
                 const drawerModal = page.locator('.customise-bottom-sheet, .customisation-modal, div[class*="customiz" i], div[class*="bottom-sheet" i]').first();
-                if (await drawerModal.isVisible({ timeout: 1000 }).catch(() => false)) {
+                if (await drawerModal.isVisible({ timeout: 800 }).catch(() => false)) {
                   const drawerBtn = drawerModal.locator('button.btn.bold.w100, button:has-text("| Add"), button:has-text("ADD TO CART"), button:has-text("Add to Cart"), button:has-text("Add"), button:has-text("ADD"), button:has-text("I CHOOSE"), button:has-text("Continue"), [class*="add-to-cart" i]').first();
-                  if (await drawerBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+                  if (await drawerBtn.isVisible({ timeout: 800 }).catch(() => false)) {
                     onProgress(`[MIDDLEMAN-ENGINE] 📝 Confirming product drawer Add button...`);
                     await drawerBtn.click({ force: true }).catch(() => {});
-                    await sleep(1000);
+                    await sleep(350);
                   }
                 }
 
