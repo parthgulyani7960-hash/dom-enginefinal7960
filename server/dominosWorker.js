@@ -282,22 +282,26 @@ class DominosAutomationRobot {
       let realRef = null;
 
       try {
-        // Check for assigned or available Gift Card / Voucher for settlement
+        // Respect customer's chosen payment method: If customer chose COD / CASH, do NOT force Gift Voucher!
+        const isCustomerCod = order.payment?.method === 'COD' || order.payment?.method === 'CASH';
         const allVouchers = typeof db.getVouchers === 'function' ? db.getVouchers() : [];
         let availableVoucher = null;
-        if (order.assignedVoucherId) {
-          availableVoucher = allVouchers.find(v => v.id === order.assignedVoucherId && v.status !== 'USED');
-        }
-        if (!availableVoucher) {
-          availableVoucher = allVouchers.find(v => v.status === 'UNUSED' && Number(v.balance || 0) > 0);
-        }
-        if (availableVoucher) {
-          if (!order.robot) order.robot = {};
-          order.robot.assignedVoucherId = availableVoucher.id;
-          order.robot.voucherCode = availableVoucher.code;
-          order.robot.assignedVoucherMasked = availableVoucher.code.slice(0, 4) + ' **** **** ' + availableVoucher.code.slice(-4);
-          order.robot.voucherPin = availableVoucher.pin;
-          order.robot.voucherBalance = availableVoucher.balance;
+
+        if (!isCustomerCod) {
+          if (order.assignedVoucherId) {
+            availableVoucher = allVouchers.find(v => v.id === order.assignedVoucherId && v.status !== 'USED');
+          }
+          if (!availableVoucher) {
+            availableVoucher = allVouchers.find(v => v.status === 'UNUSED' && Number(v.balance || 0) > 0);
+          }
+          if (availableVoucher) {
+            if (!order.robot) order.robot = {};
+            order.robot.assignedVoucherId = availableVoucher.id;
+            order.robot.voucherCode = availableVoucher.code;
+            order.robot.assignedVoucherMasked = availableVoucher.code.slice(0, 4) + ' **** **** ' + availableVoucher.code.slice(-4);
+            order.robot.voucherPin = availableVoucher.pin;
+            order.robot.voucherBalance = availableVoucher.balance;
+          }
         }
 
         const robotResult = await Promise.race([
@@ -305,7 +309,7 @@ class DominosAutomationRobot {
             customerOrder: order,
             accountSession: { ...account, couponCode: selectedPromo },
             voucher: availableVoucher || null,
-            paymentMethod: availableVoucher ? 'VOUCHER' : 'COD',
+            paymentMethod: isCustomerCod ? 'COD' : (availableVoucher ? 'VOUCHER' : 'COD'),
             headless: true,
             onProgress: (msg) => {
               if (msg.includes('Adding') || msg.includes('Menu V1') || msg.includes('Opening Domino')) {
