@@ -650,186 +650,240 @@
           </div>
         </div>
 
-        <!-- Cart Items List Header with Clear Cart -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.5px;">Selected Cart Items</span>
-          <button type="button" onclick="clearEntireCart()" style="background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-            <span>🗑️</span> <span>Clear Cart</span>
+        <!-- 3-STEP CHECKOUT BREADCRUMB PROGRESS BAR -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; background: #f1f5f9; border-radius: 8px; padding: 6px 12px; font-size: 11px; font-weight: 800; border: 1px solid #e2e8f0;">
+          <span id="cartBreadcrumbStep1" style="color: #0066a3; cursor: pointer;" onclick="goToCartStep(1)">1. Items &amp; Bill</span>
+          <span style="color: #94a3b8;">&rarr;</span>
+          <span id="cartBreadcrumbStep2" style="color: #64748b; cursor: pointer;" onclick="goToCartStep(2)">2. Delivery Address</span>
+          <span style="color: #94a3b8;">&rarr;</span>
+          <span id="cartBreadcrumbStep3" style="color: #64748b; cursor: pointer;" onclick="goToCartStep(3)">3. Payment</span>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- FLOW STEP 1: ITEMS & BILL CONFIRMATION -->
+        <!-- ========================================================================= -->
+        <div id="cartFlowStep1">
+          <!-- Cart Items List Header with Clear Cart -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.5px;">Selected Cart Items</span>
+            <button type="button" onclick="clearEntireCart()" style="background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              <span>🗑️</span> <span>Clear Cart</span>
+            </button>
+          </div>
+
+          <!-- Cart Items List -->
+          <div id="cartItemsList" style="margin-bottom: 16px;">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Live Kitchen Price & Stock Synchronization Badge -->
+          <div id="cartRateSyncNotice" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span>⚡</span>
+              <span id="cartRateSyncLabel">Real-time store rates verified with local Domino's kitchen</span>
+            </div>
+            <span id="cartRateSyncStatusBadge" style="background: #22c55e; color: white; padding: 1px 6px; border-radius: 4px; font-size: 10px;">LIVE</span>
+          </div>
+
+          <!-- Bill Summary (Domino's Store Bill Breakdown) -->
+          <div style="background: var(--gray-50); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+              <span>Items Subtotal</span>
+              <span id="billSubtotal">₹0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+              <span>Domino's GST (5% CGST + SGST)</span>
+              <span id="billGstPreview">₹0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+              <span>Standard Delivery Fee</span>
+              <span id="billDeliveryFeePreview">₹35</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
+              <span>Restaurant Packaging</span>
+              <span id="billPackagingPreview" style="color: #16a34a; font-weight: 700;">FREE</span>
+            </div>
+            <div id="billDiscountRow" style="display: none; justify-content: space-between; margin-bottom: 6px; color: #16a34a; font-weight: 700;">
+              <span id="billDiscountLabel">Special Discount</span>
+              <span id="billDiscountAmount">-₹0</span>
+            </div>
+            <div style="border-top: 1px dashed var(--gray-300); margin: 6px 0; padding-top: 6px;"></div>
+            <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 15px; color: var(--dark);">
+              <span>Payable Total</span>
+              <span id="billTotal" style="color: #16a34a;">₹0</span>
+            </div>
+          </div>
+
+          <!-- Step 1 Footer Action -->
+          <button type="button" class="btn-primary" onclick="goToCartStep(2)" style="min-height: 48px; font-size: 14px; font-weight: 800; border-radius: 10px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: #0066a3; box-shadow: 0 4px 12px rgba(0, 102, 163, 0.3);">
+            <span>Proceed to Delivery Address &rarr;</span>
           </button>
         </div>
 
-        <!-- Cart Items List -->
-        <div id="cartItemsList" style="margin-bottom: 16px;">
-          <!-- Rendered by JS -->
-        </div>
-
-        <!-- Live Kitchen Price & Stock Synchronization Badge -->
-        <div id="cartRateSyncNotice" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span>⚡</span>
-            <span id="cartRateSyncLabel">Real-time store rates verified with local Domino's kitchen</span>
-          </div>
-          <span id="cartRateSyncStatusBadge" style="background: #22c55e; color: white; padding: 1px 6px; border-radius: 4px; font-size: 10px;">LIVE</span>
-        </div>
-
-        <!-- Bill Summary (Domino's Store Bill Breakdown) -->
-        <div style="background: var(--gray-50); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
-            <span>Items Subtotal</span>
-            <span id="billSubtotal">₹0</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
-            <span>Domino's GST (5% CGST + SGST)</span>
-            <span id="billGstPreview">₹0</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
-            <span>Standard Delivery Fee</span>
-            <span id="billDeliveryFeePreview">₹35</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--gray-700);">
-            <span>Restaurant Packaging</span>
-            <span id="billPackagingPreview" style="color: #16a34a; font-weight: 700;">FREE</span>
-          </div>
-          <div id="billDiscountRow" style="display: none; justify-content: space-between; margin-bottom: 6px; color: #16a34a; font-weight: 700;">
-            <span id="billDiscountLabel">Special Discount</span>
-            <span id="billDiscountAmount">-₹0</span>
-          </div>
-          <div style="border-top: 1px dashed var(--gray-300); margin: 6px 0; padding-top: 6px;"></div>
-          <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 15px; color: var(--dark);">
-            <span>Payable Total</span>
-            <span id="billTotal" style="color: #16a34a;">₹0</span>
-          </div>
-        </div>
-
-        <!-- Step 1: Confirmed Delivery Address & Receiver Details -->
-        <div style="background: var(--gray-50); border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px; font-size: 12px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <strong style="color: var(--dark); font-size: 13px;">📍 Delivery Address:</strong>
-              <span id="cartAddressConfirmedBadge" style="background: #22c55e; color: white; font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 4px;">CONFIRMED</span>
-            </div>
-            <div style="display: flex; gap: 6px;">
-              <button type="button" id="btnCartQuickGps" onclick="cartDetectCurrentLocation()" style="background: #e0f2fe; border: 1px solid #7dd3fc; color: #0369a1; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;" title="Deliver to device GPS location">
-                📍 My GPS
-              </button>
-              <button type="button" id="btnToggleCartInlineAddr" onclick="toggleCartInlineAddAddress()" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;">
-                + Add / Change
-              </button>
-            </div>
-          </div>
-
-          <!-- Quick Address Dropdown Selector if multiple addresses exist -->
-          <div style="margin-bottom: 8px;" id="cartAddressSelectWrapper">
-            <select id="cartAddressSelect" class="form-select" onchange="onCartAddressDropdownChange(this.value)" style="font-size: 12px; font-weight: 700; padding: 6px 10px;">
-              <!-- Populated dynamically -->
-            </select>
-          </div>
-
-          <!-- Quick House / Flat input for Current Location delivery -->
-          <div id="cartQuickFlatWrapper" style="margin-bottom: 8px; display: none;">
-            <input type="text" id="cartQuickFlatInput" class="form-input" placeholder="House / Flat / Floor / Room No. (e.g. Flat 402)" style="font-size: 12px; padding: 6px 10px;" oninput="onQuickFlatInputChange(this.value)">
-          </div>
-
-          <div id="cartAddressPreview" style="color: #475569; line-height: 1.4; padding: 4px 0;">
-            <div style="color: #64748b; font-style: italic;">Loading delivery address...</div>
-          </div>
-          <div style="margin-top: 4px; font-size: 11px; color: #166534; font-weight: 700;" id="cartCoordinatesPreview">
-            📡 Locked GPS: Resolving...
-          </div>
-
-          <!-- Dedicated Receiver Contact Details for Domino's Delivery Rider -->
-          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <strong style="color: #0f172a; font-size: 12px;">📞 Rider Delivery Contact:</strong>
-              <span style="font-size: 11px; color: #64748b;">(Domino's Rider will call this receiver)</span>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;">
-              <div>
-                <label style="font-size: 10px; font-weight: 700; color: #475569; display: block; margin-bottom: 2px;">Receiver Name *</label>
-                <input type="text" id="cartReceiverNameInput" class="form-input" placeholder="Receiver Name" style="font-size: 12px; padding: 6px 10px;" oninput="onReceiverDetailsChange()">
-              </div>
-              <div>
-                <label style="font-size: 10px; font-weight: 700; color: #475569; display: block; margin-bottom: 2px;">Receiver Mobile *</label>
-                <input type="tel" id="cartReceiverPhoneInput" class="form-input" placeholder="10-digit Phone" style="font-size: 12px; padding: 6px 10px;" oninput="onReceiverDetailsChange()">
-              </div>
-            </div>
-            <div id="receiverHistoryPills" style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 11px; margin-top: 4px;">
-              <!-- Populated dynamically with recent receiver numbers -->
-            </div>
-          </div>
-
-          <!-- Inline Quick Add Address Accordion (Collapsible directly inside cart) -->
-          <div id="cartInlineAddAddrForm" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; margin-top: 10px;">
+        <!-- ========================================================================= -->
+        <!-- FLOW STEP 2: DELIVERY ADDRESS & RIDER CONTACT -->
+        <!-- ========================================================================= -->
+        <div id="cartFlowStep2" style="display: none;">
+          <!-- Confirmed Delivery Address & Receiver Details -->
+          <div style="background: var(--gray-50); border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px; font-size: 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="font-size: 12px; color: #0f172a;">Quick-Add Delivery Address:</strong>
-              <button type="button" onclick="inlineDetectGpsAddress()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; cursor: pointer;">
-                📡 Auto-Detect GPS
-              </button>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong style="color: var(--dark); font-size: 13px;">📍 Delivery Address:</strong>
+                <span id="cartAddressConfirmedBadge" style="background: #22c55e; color: white; font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 4px;">CONFIRMED</span>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" id="btnCartQuickGps" onclick="cartDetectCurrentLocation()" style="background: #e0f2fe; border: 1px solid #7dd3fc; color: #0369a1; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;" title="Deliver to device GPS location">
+                  📍 My GPS
+                </button>
+                <button type="button" id="btnToggleCartInlineAddr" onclick="toggleCartInlineAddAddress()" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;">
+                  + Add / Change
+                </button>
+              </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="cartInlineReceiverName" class="form-input" placeholder="Receiver Name *" style="font-size: 12px; padding: 6px 10px;">
-              <input type="tel" id="cartInlineReceiverPhone" class="form-input" placeholder="10-digit Mobile *" maxlength="10" style="font-size: 12px; padding: 6px 10px; font-family: monospace;">
+
+            <!-- Quick Address Dropdown Selector if multiple addresses exist -->
+            <div style="margin-bottom: 8px;" id="cartAddressSelectWrapper">
+              <select id="cartAddressSelect" class="form-select" onchange="onCartAddressDropdownChange(this.value)" style="font-size: 12px; font-weight: 700; padding: 6px 10px;">
+                <!-- Populated dynamically -->
+              </select>
             </div>
-            <div class="form-group" style="margin-bottom: 8px;">
-              <input type="text" id="cartInlineFlat" class="form-input" placeholder="House / Flat / Floor / Room No. *" style="font-size: 12px; padding: 6px 10px;">
+
+            <!-- Quick House / Flat input for Current Location delivery -->
+            <div id="cartQuickFlatWrapper" style="margin-bottom: 8px; display: none;">
+              <input type="text" id="cartQuickFlatInput" class="form-input" placeholder="House / Flat / Floor / Room No. (e.g. Flat 402)" style="font-size: 12px; padding: 6px 10px;" oninput="onQuickFlatInputChange(this.value)">
             </div>
-            <div class="form-group" style="margin-bottom: 8px;">
-              <input type="text" id="cartInlineStreet" class="form-input" placeholder="Complete Street / Building / Society *" style="font-size: 12px; padding: 6px 10px;">
+
+            <div id="cartAddressPreview" style="color: #475569; line-height: 1.4; padding: 4px 0;">
+              <div style="color: #64748b; font-style: italic;">Loading delivery address...</div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="cartInlineCity" class="form-input" placeholder="City" style="font-size: 12px; padding: 6px 10px;">
-              <input type="text" id="cartInlinePincode" class="form-input" placeholder="6-digit Pincode" style="font-size: 12px; padding: 6px 10px;">
+            <div style="margin-top: 4px; font-size: 11px; color: #166534; font-weight: 700;" id="cartCoordinatesPreview">
+              📡 Locked GPS: Resolving...
             </div>
-            <div style="display: flex; gap: 6px;">
-              <button type="button" class="btn-primary" style="font-size: 11px; padding: 6px 12px; flex: 1;" onclick="submitCartInlineAddress()">💾 Save &amp; Select</button>
-              <button type="button" class="btn-secondary" style="font-size: 11px; padding: 6px 10px;" onclick="toggleCartInlineAddAddress(false)">Cancel</button>
+
+            <!-- Dedicated Receiver Contact Details for Domino's Delivery Rider -->
+            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <strong style="color: #0f172a; font-size: 12px;">📞 Rider Delivery Contact:</strong>
+                <span style="font-size: 11px; color: #64748b;">(Domino's Rider will call this receiver)</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;">
+                <div>
+                  <label style="font-size: 10px; font-weight: 700; color: #475569; display: block; margin-bottom: 2px;">Receiver Name *</label>
+                  <input type="text" id="cartReceiverNameInput" class="form-input" placeholder="Receiver Name" style="font-size: 12px; padding: 6px 10px;" oninput="onReceiverDetailsChange()">
+                </div>
+                <div>
+                  <label style="font-size: 10px; font-weight: 700; color: #475569; display: block; margin-bottom: 2px;">Receiver Mobile *</label>
+                  <input type="tel" id="cartReceiverPhoneInput" class="form-input" placeholder="10-digit Phone" style="font-size: 12px; padding: 6px 10px;" oninput="onReceiverDetailsChange()">
+                </div>
+              </div>
+              <div id="receiverHistoryPills" style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 11px; margin-top: 4px;">
+                <!-- Populated dynamically with recent receiver numbers -->
+              </div>
             </div>
+
+            <!-- Inline Quick Add Address Accordion (Collapsible directly inside cart) -->
+            <div id="cartInlineAddAddrForm" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; margin-top: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <strong style="font-size: 12px; color: #0f172a;">Quick-Add Delivery Address:</strong>
+                <button type="button" onclick="inlineDetectGpsAddress()" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; cursor: pointer;">
+                  📡 Auto-Detect GPS
+                </button>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <input type="text" id="cartInlineReceiverName" class="form-input" placeholder="Receiver Name *" style="font-size: 12px; padding: 6px 10px;">
+                <input type="tel" id="cartInlineReceiverPhone" class="form-input" placeholder="10-digit Mobile *" maxlength="10" style="font-size: 12px; padding: 6px 10px; font-family: monospace;">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <input type="text" id="cartInlineFlat" class="form-input" placeholder="House / Flat / Floor / Room No. *" style="font-size: 12px; padding: 6px 10px;">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <input type="text" id="cartInlineStreet" class="form-input" placeholder="Complete Street / Building / Society *" style="font-size: 12px; padding: 6px 10px;">
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <input type="text" id="cartInlineCity" class="form-input" placeholder="City" style="font-size: 12px; padding: 6px 10px;">
+                <input type="text" id="cartInlinePincode" class="form-input" placeholder="6-digit Pincode" style="font-size: 12px; padding: 6px 10px;">
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="btn-primary" style="font-size: 11px; padding: 6px 12px; flex: 1;" onclick="submitCartInlineAddress()">💾 Save &amp; Select</button>
+                <button type="button" class="btn-secondary" style="font-size: 11px; padding: 6px 10px;" onclick="toggleCartInlineAddAddress(false)">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Store Serviceability Verification Feedback Box -->
+          <div id="cartServiceabilityCard" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong id="cartServiceabilityHeader" style="color: #1e40af; font-size: 13px;">
+                🟢 Domino's Kitchen Verified &amp; Delivering:
+              </strong>
+              <a id="cartKitchenGmapsLink" href="#" target="_blank" class="kitchen-gmaps-link" style="font-size: 11px;">
+                🗺️ Google Maps
+              </a>
+            </div>
+            <div id="cartStoreInfoText" style="color: #334155; font-weight: 600;">Checking kitchen serviceability...</div>
+            <div id="cartUnserviceableWarning" style="display: none; color: #b91c1c; font-weight: 700; margin-top: 6px; font-size: 11px;">
+              <!-- Rendered if unserviceable -->
+            </div>
+          </div>
+
+          <!-- Step 2 Navigation Actions -->
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn-secondary" onclick="goToCartStep(1)" style="flex: 1; min-height: 46px; font-size: 13px; font-weight: 700; border-radius: 8px;">
+              &larr; Back to Items
+            </button>
+            <button type="button" class="btn-primary" onclick="goToCartStep(3)" style="flex: 2; min-height: 46px; font-size: 14px; font-weight: 800; border-radius: 8px; background: #0066a3;">
+              Confirm Address &amp; Pay &rarr;
+            </button>
           </div>
         </div>
 
-        <!-- Step 2: Store Serviceability Verification Feedback Box -->
-        <div id="cartServiceabilityCard" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 12px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <strong id="cartServiceabilityHeader" style="color: #1e40af; font-size: 13px;">
-              🟢 Domino's Kitchen Verified &amp; Delivering:
-            </strong>
-            <a id="cartKitchenGmapsLink" href="#" target="_blank" class="kitchen-gmaps-link" style="font-size: 11px;">
-              🗺️ Google Maps
-            </a>
+        <!-- ========================================================================= -->
+        <!-- FLOW STEP 3: PAYMENT METHOD & SUBMIT -->
+        <!-- ========================================================================= -->
+        <div id="cartFlowStep3" style="display: none;">
+          <!-- Order Destination Summary Banner -->
+          <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 10px; font-weight: 800; color: #166534; text-transform: uppercase;">Delivery To:</div>
+              <div id="cartStep3AddressSummary" style="font-size: 12px; font-weight: 700; color: #15803d; margin-top: 2px;">Confirmed Address</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 10px; font-weight: 800; color: #166534; text-transform: uppercase;">Total Due:</div>
+              <div id="cartStep3TotalSummary" style="font-size: 16px; font-weight: 900; color: #15803d;">₹0</div>
+            </div>
           </div>
-          <div id="cartStoreInfoText" style="color: #334155; font-weight: 600;">Checking kitchen serviceability...</div>
-          <div id="cartUnserviceableWarning" style="display: none; color: #b91c1c; font-weight: 700; margin-top: 6px; font-size: 11px;">
-            <!-- Rendered if unserviceable -->
+
+          <!-- Payment Method Selection (Cash on Delivery vs Instant UPI) -->
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
+            <div style="font-size: 12px; font-weight: 800; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+              <span>💳 SELECT PAYMENT METHOD:</span>
+              <span style="font-size: 10px; color: #0284c7; font-weight: 700;">OFFICIAL DOMINO'S SETTLEMENT</span>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <label id="lblPayCOD" style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 8px; background: #eff6ff; border: 2px solid #0055a5; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 700; color: #0055a5;">
+                <input type="radio" name="cartPaymentMethod" id="payMethodCOD" value="COD" checked onchange="onPaymentMethodChange('COD')">
+                <span id="txtPayCOD">💵 Cash on Delivery (COD)</span>
+              </label>
+              <label id="lblPayUPI" style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1.5px solid #cbd5e1; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 700; color: #475569;">
+                <input type="radio" name="cartPaymentMethod" id="payMethodUPI" value="UPI" onchange="onPaymentMethodChange('UPI')">
+                <span id="txtPayUPI">📱 Instant UPI QR</span>
+              </label>
+            </div>
+            <div id="paymentMethodNote" style="font-size: 11px; color: #059669; font-weight: 600; margin-top: 8px; line-height: 1.4;">
+              ✓ Order will be placed directly with your local Domino's kitchen as <strong>Cash on Delivery</strong>! Pay cash to the Domino's rider upon doorstep arrival.
+            </div>
+          </div>
+
+          <!-- Step 3 Navigation Actions -->
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn-secondary" onclick="goToCartStep(2)" style="flex: 1; min-height: 48px; font-size: 13px; font-weight: 700; border-radius: 8px;">
+              &larr; Back to Address
+            </button>
+            <button class="btn-primary" id="cartProceedBtn" onclick="handleCartOrderSubmit()" style="flex: 2; min-height: 48px; font-size: 14px; font-weight: 800; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(0, 102, 163, 0.35);">
+              <span>💵</span> <span id="cartProceedBtnText">Place Cash on Delivery Order &rarr;</span>
+            </button>
           </div>
         </div>
-
-        <!-- Step 3: Payment Method Selection (Cash on Delivery vs Instant UPI) -->
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
-          <div style="font-size: 12px; font-weight: 800; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-            <span>💳 SELECT PAYMENT METHOD:</span>
-            <span style="font-size: 10px; color: #0284c7; font-weight: 700;">OFFICIAL DOMINO'S SETTLEMENT</span>
-          </div>
-          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <label id="lblPayCOD" style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 8px; background: #eff6ff; border: 2px solid #0055a5; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 700; color: #0055a5;">
-              <input type="radio" name="cartPaymentMethod" value="COD" checked onchange="onPaymentMethodChange('COD')">
-              <span>💵 Cash on Delivery (COD)</span>
-            </label>
-            <label id="lblPayUPI" style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1.5px solid #cbd5e1; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 700; color: #475569;">
-              <input type="radio" name="cartPaymentMethod" value="UPI" onchange="onPaymentMethodChange('UPI')">
-              <span>📱 Instant UPI QR</span>
-            </label>
-          </div>
-          <div id="paymentMethodNote" style="font-size: 11px; color: #059669; font-weight: 600; margin-top: 8px; line-height: 1.4;">
-            ✓ Order will be placed directly with your local Domino's kitchen as <strong>Cash on Delivery</strong>! Pay cash to the Domino's rider upon doorstep arrival.
-          </div>
-        </div>
-      </div>
-
-      <!-- Pinned & Protected Sticky Cart Footer -->
-      <div class="modal-footer" id="cartModalFooter">
-        <button class="btn-primary" id="cartProceedBtn" onclick="handleCartOrderSubmit()" style="min-height: 50px; font-size: 15px; font-weight: 800; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(0, 102, 163, 0.35);">
-          <span>💵</span> <span>Place Cash on Delivery Order &rarr;</span>
-        </button>
       </div>
     </div>
   </div>
@@ -993,41 +1047,37 @@
         </div>
 
         <!-- Rendered Dynamic UPI QR Code -->
-        <div class="qr-container" id="qrCanvasContainer">
+        <div class="qr-container" id="qrCanvasContainer" style="margin: 10px auto; display: flex; justify-content: center; align-items: center; min-height: 180px;">
           <!-- Dynamic SVG QR is injected here -->
         </div>
 
-        <button type="button" class="btn-secondary" onclick="downloadOrderPaymentQr()" style="margin: 8px 0 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 800; font-size: 13px; padding: 10px; border: 1.5px solid #0066a3; color: #0066a3; background: #f0f9ff; border-radius: 8px; cursor: pointer;">
-          <span>📥</span> <span>Download QR Code (For PhonePe / GPay Scanner)</span>
-        </button>
-
-        <a id="orderUpiDeepLink" href="#" target="_blank" class="btn-primary" style="display: none; width: 100%; padding: 11px; font-size: 13px; font-weight: 800; background: #16a34a; text-decoration: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; border-radius: 8px;">
+        <a id="orderUpiDeepLink" href="#" target="_blank" class="btn-primary" style="display: none; width: 100%; padding: 12px; font-size: 13px; font-weight: 800; background: #16a34a; text-decoration: none; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; border-radius: 8px; box-sizing: border-box;">
           <span>⚡ Pay via UPI App (Instant App Open) &rarr;</span>
         </a>
 
         <!-- Instant Payment Instructions (No UTR Required) -->
-        <div style="margin: 12px 0 14px; text-align: center; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 12px;">
-          <div style="font-size: 13px; font-weight: 800; color: #166534; margin-bottom: 4px;">
+        <div style="margin: 10px 0 12px; text-align: center; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px;">
+          <div style="font-size: 12px; font-weight: 800; color: #166534; margin-bottom: 2px;">
             ⚡ Instant Payment Settlement
           </div>
-          <div style="font-size: 12px; color: #15803d; line-height: 1.4;">
+          <div style="font-size: 11px; color: #15803d; line-height: 1.4;">
             Scan the QR code with any UPI app (GPay, PhonePe, Paytm, CRED) or tap <strong>Pay via UPI App</strong> above.<br>
-            Once completed, click the button below to immediately dispatch your order to the kitchen!
+            Once paid, click the button below to immediately dispatch your order to the kitchen!
           </div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 8px;">
-          <p style="font-size: 12px; color: var(--gray-600); margin-bottom: 2px;">Scan with any UPI App (GPay, PhonePe, Paytm, CRED, BHIM)</p>
+        <div style="text-align: center; margin-bottom: 4px;">
+          <p style="font-size: 11px; color: var(--gray-600); margin-bottom: 0;">Scan with any UPI App (GPay, PhonePe, Paytm, CRED, BHIM)</p>
         </div>
       </div>
 
       <!-- Pinned & Protected Sticky Payment Footer -->
-      <div class="modal-footer" id="paymentModalFooter">
-        <button class="btn-primary" onclick="confirmPaymentAndRelease()" style="min-height: 50px; font-size: 15px; font-weight: 800; border-radius: 12px; background: #16a34a; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);">
-          ✅ I Have Paid / Confirm Order &rarr;
-        </button>
-        <button class="btn-secondary" onclick="closeModal('paymentModal')" style="min-height: 42px; font-size: 13px; font-weight: 700; border-radius: 10px; background: white; border: 1.5px solid #cbd5e1; color: var(--gray-600);">
+      <div class="modal-footer" id="paymentModalFooter" style="display: flex; gap: 8px;">
+        <button class="btn-secondary" onclick="closeModal('paymentModal')" style="flex: 1; min-height: 48px; font-size: 13px; font-weight: 700; border-radius: 10px; background: white; border: 1.5px solid #cbd5e1; color: var(--gray-600);">
           ✕ Cancel Order
+        </button>
+        <button class="btn-primary" onclick="confirmPaymentAndRelease()" style="flex: 2; min-height: 48px; font-size: 14px; font-weight: 800; border-radius: 10px; background: #16a34a; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);">
+          ✅ I Have Paid / Confirm Order &rarr;
         </button>
       </div>
     </div>
@@ -1874,52 +1924,24 @@
           </button>
         </div>
 
-        <!-- Step B: Live Dynamic QR & UPI Deep Link Screen (5-Minute Window) -->
+        <!-- Step B: Live Dynamic QR & UPI Deep Link Screen (Clean & Focused) -->
         <div id="depositStepPayment" style="display: none;">
-          <!-- 5-Minute Countdown Timer Banner -->
-          <div id="depositCountdownContainer" style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span>⏱️</span>
-              <span style="font-size: 12px; font-weight: 700; color: #1e40af;">Dynamic QR Expires in:</span>
-              <strong id="depositCountdownTimer" style="font-size: 15px; font-weight: 900; color: #1d4ed8; font-family: monospace;">05:00</strong>
-            </div>
-            <span style="font-size: 11px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">DOMINO'S ORDER ENGINE</span>
-          </div>
-
           <div style="text-align: center; margin-bottom: 12px;">
-            <div style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">Amount to Add to Wallet</div>
+            <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Amount to Add to Wallet</div>
             <div style="font-size: 26px; font-weight: 900; color: #15803d; margin-top: 2px;">
               <span id="depositPayAmountDisplay">₹50</span>
             </div>
           </div>
 
-          <!-- Dynamic QR Code Card with 5-Minute Expiry Overlay -->
+          <!-- Dynamic QR Code Card -->
           <div style="background: white; border: 2px solid #0066a3; border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative;">
-            <div id="depositQrContainer" style="display: flex; justify-content: center; align-items: center; min-height: 180px; margin-bottom: 10px;">
+            <div id="depositQrContainer" style="display: flex; justify-content: center; align-items: center; min-height: 180px; margin-bottom: 8px;">
               <!-- QR generated dynamically -->
             </div>
-            
-            <!-- 5-Minute Expired Overlay -->
-            <div id="depositQrExpiredOverlay" style="display: none; position: absolute; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); flex-direction: column; align-items: center; justify-content: center; padding: 16px; text-align: center; border-radius: 10px; z-index: 10;">
-              <div style="font-size: 32px; margin-bottom: 4px;">⏳</div>
-              <strong style="font-size: 14px; color: #b91c1c;">QR Expired (5-Minute Window Ended)</strong>
-              <p style="font-size: 11px; color: #475569; margin: 6px 0 12px; line-height: 1.4;">
-                If you already paid, click 'I Have Paid' below.<br>Otherwise, generate a fresh QR.
-              </p>
-              <div style="display: flex; gap: 8px;">
-                <button type="button" class="btn-primary" onclick="requestWalletDepositQr()" style="font-size: 11px; padding: 6px 14px; width: auto; background: #0066a3; font-weight: 800;">🔄 Generate New QR</button>
-                <button type="button" class="btn-secondary" onclick="closeModal('walletDepositModal'); openHelpSupportModal();" style="font-size: 11px; padding: 6px 12px; width: auto; font-weight: 700;">🎧 Contact Support</button>
-              </div>
-            </div>
 
-            <div style="font-size: 12px; color: #475569; font-weight: 700; margin-bottom: 10px;">
+            <div style="font-size: 11px; color: #475569; font-weight: 700;">
               Scan with any UPI App: <strong>GPay, PhonePe, Paytm, CRED, BHIM</strong>
             </div>
-
-            <!-- Download QR Code Button -->
-            <button type="button" id="btnDownloadDepositQr" onclick="downloadDepositQr()" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 800; border: 1.5px solid #0066a3; background: #f0f9ff; color: #0066a3; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
-              <span>📥</span> <span>Download QR Code</span>
-            </button>
           </div>
 
           <!-- Click to Pay via UPI App (Direct deep link on mobile) -->
@@ -1927,24 +1949,9 @@
             <span>⚡ Pay via UPI App (GPay / PhonePe / Paytm) &rarr;</span>
           </a>
 
-          <!-- Prominent 12-Digit UPI UTR Input Field -->
-          <div style="margin-bottom: 12px; text-align: left; background: #f0fdf4; border: 2px solid #16a34a; border-radius: 10px; padding: 12px; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.1);">
-            <label style="font-size: 12px; font-weight: 800; color: #166534; display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
-              <span style="display: flex; align-items: center; gap: 5px;"><span>🔢</span> <span>Enter 12-Digit UPI Reference / UTR Number:</span></span>
-              <span style="font-size: 10px; background: #dcfce7; color: #15803d; padding: 1px 6px; border-radius: 4px; font-weight: 800;">FOR FAST APPROVAL</span>
-            </label>
-            <div style="display: flex; gap: 6px;">
-              <input type="text" id="depositUtrInput" class="form-input" placeholder="e.g. 432109876543 (from PhonePe / GPay / Paytm)" maxlength="22" style="font-size: 14px; font-weight: 800; font-family: monospace; width: 100%; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 12px; box-sizing: border-box; background: white; color: #0f172a; letter-spacing: 0.5px;">
-              <button type="button" onclick="pasteDepositUtr()" style="background: #e0f2fe; color: #0284c7; border: 1.5px solid #7dd3fc; border-radius: 8px; padding: 0 12px; font-weight: 800; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;"><span>📋</span> <span>Paste</span></button>
-            </div>
-            <div style="font-size: 10px; color: #15803d; margin-top: 4px; font-weight: 600;">
-              💡 Providing your 12-digit UTR from Google Pay, PhonePe, or Paytm ensures instant store admin audit and wallet credit.
-            </div>
-          </div>
-
           <!-- I Have Paid Button -->
           <button type="button" class="btn-primary" id="btnConfirmPaid" onclick="submitDepositPaidConfirmation()" style="width: 100%; padding: 13px; font-size: 14px; font-weight: 800; background: #0066a3; margin-bottom: 10px; border-radius: 8px; box-sizing: border-box;">
-            ✅ I Have Paid the Amount
+            ✅ I Have Paid the Amount &rarr;
           </button>
 
           <!-- Single Cancel Deposit Button -->
@@ -1959,8 +1966,7 @@
           <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Deposit Submitted for Approval</h4>
           <p style="font-size: 12px; color: #475569; margin-bottom: 14px; line-height: 1.5;">
             Reference: <strong id="submittedRefDisplay" style="font-family: monospace; color: #0066a3;">DEP-000000</strong> (<span id="submittedAmtDisplay" style="font-weight: 800; color: #16a34a;">₹50</span>).<br>
-            <span id="submittedUtrDisplay" style="display: inline-block; font-size: 12px; font-weight: 800; color: #0284c7; margin-top: 6px; background: #e0f2fe; padding: 3px 8px; border-radius: 4px; border: 1px solid #7dd3fc; font-family: monospace;"></span><br>
-            Your payment reference is currently being verified by the admin desk. Your Domino's digital wallet balance will be credited within a few minutes.
+            Your payment is recorded and being verified by the store admin. Your Domino's digital wallet balance will be credited shortly.
           </p>
           <div style="display: flex; gap: 8px; justify-content: center;">
             <button type="button" class="btn-primary" onclick="closeModal('walletDepositModal'); openUserProfileModal();" style="width: auto; padding: 8px 18px; font-size: 12px; background: #0066a3;">

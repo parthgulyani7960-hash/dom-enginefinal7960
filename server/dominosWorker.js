@@ -81,14 +81,6 @@ class DominosAutomationRobot {
             type: 'ALERT',
             badge: 'POOL_ALERT'
           });
-          db.createTicket({
-            orderId: order.id,
-            userId: order.customer?.userId || null,
-            userPhone: order.customer?.phone || null,
-            userName: order.customer?.name || 'Customer',
-            category: 'OTHER',
-            description: `[AUTOMATED ROBOT ALERT] Order #${order.id} could not claim an idle Domino's account from the pool. Please import or release an active session.`
-          });
         } catch (_) {}
         return;
       }
@@ -454,14 +446,6 @@ class DominosAutomationRobot {
               type: 'ALERT',
               badge: isStoreTiming ? 'OFFLINE' : (isItemUnavailable ? 'STOCK_ALERT' : 'ROBOT_FAIL')
             });
-            db.createTicket({
-              orderId: order.id,
-              userId: order.customer?.userId || null,
-              userPhone: order.customer?.phone || null,
-              userName: order.customer?.name || 'Customer',
-              category: 'OTHER',
-              description: `[AUTOMATED ROBOT INCIDENT] ${isItemUnavailable ? 'Item unavailable at Domino\'s store' : 'Robot failed to complete order'} #${order.id}. Reason: ${failureMsg}. Review customer cart & Domino's store status.`
-            });
           } catch (alertErr) {
             console.warn('[ROBOT-ADMIN-ALERT-ERR]', alertErr.message);
           }
@@ -490,14 +474,6 @@ class DominosAutomationRobot {
             message: `Robot exception for Order #${order.id}: ${botErr.message}`,
             type: 'ALERT',
             badge: 'BOT_ERR'
-          });
-          db.createTicket({
-            orderId: order.id,
-            userId: order.customer?.userId || null,
-            userPhone: order.customer?.phone || null,
-            userName: order.customer?.name || 'Customer',
-            category: 'OTHER',
-            description: `[AUTOMATED EXCEPTION REPORT] Robot execution crashed on order #${order.id}: ${botErr.message}`
           });
         } catch (_) {}
 

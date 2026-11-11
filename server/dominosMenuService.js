@@ -319,8 +319,9 @@ class DominosMenuService {
       let itemAllowedCrusts = isCustomizable ? (item.allowedCrusts || ['New Hand Tossed', 'Cheese Burst', 'Fresh Pan Pizza']) : (item.allowedCrusts || ['New Hand Tossed']);
 
       if (hasCoordinates && !isServiceable) {
-        isAvailable = false;
-        unavailableReason = unserviceableReason || 'Delivery unavailable at this location';
+        // Items themselves are valid catalog items; store serviceability is reported at catalog root
+        isAvailable = true;
+        unavailableReason = null;
       } else if (storeInventory) {
         // Match against store inventory by dominosCode, parentSkuId, or item name (exact and normalized)
         const normItemName = (item.name || '').toLowerCase()
@@ -429,12 +430,9 @@ class DominosMenuService {
 
     // Step 3: Mandatory / Automatic filtering of unavailable items & combos
     const combosWithAvailability = this.combos.map(combo => {
-      let isAvailable = isServiceable;
+      let isAvailable = true;
       let unavailableReason = null;
-      if (!isServiceable) {
-        isAvailable = false;
-        unavailableReason = unserviceableReason || 'Delivery unavailable at this location';
-      } else if (storeInventory && combo.includedItems) {
+      if (storeInventory && combo.includedItems) {
         for (const inc of combo.includedItems) {
           const match = storeInventory.storeItems.get(inc.dominosCode) ||
                         storeInventory.storeItems.get(inc.name.toLowerCase().trim());
@@ -467,11 +465,17 @@ class DominosMenuService {
       finalMenu = menuWithAvailability;
     }
 
+    const istHour = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })).getHours();
+    const isStoreOffline = istHour < 11;
+
     return {
       success: true,
       store: resolvedStore,
       isServiceable,
       unserviceableReason,
+      isStoreOffline,
+      storeOpensAt: '11:00 AM IST',
+      storeStatusMessage: isStoreOffline ? "Domino's kitchen is currently preparing to open. Online delivery starts at 11:00 AM IST." : "Domino's kitchen is live and accepting delivery orders.",
       locationProvided: hasCoordinates,
       totalCatalogItems: this.masterMenu.length,
       availableItemsCount: finalMenu.filter(i => i.isAvailable).length,
@@ -505,15 +509,11 @@ class DominosMenuService {
     let itemsSubtotal = 0;
     let hasUnavailableItems = false;
     const verifiedItems = (items || []).map(cartItem => {
-      let isAvailable = isServiceable;
+      let isAvailable = true;
       let unavailableReason = null;
       let currentPrice = Number(cartItem.price) || 0;
 
-      if (!isServiceable) {
-        isAvailable = false;
-        unavailableReason = 'Store not delivering to this location';
-        hasUnavailableItems = true;
-      } else if (storeInventory && storeInventory.storeItems) {
+      if (storeInventory && storeInventory.storeItems) {
         // 1. Combo Constituent Items Availability Audit
         if (cartItem.isCombo) {
           const comboItems = cartItem.includedItems || this.getDefaultCombos().find(c => c.id === cartItem.id || c.name === cartItem.name)?.includedItems || [];

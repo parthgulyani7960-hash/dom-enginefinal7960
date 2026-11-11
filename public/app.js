@@ -2481,8 +2481,10 @@ function openCartModal() {
   }
   try { syncCartAddressOptions(); } catch (e) { console.warn('syncCartAddressOptions note:', e); }
   try { syncTopBarAddressOptions(); } catch (e) { console.warn('syncTopBarAddressOptions note:', e); }
+  try { syncStorePaymentSettings(); } catch (e) {}
   try { syncPaymentGatewaysUI(); } catch (e) { console.warn('syncPaymentGatewaysUI note:', e); }
   try { renderCartDrawer(true); } catch (e) { console.warn('renderCartDrawer note:', e); }
+  try { goToCartStep(1); } catch (e) {}
   openModal('cartModal');
 }
 
@@ -2691,15 +2693,18 @@ function applyPaymentSettingsUI() {
   const lblUPI = document.getElementById('lblPayUPI');
   const rdoCOD = document.getElementById('payMethodCOD');
   const rdoUPI = document.getElementById('payMethodUPI');
+  const txtCOD = document.getElementById('txtPayCOD');
+  const txtUPI = document.getElementById('txtPayUPI');
 
   const codAvailable = storePaymentSettings.codEnabled !== false;
   const upiAvailable = storePaymentSettings.upiEnabled !== false;
 
   if (lblCOD) {
     if (!codAvailable) {
-      lblCOD.style.opacity = '0.45';
+      lblCOD.style.opacity = '0.5';
+      lblCOD.style.pointerEvents = 'none';
       lblCOD.style.cursor = 'not-allowed';
-      lblCOD.title = 'Cash on Delivery is currently paused by store manager';
+      if (txtCOD) txtCOD.innerHTML = '💵 Cash on Delivery <span style="font-size:10px; background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; padding:1px 5px; border-radius:4px; font-weight:800; margin-left:4px;">Coming Soon</span>';
       if (rdoCOD) rdoCOD.disabled = true;
       if (currentPaymentMethod === 'COD' && upiAvailable) {
         onPaymentMethodChange('UPI');
@@ -2707,17 +2712,19 @@ function applyPaymentSettingsUI() {
       }
     } else {
       lblCOD.style.opacity = '1';
+      lblCOD.style.pointerEvents = 'auto';
       lblCOD.style.cursor = 'pointer';
-      lblCOD.title = '';
+      if (txtCOD) txtCOD.innerHTML = '💵 Cash on Delivery (COD)';
       if (rdoCOD) rdoCOD.disabled = false;
     }
   }
 
   if (lblUPI) {
     if (!upiAvailable) {
-      lblUPI.style.opacity = '0.45';
+      lblUPI.style.opacity = '0.5';
+      lblUPI.style.pointerEvents = 'none';
       lblUPI.style.cursor = 'not-allowed';
-      lblUPI.title = 'Instant UPI is currently paused by store manager';
+      if (txtUPI) txtUPI.innerHTML = '📱 Instant UPI QR <span style="font-size:10px; background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; padding:1px 5px; border-radius:4px; font-weight:800; margin-left:4px;">Coming Soon</span>';
       if (rdoUPI) rdoUPI.disabled = true;
       if (currentPaymentMethod === 'UPI' && codAvailable) {
         onPaymentMethodChange('COD');
@@ -2725,12 +2732,81 @@ function applyPaymentSettingsUI() {
       }
     } else {
       lblUPI.style.opacity = '1';
+      lblUPI.style.pointerEvents = 'auto';
       lblUPI.style.cursor = 'pointer';
-      lblUPI.title = '';
+      if (txtUPI) txtUPI.innerHTML = '📱 Instant UPI QR';
       if (rdoUPI) rdoUPI.disabled = false;
     }
   }
 }
+
+// 3-Step Cart & Checkout Navigation
+let currentCartFlowStep = 1;
+
+function goToCartStep(step) {
+  if (step === 2) {
+    if (!cart || cart.length === 0) {
+      alert('Your cart is empty. Please add items or combos to your cart first.');
+      return;
+    }
+  } else if (step === 3) {
+    if (!cart || cart.length === 0) {
+      alert('Your cart is empty.');
+      goToCartStep(1);
+      return;
+    }
+    const quickFlat = (document.getElementById('cartQuickFlatInput')?.value || document.getElementById('topBarFlatInput')?.value || '').trim();
+    const selectedAddrId = document.getElementById('cartAddressSelect')?.value;
+    const addresses = currentUser?.savedAddresses || [];
+    if (selectedAddrId === 'CURRENT_LOCATION' || (addresses.length === 0 && currentCoordinates)) {
+      if (!quickFlat) {
+        alert('Please enter your House / Flat / Floor Number for Domino\'s rider doorstep delivery.');
+        const flatInput = document.getElementById('cartQuickFlatInput') || document.getElementById('topBarFlatInput');
+        if (flatInput) {
+          flatInput.focus();
+          flatInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+    }
+
+    const receiverPhone = (document.getElementById('cartReceiverPhoneInput')?.value || '').replace(/[^0-9]/g, '').slice(-10);
+    if (!receiverPhone || receiverPhone.length !== 10 || !/^[6-9]\d{9}$/.test(receiverPhone)) {
+      alert('Please enter a valid 10-digit Indian mobile number for rider delivery contact.');
+      const phoneInput = document.getElementById('cartReceiverPhoneInput');
+      if (phoneInput) {
+        phoneInput.focus();
+        phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
+    // Update Step 3 summary pill
+    const sumAddr = document.getElementById('cartStep3AddressSummary');
+    const sumTotal = document.getElementById('cartStep3TotalSummary');
+    const curTotal = document.getElementById('billTotal')?.innerText || '₹0';
+    const recName = (document.getElementById('cartReceiverNameInput')?.value || currentUser.name || 'Customer').trim();
+    if (sumAddr) sumAddr.innerText = `${recName} (${receiverPhone})`;
+    if (sumTotal) sumTotal.innerText = curTotal;
+    try { onPaymentMethodChange(currentPaymentMethod); } catch (_) {}
+  }
+
+  currentCartFlowStep = step;
+  const s1 = document.getElementById('cartFlowStep1');
+  const s2 = document.getElementById('cartFlowStep2');
+  const s3 = document.getElementById('cartFlowStep3');
+  if (s1) s1.style.display = step === 1 ? 'block' : 'none';
+  if (s2) s2.style.display = step === 2 ? 'block' : 'none';
+  if (s3) s3.style.display = step === 3 ? 'block' : 'none';
+
+  const b1 = document.getElementById('cartBreadcrumbStep1');
+  const b2 = document.getElementById('cartBreadcrumbStep2');
+  const b3 = document.getElementById('cartBreadcrumbStep3');
+  if (b1) { b1.style.color = step === 1 ? '#0066a3' : '#64748b'; b1.style.fontWeight = step === 1 ? '900' : '700'; }
+  if (b2) { b2.style.color = step === 2 ? '#0066a3' : '#64748b'; b2.style.fontWeight = step === 2 ? '900' : '700'; }
+  if (b3) { b3.style.color = step === 3 ? '#0066a3' : '#64748b'; b3.style.fontWeight = step === 3 ? '900' : '700'; }
+}
+window.goToCartStep = goToCartStep;
 
 // Payment Method State & Handler
 let currentPaymentMethod = 'COD';
@@ -5780,25 +5856,13 @@ async function submitDepositPaidConfirmation() {
       depositCountdownInterval = null;
     }
 
-    let utrVal = document.getElementById('depositUtrInput') ? document.getElementById('depositUtrInput').value.trim() : '';
-
-    if (!utrVal) {
-      const prompted = prompt('🔢 Please enter the 12-Digit UPI Reference / UTR Number from your payment app (Google Pay / PhonePe / Paytm / BHIM) so the store admin can instantly verify and credit your wallet:');
-      if (prompted && prompted.trim()) {
-        utrVal = prompted.trim();
-        const inp = document.getElementById('depositUtrInput');
-        if (inp) inp.value = utrVal;
-      }
-    }
-
     const res = await fetch('/api/user/wallet/deposit/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         reference: activeDepositRequest.reference,
         amount: activeDepositRequest.amount,
-        utr: utrVal,
-        transactionId: utrVal,
+        transactionId: activeDepositRequest.reference,
         phone: currentUser.phone || '',
         upiUri: activeDepositRequest.upiUri
       })
@@ -5810,17 +5874,11 @@ async function submitDepositPaidConfirmation() {
     if (subRef) subRef.innerText = activeDepositRequest.reference;
     const subAmt = document.getElementById('submittedAmtDisplay');
     if (subAmt) subAmt.innerText = `₹${activeDepositRequest.amount}`;
-    const subUtr = document.getElementById('submittedUtrDisplay');
-    if (subUtr) {
-      subUtr.innerHTML = utrVal
-        ? `<span>🔢 12-Digit UTR:</span> <code style="font-size: 13px; font-weight: 900; color: #0284c7;">${escapeHtml(utrVal)}</code>`
-        : `<span style="color:#b45309;">⚠️ No UTR entered</span>`;
-    }
 
     document.getElementById('depositStepPayment').style.display = 'none';
     document.getElementById('depositStepSubmitted').style.display = 'block';
 
-    showToastNotice(`Deposit ${activeDepositRequest.reference} submitted! Admin will approve within minutes.`, '⏳');
+    showToastNotice(`Deposit ${activeDepositRequest.reference} submitted! Admin will approve shortly.`, '💰');
     loadWalletTransactions();
 
   } catch (err) {
@@ -5828,7 +5886,7 @@ async function submitDepositPaidConfirmation() {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerText = '✅ I Have Paid the Amount';
+      btn.innerText = '✅ I Have Paid the Amount &rarr;';
     }
   }
 }
