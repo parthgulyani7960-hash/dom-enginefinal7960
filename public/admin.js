@@ -2115,35 +2115,18 @@ function renderAdminOrders(orders) {
           <div style="font-size: 10px; color: #475569; margin-top: 2px;">
             <span style="font-weight: 700;">Method:</span> ${order.payment?.method === 'COD' ? '💵 COD' : '📱 Instant UPI'}
           </div>
-          ${(order.payment?.utr || (order.payment?.transactionId && !order.payment.transactionId.startsWith('ORD-') && !order.payment.transactionId.startsWith('UPI-'))) ? `
-            <div style="margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 11px; font-weight: 800; color: #065f46;">
-              <span>🔢</span> <span>${escapeHtml(order.payment.utr || order.payment.transactionId)}</span>
-              <button type="button" onclick="navigator.clipboard.writeText('${escapeHtml(order.payment.utr || order.payment.transactionId)}'); showToast('UTR Copied: ${escapeHtml(order.payment.utr || order.payment.transactionId)}', '📋');" style="background: none; border: none; cursor: pointer; font-size: 10px; padding: 0;" title="Copy 12-Digit UTR">📋</button>
-            </div>
-          ` : (order.payment?.method === 'UPI' ? `
-            <div style="margin-top: 4px; display: inline-flex; align-items: center; gap: 3px;">
-              <span style="font-size: 10px; color: #b45309; background: #fffbeb; border: 1px dashed #fde68a; padding: 1px 4px; border-radius: 3px; font-weight: 700;">No UTR</span>
-              <button type="button" onclick="adminPromptOrderUtr('${order.id}')" style="background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; border-radius: 3px; padding: 1px 5px; font-size: 9px; font-weight: 800; cursor: pointer;" title="Enter 12-digit UTR from payment receipt">+ UTR</button>
-            </div>
-          ` : '')}
+          <div style="font-size: 10px; color: ${order.payment?.status === 'PAID_CONFIRMED' || order.payment?.status === 'SUCCESS' ? '#16a34a' : '#0284c7'}; margin-top: 2px; font-weight: 700;">
+            ${order.payment?.status === 'PAID_CONFIRMED' || order.payment?.status === 'SUCCESS' ? '✓ Paid' : (order.payment?.status || 'PENDING')}
+          </div>
         </td>
         <td>
           ${(order.isRefunded || order.payment?.status === 'REFUNDED') ? `
             <span style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">💳 Refunded (₹${order.refundAmount || order.payment?.amount || 0})</span>
             <div style="font-size: 10px; color: #64748b; margin-top: 3px;">Ref: ${order.refundReference || 'PROCESSED'}</div>
           ` : (r.status === 'AWAITING_PAYMENT_APPROVAL' || order.payment?.status === 'PENDING_APPROVAL') ? `
-            <span style="background: #fef3c7; color: #b45309; border: 1.5px solid #fde68a; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⏳ Awaiting UPI Verification</span>
-            <div style="font-size: 11px; color: #475569; margin-top: 4px;">
-              ${(order.payment?.utr || (order.payment?.transactionId && !order.payment.transactionId.startsWith('ORD-') && !order.payment.transactionId.startsWith('UPI-'))) ? `
-                <div style="background: #e0f2fe; border: 1px solid #7dd3fc; border-radius: 4px; padding: 3px 6px; color: #0369a1; font-weight: 800; font-family: monospace; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                  <span>🔢 UTR:</span> <span>${escapeHtml(order.payment.utr || order.payment.transactionId)}</span>
-                </div>
-              ` : `
-                <div style="display: inline-flex; align-items: center; gap: 4px;">
-                  <span style="color: #b45309; font-size: 10px; background: #fffbeb; padding: 2px 4px; border-radius: 3px; border: 1px dashed #fde68a;">⚠️ No UTR</span>
-                  <button type="button" onclick="adminPromptOrderUtr('${order.id}')" style="background: #eff6ff; color: #0284c7; border: 1px solid #93c5fd; padding: 1px 5px; border-radius: 3px; cursor: pointer; font-size: 10px; font-weight: 700;">+ Add UTR</button>
-                </div>
-              `}
+            <span style="background: #fef3c7; color: #b45309; border: 1.5px solid #fde68a; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⏳ Pending Approval</span>
+            <div style="margin-top: 4px;">
+              <button type="button" onclick="approveOrderPayment('${order.id}')" style="background: #16a34a; color: white; border: none; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; cursor: pointer;">⚡ Approve &amp; Dispatch</button>
             </div>
           ` : (r.status === 'WAITING_ADMIN_DECISION') ? `
             <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block;">⚠️ Unavailable Item</span>
@@ -2688,36 +2671,62 @@ function renderOrderDossierContent(order) {
       </div>
     </div>
 
-    <!-- 6. DUAL VERIFIED ORDER EVIDENCE PROOFS -->
+    <!-- 6. QUAD VERIFIED ORDER EVIDENCE PROOFS (4 DISTINCT MILESTONES) -->
     <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 14px;">
       <div style="font-size: 12px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">
-        📸 Verified Domino's Order Capture Evidence (Dual Screenshots)
+        📸 Verified Domino's Order Capture Evidence (4 Milestone Screenshots)
       </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
-        <!-- Cart & Bill Screenshot -->
-        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 10px; text-align: center;">
-          <div style="font-size: 11px; font-weight: 800; color: #0284c7; margin-bottom: 6px;">
-            🛒 1. Cart &amp; Itemized Bill Review
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+        <!-- 1. Address & Store Verified -->
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; font-weight: 800; color: #6366f1; margin-bottom: 4px;">
+            📍 1. Address &amp; Store Verified
           </div>
-          ${r.cartBillScreenshotUrl ? `
-            <img src="${r.cartBillScreenshotUrl}" alt="Cart Bill" style="max-width: 100%; max-height: 220px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
-            <div style="margin-top: 6px;">
-              <a href="${r.cartBillScreenshotUrl}" target="_blank" style="font-size: 11px; color: #0284c7; font-weight: 800; text-decoration: underline;">🔍 Open Full Resolution</a>
+          ${(r.addressVerifiedScreenshotDataUri || r.addressVerifiedScreenshotUrl) ? `
+            <img src="${r.addressVerifiedScreenshotDataUri || r.addressVerifiedScreenshotUrl}" alt="Address Verified" style="max-width: 100%; max-height: 180px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="openAdminBillPhoto('${order.id}', 'address')">
+            <div style="margin-top: 4px;">
+              <button type="button" onclick="openAdminBillPhoto('${order.id}', 'address')" style="background:none; border:none; cursor:pointer; font-size: 10px; color: #6366f1; font-weight: 800; text-decoration: underline;">🔍 Zoom Evidence</button>
             </div>
-          ` : '<div style="font-size: 11px; color: #94a3b8; padding: 40px 0;">Cart snapshot captures automatically upon itemized bill audit.</div>'}
+          ` : '<div style="font-size: 10px; color: #94a3b8; padding: 30px 0;">Captures when address &amp; store outlet are locked.</div>'}
         </div>
 
-        <!-- Confirmation Receipt Proof -->
-        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 10px; text-align: center;">
-          <div style="font-size: 11px; font-weight: 800; color: #16a34a; margin-bottom: 6px;">
-            🧾 2. Domino's Confirmation Receipt Proof
+        <!-- 2. Items & Customizations Added -->
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; font-weight: 800; color: #ca8a04; margin-bottom: 4px;">
+            🍕 2. Items &amp; Customizations Added
           </div>
-          ${r.proofScreenshotUrl ? `
-            <img src="${r.proofScreenshotUrl}" alt="Confirmation Proof" style="max-width: 100%; max-height: 220px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
-            <div style="margin-top: 6px;">
-              <a href="${r.proofScreenshotUrl}" target="_blank" style="font-size: 11px; color: #16a34a; font-weight: 800; text-decoration: underline;">🔍 Open Full Resolution</a>
+          ${(r.itemAddedScreenshotDataUri || r.itemAddedScreenshotUrl) ? `
+            <img src="${r.itemAddedScreenshotDataUri || r.itemAddedScreenshotUrl}" alt="Items Added" style="max-width: 100%; max-height: 180px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="openAdminBillPhoto('${order.id}', 'items')">
+            <div style="margin-top: 4px;">
+              <button type="button" onclick="openAdminBillPhoto('${order.id}', 'items')" style="background:none; border:none; cursor:pointer; font-size: 10px; color: #ca8a04; font-weight: 800; text-decoration: underline;">🔍 Zoom Evidence</button>
             </div>
-          ` : '<div style="font-size: 11px; color: #94a3b8; padding: 40px 0;">Confirmation proof captures upon Domino\'s token confirmation.</div>'}
+          ` : '<div style="font-size: 10px; color: #94a3b8; padding: 30px 0;">Captures after items and custom variants are added.</div>'}
+        </div>
+
+        <!-- 3. Cart & Bill Review -->
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; font-weight: 800; color: #0284c7; margin-bottom: 4px;">
+            🛒 3. Cart &amp; Itemized Bill
+          </div>
+          ${(r.cartBillScreenshotDataUri || r.cartBillScreenshotUrl) ? `
+            <img src="${r.cartBillScreenshotDataUri || r.cartBillScreenshotUrl}" alt="Cart Bill" style="max-width: 100%; max-height: 180px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="openAdminBillPhoto('${order.id}', 'cart')">
+            <div style="margin-top: 4px;">
+              <button type="button" onclick="openAdminBillPhoto('${order.id}', 'cart')" style="background:none; border:none; cursor:pointer; font-size: 10px; color: #0284c7; font-weight: 800; text-decoration: underline;">🔍 Zoom Evidence</button>
+            </div>
+          ` : '<div style="font-size: 10px; color: #94a3b8; padding: 30px 0;">Captures during pre-checkout basket audit.</div>'}
+        </div>
+
+        <!-- 4. Confirmation Receipt -->
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; font-weight: 800; color: #16a34a; margin-bottom: 4px;">
+            🧾 4. Final Receipt Proof
+          </div>
+          ${(r.proofScreenshotDataUri || r.proofScreenshotUrl) ? `
+            <img src="${r.proofScreenshotDataUri || r.proofScreenshotUrl}" alt="Confirmation Proof" style="max-width: 100%; max-height: 180px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; cursor: zoom-in;" onclick="openAdminBillPhoto('${order.id}', 'proof')">
+            <div style="margin-top: 4px;">
+              <button type="button" onclick="openAdminBillPhoto('${order.id}', 'proof')" style="background:none; border:none; cursor:pointer; font-size: 10px; color: #16a34a; font-weight: 800; text-decoration: underline;">🔍 Zoom Evidence</button>
+            </div>
+          ` : '<div style="font-size: 10px; color: #94a3b8; padding: 30px 0;">Captures upon Domino\'s order confirmation.</div>'}
         </div>
       </div>
     </div>
@@ -2731,28 +2740,36 @@ window.renderOrderDossierContent = renderOrderDossierContent;
 
 
 // =========================================================================
-// 3A. View Verified Domino's Bill Photo (1-Click Admin Access - Dual Screenshots)
+// 3A. View Verified Domino's Bill Photo (1-Click Admin Access - 4 Milestone Screenshots)
 // =========================================================================
 let currentBillPhotoOrder = null;
 let currentBillPhotoActiveTab = 'cart';
 
 function switchBillPhotoTab(tab) {
   currentBillPhotoActiveTab = tab;
+  const btnAddress = document.getElementById('btnBillTabAddress');
+  const btnItems = document.getElementById('btnBillTabItems');
   const btnCart = document.getElementById('btnBillTabCart');
   const btnProof = document.getElementById('btnBillTabProof');
-  if (btnCart && btnProof) {
-    if (tab === 'cart') {
-      btnCart.style.background = '#0284c7';
-      btnCart.style.color = '#fff';
-      btnProof.style.background = '#f1f5f9';
-      btnProof.style.color = '#334155';
-    } else {
-      btnProof.style.background = '#16a34a';
-      btnProof.style.color = '#fff';
-      btnCart.style.background = '#f1f5f9';
-      btnCart.style.color = '#334155';
+
+  const allBtns = [
+    { id: 'address', btn: btnAddress, activeBg: '#6366f1' },
+    { id: 'items', btn: btnItems, activeBg: '#ca8a04' },
+    { id: 'cart', btn: btnCart, activeBg: '#0284c7' },
+    { id: 'proof', btn: btnProof, activeBg: '#16a34a' }
+  ];
+
+  allBtns.forEach(b => {
+    if (b.btn) {
+      if (b.id === tab) {
+        b.btn.style.background = b.activeBg;
+        b.btn.style.color = '#fff';
+      } else {
+        b.btn.style.background = '#f1f5f9';
+        b.btn.style.color = '#334155';
+      }
     }
-  }
+  });
 
   if (!currentBillPhotoOrder) return;
   const r = currentBillPhotoOrder.robot || {};
@@ -2760,9 +2777,33 @@ function switchBillPhotoTab(tab) {
   const openBtn = document.getElementById('adminBillPhotoOpenBtn');
   const photoTitle = document.getElementById('billPhotoCurrentTitle');
 
+  const addressUrl = r.addressVerifiedScreenshotDataUri || r.addressVerifiedScreenshotUrl;
+  const itemsUrl = r.itemAddedScreenshotDataUri || r.itemAddedScreenshotUrl;
   const cartUrl = r.cartBillScreenshotDataUri || r.cartBillScreenshotUrl;
   const proofUrl = r.proofScreenshotDataUri || r.proofScreenshotUrl;
-  const targetUrl = tab === 'cart' ? (cartUrl || proofUrl) : (proofUrl || cartUrl);
+
+  let targetUrl = null;
+  let titleText = '';
+  let titleColor = '#0284c7';
+
+  if (tab === 'address') {
+    targetUrl = addressUrl || cartUrl || proofUrl;
+    titleText = '📍 Milestone 1: Domino\'s Delivery Address & Store Verified in Cart/Session';
+    titleColor = '#6366f1';
+  } else if (tab === 'items') {
+    targetUrl = itemsUrl || cartUrl || proofUrl;
+    titleText = '🍕 Milestone 2: Items & Customizations Added to Domino\'s Basket';
+    titleColor = '#ca8a04';
+  } else if (tab === 'cart') {
+    targetUrl = cartUrl || proofUrl || itemsUrl || addressUrl;
+    titleText = '🛒 Milestone 3: Domino\'s Cart & Itemized Bill Review (Items, Prices & Dispatched Cart)';
+    titleColor = '#0284c7';
+  } else {
+    targetUrl = proofUrl || cartUrl || itemsUrl || addressUrl;
+    titleText = '🧾 Milestone 4: Official Domino\'s Order Confirmation Receipt (Order Confirmed)';
+    titleColor = '#16a34a';
+  }
+
   if (photoImg && targetUrl) {
     photoImg.src = targetUrl;
   }
@@ -2780,10 +2821,8 @@ function switchBillPhotoTab(tab) {
     }
   }
   if (photoTitle) {
-    photoTitle.innerText = tab === 'cart' 
-      ? '🛒 Domino\'s Cart & Itemized Bill Review (Items, Prices & Dispatched Cart)' 
-      : '🧾 Official Domino\'s Order Confirmation Receipt (Domino\'s Order Confirmed)';
-    photoTitle.style.color = tab === 'cart' ? '#0284c7' : '#16a34a';
+    photoTitle.innerText = titleText;
+    photoTitle.style.color = titleColor;
   }
 }
 
@@ -2804,25 +2843,27 @@ function openAdminBillPhoto(orderId, preferredTab = null) {
   const contentBox = document.getElementById('billPhotoContent');
   const emptyBox = document.getElementById('billPhotoEmptyState');
 
+  const addressUrl = r.addressVerifiedScreenshotDataUri || r.addressVerifiedScreenshotUrl;
+  const itemsUrl = r.itemAddedScreenshotDataUri || r.itemAddedScreenshotUrl;
   const cartUrl = r.cartBillScreenshotDataUri || r.cartBillScreenshotUrl;
   const proofUrl = r.proofScreenshotDataUri || r.proofScreenshotUrl;
-  const hasAnyScreenshot = Boolean(cartUrl || proofUrl);
+  const hasAnyScreenshot = Boolean(addressUrl || itemsUrl || cartUrl || proofUrl);
 
   if (hasAnyScreenshot) {
     if (contentBox) contentBox.style.display = 'block';
     if (emptyBox) emptyBox.style.display = 'none';
 
     // Show/hide tab buttons based on availability
+    const btnAddress = document.getElementById('btnBillTabAddress');
+    const btnItems = document.getElementById('btnBillTabItems');
     const btnCart = document.getElementById('btnBillTabCart');
     const btnProof = document.getElementById('btnBillTabProof');
-    if (btnCart) {
-      btnCart.style.display = cartUrl ? 'inline-flex' : 'none';
-    }
-    if (btnProof) {
-      btnProof.style.display = proofUrl ? 'inline-flex' : 'none';
-    }
+    if (btnAddress) btnAddress.style.display = addressUrl ? 'inline-flex' : 'none';
+    if (btnItems) btnItems.style.display = itemsUrl ? 'inline-flex' : 'none';
+    if (btnCart) btnCart.style.display = cartUrl ? 'inline-flex' : 'none';
+    if (btnProof) btnProof.style.display = proofUrl ? 'inline-flex' : 'none';
 
-    const defaultTab = preferredTab || (cartUrl ? 'cart' : 'proof');
+    const defaultTab = preferredTab || (proofUrl ? 'proof' : (cartUrl ? 'cart' : (itemsUrl ? 'items' : 'address')));
     switchBillPhotoTab(defaultTab);
 
     const storeEl = document.getElementById('billPhotoStoreName');

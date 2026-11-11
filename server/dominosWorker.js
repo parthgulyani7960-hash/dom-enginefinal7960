@@ -336,6 +336,18 @@ class DominosAutomationRobot {
           if (robotResult.proofScreenshotDataUri) {
             order.robot.proofScreenshotDataUri = robotResult.proofScreenshotDataUri;
           }
+          if (robotResult.addressVerifiedScreenshotUrl) {
+            order.robot.addressVerifiedScreenshotUrl = robotResult.addressVerifiedScreenshotUrl;
+          }
+          if (robotResult.addressVerifiedScreenshotDataUri) {
+            order.robot.addressVerifiedScreenshotDataUri = robotResult.addressVerifiedScreenshotDataUri;
+          }
+          if (robotResult.itemAddedScreenshotUrl) {
+            order.robot.itemAddedScreenshotUrl = robotResult.itemAddedScreenshotUrl;
+          }
+          if (robotResult.itemAddedScreenshotDataUri) {
+            order.robot.itemAddedScreenshotDataUri = robotResult.itemAddedScreenshotDataUri;
+          }
           order.robot.dominosOrderRef = realRef;
           order.robot.status = 'ORDER_PLACED';
           order.robot.voucherApplied = robotResult.voucherApplied;
@@ -408,6 +420,18 @@ class DominosAutomationRobot {
           }
           if (robotResult?.unavailableItems && robotResult.unavailableItems.length > 0) {
             order.robot.unavailableItems = robotResult.unavailableItems;
+          }
+          if (robotResult?.addressVerifiedScreenshotUrl) {
+            order.robot.addressVerifiedScreenshotUrl = robotResult.addressVerifiedScreenshotUrl;
+          }
+          if (robotResult?.addressVerifiedScreenshotDataUri) {
+            order.robot.addressVerifiedScreenshotDataUri = robotResult.addressVerifiedScreenshotDataUri;
+          }
+          if (robotResult?.itemAddedScreenshotUrl) {
+            order.robot.itemAddedScreenshotUrl = robotResult.itemAddedScreenshotUrl;
+          }
+          if (robotResult?.itemAddedScreenshotDataUri) {
+            order.robot.itemAddedScreenshotDataUri = robotResult.itemAddedScreenshotDataUri;
           }
           if (robotResult?.proofScreenshotUrl) {
             order.robot.proofScreenshotUrl = robotResult.proofScreenshotUrl;

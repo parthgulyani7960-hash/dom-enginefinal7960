@@ -3852,16 +3852,6 @@ window.promptUpdateOrderUtr = promptUpdateOrderUtr;
 
 async function confirmPaymentAndRelease() {
   if (!currentOrder) return;
-  const txnInput = document.getElementById('upiTxnInput');
-  let txnId = txnInput ? txnInput.value.trim() : '';
-
-  if (!txnId) {
-    const promptedUtr = prompt('💡 Enter 12-Digit UPI Reference / UTR Number:\n\nPlease enter the 12-digit UTR from your payment app (Google Pay / PhonePe / Paytm / BHIM) to verify your payment immediately.\n\n(Click Cancel if you will provide it later in the tracker):', '');
-    if (promptedUtr !== null && promptedUtr.trim()) {
-      txnId = promptedUtr.trim();
-      if (txnInput) txnInput.value = txnId;
-    }
-  }
 
   try {
     const res = await fetch('/api/orders/verify-payment', {
@@ -3869,12 +3859,11 @@ async function confirmPaymentAndRelease() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         orderId: currentOrder.id,
-        transactionId: txnId || currentOrder.id,
-        utr: txnId
+        transactionId: currentOrder.id
       })
     });
     const data = await res.json();
-    if (!data.success) throw new Error(data.error);
+    if (!data.success) throw new Error(data.error || 'Payment verification failed');
 
     clearInterval(countdownTimer);
     closeModal('paymentModal');
@@ -3882,10 +3871,11 @@ async function confirmPaymentAndRelease() {
     saveCartToStorage();
     updateCartBadge();
 
+    showToastNotice('✅ Payment confirmed! Order dispatched to Domino\'s autonomous robot...', '🍕');
     // Open Live Order Tracker
     openTrackingModal(currentOrder.id);
   } catch (err) {
-    alert('Payment verification failed: ' + err.message);
+    alert('Payment confirmation error: ' + err.message);
   }
 }
 
@@ -4267,26 +4257,9 @@ function updateTrackingUI(order) {
   const payMethodEl = document.getElementById('trackerPayMethod');
   if (payMethodEl) payMethodEl.innerText = p.method === 'COD' ? '💵 Cash to Rider' : '📱 Instant UPI';
 
-  // Dedicated Real-Time UPI & 12-Digit UTR Status Display
+  // Dedicated Real-Time UPI Status Display (Clean - No UTR required)
   const utrCard = document.getElementById('trackerUpiUtrCard');
-  const utrValDisplay = document.getElementById('trackerUtrValueDisplay');
-  const utrNote = document.getElementById('trackerUtrStatusNote');
-  const isUpiOrder = p.method === 'UPI' || (p.upiString && p.upiString.length > 0) || p.utr || (p.transactionId && !p.transactionId.startsWith('ORD-'));
-  if (utrCard) {
-    if (isUpiOrder) {
-      utrCard.style.display = 'block';
-      const actualUtr = p.utr || (p.transactionId && !p.transactionId.startsWith('ORD-') && !p.transactionId.startsWith('UPI-') ? p.transactionId : '');
-      if (actualUtr) {
-        if (utrValDisplay) utrValDisplay.innerHTML = `<span style="color: #065f46; background: #ecfdf5; border: 1.5px solid #6ee7b7; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-family: monospace;">🔢 UTR: ${escapeHtml(actualUtr)}</span>`;
-        if (utrNote) utrNote.innerText = '✓ Verified 12-digit UTR recorded for store dispatch.';
-      } else {
-        if (utrValDisplay) utrValDisplay.innerHTML = `<span style="color: #b45309; background: #fffbeb; border: 1.5px dashed #fde68a; padding: 2px 8px; border-radius: 4px; font-weight: 700;">⚠️ 12-Digit UTR Not Submitted Yet</span>`;
-        if (utrNote) utrNote.innerText = 'Tap "Update UTR" to provide the 12-digit reference from your UPI app receipt.';
-      }
-    } else {
-      utrCard.style.display = 'none';
-    }
-  }
+  if (utrCard) utrCard.style.display = 'none';
 
   // Populate Ordered Items in Tracker
   const itemsContainer = document.getElementById('trackerItemsContainer');
@@ -4592,7 +4565,7 @@ function updateTrackingUI(order) {
       payStatusBadge.innerHTML = '<span style="color: #15803d; font-weight: 700;">✓ Payment Confirmed</span>';
     } else if (p.status === 'PENDING_APPROVAL' || r.status === 'AWAITING_PAYMENT_APPROVAL') {
       payStatusBadge.innerHTML = `
-        <span style="color: #d97706; font-weight: 700; margin-right: 6px;">⏳ Payment Submitted (UTR: ${p.utr || 'Recorded'})</span>
+        <span style="color: #d97706; font-weight: 700; margin-right: 6px;">⏳ Payment Submitted</span>
         <button onclick="dispatchPendingOrderToRobot('${order.id}')" style="background: #16a34a; color: white; border: none; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer;">⚡ Dispatch to Robot</button>
       `;
     } else {

@@ -2031,13 +2031,19 @@
         <button class="modal-close" onclick="closeModal('adminBillPhotoModal')">&times;</button>
       </div>
       <div class="modal-body" style="padding: 16px;">
-        <!-- Tab Bar for Dual Screenshots (Cart Bill vs Confirmation Proof) -->
-        <div id="billPhotoTabStrip" style="display: flex; gap: 8px; margin-bottom: 10px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">
-          <button type="button" id="btnBillTabCart" class="btn-action-copy active" onclick="switchBillPhotoTab('cart')" style="padding: 5px 12px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #0284c7; color: white;">
-            🛒 Cart &amp; Itemized Bill Review
+        <!-- Tab Bar for Multi-Stage Visual Proof Screenshots -->
+        <div id="billPhotoTabStrip" style="display: flex; gap: 6px; margin-bottom: 10px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px; flex-wrap: wrap;">
+          <button type="button" id="btnBillTabAddress" class="btn-action-copy" onclick="switchBillPhotoTab('address')" style="padding: 5px 10px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #f1f5f9; color: #334155;">
+            📍 Address &amp; Store Verified
           </button>
-          <button type="button" id="btnBillTabProof" class="btn-action-copy" onclick="switchBillPhotoTab('proof')" style="padding: 5px 12px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #f1f5f9; color: #334155;">
-            🧾 Order Confirmation Receipt
+          <button type="button" id="btnBillTabItems" class="btn-action-copy" onclick="switchBillPhotoTab('items')" style="padding: 5px 10px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #f1f5f9; color: #334155;">
+            🍕 Items Added
+          </button>
+          <button type="button" id="btnBillTabCart" class="btn-action-copy active" onclick="switchBillPhotoTab('cart')" style="padding: 5px 10px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #0284c7; color: white;">
+            🛒 Cart &amp; Bill
+          </button>
+          <button type="button" id="btnBillTabProof" class="btn-action-copy" onclick="switchBillPhotoTab('proof')" style="padding: 5px 10px; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 6px; background: #f1f5f9; color: #334155;">
+            🧾 Final Order Receipt
           </button>
         </div>
         <div id="billPhotoCurrentTitle" style="font-size: 12px; font-weight: 800; color: #0284c7; margin-bottom: 8px;">

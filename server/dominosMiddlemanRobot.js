@@ -25,13 +25,11 @@ const CHROME_PATH = getChromeExecutablePath();
  */
 async function handleDominosCustomizationSheet(page, item, onProgress) {
   try {
-    if (!item.isCustomizable && !item.customSize && !item.customCrust) return;
     // Check if legitimate Domino's customization drawer is actively mounted
     const hasCustomDrawer = await page.evaluate(() => {
       const modal = document.querySelector('.customise-bottom-sheet, .customisation-modal, div[class*="customiz" i], div[class*="bottom-sheet" i]');
       if (!modal) return false;
-      const txt = (modal.innerText || '').toLowerCase();
-      return txt.includes('size') || txt.includes('crust') || txt.includes('add to cart') || txt.includes('i choose');
+      return modal.offsetHeight > 50;
     });
 
     if (!hasCustomDrawer) return;
@@ -563,12 +561,14 @@ async function executeMiddlemanOrderOnDominos({
       const saveRes = await page.evaluate(async ({ token, mobile, uId, payload, targetLat, targetLng }) => {
         try {
           const reqId = `pwa-${uId}-${Date.now()}`;
+          const bearer = token && token.startsWith('Bearer ') ? token : `Bearer ${token}`;
           const headers = {
             'Content-Type': 'application/json',
             'api_key': 'd2aeb489bb8df385',
-            'authToken': token,
-            'sessiontoken': token,
-            'userId': uId,
+            'authToken': bearer,
+            'Authorization': bearer,
+            'sessiontoken': bearer,
+            'userId': String(uId),
             'mobile': mobile,
             'isLoggedIn': 'true',
             'client_type': 'web app-chrome',
@@ -607,11 +607,10 @@ async function executeMiddlemanOrderOnDominos({
               return { status: 200, isReused: true, data: [match] };
             }
 
-            // 3. Address is not identical: Create new address for customer.
-            // Auto-evict oldest address if account has reached Domino's 3-address limit
-            if (existing.length >= 3) {
-              const oldest = existing[existing.length - 1];
-              const oldId = oldest.address_id || oldest.id;
+            // 3. Address is not identical: Auto-evict older addresses if near Domino's 3-address limit
+            while (existing.length >= 2) {
+              const oldest = existing.pop();
+              const oldId = oldest?.address_id || oldest?.id;
               if (oldId) {
                 await fetch(`https://api.dominos.co.in/customer-service/ve2/user/${uId}/addresses/${oldId}?site=jflcms`, {
                   method: 'DELETE',
@@ -651,22 +650,48 @@ async function executeMiddlemanOrderOnDominos({
           onProgress(`[MIDDLEMAN-ENGINE] ✓ Customer delivery address saved in Domino's "My Addresses"! (ID: #${interceptedAddressId})`);
         }
         
-        // Immediately persist newly intercepted address ID into page localStorage contracts
-        await page.evaluate(({ newId, curAddr }) => {
+        // Immediately persist newly intercepted address ID into page localStorage contracts & Vuex store
+        await page.evaluate(({ newId, curAddr, targetStore }) => {
           try {
             curAddr.address_id = newId;
             localStorage.setItem('selectedAddress', JSON.stringify(curAddr));
+            localStorage.setItem('storeId', String(targetStore));
+            localStorage.setItem('advanceStore', String(targetStore));
             let addrs = [];
             try { addrs = JSON.parse(localStorage.getItem('userAddresses') || '[]'); } catch (e) {}
             addrs = addrs.filter(a => a.address_id !== newId);
             addrs.unshift(curAddr);
             localStorage.setItem('userAddresses', JSON.stringify(addrs));
             localStorage.setItem('savedUserAddresses', JSON.stringify(addrs));
+
+            // Synchronize directly with Domino's reactive Vue store
+            const app = document.querySelector('#app')?.__vue__;
+            if (app && app.$store) {
+              try { app.$store.commit('Location/SET_SELECTED_ADDRESS', curAddr); } catch (_) {}
+              try { app.$store.dispatch('Location/setSelectedAddress', curAddr); } catch (_) {}
+              try { app.$store.dispatch('Location/changeStore', String(targetStore)); } catch (_) {}
+            }
           } catch (e) {}
-        }, { newId: interceptedAddressId, curAddr: currentAddressObj });
+        }, { newId: interceptedAddressId, curAddr: currentAddressObj, targetStore: targetStoreId });
       } else {
         onProgress(`[MIDDLEMAN-ENGINE] ℹ️ Address established and linked to session.`);
       }
+
+      // Milestone Screenshot 1: Address & Store Verification
+      try {
+        const addrRef = (customerOrder.id || 'ORDER').replace(/[^a-zA-Z0-9]/g, '');
+        const addrProofFile = `address-verified-${addrRef}.png`;
+        const ssDir = path.join(__dirname, '..', 'public', 'screenshots');
+        fs.mkdirSync(ssDir, { recursive: true });
+        const addrProofPath = path.join(ssDir, addrProofFile);
+        await page.screenshot({ path: addrProofPath, fullPage: false }).catch(() => {});
+        const buf = fs.readFileSync(addrProofPath);
+        if (customerOrder.robot) {
+          customerOrder.robot.addressVerifiedScreenshotUrl = `/screenshots/${addrProofFile}`;
+          customerOrder.robot.addressVerifiedScreenshotDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+        }
+        onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured Domino's address & delivery store verification screenshot: ${addrProofFile}`);
+      } catch (_) {}
     } catch (evalErr) {
       onProgress(`[MIDDLEMAN-ENGINE] Address registration note: ${evalErr.message}`);
     }
@@ -1146,6 +1171,22 @@ async function executeMiddlemanOrderOnDominos({
         onProgress(`[MIDDLEMAN-ENGINE] ⚠️ Note: "${cleanName}" not clicked on menu page; checking cart...`);
       }
     }
+
+    // Milestone Screenshot 2: Items Added Confirmation
+    try {
+      const itemRef = (customerOrder.id || 'ORDER').replace(/[^a-zA-Z0-9]/g, '');
+      const itemProofFile = `item-added-${itemRef}.png`;
+      const ssDir = path.join(__dirname, '..', 'public', 'screenshots');
+      fs.mkdirSync(ssDir, { recursive: true });
+      const itemProofPath = path.join(ssDir, itemProofFile);
+      await page.screenshot({ path: itemProofPath, fullPage: false }).catch(() => {});
+      const buf = fs.readFileSync(itemProofPath);
+      if (customerOrder.robot) {
+        customerOrder.robot.itemAddedScreenshotUrl = `/screenshots/${itemProofFile}`;
+        customerOrder.robot.itemAddedScreenshotDataUri = `data:image/png;base64,${buf.toString('base64')}`;
+      }
+      onProgress(`[MIDDLEMAN-ENGINE] 📸 Captured Domino's item addition confirmation screenshot: ${itemProofFile}`);
+    } catch (_) {}
 
     // Explicitly dismiss search modal so the bottom navigation bar is completely uncovered
     await page.evaluate(() => {
@@ -2482,6 +2523,10 @@ async function executeMiddlemanOrderOnDominos({
       proofScreenshotDataUri: proofDataUri,
       cartBillScreenshotUrl: cartBillUrl,
       cartBillScreenshotDataUri: cartBillDataUri,
+      addressVerifiedScreenshotUrl: customerOrder.robot?.addressVerifiedScreenshotUrl || null,
+      addressVerifiedScreenshotDataUri: customerOrder.robot?.addressVerifiedScreenshotDataUri || null,
+      itemAddedScreenshotUrl: customerOrder.robot?.itemAddedScreenshotUrl || null,
+      itemAddedScreenshotDataUri: customerOrder.robot?.itemAddedScreenshotDataUri || null,
       dominosAddressId: interceptedAddressId,
       voucherApplied: voucherApplied,
       voucherBalance: voucherBalanceReflected,
